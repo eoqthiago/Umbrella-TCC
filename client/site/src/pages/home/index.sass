@@ -1,5 +1,46 @@
+@keyframes home-banner-flutuante
+    0% 
+        transform: translatey(0px)
+        transform: rotate(-1deg)
+    50%
+        transform: translatey(-5px)
+    75%
+        transform: rotate(2deg)
+    100% 
+        transform: translatey(0px)
+
 .home
+    background-color: #fff !important
     > main
-        .home-exemplo
-            color: red
-            font-family: Roboto-bold
+        width: 100vw
+        height: calc( 100vh - 55px )
+        display: flex
+        flex-direction: column
+        align-items: center
+
+        > section
+            margin-top: 5em
+
+        .home-banner-inicial
+            background-color: #5AD99C
+            display: flex
+            flex-flow: row wrap
+            align-items: center
+            justify-content: space-around
+            width: 85vw
+            min-height: 380px
+            border-radius: 60px
+            color: #fff
+
+            > img
+                width: 600px
+                max-width: 90%
+                animation: home-banner-flutuante 10s ease-in-out infinite alternate
+
+            > div
+                width: 30%
+                text-align: center
+                > div
+                    margin-top: 1em
+                    font-family: Roboto-regular
+                    font-size: 18px
