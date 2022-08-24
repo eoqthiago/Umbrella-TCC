@@ -1,1 +1,4 @@
 Adicionar nome e descrição do site no index.html
+Finalizar ddl/dml
+Fazer análise de componentes
+Terminar o mapeamento de endpoints
