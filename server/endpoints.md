@@ -28,15 +28,15 @@
 ```json
 //request
 {
-  "admin": {
-    "email": "adm@umbrella.com",
-    "senha": "12345"
-  },
-  "email": "admin@moge.com",
-  "nome": "admin",
-  "senha": "12345",
-  "nascimento": "2000-10-10",
-  "cpf": "000.000.000-00"
+	"admin": {
+		"email": "adm@umbrella.com",
+		"senha": "12345"
+	},
+	"email": "admin@moge.com",
+	"nome": "admin",
+	"senha": "12345",
+	"nascimento": "2000-10-10",
+	"cpf": "000.000.000-00"
 }
 
 //response (201)
@@ -51,9 +51,9 @@
 ```json
 //request
 {
-  "admEmail": "adm@umbrella.com",
-  "admSenha": "12345",
-  "email": "admin@moge.com"
+	"admEmail": "adm@umbrella.com",
+	"admSenha": "12345",
+	"email": "admin@moge.com"
 }
 
 //response (204)
@@ -78,8 +78,8 @@
 ```json
 //request
 {
-  "admEmail": "adm@umbrella.com",
-  "admSenha": "12345"
+	"admEmail": "adm@umbrella.com",
+	"admSenha": "12345"
 }
 
 //response (204)
@@ -140,9 +140,23 @@
 ```json
 //request
 {
-  "email": "usuario@dom.com",
-  "senha": "12345"
+	"email": "usuario@dom.com",
+	"senha": "12345"
 }
 
 //response (204)
+```
+
+# **Chat**
+
+## Enviar mensagem
+
+### _POST /mensagem/:conversa_
+
+```json
+{
+	"id_usuario": 87686,
+	"mensagem": "chat daoraa",
+	"data": "2020-20-10"
+}
 ```
