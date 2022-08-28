@@ -1,13 +1,19 @@
 @keyframes home-banner-flutuante
     0% 
         transform: translatey(0px)
-        transform: rotate(-1deg)
     50%
         transform: translatey(-5px)
-    75%
-        transform: rotate(2deg)
     100% 
         transform: translatey(0px)
+
+@keyframes fadein 
+    from
+        opacity: 0
+        transform: translatey(-15px)
+    to 
+        opacity: 1
+        transform: translatey(0px)
+
 
 .home
     background-color: #fff !important
@@ -21,8 +27,8 @@
         > section
             margin-top: 5em
 
-        .home-banner-inicial
-            background-color: #5AD99C
+        > .home-banner-inicial
+            background-color: #54cc92
             display: flex
             flex-flow: row wrap
             align-items: center
@@ -31,16 +37,28 @@
             min-height: 380px
             border-radius: 60px
             color: #fff
+            box-shadow: 0 1px 10px #0000003b
+            user-select: none
 
             > img
                 width: 600px
-                max-width: 90%
-                animation: home-banner-flutuante 10s ease-in-out infinite alternate
+                max-width: 50%
+                animation: home-banner-flutuante 6s ease-in-out infinite alternate
 
             > div
                 width: 30%
                 text-align: center
-                > div
-                    margin-top: 1em
-                    font-family: Roboto-regular
-                    font-size: 18px
+
+        > .home-top-comunidades
+            > .home-top-comunidades-titulos
+                text-align: center
+            
+            > .home-top-comunidades-cards
+                padding-top: 2.3em
+                display: flex
+                flex-flow: row wrap
+                width: 900px
+                align-items: center
+                justify-content: center
+                gap: 60px
+                animation: fadein 3s
