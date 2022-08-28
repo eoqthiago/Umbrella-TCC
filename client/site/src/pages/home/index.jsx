@@ -1,6 +1,7 @@
 import React from "react";
 import Header from "../../components/header";
-import { Titulo, SubTitulo } from "../../styled";
+import Footer from "../../components/footer";
+import { Titulo, SubTitulo, BotaoLiso } from "../../styled";
 import Card from "../../components/card";
 import "./index.sass";
 
@@ -27,6 +28,42 @@ const Index = () => {
 						<Card />
 					</div>
 				</section>
+				<section className="home-cadastre">
+					<div className="home-cadastre-textos">
+						<Titulo fonte="30px">Faça parte de tudo isso</Titulo>
+						<SubTitulo>Crie sua conta para desfrutar dessa experiência ao máximo!</SubTitulo>
+					</div>
+					<div className="home-cadastre-botao">
+						<BotaoLiso main="#fff" width="200px" fonte="22px">
+							Cadastre-se
+						</BotaoLiso>
+					</div>
+				</section>
+				<section className="home-conecte">
+					<div>
+						<img src="/assets/images/conecte.png" alt="Conecte-se!" />
+						<div>
+							<Titulo cor="#282828" fonte="35px">
+								CONECTE-SE COM PESSOAS EM QUALQUER LUGAR
+							</Titulo>
+							<SubTitulo cor="#3A3A3A">Conheça novas pessoas em todos os lugares que compartilham o mesmo gosto que o seu</SubTitulo>
+						</div>
+					</div>
+					<div>
+						<div>
+							<Titulo cor="#282828" fonte="35px">
+								CRIE COMUNIDADES COMO QUISER
+							</Titulo>
+							<ul>
+								<li>Rápido</li>
+								<li>Prático</li>
+								<li>Simples</li>
+							</ul>
+						</div>
+						<img src="/assets/images/foguete.png" alt="Conecte-se!" />
+					</div>
+				</section>
+				<Footer />
 			</main>
 		</div>
 	);

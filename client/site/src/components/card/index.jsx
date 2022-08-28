@@ -5,7 +5,7 @@ const Index = () => {
 	return (
 		<div className="comp-card">
 			<img src="/assets/images/star-wars.webp" alt="Comunidade" />
-            <div>Star Wars</div>
+			<div>Comunidade fã de Star Wars</div>
 		</div>
 	);
 };

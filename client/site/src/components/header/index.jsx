@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { BotaoLiso } from "../../styled";
 import "./index.sass";
 
 export default function Index(props) {
@@ -10,8 +11,16 @@ export default function Index(props) {
 			<img src="/assets/icons/logo.png" alt="Logo" />
 
 			<nav>
-				{props.login && <div onClick={() => navigate("/login")}>Entrar</div>}
-				{props.voltar && <div onClick={() => navigate(-1)}>Voltar</div>}
+				{props.login && (
+					<BotaoLiso main="#fff" padding="3px 12px" fonte="16px" onClick={() => navigate("/login")}>
+						Entrar
+					</BotaoLiso>
+				)}
+				{props.voltar && (
+					<BotaoLiso main="#fff" padding="3px 12px" fonte="16px" onClick={() => navigate(-1)}>
+						Voltar
+					</BotaoLiso>
+				)}
 			</nav>
 		</header>
 	);
