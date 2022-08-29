@@ -39,7 +39,7 @@ const Index = () => {
 				</ul>
 			</div>
 			<div className="comp-footer-redes">
-				<BotaoLiso main="#fff">Contato</BotaoLiso>
+				<BotaoLiso main="#fff" width="150px" fonte="18px">Contato</BotaoLiso>
 				<div>
 					<img src="/assets/icons/instagram.png" alt="Instagram" />
 					<img src="/assets/icons/twitter.png" alt="Twitter" />
