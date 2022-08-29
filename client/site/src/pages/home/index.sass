@@ -1,5 +1,127 @@
+@keyframes home-banner-flutuante
+    0%
+        box-shadow: 0 5px 15px 0px #0000005e
+        transform: translatey(0px)
+    50%
+        box-shadow: 0 25px 15px 0px #0000001c
+        transform: translatey(-10px)
+    100%
+        box-shadow: 0 5px 15px 0px #0000005e
+        transform: translatey(0px)
+
+@keyframes fadein
+    0%
+        opacity: 0
+        transform: translatey(-15px)
+    100%
+        opacity: 1
+        transform: translatey(0px)
+
+
 .home
+    background-color: #fff !important
     > main
-        .home-exemplo
-            color: red
-            font-family: Roboto-bold
+        width: 100vw
+        height: calc( 100vh - 55px )
+        display: flex
+        flex-direction: column
+        align-items: center
+        padding: 5em 0
+
+        > section
+            margin-bottom: 8em
+
+        > .home-banner-inicial
+            background-color: #54cc92
+            display: flex
+            flex-flow: row wrap
+            align-items: center
+            justify-content: space-around
+            width: 85vw
+            min-height: 380px
+            border-radius: 60px
+            color: #fff
+            box-shadow: 0 1px 10px #0000003b
+            user-select: none
+            animation: home-banner-flutuante 8s ease-in-out infinite alternate
+
+            > img
+                width: 600px
+                max-width: 50%
+
+            > div
+                width: 30%
+                text-align: center
+
+        > .home-top-comunidades
+            > .home-top-comunidades-titulos
+                text-align: center
+            
+            > .home-top-comunidades-cards
+                margin-top: 2.3em
+                display: flex
+                flex-flow: row wrap
+                width: 90vw
+                align-items: center
+                justify-content: center
+                gap: 60px
+                animation: fadein 2s
+                outline: 1px red solid
+
+        > .home-cadastre
+            background: #54cc92
+            width: 100vw
+            display: flex
+            flex-flow: row nowrap
+            justify-content: space-between
+            user-select: none
+
+            > .home-cadastre-textos
+                display: flex
+                flex-flow: column nowrap
+                width: 100%
+                height: 100%
+                align-items: center
+                justify-content: center
+
+                > *
+                    width: 400px
+                    text-align: center
+
+            > .home-cadastre-botao
+                background: url('../../../public/assets/images/bichos.png') no-repeat
+                background-size: 90%
+                background-position: 50% 100%
+                width: 1000px
+                height: 300px
+                display: flex
+                flex-direction: row
+                align-items: center
+                justify-content: center
+
+        > .home-conecte
+            width: 100vw
+            display: flex
+            flex-flow: column wrap
+
+            > div
+                display: flex
+                flex-flow: row wrap
+                align-items: center
+                justify-content: space-around
+
+                > img
+                    width: 400px
+
+                > div
+                    width: 500px
+                    text-align: center
+
+                    > ul
+                        margin-left: 4vw
+                        margin-top: 2em
+
+                        > li
+                            font-family: Roboto-medium
+                            font-size: 20px
+                            text-align: left

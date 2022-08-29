@@ -1,0 +1,61 @@
+.comp-footer
+    background: #27B985
+    width: 100vw
+    min-height: 250px
+    display: flex
+    flex-flow: row wrap
+    justify-content: space-around
+
+    > .comp-footer-logo
+        margin-top: 1em
+        user-select: none
+        display: flex
+        width: 400px
+        flex-flow: row nowrap
+        align-items: center
+        align-self: flex-start
+        gap: 30px
+
+    > .comp-footer-acoes
+        display: flex
+        width: 500px
+        flex-flow: row wrap
+        align-items: flex-start
+        align-content: center
+        gap: 0px 80px
+
+        > ul > li
+            color: #fff
+            font-family: Roboto-regular
+            list-style: none
+            font-size: 17px
+            margin-bottom: 5px
+            cursor: pointer
+            
+            &:hover
+                text-decoration: underline
+
+            &:first-child
+                font-size: 18px
+                font-family: Roboto-bold
+                cursor: default
+
+                &:hover
+                    text-decoration: none
+
+    > .comp-footer-redes
+        width: 300px
+        display: flex
+        flex-direction: column
+        justify-content: center
+        align-items: center 
+
+        > div > img
+            margin: 1em 5px 0 5px
+            width: 40px
+            user-select: none
+            cursor: pointer
+
+            &:hover
+                transform: scale(1.03)
+                
