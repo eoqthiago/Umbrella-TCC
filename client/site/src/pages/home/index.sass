@@ -1,12 +1,9 @@
 @keyframes home-banner-flutuante
     0%
-        box-shadow: 0 5px 15px 0px #0000005e
         transform: translatey(0px)
     50%
-        box-shadow: 0 25px 15px 0px #0000001c
-        transform: translatey(-10px)
+        transform: translatey(-13px)
     100%
-        box-shadow: 0 5px 15px 0px #0000005e
         transform: translatey(0px)
 
 @keyframes fadein
@@ -29,7 +26,7 @@
         padding: 5em 0
 
         > section
-            margin-bottom: 8em
+            margin-bottom: clamp(3em, 20vw + 1em, 8em   )
 
         > .home-banner-inicial
             background-color: #54cc92
@@ -38,24 +35,28 @@
             align-items: center
             justify-content: space-around
             width: 85vw
-            min-height: 380px
+            min-height: 340px
             border-radius: 60px
             color: #fff
             box-shadow: 0 1px 10px #0000003b
             user-select: none
-            animation: home-banner-flutuante 8s ease-in-out infinite alternate
+            overflow: hidden
 
             > img
-                width: 600px
-                max-width: 50%
+                max-width: 450px
+                width: 70%
+                min-width: 250px
+                animation: home-banner-flutuante 9s ease-in-out infinite alternate
 
             > div
-                width: 30%
+                max-width: 300px
+                width: 85%
                 text-align: center
 
         > .home-top-comunidades
             > .home-top-comunidades-titulos
                 text-align: center
+                width: 90vw
             
             > .home-top-comunidades-cards
                 margin-top: 2.3em
@@ -71,28 +72,31 @@
         > .home-cadastre
             background: #54cc92
             width: 100vw
+            min-height: max-content
             display: flex
-            flex-flow: row nowrap
+            flex-flow: row wrap
             justify-content: space-between
+            align-items: flex-end
             user-select: none
 
             > .home-cadastre-textos
                 display: flex
                 flex-flow: column nowrap
-                width: 100%
+                min-width: 250px
+                width: 50vw
+                max-width: 450px
                 height: 100%
                 align-items: center
                 justify-content: center
+                text-align: center
 
-                > *
-                    width: 400px
-                    text-align: center
 
             > .home-cadastre-botao
                 background: url('../../../public/assets/images/bichos.png') no-repeat
                 background-size: 90%
                 background-position: 50% 100%
-                width: 1000px
+                width: 100%
+                max-width: 350px
                 height: 300px
                 display: flex
                 flex-direction: row
@@ -100,7 +104,7 @@
                 justify-content: center
 
         > .home-conecte
-            width: 100vw
+            width: 90vw
             display: flex
             flex-flow: column wrap
 
@@ -109,19 +113,24 @@
                 flex-flow: row wrap
                 align-items: center
                 justify-content: space-around
+                margin-bottom: clamp(3em, 30vw + 1em, 8em   )
 
                 > img
-                    width: 400px
+                    min-width: 250px
+                    width: 35vw
+                    max-width: 450px
 
                 > div
-                    width: 500px
+                    min-width: 250px
+                    width: 60vw
+                    max-width: 500px
                     text-align: center
 
                     > ul
-                        margin-left: 4vw
+                        margin-left: 10vw
                         margin-top: 2em
 
                         > li
                             font-family: Roboto-medium
-                            font-size: 20px
+                            font-size: clamp(14px, 1vw + 1em, 25px)
                             text-align: left

@@ -7,7 +7,7 @@ const Index = () => {
 		<footer className="comp-footer">
 			<div className="comp-footer-logo">
 				<img src="/assets/icons/logo.png" alt="Logo" />
-				<Titulo cor="#fff">Desfrute a liberdade</Titulo>
+				<Titulo cor="#fff" fonte="4vw">Desfrute a liberdade</Titulo>
 			</div>
 			<div className="comp-footer-acoes">
 				<ul>
@@ -39,7 +39,6 @@ const Index = () => {
 				</ul>
 			</div>
 			<div className="comp-footer-redes">
-				<BotaoLiso main="#fff" width="150px" fonte="18px">Contato</BotaoLiso>
 				<div>
 					<img src="/assets/icons/instagram.png" alt="Instagram" />
 					<img src="/assets/icons/twitter.png" alt="Twitter" />

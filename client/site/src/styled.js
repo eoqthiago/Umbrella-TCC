@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 const Titulo = styled.h1`
 	font-weigth: 800;
-	font-size: ${(props) => props.fonte || "38px"};
-	line-height: 40px;
+	font-size: clamp(25px, ${(props) => props.fonte}, 35px);
+	line-height: 35px;
 	text-transform: uppercase;
 	color: ${(props) => props.cor || "#fff"};
 	font-family: "OpenSans-bold", sans;
@@ -12,7 +12,7 @@ const Titulo = styled.h1`
 const SubTitulo = styled.h2`
 	margin-top: 0.5em;
 	font-family: Roboto-regular;
-	font-size: ${(props) => props.fonte || "20px"};
+	font-size: clamp(15px, ${(props) => props.fonte}, 22px);
 	color: ${(props) => props.cor || "#fff"};
 `;
 
