@@ -4,18 +4,21 @@
 
 ### _POST /admin/usuario/login_
 
-```json
-//request
-{
-    "email": "adm@umbrella.com",
-    "senha": "12345"
-}
+**request**
 
-//response (202)
+```json
 {
-    "id": 1,
-    "nome": "adm",
-    "email": "adm@umbrella.com"
+	"email": "adm@umbrella.com",
+	"senha": "12345"
+}
+```
+
+**response (202)**
+
+```json
+{
+	"token": "jsand8nasudnauifn.gemgimerigmer.dfsdncus",
+	"nome": "adm"
 }
 ```
 
@@ -25,22 +28,23 @@
 
 ### _POST /admin/usuario_
 
+**request**
+
 ```json
-//request
 {
 	"admin": {
 		"email": "adm@umbrella.com",
 		"senha": "12345"
 	},
-	"email": "admin@moge.com",
+	"email": "admin@umbrella.com",
 	"nome": "admin",
 	"senha": "12345",
 	"nascimento": "2000-10-10",
 	"cpf": "000.000.000-00"
 }
-
-//response (201)
 ```
+
+**response (201)**
 
 <br>
 
@@ -48,18 +52,19 @@
 
 ### _DELETE /admin/usuario_
 
+**request**
+
 ```json
-//request
 {
 	"admin": {
 		"email": "adm@umbrella.com",
 		"senha": "12345"
 	},
-	"email": "admin@moge.com"
+	"email": "admin@umbrella.com"
 }
-
-//response (204)
 ```
+
+**response (204)**
 
 <br>
 
@@ -69,8 +74,9 @@
 
 ### _POST /comunidade_
 
+**request**
+
 ```json
-//request
 {
 	"nome": "Star Wars",
 	"descricao": "Os maiores fãs de Star Wars",
@@ -78,7 +84,19 @@
 	"imagemFundo": "imagem2.svg",
 	"privada": false
 }
-//response (201)
+```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
+}
+```
+
+**response (201)**
+
+```json
 {
 	"id": 1,
 	"nome": "Star Wars",
@@ -93,15 +111,24 @@
 
 ### _POST /comunidade/denuncia_
 
+**request**
+
 ```json
-//request
 {
-	"id": 12234,
-	"usuario": 1,
+	"idUsuario": 12234,
 	"motivo": "Extremismo"
 }
-//response (202)
 ```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
+}
+```
+
+**response (202)**
 
 <br>
 
@@ -109,14 +136,16 @@
 
 ### _DELETE /comunidade/?id=1_
 
+**request**
+**Header**
+
 ```json
-//request
 {
-	"email": "usuario@umbrella",
-	"senha": "1234"
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
 }
-//response (204)
 ```
+
+**response (204)**
 
 <br>
 
@@ -124,16 +153,28 @@
 
 ### _POST /comunidade/gerenciamento/canal_
 
+**request**
+
 ```json
-//request
 {
-	"usuario": 1,
 	"nome": "Geral"
 }
-//response (204)
+```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
+}
+```
+
+**response (204)**
+
+```json
 {
 	"id": 1,
-    "canal": "Geral"
+	"canal": "Geral"
 }
 ```
 
@@ -143,13 +184,23 @@
 
 ### _PUT /comunidade/1/usuario/1_
 
+**request**
+
 ```json
-//request
 {
 	"nivel": "admin"
 }
-//response (202)
 ```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
+}
+```
+
+**response (202)**
 
 <br>
 
@@ -157,14 +208,24 @@
 
 ### _POST /comunidade/banimento_
 
+**request**
+
 ```json
-//request
 {
 	"id_usuario_comunidade": 12,
 	"motivo": "Spam"
 }
-//response (201)
 ```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
+}
+```
+
+**response (201)**
 
 <br>
 
@@ -172,14 +233,24 @@
 
 ### _POST /usuario/denuncia_
 
+**request**
+
 ```json
-//request
 {
 	"id_usuario": 12,
 	"motivo": "Bullying"
 }
-//response (201)
 ```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
+}
+```
+
+**response (201)**
 
 <br>
 
@@ -187,15 +258,24 @@
 
 ### _DELETE /usuario/?id=1_
 
+**request**
+
 ```json
-//request
 {
 	"admEmail": "adm@umbrella.com",
 	"admSenha": "12345"
 }
-
-//response (201)
 ```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
+}
+```
+
+**response (201)**
 
 <hr>
 
@@ -205,18 +285,23 @@
 
 ### _POST /usuario/login_
 
-```json
-//request
-{
-    "email": "usuario@dom.com",
-    "senha": "12345"
-}
+**request**
 
-//response (201)
+```json
 {
-    "id_usuario": 1,
-    "nome": "usuario",
-    "email": "usuario@dom.com"
+	"email": "usuario@dom.com",
+	"senha": "12345"
+}
+```
+
+**response (201)**
+
+```json
+{
+	"id_usuario": 1,
+	"nome": "usuario",
+	"email": "usuario@dom.com",
+	"token": "omefomewfiome.rgewaeragefg.eververververv"
 }
 ```
 
@@ -226,22 +311,25 @@
 
 ### _POST /usuario_
 
+**request**
+
 ```json
-//request
 {
-    "nome": "usuario",
-    "email": "usuario@dom.com",
-    "senha": "12345",
-    "nascimento": "2000-10-10",
+	"nome": "usuario",
+	"email": "usuario@dom.com",
+	"senha": "12345",
+	"nascimento": "2000-10-10",
 	"imagem": "imagem.svg",
 	"imagem_fundo": "imagem.svg"
 }
+```
 
-//response (204)
+**response (204)**
+
+```json
 {
-    "id": 1,
-    "nome": "usuario",
-    "email": "12345"
+	"id": 1,
+	"nome": "usuario"
 }
 ```
 
@@ -251,16 +339,25 @@
 
 ### _PUT /usuario/perfil_
 
+**request**
+
 ```json
-//request
 {
 	"nome": "usuario",
 	"descrição": "Gosto de Star Wars e Senhor dos Anéis",
 	"imagem": "imagem.svg"
 }
-
-//response (201)
 ```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
+}
+```
+
+**response (201)**
 
 <br>
 
@@ -268,15 +365,24 @@
 
 ### _DELETE /usuario/perfil_
 
+**request**
+
 ```json
-//request
 {
 	"email": "usuario@dom.com",
 	"senha": "12345"
 }
-
-//response (201)
 ```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
+}
+```
+
+**response (201)**
 
 # **Chat**
 
@@ -284,17 +390,26 @@
 
 ### _POST /mensagem/:conversa_
 
+**request**
+
 ```json
-//request
 {
 	"id_usuario": 87686,
 	"id_mensagem": 73246,
 	"mensagem": "chat daoraa",
 	"data": "2020-20-10"
 }
-
-//response(201)
 ```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
+}
+```
+
+**response(201)**
 
 <br>
 
@@ -302,12 +417,23 @@
 
 ### _DELETE /mensagem/:conversa_
 
+**request**
+
 ```json
 {
 	"id_usuario": 87686,
 	"id_mensagem": 79837,
 	"mensagem": "chat daoraa"
 }
-
-//response(201)
 ```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
+}
+```
+
+**response(201)**
+s
