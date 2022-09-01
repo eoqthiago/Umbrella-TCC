@@ -32,15 +32,22 @@
 
 ```json
 {
-	"admin": {
-		"email": "adm@umbrella.com",
-		"senha": "12345"
-	},
-	"email": "admin@umbrella.com",
-	"nome": "admin",
-	"senha": "12345",
-	"nascimento": "2000-10-10",
-	"cpf": "000.000.000-00"
+	"novoAdmin": {
+		"email": "admin@umbrella.com",
+		"nome": "admin",
+		"senha": "12345",
+		"nascimento": "2000-10-10",
+		"cpf": "000.000.000-00",
+		"nivelHierarquia": "root"
+	}
+}
+```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
 }
 ```
 
@@ -56,11 +63,15 @@
 
 ```json
 {
-	"admin": {
-		"email": "adm@umbrella.com",
-		"senha": "12345"
-	},
-	"email": "admin@umbrella.com"
+	"usuarioEmail": "admin@umbrella.com"
+}
+```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
 }
 ```
 
@@ -90,7 +101,7 @@
 
 ```json
 {
-	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
 }
 ```
 
