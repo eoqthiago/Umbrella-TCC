@@ -19,8 +19,12 @@ const Index = () => {
 				</section>
 				<section className="home-top-comunidades">
 					<div className="home-top-comunidades-titulos">
-						<Titulo cor="#3A3A3A" fonte="4vw">O QUE VOCÊ PROCURA ESTÁ AQUI</Titulo>
-						<SubTitulo cor="#3A3A3A" fonte="2vw">Encontre a melhor opção para você!</SubTitulo>
+						<Titulo cor="#3A3A3A" fonte="4vw">
+							O QUE VOCÊ PROCURA ESTÁ AQUI
+						</Titulo>
+						<SubTitulo cor="#3A3A3A" fonte="2vw">
+							Encontre a melhor opção para você!
+						</SubTitulo>
 					</div>
 					<div className="home-top-comunidades-cards">
 						<Card />
@@ -46,7 +50,9 @@ const Index = () => {
 							<Titulo cor="#282828" fonte="4vw">
 								CONECTE-SE COM PESSOAS EM QUALQUER LUGAR
 							</Titulo>
-							<SubTitulo cor="#3A3A3A" fonte="2vw">Conheça novas pessoas em todos os lugares que compartilham o mesmo gosto que o seu</SubTitulo>
+							<SubTitulo cor="#3A3A3A" fonte="2vw">
+								Conheça novas pessoas em todos os lugares que compartilham o mesmo gosto que o seu
+							</SubTitulo>
 						</div>
 					</div>
 					<div>
