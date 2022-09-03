@@ -1,4 +1,2 @@
-Adicionar nome e descrição do site no index.html
-Finalizar ddl/dml
-Fazer análise de componentes
-Terminar o mapeamento de endpoints
+Finalizar dml
+Implementar carrossel de cards na landing page
