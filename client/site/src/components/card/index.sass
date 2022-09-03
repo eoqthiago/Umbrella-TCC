@@ -1,5 +1,7 @@
 .comp-card
-    width: 160px
+    max-width: 160px
+    min-width: 100px
+    width: 40vw
     min-height: 180
     max-height: 250px
     overflow: hidden
@@ -13,10 +15,10 @@
         width: 100%
 
     > div
-        margin-top: 1em
+        margin-top: .3em
         color: #373535
         font-family: Roboto-medium
-        font-size: 20px
+        font-size: clamp(16px, 2vw, 20px)
 
     &:hover
         transform: scale(1.05)

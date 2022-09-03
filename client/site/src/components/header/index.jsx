@@ -12,7 +12,7 @@ export default function Index(props) {
 
 			<nav>
 				{props.login && (
-					<BotaoLiso main="#fff" padding="3px 12px" fonte="16px" onClick={() => navigate("/login")}>
+					<BotaoLiso main="#fff" padding="3px 12px" fonte="18px" onClick={() => navigate("/login")}>
 						Entrar
 					</BotaoLiso>
 				)}
