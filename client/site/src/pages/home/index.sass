@@ -66,7 +66,6 @@
                 justify-content: center
                 gap: 60px
                 animation: fadein 2s
-                outline: 1px red solid
 
         > .home-cadastre
             background: #54cc92
@@ -82,7 +81,7 @@
                 display: flex
                 flex-flow: column nowrap
                 min-width: 250px
-                width: 50vw
+                width: calc(50vw + 1em)
                 max-width: 450px
                 height: 100%
                 align-items: center
@@ -94,7 +93,7 @@
                 background-size: 90%
                 background-position: 50% 100%
                 width: 100%
-                max-width: 350px
+                max-width: 550px
                 height: 300px
                 display: flex
                 flex-direction: row
@@ -132,3 +131,12 @@
                             font-family: Roboto-medium
                             font-size: clamp(14px, 4vw, 20px)
                             text-align: left
+
+@media (max-width: 1000px)
+    .home > main
+        > .home-cadastre
+            flex-flow: column nowrap
+            align-items: center
+
+            > .home-cadaste-botao
+                background-size: 100%

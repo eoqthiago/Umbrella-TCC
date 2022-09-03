@@ -17,14 +17,14 @@ const SubTitulo = styled.h2`
 `;
 
 const BotaoLiso = styled.button`
-	background: none;
+	background: ${(props) => props.background || "none"};
 	color: ${(props) => props.main || "#4AC58A"};
 	border: 2px solid ${(props) => props.main || "#4AC58A"};
 	border-radius: 21px;
 	width: ${(props) => props.width || "fit-content"};
 	padding: ${(props) => props.padding || "7px 20px"};
 	font-family: OpenSans-medium;
-	font-size: ${(props) => props.fonte || "20px"};
+	font-size: clamp(15px, ${(props) => props.fonte}, 20px);
 	cursor: pointer;
 	user-select: none;
 	transition: 0.2s ease-in-out;

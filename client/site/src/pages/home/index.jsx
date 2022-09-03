@@ -38,7 +38,7 @@ const Index = () => {
 						<SubTitulo fonte="2vw">Crie sua conta para desfrutar dessa experiência ao máximo!</SubTitulo>
 					</div>
 					<div className="home-cadastre-botao">
-						<BotaoLiso main="#fff" width="200px" fonte="22px">
+						<BotaoLiso main="#fff" fonte="4vw">
 							Cadastre-se
 						</BotaoLiso>
 					</div>
