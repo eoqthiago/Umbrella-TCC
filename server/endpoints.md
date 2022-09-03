@@ -1,21 +1,23 @@
-# **Admnistrador**
+# **Admnistrador root**
 
 ## Login
 
 ### _POST /admin/usuario/login_
 
-```json
-//request
-{
-    "email": "adm@umbrella.com",
-    "senha": "12345"
-}
+**Request**
 
-//response (202)
+```json
 {
-    "id": 1,
-    "nome": "adm",
-    "email": "adm@umbrella.com"
+	"email": "adm@umbrella.com",
+	"senha": "12345"
+}
+```
+
+**Response (202)**
+
+```json
+{
+	"token": "jsand8nasudnauifn.gemgimerigmer.dfsdncus"
 }
 ```
 
@@ -25,22 +27,30 @@
 
 ### _POST /admin/usuario_
 
-```json
-//request
-{
-	"admin": {
-		"email": "adm@umbrella.com",
-		"senha": "12345"
-	},
-	"email": "admin@moge.com",
-	"nome": "admin",
-	"senha": "12345",
-	"nascimento": "2000-10-10",
-	"cpf": "000.000.000-00"
-}
+**Request**
 
-//response (201)
+```json
+{
+	"novoAdmin": {
+		"email": "admin@umbrella.com",
+		"nome": "admin",
+		"senha": "12345",
+		"nascimento": "2000-10-10",
+		"cpf": "000.000.000-00",
+		"nivelHierarquia": "root"
+	}
+}
 ```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (201)**
 
 <br>
 
@@ -48,42 +58,320 @@
 
 ### _DELETE /admin/usuario_
 
-```json
-//request
-{
-	"admEmail": "adm@umbrella.com",
-	"admSenha": "12345",
-	"email": "admin@moge.com"
-}
+**Request**
 
-//response (204)
+```json
+{
+	"usuarioEmail": "admin@umbrella.com"
+}
+```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (204)**
+
+<br>
+
+# **Comunidade**
+
+## Criação de comunidade
+
+### _POST /comunidade_
+
+**Request**
+
+```json
+{
+	"nome": "Star Wars",
+	"descricao": "Os maiores fãs de Star Wars",
+	"imagem": "imagem.svg",
+	"imagemFundo": "imagem2.svg",
+	"privada": false
+}
+```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (201)**
+
+```json
+{
+	"id": 1,
+	"nome": "Star Wars",
+	"descricao": "Os maiores fãs de Star Wars",
+	"imagem": "imagem.svg",
+	"imagemFundo": "imagem2.svg",
+	"privada": false
+}
 ```
 
 <br>
 
-## Remoção de uma comunidade
+## Editar comunidade
 
-### _DELETE /venda/?id=1_
+### _PUT /comunidade/:id_
+
+**Request**
 
 ```json
-//response (204)
+{
+	"nome": "Star Wars",
+	"descricao": "Os maiores fãs de Star Wars",
+	"imagem": "imagem.svg",
+	"imagemFundo": "imagem2.svg",
+	"privada": false
+}
+```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (202)**
+<br>
+
+## Deletar comunidade
+
+### _DELETE /comunidade/:id_
+
+**Request**
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (204)**
+
+<br>
+
+## Criação de canal
+
+### _POST /comunidade/:id/canal_
+
+**Request**
+
+```json
+{
+	"nome": "Geral"
+}
+```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (201)**
+
+```json
+{
+	"id": 1,
+	"canal": "Geral"
+}
 ```
 
 <br>
 
-## Remover um usuário
+## Editar canal
 
-### _DELETE /usuario/?id=1_
+### _PUT /comunidade/:id/canal/:id_
+
+**Request**
 
 ```json
-//request
 {
-	"admEmail": "adm@umbrella.com",
-	"admSenha": "12345"
+	"nome": "Geral"
 }
-
-//response (204)
 ```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (202)**
+
+<br>
+
+## Deletar canal
+
+### _DELETE /comunidade/:id/canal/:id_
+
+**Request**
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (204)**
+
+<br>
+
+## Enviar mensagem
+
+### _POST /comunidade/canal/:id/mensagem_
+
+**Request**
+
+```json
+{
+	"mensagem": "Mensagem daora"
+}
+```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (201)**
+
+<br>
+
+## Editar mensagem
+
+### _PUT /comunidade/canal/:id/mensagem/:id_
+
+**Request**
+
+```json
+{
+	"mensagem": "Mensagem daora"
+}
+```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (202)**
+
+<br>
+
+## Deletar mensagem
+
+### _DELETE /comunidade/canal/:id/mensagem/:id_
+
+**Request**
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (204)**
+
+<br>
+
+## Denunciar comunidade
+
+### _POST /comunidade/:id/denuncia_
+
+**Request**
+
+```json
+{
+	"motivo": "Extremismo"
+}
+```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (204)**
+
+<br>
+
+## Promover usuario
+
+### _PUT /comunidade/:id/usuario/:id_
+
+**Request**
+
+```json
+{
+	"admin": true
+}
+```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (204)**
+
+<br>
+
+## Banir Usuario
+
+### _POST /comunidade/:id/banir_
+
+**Request**
+
+```json
+{
+	"idUsuario": 12,
+	"motivo": "Spam"
+}
+```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (204)**
 
 <hr>
 
@@ -93,18 +381,20 @@
 
 ### _POST /usuario/login_
 
-```json
-//request
-{
-    "email": "usuario@dom.com",
-    "senha": "12345"
-}
+**Request**
 
-//response (201)
+```json
 {
-    "id": 1,
-    "nome": "usuario",
-    "email": "usuario@dom.com"
+	"email": "usuario@dom.com",
+	"senha": "12345"
+}
+```
+
+**Response (202)**
+
+```json
+{
+	"token": "omefomewfiome.rgewaeragefg.eververververv"
 }
 ```
 
@@ -114,49 +404,158 @@
 
 ### _POST /usuario_
 
-```json
-//request
-{
-    "nome": "usuario",
-    "email": "usuario@dom.com",
-    "senha": "12345",
-    "nascimento": "2000-10-10"
-}
+**Request**
 
-//response (201)
+```json
 {
-    "id": 1,
-    "nome": "usuario",
-    "email": "12345"
+	"nome": "usuario",
+	"email": "usuario@dom.com",
+	"senha": "12345",
+	"nascimento": "2000-10-10",
+	"imagem": "imagem.svg",
+	"imagemFundo": "imagem.svg"
+}
+```
+
+**Response (201)**
+
+```json
+{
+	"token": "omefomewfiome.rgewaeragefg.eververververv"
 }
 ```
 
 <br>
 
-## Deleção de conta
+## Alterar Perfil
 
-### _DELETE /usuario_
+### _PUT /usuario_
+
+**Request**
 
 ```json
-//request
 {
-	"email": "usuario@dom.com",
-	"senha": "12345"
+	"nome": "usuario",
+	"descrição": "Gosto de Star Wars e Senhor dos Anéis",
+	"imagem": "imagem.svg",
+	"imagemFundo": "imagem.svg"
 }
-
-//response (204)
 ```
 
-# **Chat**
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (202)**
+
+<br>
+
+## Deleção de conta
+
+### _DELETE /usuario/:id_
+
+**Request**
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (204)**
+
+<br>
 
 ## Enviar mensagem
 
-### _POST /mensagem/:conversa_
+### _POST /conversa/:id/mensagem_
+
+**Request**
 
 ```json
 {
-	"id_usuario": 87686,
-	"mensagem": "chat daoraa",
-	"data": "2020-20-10"
+	"mensagem": "chat daoraa"
 }
 ```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response(201)**
+
+<br>
+
+## Editar mensagem
+
+### _PUT /conversa/:id/mensagem/:id_
+
+**Request**
+
+```json
+{
+	"mensagem": "chat daoraa"
+}
+```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response(202)**
+<br>
+
+## Excluir mensagem
+
+### _DELETE /mensagem/:conversa/:id_
+
+**Request**
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response(204)**
+
+<br>
+
+## Denunciar Usúario
+
+### _POST /usuario/denuncia_
+
+**Request**
+
+```json
+{
+	"idUsuario": 12,
+	"motivo": "Bullying"
+}
+```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (201)**

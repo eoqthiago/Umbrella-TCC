@@ -109,12 +109,21 @@ create table tb_usuario_comunidade (
     foreign key (id_comunidade) references tb_comunidade (id_comunidade) on delete cascade
 );
 
+create table tb_comunidade_canal (
+    id_comunidade_canal int primary key auto_increment,
+    id_comunidade int,
+    nm_canal varchar(20),
+    foreign key (id_comunidade) references tb_comunidade (id_comunidade)
+)
+
 create table tb_comunidade_mensagem (
     id_mensagem int primary key auto_increment,
     id_usuario_comunidade int,
+    id_comunidade_canal int,
     ds_mensagem varchar(2500) not null,
     dt_mensagem datetime default(now()),
-    foreign key (id_usuario_comunidade) references tb_usuario_comunidade (id_usuario_comunidade) on delete cascade
+    foreign key (id_usuario_comunidade) references tb_usuario_comunidade (id_usuario_comunidade) on delete cascade,
+    foreign key (id_comunidade_canal) references tb_comunidade_canal (id_comunidade_canal) on delete cascade
 );
 
 create table tb_comunidade_mensagem_arquivo (
@@ -122,7 +131,8 @@ create table tb_comunidade_mensagem_arquivo (
     id_usuario_comunidade int,
     ds_arquivo varchar(400) not null,
     dt_arquivo datetime default(now()),
-    foreign key (id_usuario_comunidade) references tb_usuario_comunidade (id_usuario_comunidade) on delete cascade
+    foreign key (id_usuario_comunidade) references tb_usuario_comunidade (id_usuario_comunidade) on delete cascade,
+    foreign key (id_comunidade_canal) references tb_comunidade_canal (id_comunidade_canal) on delete cascade
 );
 
 create table tb_comunidade_usuario_banido (
