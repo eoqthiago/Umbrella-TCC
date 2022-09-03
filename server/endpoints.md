@@ -4,7 +4,7 @@
 
 ### _POST /admin/usuario/login_
 
-**request**
+**Request**
 
 ```json
 {
@@ -13,12 +13,11 @@
 }
 ```
 
-**response (202)**
+**Response (202)**
 
 ```json
 {
-	"token": "jsand8nasudnauifn.gemgimerigmer.dfsdncus",
-	"nome": "adm"
+	"token": "jsand8nasudnauifn.gemgimerigmer.dfsdncus"
 }
 ```
 
@@ -28,7 +27,7 @@
 
 ### _POST /admin/usuario_
 
-**request**
+**Request**
 
 ```json
 {
@@ -47,11 +46,11 @@
 
 ```json
 {
-	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
 }
 ```
 
-**response (201)**
+**Response (201)**
 
 <br>
 
@@ -59,7 +58,7 @@
 
 ### _DELETE /admin/usuario_
 
-**request**
+**Request**
 
 ```json
 {
@@ -71,11 +70,11 @@
 
 ```json
 {
-	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
 }
 ```
 
-**response (204)**
+**Response (204)**
 
 <br>
 
@@ -85,7 +84,7 @@
 
 ### _POST /comunidade_
 
-**request**
+**Request**
 
 ```json
 {
@@ -105,7 +104,7 @@
 }
 ```
 
-**response (201)**
+**Response (201)**
 
 ```json
 {
@@ -120,14 +119,19 @@
 
 <br>
 
-### _POST /comunidade/denuncia_
+## Editar comunidade
 
-**request**
+### _PUT /comunidade/:id_
+
+**Request**
 
 ```json
 {
-	"idUsuario": 12234,
-	"motivo": "Extremismo"
+	"nome": "Star Wars",
+	"descricao": "Os maiores fãs de Star Wars",
+	"imagem": "imagem.svg",
+	"imagemFundo": "imagem2.svg",
+	"privada": false
 }
 ```
 
@@ -135,36 +139,35 @@
 
 ```json
 {
-	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
 }
 ```
 
-**response (202)**
-
+**Response (202)**
 <br>
 
-## Remoção de uma comunidade
+## Deletar comunidade
 
-### _DELETE /comunidade/?id=1_
+### _DELETE /comunidade/:id_
 
-**request**
+**Request**
 **Header**
 
 ```json
 {
-	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
 }
 ```
 
-**response (204)**
+**Response (204)**
 
 <br>
 
-## Criação de canais
+## Criação de canal
 
-### _POST /comunidade/gerenciamento/canal_
+### _POST /comunidade/:id/canal_
 
-**request**
+**Request**
 
 ```json
 {
@@ -176,11 +179,11 @@
 
 ```json
 {
-	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
 }
 ```
 
-**response (204)**
+**Response (201)**
 
 ```json
 {
@@ -191,15 +194,15 @@
 
 <br>
 
-## Promover usuario
+## Editar canal
 
-### _PUT /comunidade/1/usuario/1_
+### _PUT /comunidade/:id/canal/:id_
 
-**request**
+**Request**
 
 ```json
 {
-	"nivel": "admin"
+	"nome": "Geral"
 }
 ```
 
@@ -207,23 +210,155 @@
 
 ```json
 {
-	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
 }
 ```
 
-**response (202)**
+**Response (202)**
+
+<br>
+
+## Deletar canal
+
+### _DELETE /comunidade/:id/canal/:id_
+
+**Request**
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (204)**
+
+<br>
+
+## Enviar mensagem
+
+### _POST /comunidade/canal/:id/mensagem_
+
+**Request**
+
+```json
+{
+	"mensagem": "Mensagem daora"
+}
+```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (201)**
+
+<br>
+
+## Editar mensagem
+
+### _PUT /comunidade/canal/:id/mensagem/:id_
+
+**Request**
+
+```json
+{
+	"mensagem": "Mensagem daora"
+}
+```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (202)**
+
+<br>
+
+## Deletar mensagem
+
+### _DELETE /comunidade/canal/:id/mensagem/:id_
+
+**Request**
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (204)**
+
+<br>
+
+## Denunciar comunidade
+
+### _POST /comunidade/:id/denuncia_
+
+**Request**
+
+```json
+{
+	"motivo": "Extremismo"
+}
+```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (204)**
+
+<br>
+
+## Promover usuario
+
+### _PUT /comunidade/:id/usuario/:id_
+
+**Request**
+
+```json
+{
+	"admin": true
+}
+```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (204)**
 
 <br>
 
 ## Banir Usuario
 
-### _POST /comunidade/banimento_
+### _POST /comunidade/:id/banir_
 
-**request**
+**Request**
 
 ```json
 {
-	"id_usuario_comunidade": 12,
+	"idUsuario": 12,
 	"motivo": "Spam"
 }
 ```
@@ -232,61 +367,11 @@
 
 ```json
 {
-	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
 }
 ```
 
-**response (201)**
-
-<br>
-
-## Denunciar Usúario
-
-### _POST /usuario/denuncia_
-
-**request**
-
-```json
-{
-	"id_usuario": 12,
-	"motivo": "Bullying"
-}
-```
-
-**Header**
-
-```json
-{
-	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
-}
-```
-
-**response (201)**
-
-<br>
-
-## Remover um usuário
-
-### _DELETE /usuario/?id=1_
-
-**request**
-
-```json
-{
-	"admEmail": "adm@umbrella.com",
-	"admSenha": "12345"
-}
-```
-
-**Header**
-
-```json
-{
-	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
-}
-```
-
-**response (201)**
+**Response (204)**
 
 <hr>
 
@@ -296,7 +381,7 @@
 
 ### _POST /usuario/login_
 
-**request**
+**Request**
 
 ```json
 {
@@ -305,13 +390,10 @@
 }
 ```
 
-**response (201)**
+**Response (202)**
 
 ```json
 {
-	"id_usuario": 1,
-	"nome": "usuario",
-	"email": "usuario@dom.com",
 	"token": "omefomewfiome.rgewaeragefg.eververververv"
 }
 ```
@@ -322,7 +404,7 @@
 
 ### _POST /usuario_
 
-**request**
+**Request**
 
 ```json
 {
@@ -331,16 +413,15 @@
 	"senha": "12345",
 	"nascimento": "2000-10-10",
 	"imagem": "imagem.svg",
-	"imagem_fundo": "imagem.svg"
+	"imagemFundo": "imagem.svg"
 }
 ```
 
-**response (204)**
+**Response (201)**
 
 ```json
 {
-	"id": 1,
-	"nome": "usuario"
+	"token": "omefomewfiome.rgewaeragefg.eververververv"
 }
 ```
 
@@ -348,15 +429,16 @@
 
 ## Alterar Perfil
 
-### _PUT /usuario/perfil_
+### _PUT /usuario_
 
-**request**
+**Request**
 
 ```json
 {
 	"nome": "usuario",
 	"descrição": "Gosto de Star Wars e Senhor dos Anéis",
-	"imagem": "imagem.svg"
+	"imagem": "imagem.svg",
+	"imagemFundo": "imagem.svg"
 }
 ```
 
@@ -364,76 +446,40 @@
 
 ```json
 {
-	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
 }
 ```
 
-**response (201)**
+**Response (202)**
 
 <br>
 
 ## Deleção de conta
 
-### _DELETE /usuario/perfil_
+### _DELETE /usuario/:id_
 
-**request**
-
-```json
-{
-	"email": "usuario@dom.com",
-	"senha": "12345"
-}
-```
+**Request**
 
 **Header**
 
 ```json
 {
-	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
 }
 ```
 
-**response (201)**
-
-# **Chat**
-
-## Enviar mensagem
-
-### _POST /mensagem/:conversa_
-
-**request**
-
-```json
-{
-	"id_usuario": 87686,
-	"id_mensagem": 73246,
-	"mensagem": "chat daoraa",
-	"data": "2020-20-10"
-}
-```
-
-**Header**
-
-```json
-{
-	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
-}
-```
-
-**response(201)**
+**Response (204)**
 
 <br>
 
-## Excluir mensagem
+## Enviar mensagem
 
-### _DELETE /mensagem/:conversa_
+### _POST /conversa/:id/mensagem_
 
-**request**
+**Request**
 
 ```json
 {
-	"id_usuario": 87686,
-	"id_mensagem": 79837,
 	"mensagem": "chat daoraa"
 }
 ```
@@ -442,9 +488,74 @@
 
 ```json
 {
-	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
 }
 ```
 
-**response(201)**
-s
+**Response(201)**
+
+<br>
+
+## Editar mensagem
+
+### _PUT /conversa/:id/mensagem/:id_
+
+**Request**
+
+```json
+{
+	"mensagem": "chat daoraa"
+}
+```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response(202)**
+<br>
+
+## Excluir mensagem
+
+### _DELETE /mensagem/:conversa/:id_
+
+**Request**
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response(204)**
+
+<br>
+
+## Denunciar Usúario
+
+### _POST /usuario/denuncia_
+
+**Request**
+
+```json
+{
+	"idUsuario": 12,
+	"motivo": "Bullying"
+}
+```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (201)**
