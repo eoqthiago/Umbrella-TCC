@@ -8,10 +8,10 @@ create table tb_admin (
     ds_senha varchar(64) not null,
     ds_endereco varchar(200) not null,
     dt_nascimento date not null,
-    ds_telefone varchar(12) unique not null,
+    ds_telefone varchar(14) unique not null,
     ds_cpf varchar(14) unique not null,
     dt_criacao date default(curdate()),
-    lv_hierarquia int not null
+    bt_root boolean not null
 );
 
 -- Usuario
