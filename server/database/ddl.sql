@@ -4,21 +4,21 @@ create schema umbrellaDB;
 create table tb_admin (
     id_admin int primary key auto_increment,
     nm_admin varchar(50) not null,
-    ds_email varchar(2500) unique not null,
+    ds_email varchar(250) unique not null,
     ds_senha varchar(64) not null,
     ds_endereco varchar(200) not null,
     dt_nascimento date not null,
-    ds_telefone varchar(12) unique not null,
+    ds_telefone varchar(14) unique not null,
     ds_cpf varchar(14) unique not null,
     dt_criacao date default(curdate()),
-    lv_hierarquia int not null
+    bt_root boolean not null
 );
 
 -- Usuario
 create table tb_usuario (
     id_usuario int primary key auto_increment,
     nm_usuario varchar(50) not null,
-    ds_usuario varchar(500) not null,
+    ds_usuario varchar(500),
     img_usuario varchar(200),
     img_banner varchar(200),
     ds_email varchar(200) unique not null,
@@ -114,7 +114,7 @@ create table tb_comunidade_canal (
     id_comunidade int,
     nm_canal varchar(20),
     foreign key (id_comunidade) references tb_comunidade (id_comunidade)
-)
+);
 
 create table tb_comunidade_mensagem (
     id_mensagem int primary key auto_increment,
@@ -129,6 +129,7 @@ create table tb_comunidade_mensagem (
 create table tb_comunidade_mensagem_arquivo (
     id_mensagem_arquivo int primary key auto_increment,
     id_usuario_comunidade int,
+    id_comunidade_canal int,
     ds_arquivo varchar(400) not null,
     dt_arquivo datetime default(now()),
     foreign key (id_usuario_comunidade) references tb_usuario_comunidade (id_usuario_comunidade) on delete cascade,

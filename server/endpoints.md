@@ -37,7 +37,7 @@
 		"senha": "12345",
 		"nascimento": "2000-10-10",
 		"cpf": "000.000.000-00",
-		"nivelHierarquia": "root"
+		"root": true
 	}
 }
 ```
