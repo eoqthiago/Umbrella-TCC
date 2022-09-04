@@ -28,15 +28,14 @@ create table tb_usuario (
 );
 
 create table tb_usuario_amizade (
-    id_usuario_amizade int primary key auto_increment
-);
-
-create table tb_usuario_amigo (
-    id_usuario_amigo int primary key auto_increment,
-    id_usuario int,
-    id_usuario_amizade int,
-    foreign key (id_usuario) references tb_usuario(id_usuario) on delete cascade,
-    foreign key (id_usuario_amizade) references tb_usuario_amizade(id_usuario_amizade) on delete cascade
+    id_usuario_amizade int primary key auto_increment,
+    id_solicitante int,
+    id_solicitado int,
+    ds_situacao varchar(1) default('P') not null,
+    dt_pedido date default(curdate()),
+    dt_confirmacao date,
+    foreign key (id_solicitante) references tb_usuario (id_usuario) on delete cascade,
+    foreign key (id_solicitado) references tb_usuario (id_usuario) on delete cascade
 );
 
 create table tb_usuario_report (
