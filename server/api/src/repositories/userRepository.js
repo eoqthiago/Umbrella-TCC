@@ -44,3 +44,49 @@ export async function userSearch(email) {
 	const [answer] = await con.query(command, [email]);
 	return answer;
 }
+
+export async function userIdSearch(id) {
+	const command = `
+        select * from tb_usuario where id_usuario = ? `;
+	const [answer] = await con.query(command, [id]);
+	return answer;
+}
+
+export async function amigosConsulta(id) {
+	const command = `
+        select *
+        from tb_usuario_amizade
+        where	id_solicitante = ? or id_solicitado = ? and ds_situacao = 'A' `;
+	const [answer] = await con.query(command, [id, id]);
+	return answer;
+}
+
+export async function solicitarAmizade(solicitante, solicitado) {
+	const command = `
+        insert into tb_usuario_amizade (id_solicitante, id_solicitado)
+			        values (?, ?) `;
+	const [answer] = await con.query(command, [solicitante, solicitado]);
+	return answer.affectedRows;
+}
+
+export async function aceitarAmizade(idAmizade, idSolicitado) {
+	const command = `
+        update tb_usuario_amizade set dt_confirmacao = curdate() and ds_situacao = 'A' where id_usuario_amizade = ? and id_solicitado = ?`;
+	const [answer] = await con.query(command, [idAmizade, idSolicitado]);
+	return answer.affectedRows;
+}
+
+export async function recusarAmizade(idAmizade, idSolicitado) {
+	const command = `
+        update tb_usuario_amizade set ds_situacao = 'N' where id_usuario_amizade = ? and id_solicitado = ? `;
+	const [answer] = await con.query(command, [idAmizade, idSolicitado]);
+	console.log('recusar');
+	return answer.affectedRows;
+}
+
+export async function removerAmizade(idAmizade, idUsuario) {
+	const command = `
+        delete from tb_usuario_amizade where id_usuario_amizade = ? and (id_solicitante = ? or id_solicitado = ?)`;
+	const [answer] = await con.query(command, [idAmizade, idUsuario, idUsuario]);
+	return answer.affectedRows;
+}

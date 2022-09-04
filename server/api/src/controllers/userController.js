@@ -1,10 +1,23 @@
 import { Router } from "express";
 import { sha256 } from "js-sha256";
 import jwt from "jsonwebtoken";
-import { userCadastro, userDelete, userEdit, userLogin, userSearch } from "../repositories/userRepository.js";
+import {
+	aceitarAmizade,
+	amigosConsulta,
+	recusarAmizade,
+	removerAmizade,
+	solicitarAmizade,
+	userCadastro,
+	userDelete,
+	userEdit,
+	userIdSearch,
+	userLogin,
+	userSearch,
+} from "../repositories/userRepository.js";
 
 const server = Router();
 
+// Cadastro
 server.post("/usuario", async (req, res) => {
 	try {
 		const user = req.body;
@@ -32,6 +45,7 @@ server.post("/usuario", async (req, res) => {
 	}
 });
 
+// Login
 server.post("/usuario/login", async (req, res) => {
 	try {
 		const user = req.body;
@@ -68,6 +82,7 @@ server.post("/usuario/login", async (req, res) => {
 	}
 });
 
+// Alterar perfil
 server.put("/usuario", async (req, res) => {
 	try {
 		const user = req.body;
@@ -90,16 +105,118 @@ server.put("/usuario", async (req, res) => {
 	}
 });
 
+// Deletar conta
 server.delete("/usuario", async (req, res) => {
 	try {
 		const user = req.body;
 		switch (true) {
 			case !user.header.token:
 				throw new Error("Falha na autenticação");
+			default:
+				break;
 		}
 		const email = jwt.decode(user.header.token).email;
 		const answer = await userDelete(email);
 		if (!answer) throw new Error("Um erro ocorreu");
+		res.status(204).send();
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
+// Listar amigos
+server.get("/usuario/:id/amizades", async (req, res) => {
+	try {
+		const id = Number(req.params.id);
+		if (!userIdSearch(id)[0]) throw new Error("Usuário não encontrado");
+		const answer = await amigosConsulta(id);
+		if (answer < 1) throw new Error("Nenhuma amizade foi encontrada");
+		res.send(answer);
+	} catch (err) {
+		res.status(404).send({
+			err: err.message,
+		});
+	}
+});
+
+// Pedir em amizade
+server.post("/usuario/amizade", async (req, res) => {
+	try {
+		const user = req.body;
+		switch (true) {
+			case !user.header.token:
+				throw new Error("Falha na autenticação");
+			case !userIdSearch(user.usuarioSolicitado):
+				throw new Error("Usuário não encontrado");
+			default:
+				break;
+		}
+		user.id = jwt.decode(user.header.token).id;
+		const answer = await solicitarAmizade(user.id, user.usuarioSolicitado);
+
+		if (answer < 1) throw new Error("Um erro ocorreu");
+		res.send();
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
+// Aceitar / recusar pedido de amizade
+server.put("/usuario/amizade/:id/:situacao", async (req, res) => {
+	try {
+		const user = req.body;
+		const id = Number(req.params.id);
+		const situacao = req.params.situacao.toUpperCase()[0];
+		switch (true) {
+			case !user.header.token:
+				throw new Error("Falha na autenticação");
+			case !id || !situacao || !["A", "N"].includes(situacao):
+				throw new Error("Campos inválidos");
+			default:
+				break;
+		}
+		user.id = jwt.decode(user.header.token).id;
+		let answer;
+		switch (situacao) {
+			case "A":
+				answer = await aceitarAmizade(id, user.id);
+				break;
+			case "N":
+				answer = await recusarAmizade(id, user.id);
+				break;
+			default:
+				break;
+		}
+		if (answer < 1) {
+			throw new Error(`Não foi possível ${situacao == "N" ? "rejeitar" : "aceitar"} a amizade`);
+		}
+
+		res.send();
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
+// Remover pedido / amizade
+server.delete("/usuario/amizade/:id", async (req, res) => {
+	try {
+		const user = req.body;
+		const id = Number(req.params.id);
+		switch (true) {
+			case !user.header.token:
+				throw new Error("Falha na autenticação");
+			case !id:
+				throw new Error("Campos inválidos");
+		}
+		user.id = jwt.decode(user.header.token).id;
+		const answer = await removerAmizade(id, user.id);
+		if (answer < 1) throw new Error("Não foi possível desfazer a amizade");
 		res.status(204).send();
 	} catch (err) {
 		res.status(400).send({
