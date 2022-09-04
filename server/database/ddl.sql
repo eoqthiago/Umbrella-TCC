@@ -4,7 +4,7 @@ create schema umbrellaDB;
 create table tb_admin (
     id_admin int primary key auto_increment,
     nm_admin varchar(50) not null,
-    ds_email varchar(250) unique not null,
+    ds_email varchar(200) unique not null,
     ds_senha varchar(64) not null,
     ds_endereco varchar(200) not null,
     dt_nascimento date not null,

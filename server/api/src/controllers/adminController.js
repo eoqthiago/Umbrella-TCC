@@ -2,7 +2,7 @@ import { Router } from "express";
 import jwt from "jsonwebtoken";
 import { sha256 } from "js-sha256";
 import { adminCadastro, adminDelete, adminLogin, adminSearch, adminVerificar } from "../repositories/adminRepository.js";
-import { cpfTest, emailTest } from "../utils/expressionTest.js";
+import { cpfTest, emailTest, telefoneTest } from "../utils/expressionTest.js";
 
 const server = Router();
 
@@ -11,7 +11,7 @@ server.post("/admin/login", async (req, res) => {
 		const admin = req.body;
 		switch (true) {
 			case !emailTest(admin.email.trim()):
-				throw new Error("O email é obrigatório");
+				throw new Error("O email inserido é inválido");
 			case !admin.senha || !admin.senha.trim():
 				throw new Error("A senha é obrigatória");
 			default:
@@ -47,15 +47,18 @@ server.post("/admin/login", async (req, res) => {
 server.post("/admin", async (req, res) => {
 	try {
 		const admin = req.body;
+		const header = req.header("x-acess-token");
 		switch (true) {
-			case !adminVerificar(jwt.decode(admin.header.token).email):
+			case !adminVerificar(jwt.decode(header).email):
 				throw new Error("Falha na autenticação");
 			case !emailTest(admin.novoAdmin.email):
 				throw new Error("Email inválido");
 			case !admin.novoAdmin.senha || !admin.novoAdmin.senha.trim():
 				throw new Error("Senha inválida");
-			case !cpfTest(admin.novoAdmin.cpf):
+			case !cpfTest(admin.novoAdmin.cpf) :
 				throw new Error("CPF inválido");
+			case !telefoneTest(admin.novoAdmin.telefone) :
+				throw new Error("Telefone inválido");
 			case !admin.novoAdmin.nascimento:
 				throw new Error("Data de nascimento inválida");
 		}
@@ -75,8 +78,9 @@ server.post("/admin", async (req, res) => {
 server.delete("/admin", async (req, res) => {
 	try {
 		const admin = req.body;
+		const header = req.header("x-acess-token");
 		switch (true) {
-			case !adminVerificar(jwt.decode(admin.header.token).email):
+			case !adminVerificar(jwt.decode(header).email):
 				throw new Error("Falha na autenticação");
 			case !emailTest(admin.email):
 				throw new Error("Email inválido");
