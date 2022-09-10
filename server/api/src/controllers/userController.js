@@ -51,7 +51,7 @@ server.post("/usuario/login", async (req, res) => {
 	try {
 		const user = req.body;
 		switch (true) {
-			case !user.email || !user.email.trim() || user.email.length > 200:
+			case !emailTest(user.email):
 				throw new Error("O email inserido é inválido");
 			case !user.senha || !user.senha.trim():
 				throw new Error("A senha é obrigatória");
