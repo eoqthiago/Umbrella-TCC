@@ -44,6 +44,7 @@ const Input = styled.input`
 	width: clamp(100px, ${(props) => props.width}, 100%);
 	color: ${(props) => props.cor || "#525252"};
 	font-family: OpenSans-medium;
+	height: 40px;
 	font-size: clamp(15px, ${(props) => props.fonte}, 20px);
 	user-select: none;
 	padding: 10px 7px;
@@ -57,6 +58,12 @@ const Input = styled.input`
 
 	&:disabled {
 		cursor: not-allowed;
+	}
+
+	@media (max-width: 400px) {
+		height: 30px;
+		margin-top: 9px;
+		font-size: 13px;
 	}
 `;
 

@@ -10,6 +10,12 @@ export async function userLogin(email, senha) {
 	return r.data;
 }
 
-export async function userCadastro() {
-	return 1;
+export async function userCadastro(nome, email, senha, nascimento) {
+	const r = await api.post("/usuario", {
+		nome: nome,
+		email: email,
+		senha: senha,
+		nascimento: nascimento,
+	});
+	return r;
 }

@@ -22,7 +22,7 @@ const Index = () => {
 			localstorage("user", r);
 			setTimeout(() => navigate("/"), 2000);
 		} catch (err) {
-			if (err.response.status === 401) toast.error(err.response.data.err);
+			if (err.response) toast.error(err.response.data.err);
 			setLoading(false);
 			ref.current.complete();
 		}

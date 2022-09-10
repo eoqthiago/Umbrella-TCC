@@ -2,14 +2,18 @@ import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import LoadingBar from "react-top-loading-bar";
-import localstorage from "local-storage";
+import Checkbox from "@mui/material/Checkbox";
 import { userCadastro } from "../../api/userApi";
 import { BotaoSolido, Input, SubTitulo, Titulo } from "../../styled";
 import "./index.sass";
 
 const Index = () => {
+	const [nome, setNome] = useState("");
 	const [email, setEmail] = useState("");
 	const [senha, setSenha] = useState("");
+	const [senhaconf, setSenhaconf] = useState("");
+	const [nascimento, setNascimento] = useState();
+	const [termos, setTermos] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
 	const ref = useRef();
@@ -18,14 +22,15 @@ const Index = () => {
 		setLoading(true);
 		ref.current.continuousStart();
 		try {
-			const r = await userCadastro(email, senha);
-			localstorage("user", r);
-			setTimeout(() => navigate("/"), 2000);
+			if (senha !== senhaconf) throw new Error("As senhas são coincidem");
+			await userCadastro(nome, email, senha, nascimento);
+			toast.success("🚀 Conta criada com sucesso!");
 		} catch (err) {
-			if (err.response.status === 401) toast.error(err.response.data.err);
-			setLoading(false);
-			ref.current.complete();
+			if (err.response) toast.error(err.response.data.err);
+			else toast.warning(err.message);
 		}
+		setLoading(false);
+		ref.current.complete();
 	}
 
 	return (
@@ -37,23 +42,39 @@ const Index = () => {
 						cadastro
 					</Titulo>
 					<SubTitulo cor="#3F3F3F" fonte="2.5vw">
-						Estamos felizes em ter você de volta!
+						Seja bem-vindo!
 					</SubTitulo>
 				</div>
 				<div className="cadastro-corpo">
 					<div className="cadastro-inputs">
+						<Input placeholder="Nome de usuário" width="100%" type="text" value={nome} onChange={(e) => setNome(e.target.value)} disabled={loading} />
 						<Input placeholder="Email" width="100%" type="email" value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} />
-						<Input placeholder="Senha" width="100%" value={senha} onChange={(e) => setSenha(e.target.value)} disabled={loading} />
-						<div className="cadastro-legenda">
-							Esqueceu sua senha? Clique <span> aqui </span> para recuperá-la
+						<Input
+							placeholder="Data de nascimento"
+							width="100%"
+							onFocus={(e) => (e.target.type = "date")}
+							onBlur={(e) => (e.target.type = "text")}
+							value={nascimento}
+							onChange={(e) => setNascimento(e.target.value)}
+							disabled={loading}
+						/>
+						<Input placeholder="Senha" width="100%" type="password" value={senha} onChange={(e) => setSenha(e.target.value)} disabled={loading} />
+						<Input placeholder="Confirme sua senha" width="100%" type="password" value={senhaconf} onChange={(e) => setSenhaconf(e.target.value)} disabled={loading} />
+						<div className="cadastro-legenda" style={{ marginTop: "10px" }}>
+							<Checkbox value={termos} onClick={(e) => setTermos(!termos)} />
+							<div>
+								Tenho mais de 13 anos e concordo com os <span> termos e condições </span>
+							</div>
 						</div>
 					</div>
 					<div className="cadastro-btn">
-						<BotaoSolido fonte="4vw" width="100%" onClick={handlecadastro} disabled={loading}>
+						<BotaoSolido fonte="4vw" width="100%" onClick={handlecadastro} disabled={loading || !termos}>
 							Confirmar
 						</BotaoSolido>
 						<div className="cadastro-legenda">
-							Não possui uma conta? Faça seu cadastro <span> aqui! </span>
+							<div>
+								Já possui uma conta? Clique <span onClick={() => navigate("/login")}> aqui </span> para fazer login
+							</div>
 						</div>
 					</div>
 				</div>
