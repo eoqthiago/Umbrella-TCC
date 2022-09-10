@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import LoadingBar from "react-top-loading-bar";
 import localstorage from "local-storage";
-import { userLogin } from "../../api/userApi";
+import { userCadastro } from "../../api/userApi";
 import { BotaoSolido, Input, SubTitulo, Titulo } from "../../styled";
 import "./index.sass";
 
@@ -14,11 +14,11 @@ const Index = () => {
 	const navigate = useNavigate();
 	const ref = useRef();
 
-	async function handleLogin() {
+	async function handlecadastro() {
 		setLoading(true);
 		ref.current.continuousStart();
 		try {
-			const r = await userLogin(email, senha);
+			const r = await userCadastro(email, senha);
 			localstorage("user", r);
 			setTimeout(() => navigate("/"), 2000);
 		} catch (err) {
@@ -29,31 +29,31 @@ const Index = () => {
 	}
 
 	return (
-		<div className="login page">
+		<div className="cadastro page">
 			<LoadingBar color="#48d677" ref={ref} />
 			<main>
-				<div className="login-titulos">
+				<div className="cadastro-titulos">
 					<Titulo cor="#02C17D" fonte="4vw">
-						Login
+						cadastro
 					</Titulo>
 					<SubTitulo cor="#3F3F3F" fonte="2.5vw">
 						Estamos felizes em ter você de volta!
 					</SubTitulo>
 				</div>
-				<div className="login-corpo">
-					<div className="login-inputs">
+				<div className="cadastro-corpo">
+					<div className="cadastro-inputs">
 						<Input placeholder="Email" width="100%" type="email" value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} />
-						<Input placeholder="Senha" width="100%" type="password" value={senha} onChange={(e) => setSenha(e.target.value)} disabled={loading} />
-						<div className="login-legenda">
+						<Input placeholder="Senha" width="100%" value={senha} onChange={(e) => setSenha(e.target.value)} disabled={loading} />
+						<div className="cadastro-legenda">
 							Esqueceu sua senha? Clique <span> aqui </span> para recuperá-la
 						</div>
 					</div>
-					<div className="login-btn">
-						<BotaoSolido fonte="4vw" width="100%" onClick={handleLogin} disabled={loading}>
+					<div className="cadastro-btn">
+						<BotaoSolido fonte="4vw" width="100%" onClick={handlecadastro} disabled={loading}>
 							Confirmar
 						</BotaoSolido>
-						<div className="login-legenda">
-							Não possui uma conta? Faça seu cadastro <span onClick={() => navigate("/cadastro")}> aqui! </span>
+						<div className="cadastro-legenda">
+							Não possui uma conta? Faça seu cadastro <span> aqui! </span>
 						</div>
 					</div>
 				</div>

@@ -9,3 +9,7 @@ export async function userLogin(email, senha) {
 	});
 	return r.data;
 }
+
+export async function userCadastro() {
+	return 1;
+}

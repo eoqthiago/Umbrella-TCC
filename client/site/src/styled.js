@@ -54,10 +54,15 @@ const Input = styled.input`
 	&:focus {
 		outline-color: #17ba76;
 	}
+
+	&:disabled {
+		cursor: not-allowed;
+	}
 `;
 
 const BotaoSolido = styled.button`
-	background: ${(props) => props.background || "#17BA76"};
+	background: #17ba76;
+	text-align: center;
 	color: ${(props) => props.main || "#fff"};
 	border-radius: 3px;
 	border: none;
@@ -71,7 +76,16 @@ const BotaoSolido = styled.button`
 
 	&:active {
 		transform: scale(1.02);
-	}	
-`
+	}
+
+	&:disabled {
+		background: #51bb8f;
+		cursor: not-allowed;
+
+		&:active {
+			transform: scale(1);
+		}
+	}
+`;
 
 export { Titulo, SubTitulo, BotaoLiso, Input, BotaoSolido };
