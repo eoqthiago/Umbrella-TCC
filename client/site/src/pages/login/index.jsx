@@ -1,11 +1,23 @@
 import React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { userLogin } from "../../api/userApi";
 import { BotaoSolido, Input, SubTitulo, Titulo } from "../../styled";
 import "./index.sass";
 
 const Index = () => {
 	const [email, setEmail] = useState("");
 	const [senha, setSenha] = useState("");
+	const navigate = useNavigate();
+
+	async function handleLogin() {
+		try {
+			const r = await userLogin(email, senha);
+		} catch (err) {
+			if (err.response.status === 401) toast.error(err.response.data.err);
+		}
+	}
 
 	return (
 		<div className="login page">
@@ -27,7 +39,7 @@ const Index = () => {
 						</div>
 					</div>
 					<div className="login-btn">
-						<BotaoSolido fonte="4vw" width="100%">
+						<BotaoSolido fonte="4vw" width="100%" onClick={handleLogin}>
 							Confirmar
 						</BotaoSolido>
 						<div className="login-legenda">
