@@ -3,6 +3,7 @@ import Header from "../../components/header";
 import Footer from "../../components/footer";
 import { Titulo, SubTitulo, BotaoLiso } from "../../styled";
 import Card from "../../components/card";
+import Carousel from 'react-elastic-carousel';
 import "./index.sass";
 
 const Index = () => {
@@ -27,9 +28,11 @@ const Index = () => {
 						</SubTitulo>
 					</div>
 					<div className="home-top-comunidades-cards">
-						<Card />
-						<Card />
-						<Card />
+						<Carousel>
+							<Card />
+							<Card />
+							<Card />
+      					</Carousel>
 					</div>
 				</section>
 				<section className="home-cadastre">
