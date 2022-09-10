@@ -51,17 +51,18 @@ server.post("/usuario/login", async (req, res) => {
 	try {
 		const user = req.body;
 		switch (true) {
-			case !user.email || !user.email.trim() || user.email.length > 200:
+			case !emailTest(user.email):
 				throw new Error("O email inserido é inválido");
 			case !user.senha || !user.senha.trim():
-				throw new Error("A senha é obrigatória");
+				throw new Error("A senha inserida é inválida");
 			default:
 				break;
 		}
-		const search = await userSearch(user.email);
-		if (!search[0]) throw new Error("Um erro ocorreu");
+
 		user.senha = sha256(user.senha);
 		const answer = await userLogin(user);
+		if (!answer) throw new Error("Email ou senha incorretos");
+
 		const token = jwt.sign(
 			{
 				id: answer.id,
@@ -111,7 +112,7 @@ server.put("/usuario", async (req, res) => {
 server.delete("/usuario", async (req, res) => {
 	try {
 		const header = req.header("x-acess-token");
-		if (!header || !userIdSearch(jwt.decode(header).id)[0]) throw new Error('Falha na autenticação')
+		if (!header || !userIdSearch(jwt.decode(header).id)[0]) throw new Error("Falha na autenticação");
 		const email = jwt.decode(header).email;
 		const answer = await userDelete(email);
 		if (answer < 1) throw new Error("Um erro ocorreu");
@@ -128,7 +129,7 @@ server.get("/usuario/:id/amizades", async (req, res) => {
 	try {
 		const id = Number(req.params.id);
 		const header = req.header("x-acess-token");
-		if (!header || !userIdSearch(jwt.decode(header).id)[0]) throw new Error("Falha na autenticação")
+		if (!header || !userIdSearch(jwt.decode(header).id)[0]) throw new Error("Falha na autenticação");
 		if (!userIdSearch(id)[0]) throw new Error("Usuário não encontrado");
 		const answer = await amigosConsulta(id);
 		if (answer < 1) throw new Error("Nenhuma amizade foi encontrada");
