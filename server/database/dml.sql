@@ -27,6 +27,30 @@ delete from tb_usuario where ds_email = "othierrydaora";
 -- Procurar usuário
 select * from tb_usuario where ds_email = "othierry@daora";
 
+-- Consultar amigos
+select *
+  from tb_usuario_amizade
+  where	id_solicitante = 1 or id_solicitado = 1 and ds_situacao = 'A';
+
+-- Ver pedidos de amizade recebidos
+select 	*
+  from	tb_usuario_amizade
+  where	id_solicitado = 1 and dt_confirmacao is null;
+  
+-- Adicionar pedido de amizade
+insert into tb_usuario_amizade (id_solicitante, id_solicitado)
+					  values (1, 2);
+
+-- Aceitar pedido de amizade
+update tb_usuario_amizade set dt_confirmacao = curdate() and ds_situacao = 'A' where id_usuario_amizade = 1;
+
+-- Recusar pedido de amizade
+update tb_usuario_amizade set ds_situacao = 'N' where id_usuario_amizade = 1;
+
+-- Remover pedido ou amizade
+delete from tb_usuario_amizade where id_usuario_amizade = 1;
+
+
 
 
 -- *Administrador*

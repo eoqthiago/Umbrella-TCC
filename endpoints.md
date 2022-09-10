@@ -236,6 +236,40 @@
 
 <br>
 
+## Entrar em comunidade
+
+### _POST /comunidade/:id/usuario_
+
+**Request**
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (202)**
+
+<br>
+
+## Sair de comunidade
+
+### _DELETE /comunidade/:id/usuario_
+
+**Request**
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (204)**
+
+<br>
+
 ## Enviar mensagem
 
 ### _POST /comunidade/canal/:id/mensagem_
@@ -350,7 +384,7 @@
 
 <br>
 
-## Banir Usuario
+## Banir Usuario da comunidade
 
 ### _POST /comunidade/:id/banir_
 
@@ -429,7 +463,7 @@
 
 ## Alterar Perfil
 
-### _PUT /usuario_
+### _PUT /usuario/perfil_
 
 **Request**
 
@@ -454,9 +488,34 @@
 
 <br>
 
+## Alterar credenciais
+
+### _PUT /usuario_
+
+**Request**
+
+```json
+{
+	"email": "othierry@daora",
+	"senha": "1234"
+}
+```
+
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (204)**
+
+<br>
+
 ## Deleção de conta
 
-### _DELETE /usuario/:id_
+### _DELETE /usuario_
 
 **Request**
 
@@ -534,6 +593,118 @@
 ```
 
 **Response(204)**
+
+<br>
+
+## Consultar amigo
+
+### _GET /usuario/:id/amizades_
+
+**Request**
+**Response (200)**
+
+```json
+[
+	{
+		"id": 1,
+		"amigoDesde": "2010-10-10"
+	}
+]
+```
+
+<br>
+
+## Ver pedidos de amizades recebidos
+
+### _POST /usuario/pedidos_amizade/recebidos_
+
+**Request**
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (200)**
+
+```json
+[
+	{
+		"id": 1,
+		"data": "2010-10-10"
+	}
+]
+```
+
+<br>
+
+## Fazer um pedido de amizade
+
+### _POST /usuario/:id/pedido_amizade_
+
+**Request**
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (201)**
+
+<br>
+
+## Aceitar um pedido de amizade
+
+### _PUT /usuario/pedido_amizade/:id_
+
+**Request**
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (201)**
+
+<br>
+
+## Recusar um pedido de amizade
+
+### _Delete /usuario/pedido_amizade/:id_
+
+**Request**
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (204)**
+
+<br>
+
+## Remover amigo
+
+### _DELETE /usuario/:id/amizade_
+
+**Request**
+**Header**
+
+```json
+{
+	"x-access-token": "omefomewfiome.rgewaeragefg.eververververv"
+}
+```
+
+**Response (201)**
 
 <br>
 
