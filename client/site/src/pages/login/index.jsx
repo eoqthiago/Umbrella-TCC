@@ -31,7 +31,7 @@ const Index = () => {
 
 	useEffect(() => {
 		localstorage("user") && navigate("/home");
-	});
+	}, []);
 
 	return (
 		<div className="login page">

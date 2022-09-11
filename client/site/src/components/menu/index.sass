@@ -1,5 +1,5 @@
 .comp-menu
-    background: red
+    background: #EEEFF0
     display: flex
     flex-direction: row
     height: 100vh
@@ -9,15 +9,39 @@
     position: fixed
     z-index: 2
     right: -100vw
-    padding-top: 30px
+    padding: 60px 0 0 20px
     transition: .4s ease-in
     overflow: hidden
+    // border-left: 1px solid #D7D7D7
+    box-shadow: -2px 0px 10px #0000001e
+    justify-content: space-between
 
     > .comp-menu-exit
         position: absolute
-        top: 0
-        left: 0
+        top: 10px
+        left: 10px
+        width: 30px
+        height: 30px
+        background: url(../../../public/assets/icons/x.svg) no-repeat center
+        background-size: 20px
+        border: none
+        transition: .1s ease
+
+        &:hover
+            transform: scale(1.05)
+        
+        &:active
+                transition: .1s linear
+                transform: scale(.9)
+
+    > .comp-menu-chats
+        background-color: red
+        width: 100%
+        
+    > .comp-menu-config
+        background-color: blue
+        width: 80px
 
 .comp-menu-ativo
     right: 0
-    transition: .4s ease-out
+    transition: .3s ease-out

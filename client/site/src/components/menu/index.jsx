@@ -12,15 +12,14 @@ export default function Index() {
 			toast.warn("Você precisa estar logado para acessar essa página");
 			navigate("/");
 		}
-	});
+	}, []);
 
 	return (
 		<div className="comp-menu" id="comp-menu-id">
-			<button className="comp-menu-exit" onClick={() => document.getElementById("comp-menu-id").classList.remove("comp-menu-ativo")}>
-				X
-			</button>
-			<section>comunidades</section>
-			<section>Configurações</section>
+			<button className="comp-menu-exit" onClick={() => document.getElementById("comp-menu-id").classList.remove("comp-menu-ativo")} />
+
+			<section className="comp-menu-chats">Comunidades</section>
+			<section className="comp-menu-config">Configurações</section>
 		</div>
 	);
 }

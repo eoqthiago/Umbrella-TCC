@@ -35,7 +35,7 @@ server.post("/usuario", async (req, res) => {
 				break;
 		}
 		const search = await userSearch(user.email);
-		if (search[0]) throw new Error("Um erro ocorreu");
+		if (search[0]) throw new Error("Este email já está em uso");
 		user.senha = sha256(user.senha);
 		const answer = await userCadastro(user);
 		res.status(201).send();
@@ -89,15 +89,16 @@ server.put("/usuario", async (req, res) => {
 	try {
 		const user = req.body;
 		const header = req.header("x-acess-token");
+		const auth = jwt.decode(header);
 		switch (true) {
-			case !header || !userIdSearch(jwt.decode(header).id)[0]:
+			case !header || !auth || !(await userIdSearch(auth.id)):
 				throw new Error("Falha na autenticação");
 			case !user.nome || !user.nome.trim() || user.nome.length > 50:
 				throw new Error("O nome é obrigatório");
 			default:
 				break;
 		}
-		user.id = jwt.decode(header).id;
+		user.id = auth.id;
 		const answer = await userEdit(user);
 		if (answer < 0) throw new Error("Não foi possível alterar o perfil");
 		res.status(202).send();
@@ -112,8 +113,9 @@ server.put("/usuario", async (req, res) => {
 server.delete("/usuario", async (req, res) => {
 	try {
 		const header = req.header("x-acess-token");
-		if (!header || !userIdSearch(jwt.decode(header).id)[0]) throw new Error("Falha na autenticação");
-		const email = jwt.decode(header).email;
+		const auth = jwt.decode(header);
+		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
+		const email = auth.email;
 		const answer = await userDelete(email);
 		if (answer < 1) throw new Error("Um erro ocorreu");
 		res.status(204).send();
@@ -129,8 +131,9 @@ server.get("/usuario/:id/amizades", async (req, res) => {
 	try {
 		const id = Number(req.params.id);
 		const header = req.header("x-acess-token");
-		if (!header || !userIdSearch(jwt.decode(header).id)[0]) throw new Error("Falha na autenticação");
-		if (!userIdSearch(id)[0]) throw new Error("Usuário não encontrado");
+		const auth = jwt.decode(header);
+		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
+		if (!(await userIdSearch(id))) throw new Error("Usuário não encontrado");
 		const answer = await amigosConsulta(id);
 		if (answer < 1) throw new Error("Nenhuma amizade foi encontrada");
 		res.send(answer);
@@ -146,15 +149,16 @@ server.post("/usuario/amizade", async (req, res) => {
 	try {
 		const user = req.body;
 		const header = req.header("x-acess-token");
+		const auth = jwt.decode(header);
 		switch (true) {
-			case !header || !userIdSearch(jwt.decode(header).id)[0]:
+			case !header || !auth || !(await userIdSearch(auth.id)):
 				throw new Error("Falha na autenticação");
 			case !userIdSearch(user.usuarioSolicitado):
 				throw new Error("Usuário não encontrado");
 			default:
 				break;
 		}
-		user.id = jwt.decode(header).id;
+		user.id = auth.id;
 		const answer = await solicitarAmizade(user.id, user.usuarioSolicitado);
 
 		if (answer < 1) throw new Error("Um erro ocorreu");
@@ -173,15 +177,16 @@ server.put("/usuario/amizade/:id/:situacao", async (req, res) => {
 		const id = Number(req.params.id);
 		const situacao = req.params.situacao.toUpperCase()[0];
 		const header = req.header("x-acess-token");
+		const auth = jwt.decode(header);
 		switch (true) {
-			case !header || !userIdSearch(jwt.decode(header).id)[0]:
+			case !header || !auth || !(await userIdSearch(auth.id)):
 				throw new Error("Falha na autenticação");
 			case !id || !situacao || !["A", "N"].includes(situacao):
 				throw new Error("Campos inválidos");
 			default:
 				break;
 		}
-		user.id = jwt.decode(header).id;
+		user.id = auth.id;
 		let answer;
 		switch (situacao) {
 			case "A":
@@ -211,16 +216,35 @@ server.delete("/usuario/amizade/:id", async (req, res) => {
 		const user = req.body;
 		const id = Number(req.params.id);
 		const header = req.header("x-acess-token");
+		const auth = jwt.decode(header);
 		switch (true) {
-			case !header || !userIdSearch(jwt.decode(header).id)[0]:
+			case !header || !auth || !(await userIdSearch(auth.id)[0]):
 				throw new Error("Falha na autenticação");
 			case !id:
 				throw new Error("Campos inválidos");
 		}
-		user.id = jwt.decode(header).id;
+		user.id = auth.id;
 		const answer = await removerAmizade(id, user.id);
 		if (answer < 1) throw new Error("Não foi possível desfazer a amizade");
 		res.status(204).send();
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
+// Consultar usuário
+server.get("/usuario/:id", async (req, res) => {
+	try {
+		const id = Number(req.params.id);
+		const header = req.header("x-acess-token");
+		const auth = jwt.decode(header);
+		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
+		if (!(await userIdSearch(id))) throw new Error("Usuário não encontrado");
+		const answer = await userIdSearch(id);
+		if (answer < 1) throw new Error("Nenhuma amizade foi encontrada");
+		res.send(answer[0]);
 	} catch (err) {
 		res.status(400).send({
 			err: err.message,

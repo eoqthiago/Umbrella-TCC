@@ -20,6 +20,8 @@ const Index = () => {
 	const ref = useRef();
 
 	async function handleCadastro() {
+		if (!termos) return;
+
 		localstorage.remove("user");
 		setLoading(true);
 		ref.current.continuousStart();
