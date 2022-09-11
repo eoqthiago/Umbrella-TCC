@@ -3,8 +3,15 @@ import Header from "../../components/header";
 import Footer from "../../components/footer";
 import { Titulo, SubTitulo, BotaoLiso } from "../../styled";
 import Card from "../../components/card";
-import Carousel from 'react-elastic-carousel';
+import Carousel from "react-elastic-carousel";
 import "./index.sass";
+
+const breakPoints = [
+	{ width: 1, itemsToShow: 1 },
+	{ width: 550, itemsToShow: 2, itemsToScroll: 2 },
+	{ width: 768, itemsToShow: 3 },
+	{ width: 1200, itemsToShow: 4 },
+];
 
 const Index = () => {
 	return (
@@ -28,11 +35,20 @@ const Index = () => {
 						</SubTitulo>
 					</div>
 					<div className="home-top-comunidades-cards">
-						<Carousel>
+						<Carousel breakPoints={breakPoints}>
 							<Card />
 							<Card />
 							<Card />
-      					</Carousel>
+							<Card />
+							<Card />
+							<Card />
+							<Card />
+							<Card />
+							<Card />
+							<Card />
+							<Card />
+							<Card />
+						</Carousel>
 					</div>
 				</section>
 				<section className="home-cadastre">

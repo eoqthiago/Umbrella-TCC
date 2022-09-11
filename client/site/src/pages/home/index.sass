@@ -132,6 +132,25 @@
                             font-size: clamp(14px, 4vw, 20px)
                             text-align: left
 
+.rec.rec-arrow
+    border-radius: 3px
+    background-color: #26c575
+    border: none !important
+    outline: none !important
+    color: #fff
+    user-select: none
+
+    &:hover:enabled
+        background-color: #10ad5f
+
+    &:focus:enabled
+        background-color: #10ad5f
+
+.rec.rec-dot
+    visibility: hidden
+    position: absolute
+    display: none
+
 @media (max-width: 1000px)
     .home > main
         > .home-cadastre

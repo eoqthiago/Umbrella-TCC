@@ -2,7 +2,7 @@
     max-width: 160px
     min-width: 100px
     width: 40vw
-    min-height: 180
+    min-height: 180px
     max-height: 250px
     overflow: hidden
     text-align: center
@@ -13,6 +13,8 @@
     > img
         border-radius: 25px
         width: 100%
+        -webkit-user-drag: none
+        -webkit-user-select: none
 
     > div
         margin-top: .3em
@@ -20,6 +22,3 @@
         font-family: Roboto-medium
         font-size: clamp(16px, 2vw, 20px)
 
-    &:hover
-        transform: scale(1.05)
-        transition: ease-in-out .2s
