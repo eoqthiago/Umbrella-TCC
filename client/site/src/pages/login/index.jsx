@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import LoadingBar from "react-top-loading-bar";
@@ -15,18 +15,23 @@ const Index = () => {
 	const ref = useRef();
 
 	async function handleLogin() {
+		localstorage.remove("user");
 		setLoading(true);
 		ref.current.continuousStart();
 		try {
 			const r = await userLogin(email, senha);
 			localstorage("user", r);
-			setTimeout(() => navigate("/"), 2000);
+			setTimeout(() => navigate("/chat"), 2000);
 		} catch (err) {
 			if (err.response) toast.error(err.response.data.err);
 			setLoading(false);
 			ref.current.complete();
 		}
 	}
+
+	useEffect(() => {
+		localstorage("user") && navigate("/chat");
+	});
 
 	return (
 		<div className="login page">
@@ -42,8 +47,24 @@ const Index = () => {
 				</div>
 				<div className="login-corpo">
 					<div className="login-inputs">
-						<Input placeholder="Email" width="100%" type="email" value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} />
-						<Input placeholder="Senha" width="100%" type="password" value={senha} onChange={(e) => setSenha(e.target.value)} disabled={loading} />
+						<Input
+							placeholder="Email"
+							width="100%"
+							type="email"
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
+							disabled={loading}
+							onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+						/>
+						<Input
+							placeholder="Senha"
+							width="100%"
+							type="password"
+							value={senha}
+							onChange={(e) => setSenha(e.target.value)}
+							disabled={loading}
+							onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+						/>
 						<div className="login-legenda">
 							Esqueceu sua senha? Clique <span> aqui </span> para recuperá-la
 						</div>
