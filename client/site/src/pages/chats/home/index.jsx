@@ -8,7 +8,6 @@ const Index = () => {
 		<div className="initial page ">
 			<Menu />
 			<Header menu />
-			INICIAL
 		</div>
 	);
 };

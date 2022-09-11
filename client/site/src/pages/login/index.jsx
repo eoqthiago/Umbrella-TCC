@@ -21,7 +21,7 @@ const Index = () => {
 		try {
 			const r = await userLogin(email, senha);
 			localstorage("user", r);
-			setTimeout(() => navigate("/chat"), 2000);
+			setTimeout(() => navigate("/home"), 2000);
 		} catch (err) {
 			if (err.response) toast.error(err.response.data.err);
 			setLoading(false);
@@ -30,7 +30,7 @@ const Index = () => {
 	}
 
 	useEffect(() => {
-		localstorage("user") && navigate("/chat");
+		localstorage("user") && navigate("/home");
 	});
 
 	return (

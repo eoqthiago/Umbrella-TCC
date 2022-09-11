@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/home";
 import Login from "./pages/login";
 import Cadastro from "./pages/cadastro";
-import Inicial from "./pages/chats/inicial";
+import Inicial from "./pages/chats/home";
 
 export default function Index() {
 	return (
@@ -12,7 +12,7 @@ export default function Index() {
 				<Route path="/" exact element={<Home />} />
 				<Route path="/login" exact element={<Login />} />
 				<Route path="/cadastro" exact element={<Cadastro />} />
-				<Route path="/chat" exact element={<Inicial />} />
+				<Route path="/home" exact element={<Inicial />} />
 			</Routes>
 		</BrowserRouter>
 	);
