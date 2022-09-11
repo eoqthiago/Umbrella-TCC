@@ -1,13 +1,14 @@
 import React from "react";
 import Header from "../../../components/header";
 import Menu from "../../../components/menu";
+import "./index.sass";
 
 const Index = () => {
 	return (
-		<div>
-            <Header />
-            <Menu />
-            INICIAL
+		<div className="initial page comm">
+			<Menu />
+			<Header menu />
+			INICIAL
 		</div>
 	);
 };

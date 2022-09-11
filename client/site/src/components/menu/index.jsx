@@ -15,8 +15,12 @@ export default function Index() {
 	});
 
 	return (
-		<div>
-			<div></div>
+		<div className="comp-menu" id="comp-menu-id">
+			<button className="comp-menu-exit" onClick={() => document.getElementById("comp-menu-id").classList.remove("comp-menu-ativo")}>
+				X
+			</button>
+			<section>comunidades</section>
+			<section>Configurações</section>
 		</div>
 	);
 }
