@@ -1,7 +1,7 @@
 .comp-menu
     background: #EEEFF0
     display: flex
-    flex-direction: row
+    flex-flow: row nowrap
     height: 100vh
     width: 30vw
     max-width: 350px
@@ -41,6 +41,10 @@
     > .comp-menu-config
         background-color: blue
         width: 80px
+        display: flex
+        flex-flow: column nowrap
+        margin-bottom: 20px
+        align-items: flex-end
 
 .comp-menu-ativo
     right: 0

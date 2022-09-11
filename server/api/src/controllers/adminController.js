@@ -22,7 +22,6 @@ server.post("/admin/login", async (req, res) => {
 
 		admin.senha = sha256(admin.senha);
 		const answer = await adminLogin(admin);
-		console.log(answer);
 		const token = jwt.sign(
 			{
 				id: answer.id,
@@ -55,9 +54,9 @@ server.post("/admin", async (req, res) => {
 				throw new Error("Email inválido");
 			case !admin.novoAdmin.senha || !admin.novoAdmin.senha.trim():
 				throw new Error("Senha inválida");
-			case !cpfTest(admin.novoAdmin.cpf) :
+			case !cpfTest(admin.novoAdmin.cpf):
 				throw new Error("CPF inválido");
-			case !telefoneTest(admin.novoAdmin.telefone) :
+			case !telefoneTest(admin.novoAdmin.telefone):
 				throw new Error("Telefone inválido");
 			case !admin.novoAdmin.nascimento:
 				throw new Error("Data de nascimento inválida");

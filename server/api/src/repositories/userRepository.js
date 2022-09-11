@@ -87,7 +87,6 @@ export async function recusarAmizade(idAmizade, idSolicitado) {
 	const command = `
         update tb_usuario_amizade set ds_situacao = 'N' where id_usuario_amizade = ? and id_solicitado = ? `;
 	const [answer] = await con.query(command, [idAmizade, idSolicitado]);
-	console.log('recusar');
 	return answer.affectedRows;
 }
 
