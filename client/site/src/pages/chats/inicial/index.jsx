@@ -5,7 +5,7 @@ import "./index.sass";
 
 const Index = () => {
 	return (
-		<div className="initial page comm">
+		<div className="initial page ">
 			<Menu />
 			<Header menu />
 			INICIAL
