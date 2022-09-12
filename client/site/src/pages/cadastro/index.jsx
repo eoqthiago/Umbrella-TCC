@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import localstorage from "local-storage";
 import LoadingBar from "react-top-loading-bar";
 import Checkbox from "@mui/material/Checkbox";
 import { userCadastro } from "../../api/userApi";
@@ -18,7 +19,10 @@ const Index = () => {
 	const navigate = useNavigate();
 	const ref = useRef();
 
-	async function handlecadastro() {
+	async function handleCadastro() {
+		if (!termos) return;
+
+		localstorage.remove("user");
 		setLoading(true);
 		ref.current.continuousStart();
 		try {
@@ -47,8 +51,24 @@ const Index = () => {
 				</div>
 				<div className="cadastro-corpo">
 					<div className="cadastro-inputs">
-						<Input placeholder="Nome de usuário" width="100%" type="text" value={nome} onChange={(e) => setNome(e.target.value)} disabled={loading} />
-						<Input placeholder="Email" width="100%" type="email" value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} />
+						<Input
+							placeholder="Nome de usuário"
+							width="100%"
+							type="text"
+							value={nome}
+							onChange={(e) => setNome(e.target.value)}
+							disabled={loading}
+							onKeyDown={(e) => e.key === "Enter" && handleCadastro()}
+						/>
+						<Input
+							placeholder="Email"
+							width="100%"
+							type="email"
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
+							disabled={loading}
+							onKeyDown={(e) => e.key === "Enter" && handleCadastro()}
+						/>
 						<Input
 							placeholder="Data de nascimento"
 							width="100%"
@@ -57,9 +77,26 @@ const Index = () => {
 							value={nascimento}
 							onChange={(e) => setNascimento(e.target.value)}
 							disabled={loading}
+							onKeyDown={(e) => e.key === "Enter" && handleCadastro()}
 						/>
-						<Input placeholder="Senha" width="100%" type="password" value={senha} onChange={(e) => setSenha(e.target.value)} disabled={loading} />
-						<Input placeholder="Confirme sua senha" width="100%" type="password" value={senhaconf} onChange={(e) => setSenhaconf(e.target.value)} disabled={loading} />
+						<Input
+							placeholder="Senha"
+							width="100%"
+							type="password"
+							value={senha}
+							onChange={(e) => setSenha(e.target.value)}
+							disabled={loading}
+							onKeyDown={(e) => e.key === "Enter" && handleCadastro()}
+						/>
+						<Input
+							placeholder="Confirme sua senha"
+							width="100%"
+							type="password"
+							value={senhaconf}
+							onChange={(e) => setSenhaconf(e.target.value)}
+							disabled={loading}
+							onKeyDown={(e) => e.key === "Enter" && handleCadastro()}
+						/>
 						<div className="cadastro-legenda" style={{ marginTop: "10px" }}>
 							<Checkbox value={termos} onClick={(e) => setTermos(!termos)} />
 							<div>
@@ -68,7 +105,7 @@ const Index = () => {
 						</div>
 					</div>
 					<div className="cadastro-btn">
-						<BotaoSolido fonte="4vw" width="100%" onClick={handlecadastro} disabled={loading || !termos}>
+						<BotaoSolido fonte="4vw" width="100%" onClick={handleCadastro} disabled={loading || !termos}>
 							Confirmar
 						</BotaoSolido>
 						<div className="cadastro-legenda">

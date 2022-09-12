@@ -19,3 +19,17 @@ export async function userCadastro(nome, email, senha, nascimento) {
 	});
 	return r;
 }
+
+export async function userConsulta(id, auth) {
+	const r = await api.get(`/usuario/${id}`, {
+		headers: {
+			"x-acess-token": auth,
+		},
+	});
+	return r.data;
+}
+
+export async function userImagem(imagem) {
+	if (!imagem) return '/assets/images/user.png'
+	return `${api.getUri()}/${imagem}`;
+}
