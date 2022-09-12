@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { communityCreat, communityEdit } from "../repositories/comunnityRepository.js";
+import { communityCreat, communityEdit, communityGet } from "../repositories/comunnityRepository.js";
 
 const server = Router();
 
@@ -35,6 +35,18 @@ server.put("/comunidade", async (req, res) => {
             const r = await communityEdit(community);
             res.status(201).send();
         };
+    } catch (err) {
+        res.status(401).send({
+            err: err.message
+        });
+    }
+});
+
+//Consultar todas comunidades
+server.get("/comunidade", async (req, res) => {
+    try {
+        const r = await communityGet();
+        res.status(200).send(r);
     } catch (err) {
         res.status(401).send({
             err: err.message

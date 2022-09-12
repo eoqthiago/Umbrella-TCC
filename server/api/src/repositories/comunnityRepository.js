@@ -20,3 +20,9 @@ export async function communityEdit(community) {
     const [r] = await con.query(command, [community.name, community.desc, community.id]);
     return r;
 }
+
+export async function communityGet() {
+    const command = `SELECT * FROM tb_comunidade;`;
+    const [r] = await con.query(command);
+    return r;
+}
