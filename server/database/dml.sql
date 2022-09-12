@@ -21,6 +21,11 @@ update  tb_usuario
         img_banner = null
   where id_usuario = 1;
 
+-- Inserir imagem
+update tb_usuario
+	set img_usuario = '/path'
+	where id_usuario = 1
+
 -- Deletar
 delete from tb_usuario where ds_email = "othierrydaora";
 

@@ -1,28 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import localstorage from "local-storage";
+import storage from "local-storage";
 import { toast } from "react-toastify";
-import { userConsulta } from "../../api/userApi";
+import { userConsulta, userImagem } from "../../api/userApi";
 import { useJwt } from "react-jwt";
 import "./index.sass";
 
+const token = storage('user').token
+
 export default function Index() {
 	const navigate = useNavigate();
-	const [user, setUser] = useState({});
-	const { decodedToken, isExpired } = useJwt(localstorage("user").token);
+	const [user, setUser] = useState({imagem: '/assets/images/user.png'});
+	const { decodedToken, isExpired } = useJwt(token);
 
 	async function consultar() {
-		const r = await userConsulta(decodedToken.id, localstorage("user").token);
+		const r = await userConsulta(decodedToken.id, token);
 		setUser(r);
 	}
 
 	useEffect(() => {
-		if (isExpired) localstorage.remove("user");
-		if (!localstorage("user")) {
+		if (isExpired) storage.remove("user");
+		if (!storage("user")) {
 			toast.warn("Você precisa estar logado para acessar essa página");
 			navigate("/");
 		}
-	}, []);
+	});
 
 	useEffect(() => {
 		consultar();
@@ -32,15 +34,14 @@ export default function Index() {
 		<div className="comp-menu" id="comp-menu-id">
 			<button className="comp-menu-exit" onClick={() => document.getElementById("comp-menu-id").classList.remove("comp-menu-ativo")} />
 			<div className="comp-menu-search">
-				<input type="text" placeholder="Pesquisar"/>
-				<img src='/assets/icons/search.svg' alt='Pesquisar'/>
+				<input type="text" placeholder="Pesquisar" />
+				<img src="/assets/icons/search.svg" alt="Pesquisar" />
 			</div>
-
 
 			<section className="comp-menu-chats">Comunidades</section>
 
 			<section className="comp-menu-config">
-				<img src={user.imagem || '/assets/images/user.png'} alt="Imagem de usuário" title={user.nome} />
+				<img src={userImagem(user.imagem)} alt="Imagem de usuário" title={user.nome} className="comp-menu-img-user" onClick={() => navigate(`/usuario/${user.id}`)} />
 			</section>
 		</div>
 	);

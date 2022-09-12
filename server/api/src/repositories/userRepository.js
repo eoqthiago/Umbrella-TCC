@@ -31,6 +31,15 @@ export async function userEdit(user) {
 	return answer.affectedRows;
 }
 
+export async function userImg(image, id) {
+	const command = `
+	update tb_usuario
+	set img_usuario = ?
+	where id_usuario = ? `;
+	const [answer] = await con.query(command, [image, id]);
+	return answer.affectedRows;
+}
+
 export async function userDelete(email) {
 	const command = `
         delete from tb_usuario where ds_email = ? `;

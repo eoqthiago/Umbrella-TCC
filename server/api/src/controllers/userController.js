@@ -11,12 +11,15 @@ import {
 	userDelete,
 	userEdit,
 	userIdSearch,
+	userImg,
 	userLogin,
 	userSearch,
 } from "../repositories/userRepository.js";
 import { emailTest } from "../utils/expressionTest.js";
+import multer from "multer";
 
 const server = Router();
+const usuarioImg = multer({ dest: "storage/users" });
 
 // Cadastro
 server.post("/usuario", async (req, res) => {
@@ -105,6 +108,32 @@ server.put("/usuario", async (req, res) => {
 	} catch (err) {
 		res.status(400).send({
 			err: "Um erro ocorreu",
+		});
+	}
+});
+
+// Enviar imagem
+server.put("/usuario/imagem", usuarioImg.single("imagem"), async (req, res) => {
+	try {
+		const header = req.header("x-acess-token");
+		const auth = jwt.decode(header);
+		switch (true) {
+			case !header || !auth || !(await userIdSearch(auth.id)):
+				throw new Error("Falha na autenticação");
+			case !req.file:
+				throw new Error("Arquivo não encontrado");
+			default:
+				break;
+		}
+
+		const img = req.file.path;
+		const answer = await userImg(img, auth.id);
+		if (answer < 1) throw new Error("Não foi possível alterar a imagem");
+
+		res.status(204).send();
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
 		});
 	}
 });
