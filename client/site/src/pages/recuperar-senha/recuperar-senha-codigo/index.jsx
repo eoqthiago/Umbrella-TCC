@@ -5,13 +5,13 @@ import { useNavigate } from "react-router-dom";
 import LoadingBar from "react-top-loading-bar";
 
 
-import { BotaoSolido, Input, SubTitulo, Titulo } from "../../styled";
-import "./index.sass";
+import { BotaoSolido, Input, SubTitulo, Titulo } from "../../../styled";
+import "../index.sass";
 
 
 export default function Index () {
 
-    const [email, setEmail] = useState('');
+    const [codigo, setCodigo] = useState('');
     const navigate = useNavigate();
 	const ref = useRef();
 
@@ -24,16 +24,16 @@ export default function Index () {
                         Recuperar senha
                     </Titulo>
                     <SubTitulo cor="#3F3F3F" fonte="2.5vw">
-                        Insira seu endereço email associado à sua conta
+                        Insira o codigo enviado no email.
                     </SubTitulo>
                 </div>
                 <div className="email-corpo">
                     <div className="email-inputs">
-                        <Input placeholder="Email" width="100%" type="email" value={email} onChange={(e) => setEmail(e.target.value)}  />
+                        <Input placeholder="Codigo" width="100%" type="email" value={codigo} onChange={(e) => setCodigo(e.target.value)}  />
                     
                     </div>
                     <div className="email-btn">
-                        <BotaoSolido fonte="4vw" width="100%" onClick={() => navigate("/code")}>
+                        <BotaoSolido fonte="4vw" width="100%" onClick={() => navigate("/alterar-senha")}>
                             Confirmar
                         </BotaoSolido>
                         <div className="email-legenda">
