@@ -1,7 +1,23 @@
 import { Router } from "express";
-import { communityCreat, communityEdit, communityGet } from "../repositories/comunnityRepository.js";
+import { communityCreat, communityEdit, communityGet, communityUser } from "../repositories/comunnityRepository.js";
 
 const server = Router();
+
+
+//Adicionar usuario na comunidade
+server.post("/comunidade/convite", (req, res) => {
+    try {
+        const userId = req.query.user;
+        const community = req.query.community;
+        const r = communityUser(userId, community);
+        res.status(200).send(r);
+    } catch (err) {
+        res.status(401).send({
+            err: err.message
+        });
+    };
+});
+
 
 // Criar comunidade
 server.post("/comunidade", async (req, res) => {

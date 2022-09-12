@@ -26,3 +26,10 @@ export async function communityGet() {
     const [r] = await con.query(command);
     return r;
 }
+
+export async function communityUser(userId, community) {
+    const command = `INSERT INTO tb_usuario_comunidade(id_usuario, id_comunidade) 
+                            VALUES(?, ?)`;
+    const r = await con.query(command, [userId.user, community]);
+    return r.data;
+}
