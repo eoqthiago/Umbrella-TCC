@@ -33,3 +33,10 @@ export async function communityUser(userId, community) {
     const r = await con.query(command, [userId.user, community]);
     return r.data;
 }
+
+export async function communityAdmin(user) {
+    const command = `INSERT INTO tb_administrador_comunidade(id_usuario_comunidade) 
+                            VALUES (?)`;
+    const [r] = await con.query(command, [user.id]);
+    return r;
+}

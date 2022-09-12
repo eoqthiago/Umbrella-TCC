@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { communityCreat, communityEdit, communityGet, communityUser } from "../repositories/comunnityRepository.js";
+import { communityCreat, communityEdit, communityGet, communityUser, communityAdmin } from "../repositories/comunnityRepository.js";
 
 const server = Router();
 
@@ -63,6 +63,20 @@ server.get("/comunidade", async (req, res) => {
     try {
         const r = await communityGet();
         res.status(200).send(r);
+    } catch (err) {
+        res.status(401).send({
+            err: err.message
+        });
+    }
+});
+
+//Promover usuario à administrador
+server.post("/comunidade/administrador", async (req, res) => {
+    try {
+        const user = req.body;
+        if (!user.id || !user.id.trim()) throw new Error('Usuario não esta na comunidade');
+        const r = await communityAdmin(user);
+        res.status(202).send();
     } catch (err) {
         res.status(401).send({
             err: err.message
