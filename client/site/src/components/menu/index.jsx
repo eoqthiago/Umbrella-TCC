@@ -6,25 +6,24 @@ import { userConsulta, userImagem } from "../../api/userApi";
 import { useJwt } from "react-jwt";
 import "./index.sass";
 
-const token = storage('user').token
-
 export default function Index() {
 	const navigate = useNavigate();
-	const [user, setUser] = useState({imagem: '/assets/images/user.png'});
-	const { decodedToken, isExpired } = useJwt(token);
-
-	async function consultar() {
-		const r = await userConsulta(decodedToken.id, token);
-		setUser(r);
-	}
+	const [user, setUser] = useState({ imagem: "/assets/images/user.png" });
+	const { decodedToken, isExpired } = useJwt(storage("user").token);
+	const token = storage("user").token;
 
 	useEffect(() => {
-		if (isExpired) storage.remove("user");
-		if (!storage("user")) {
+		if (isExpired || !storage("user")) {
+			storage.remove("user");
 			toast.warn("Você precisa estar logado para acessar essa página");
 			navigate("/");
 		}
 	});
+
+	async function consultar() {
+		const r = await userConsulta(storage("user").id, token);
+		setUser(r);
+	}
 
 	useEffect(() => {
 		consultar();
