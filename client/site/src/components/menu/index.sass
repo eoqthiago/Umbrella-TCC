@@ -9,7 +9,7 @@
     position: fixed
     z-index: 2
     right: -100vw
-    padding: 60px 0 0 20px
+    padding: 140px 0 0 20px
     transition: .4s ease-in
     overflow: hidden
     // border-left: 1px solid #D7D7D7
@@ -18,8 +18,8 @@
 
     > .comp-menu-exit
         position: absolute
-        top: 10px
-        left: 10px
+        top: 20px
+        left: 20px
         width: 30px
         height: 30px
         background: url(../../../public/assets/icons/x.svg) no-repeat center
@@ -34,17 +34,55 @@
                 transition: .1s linear
                 transform: scale(.9)
 
+    > .comp-menu-search
+        position: absolute
+        top: 70px
+        display: inline-flex
+        align-items: center
+        width: 85%
+        background-color: #F7F9FB
+        overflow: hidden
+        padding: 3px 7px
+        border-radius: 10px
+        box-shadow: 0px 1px 9px #0c55000d
+
+        > img
+            width: 25px
+            cursor: pointer
+            margin-right: 5px
+        
+        > input
+            border: none
+            font-size: 15px
+            color: #222222
+            font-family: Roboto-regular
+            outline: none
+            height: 27px
+            width: 100%
+            background-color: #F7F9FB
+            padding: 0 15px
+
+
+
+
     > .comp-menu-chats
         background-color: red
         width: 100%
         
     > .comp-menu-config
-        background-color: blue
         width: 80px
         display: flex
         flex-flow: column nowrap
         margin-bottom: 20px
-        align-items: flex-end
+        align-items: center
+        justify-content: flex-end
+
+        > img
+            margin-top: 30px
+            width: 50px
+
+        > *
+            cursor: pointer
 
 .comp-menu-ativo
     right: 0

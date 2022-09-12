@@ -31,10 +31,16 @@ export default function Index() {
 	return (
 		<div className="comp-menu" id="comp-menu-id">
 			<button className="comp-menu-exit" onClick={() => document.getElementById("comp-menu-id").classList.remove("comp-menu-ativo")} />
+			<div className="comp-menu-search">
+				<input type="text" placeholder="Pesquisar"/>
+				<img src='/assets/icons/search.svg' alt='Pesquisar'/>
+			</div>
+
 
 			<section className="comp-menu-chats">Comunidades</section>
+
 			<section className="comp-menu-config">
-				<img src={user.imagem} alt="Imagem de usuário" title={user.nome} />
+				<img src={user.imagem || '/assets/images/user.png'} alt="Imagem de usuário" title={user.nome} />
 			</section>
 		</div>
 	);

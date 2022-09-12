@@ -26,7 +26,5 @@ export async function userConsulta(id, auth) {
 			"x-acess-token": auth,
 		},
 	});
-	if (r.data.imagem != null) r.data.imagem = `${api.getUri()}/${r.data.imagem}`;
-	else r.data.imagem = "/assets/images/user.png";
 	return r.data;
 }
