@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { communityCreat } from "../repositories/comunnityRepository.js";
+import { communityCreat, communityEdit } from "../repositories/comunnityRepository.js";
 
 const server = Router();
 
@@ -22,6 +22,24 @@ server.post("/comunidade", async (req, res) => {
             err: err.message
         });
     };
+});
+
+// Alterar comunidade 
+server.put("/comunidade", async (req, res) => {
+    try {
+        const community = req.body;
+        if (!community.id || !community.id.trim()) throw new Error("O grupo precisa de um ID");
+        if (!community.name || !community.name.trim()) throw new Error("O grupo precisa de um ");
+        else if(!community.desc || !community.desc.trim()) throw new Error("O grupo precisa de um ");
+        else {
+            const r = await communityEdit(community);
+            res.status(201).send();
+        };
+    } catch (err) {
+        res.status(401).send({
+            err: err.message
+        });
+    }
 });
 
 export default server;
