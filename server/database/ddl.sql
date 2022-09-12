@@ -156,6 +156,13 @@ create table tb_comunidade_report (
     foreign key (id_comunidade) references tb_comunidade (id_comunidade) on delete cascade
 );
 
+-- administrador comunidade
+create table tb_administrador_comunidade (
+    id_administrador int primary key auto_increment,
+    id_usuario_comunidade int,
+    foreign key (id_usuario_comunidade) references tb_usuario_comunidade (id_usuario_comunidade) on delete cascade
+);
+
 -- Outros
 create table tb_feedback (
     id_feedback int primary key auto_increment,
