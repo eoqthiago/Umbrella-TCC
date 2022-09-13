@@ -40,7 +40,11 @@ export default function Index() {
 			<section className="comp-menu-chats">Comunidades</section>
 
 			<section className="comp-menu-config">
-				<img src={userImagem(user.imagem)} alt="Imagem de usuário" title={user.nome} className="comp-menu-img-user" onClick={() => navigate(`/usuario/${user.id}`)} />
+				{!user.imagem ? (
+					<img src="/assets/images/user.png" alt="Usuário" />
+				) : (
+					<img src={userImagem(user.imagem)} alt="Usuário" title={user.nome} className="comp-menu-img-user" onClick={() => navigate(`/usuario/${user.id}`)} />
+				)}
 			</section>
 		</div>
 	);
