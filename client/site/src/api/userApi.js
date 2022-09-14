@@ -19,3 +19,4 @@ export async function userCadastro(nome, email, senha, nascimento) {
 	});
 	return r;
 }
+
