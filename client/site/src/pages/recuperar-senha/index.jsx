@@ -15,6 +15,20 @@ export default function Index () {
     const navigate = useNavigate();
 	const ref = useRef();
 
+    async function handlePassword() {
+		setLoading(true);
+		ref.current.continuousStart();
+		try {
+			const r = await userLogin(email, senha);
+			localstorage("user", r);
+			setTimeout(() => navigate("/"), 2000);
+		} catch (err) {
+			if (err.response) toast.error(err.response.data.err);
+			setLoading(false);
+			ref.current.complete();
+		}
+	}
+
     return (
         <div className="email page">
             <LoadingBar color="#48d677" ref={ref} />
