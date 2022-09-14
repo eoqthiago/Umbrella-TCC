@@ -1,0 +1,48 @@
+.comp-modal
+    position: fixed
+    top: 50
+    left: 50
+    z-index: 3
+    width: 100vw
+    height: 100vh
+    display: flex
+    align-items: center
+    justify-content: center
+    visibility: hidden
+    background: #00000036
+
+    > main
+        background: #fff
+        width: 70vw
+        max-width: 450px
+        min-width: 200px
+        max-height: clamp(300px, 60vh, 700px)
+        overflow-y: auto
+        position: relative
+        padding: 3em clamp(1.4em,5vw, 3em)
+        z-index: 4
+
+        > h1
+            margin: 1em 0
+            font-family: OpenSans-bold
+            text-align: center
+            user-select: none
+
+        > div
+            font-family: Roboto-regular
+            text-align: justify
+        
+
+        > .comp-modal-exit
+            position: absolute
+            top: 10px
+            left: 10px
+            width: 30px
+            height: 30px
+            background: url(../../../public/assets/icons/x.svg) no-repeat center
+            background-size: 20px
+            border: none
+            cursor: pointer
+
+.comp-modal-ativo
+    visibility: visible !important

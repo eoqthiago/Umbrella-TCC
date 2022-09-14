@@ -30,6 +30,5 @@ export async function userConsulta(id, auth) {
 }
 
 export async function userImagem(imagem) {
-	if (!imagem) return '/assets/images/user.png'
 	return `${api.getUri()}/${imagem}`;
 }
