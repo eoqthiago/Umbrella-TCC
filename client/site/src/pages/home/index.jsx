@@ -38,7 +38,7 @@ const Index = () => {
 						</SubTitulo>
 					</div>
 					<div className="home-top-comunidades-cards">
-						<Carousel breakPoints={breakPoints}>
+						<Carousel breakPoints={breakPoints} enableAutoPlay={true}>
 							<Card msg="Entre para ver mais" />
 							<Card msg="Entre para ver mais" />
 							<Card msg="Entre para ver mais" />
