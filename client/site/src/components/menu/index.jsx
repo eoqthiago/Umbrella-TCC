@@ -21,7 +21,7 @@ export default function Index() {
 	});
 
 	async function consultar() {
-		const r = await userConsulta(storage("user").id, token);
+		const r = await userConsulta(storage("user").id);
 		setUser(r);
 	}
 
