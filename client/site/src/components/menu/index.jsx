@@ -29,19 +29,32 @@ export default function Index() {
 		consultar();
 	}, []);
 
+	function logout() {
+		storage.remove("user");
+		toast.success("Logout feito com sucesso!");
+		navigate("/");
+	}
+
 	return (
 		<div className="comp-menu" id="comp-menu-id">
 			<button className="comp-menu-exit" onClick={() => document.getElementById("comp-menu-id").classList.remove("comp-menu-ativo")} />
-			<div className="comp-menu-search">
-				<input type="text" placeholder="Pesquisar" />
-				<img src="/assets/icons/search.svg" alt="Pesquisar" />
-			</div>
+			<section className="comp-menu-chats">
+				<div className="comp-menu-search">
+					<input type="text" placeholder="Pesquisar" />
+					<img src="/assets/icons/search.svg" alt="Pesquisar" />
+				</div>
 
-			<section className="comp-menu-chats">Comunidades</section>
+				Comunidades
+				
+			</section>
 
 			<section className="comp-menu-config">
-				{!user.imagem ? (
-					<img src="/assets/images/user.png" alt="Usuário" />
+				<img src="/assets/icons/create.svg" alt="Criar comunidade" title="Criar comunidade" />
+				<img src="/assets/icons/edit.svg" alt="Configurações" title="Configurações" />
+				<img src="/assets/icons/exit.svg" alt="Sair" title="Sair" onClick={() => logout()} />
+				<hr />
+				{user.imagem ? (
+					<img src="/assets/images/user.png" alt="Usuário" className="comp-menu-img-user" />
 				) : (
 					<img src={userImagem(user.imagem)} alt="Usuário" title={user.nome} className="comp-menu-img-user" onClick={() => navigate(`/usuario/${user.id}`)} />
 				)}

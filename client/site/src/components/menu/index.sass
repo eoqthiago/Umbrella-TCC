@@ -1,19 +1,18 @@
 .comp-menu
-    background: #EEEFF0
+    background: #3baf69
     display: flex
     flex-flow: row nowrap
     height: 100vh
     width: 30vw
-    max-width: 350px
-    min-width: 200px
+    max-width: 390px
+    min-width: 250px
     position: fixed
     z-index: 2
-    right: -100vw
-    padding: 140px 0 0 20px
+    right: -50vw
     transition: .4s ease-in
     overflow: hidden
-    // border-left: 1px solid #D7D7D7
-    box-shadow: -2px 0px 10px #0000001e
+    border-left: 1px solid #e0e0e0
+    box-shadow: -2px 0px 10px 4px #00000017
     justify-content: space-between
 
     > .comp-menu-exit
@@ -26,6 +25,7 @@
         background-size: 20px
         border: none
         transition: .1s ease
+        z-index: 4
 
         &:hover
             transform: scale(1.05)
@@ -34,55 +34,69 @@
                 transition: .1s linear
                 transform: scale(.9)
 
-    > .comp-menu-search
-        position: absolute
-        top: 70px
-        display: inline-flex
-        align-items: center
-        width: 85%
-        background-color: #F7F9FB
-        overflow: hidden
-        padding: 3px 7px
-        border-radius: 10px
-        box-shadow: 0px 1px 9px #0c55000d
-
-        > .comp-menu-img-user
-            width: 30px
-            height: 30px
-            overflow: hidden
-            border-radius: 100%
-            cursor: pointer
-            margin-right: 5px
-        
-        > input
-            border: none
-            font-size: 15px
-            color: #222222
-            font-family: Roboto-regular
-            outline: none
-            height: 27px
-            width: 100%
-            background-color: #F7F9FB
-            padding: 0 15px
-
-
-
-
     > .comp-menu-chats
-        background-color: red
+        padding-top: 10em
         width: 100%
-        
+        background-color: #EEEFF0
+        padding-left: 1.5em
+        position: relative
+
+        > .comp-menu-search
+            position: absolute
+            top: 90px
+            display: inline-flex
+            align-items: center
+            width: 90%
+            background-color: #f4f5f5
+            overflow: hidden
+            padding: 5px 7px
+            border-radius: 10px
+            box-shadow: 0 0 8px 1px #7575751e
+            z-index: 2
+            left: 50%
+            transform: translateX(-50%)
+
+            > img
+                width: 25px
+                cursor: pointer
+            
+            > input
+                border: none
+                font-size: 15px
+                color: #222222
+                font-family: Roboto-regular
+                outline: none
+                height: 27px
+                width: 100%
+                background-color: #f4f5f5
+                padding: 0 15px
+
     > .comp-menu-config
         width: 80px
         display: flex
         flex-flow: column nowrap
-        margin-bottom: 20px
         align-items: center
         justify-content: flex-end
+        padding-bottom: 2em
+        gap: 25px
+        user-select: none
 
-        > img
-            margin-top: 30px
-            width: 50px
+        img
+            width: 33px
+            height: 33px
+
+        > hr
+            width: 70%
+            height: 2px
+            cursor: default
+
+        > .comp-menu-img-user
+            width: 45px
+            height: 45px
+            overflow: hidden
+            border-radius: 100%
+            cursor: pointer
+            background-color: #fff
 
         > *
             cursor: pointer
