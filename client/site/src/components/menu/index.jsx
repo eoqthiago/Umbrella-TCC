@@ -3,17 +3,16 @@ import { useNavigate } from "react-router-dom";
 import storage from "local-storage";
 import { toast } from "react-toastify";
 import { userConsulta, userImagem } from "../../api/userApi";
-import { useJwt } from "react-jwt";
 import "./index.sass";
 
 export default function Index() {
 	const navigate = useNavigate();
-	const [user, setUser] = useState({ imagem: "/assets/images/user.png" });
-	const { decodedToken, isExpired } = useJwt(storage("user").token);
-	const token = storage("user").token;
+	const [user, setUser] = useState({});
+	let cred = {};
+	if (storage("user")) cred = storage("user");
 
 	useEffect(() => {
-		if (isExpired || !storage("user")) {
+		if (!cred.id) {
 			storage.remove("user");
 			toast.warn("Você precisa estar logado para acessar essa página");
 			navigate("/");
@@ -21,7 +20,7 @@ export default function Index() {
 	});
 
 	async function consultar() {
-		const r = await userConsulta(storage("user").id);
+		const r = await userConsulta(cred.id);
 		setUser(r);
 	}
 
@@ -43,9 +42,7 @@ export default function Index() {
 					<input type="text" placeholder="Pesquisar" />
 					<img src="/assets/icons/search.svg" alt="Pesquisar" />
 				</div>
-
 				Comunidades
-				
 			</section>
 
 			<section className="comp-menu-config">
@@ -56,7 +53,7 @@ export default function Index() {
 				{user.imagem ? (
 					<img src="/assets/images/user.png" alt="Usuário" className="comp-menu-img-user" />
 				) : (
-					<img src={userImagem(user.imagem)} alt="Usuário" title={user.nome} className="comp-menu-img-user" onClick={() => navigate(`/usuario/${user.id}`)} />
+					<img src={!user.imagem ?"/assets/images/user.png" : userImagem(user.imagem)} alt="Usuário" title={user.nome} className="comp-menu-img-user" onClick={() => navigate(`/usuario/${user.id}`)} />
 				)}
 			</section>
 		</div>

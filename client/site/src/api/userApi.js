@@ -22,6 +22,7 @@ export async function userCadastro(nome, email, senha, nascimento) {
 }
 
 export async function userConsulta(id) {
+	if (!userToken) return;
 	const r = await api.get(`/usuario/${id}`, {
 		headers: {
 			"x-acess-token": userToken,
@@ -31,5 +32,5 @@ export async function userConsulta(id) {
 }
 
 export async function userImagem(imagem) {
-	return `${api.getUri()}/${imagem}`;
+	if (!userToken) return `${api.getUri()}/${imagem}`;
 }
