@@ -6,7 +6,7 @@ import LoadingBar from "react-top-loading-bar";
 import Checkbox from "@mui/material/Checkbox";
 import { userCadastro } from "../../api/userApi";
 import { BotaoSolido, Input, SubTitulo, Titulo } from "../../styled";
-import Modal from "../../components/modal";
+import Modal from "../../components/modals/textModal";
 import "./index.sass";
 
 const condicoes = `
