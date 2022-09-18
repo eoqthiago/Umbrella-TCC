@@ -15,8 +15,17 @@ export default function Index({ ativo, alterar }) {
 		navigate("/");
 	}
 
+	function exibirImagem() {
+		try {
+			if (!user.imagem) throw new Error("Imagem não encontrada");
+			return userImagem(user.imagem);
+		} catch (err) {
+			return "/assets/images/user.png";
+		}
+	}
+
 	useEffect(() => {
-		if (!storage('user')) {
+		if (!storage("user")) {
 			storage.remove("user");
 			toast.warn("Você precisa estar logado para acessar essa página");
 			navigate("/");
@@ -25,38 +34,37 @@ export default function Index({ ativo, alterar }) {
 
 	useEffect(() => {
 		async function consultar() {
-			const r = await userConsulta(storage('user').id);
+			const r = await userConsulta(storage("user").id);
 			setUser(r);
 		}
-		consultar()
+		consultar();
 	}, []);
 
 	return (
-		<div className={(ativo && "comp-menu-ativo") + " comp-menu"}>
-			<section className="comp-menu-chats">
-				<div className="comp-menu-search">
-					<input type="text" placeholder="Pesquisar" />
-					<img src="/assets/icons/search.svg" alt="Pesquisar" />
-				</div>
-				<div>Comunidades</div>
-			</section>
+		<div className={ativo ? "comp-menu-bg" : undefined}>
+			<main className={(ativo && "comp-menu-ativo") + " comp-menu"}>
+				<section className="comp-menu-chats">
+					<div className="comp-menu-search">
+						<input type="text" placeholder="Pesquisar" />
+						<img src="/assets/icons/search.svg" alt="Pesquisar" />
+					</div>
+					<div>Comunidades</div>
+				</section>
 
-			<section className="comp-menu-config">
-				<button className="comp-menu-exit" onClick={() => alterar(!ativo)} />
+				<section className="comp-menu-config">
+					<button className="comp-menu-exit" onClick={() => alterar(!ativo)} />
 
-				<img src="/assets/icons/create.svg" alt="Criar comunidade" title="Criar comunidade" />
-				<img src="/assets/icons/edit.svg" alt="Configurações" title="Configurações" />
-				<img src="/assets/icons/exit.svg" alt="Sair" title="Sair" onClick={() => logout()} />
-				<hr />
+					<div>
+						<img src="/assets/icons/create.svg" alt="Criar comunidade" title="Criar comunidade" />
+						<img src="/assets/icons/edit.svg" alt="Configurações" title="Configurações" />
+						<img src="/assets/icons/exit.svg" alt="Sair" title="Sair" onClick={() => logout()} />
 
-				<img
-					src={!user.imagem ? "/assets/images/user.png" : userImagem(user.imagem)}
-					alt="Usuário"
-					title={user.nome}
-					className="comp-menu-img-user"
-					onClick={() => navigate(`/usuario/${user.id}`)}
-				/>
-			</section>
+						<hr />
+
+						<img src={exibirImagem()} alt="Usuário" title={!user ? "" : user.nome} className="comp-menu-img-user" onClick={() => navigate(`/usuario/${user.id}`)} />
+					</div>
+				</section>
+			</main>
 		</div>
 	);
 }

@@ -1,5 +1,17 @@
+.comp-menu-bg
+    background: #00000036
+    width: 100vw
+    height: 100vw
+    z-index: 2
+    position: fixed
+    margin-left: auto
+    margin-right: auto
+    left: 0
+    right: 0
+    text-align: center
+    transition: .5s
+    
 .comp-menu
-    background: #3baf69
     display: flex
     flex-flow: row nowrap
     height: 100%
@@ -8,14 +20,15 @@
     min-width: 250px
     position: fixed
     bottom: 0
-    z-index: 2
+    z-index: 3
     left: -50vw
-    transition: .2s ease-in
+    transition: .2s ease-out
     overflow: hidden
     border-left: 1px solid #e0e0e0
     box-shadow: -2px 0px 10px 4px #00000017
     justify-content: space-between
     visibility: hidden  
+    background: red
 
     > .comp-menu-chats
         width: 100%
@@ -56,17 +69,17 @@
 
     > .comp-menu-config
         width: 80px
+        background: #3baf69
         display: flex
         flex-flow: column nowrap
         align-items: center
-        justify-content: flex-end
         padding-bottom: 2em
-        gap: 20px
         user-select: none
-        height: 100%
+        justify-content: space-between
+        height: 100vh
 
         > .comp-menu-exit
-            justify-self: flex-start
+            justify-items: flex-start
             width: 30px
             height: 30px
             background: url(../../../public/assets/icons/x.svg) no-repeat center
@@ -74,36 +87,44 @@
             border: none
             transition: .1s ease
             z-index: 4
+            margin-top: 1em
 
             &:hover
-                transform: scale(1.05)
+                transform: scale(1.1)
             
             &:active
                 transition: .1s linear
                 transform: scale(.9)
 
-        img
-            width: 30px
-            height: 30px
+        > div
+            display: flex
+            flex-flow: column nowrap
+            gap: 20px
+            justify-content: flex-end
+            align-items: center
 
-            &:hover
-                transform: scale(1.05)    
+            img
+                width: 30px
+                height: 30px
 
-        > hr
-            width: 70%
-            cursor: default
-            border: 1px solid #fff
+                &:hover
+                    transform: scale(1.05)    
 
-        > .comp-menu-img-user
-            width: 45px
-            height: 45px
-            overflow: hidden
-            border-radius: 100%
-            cursor: pointer
-            background-color: #fff
+            > hr
+                width: 70%
+                cursor: default
+                border: 1px solid #fff
 
-        > *
-            cursor: pointer
+            > .comp-menu-img-user
+                width: 45px
+                height: 45px
+                overflow: hidden
+                border-radius: 100%
+                cursor: pointer
+                background-color: #fff
+
+            > *
+                cursor: pointer
 
 .comp-menu-ativo
     left: 0

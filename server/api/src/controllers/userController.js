@@ -273,7 +273,7 @@ server.get("/usuario/:id", async (req, res) => {
 		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
 		if (!(await userIdSearch(id))) throw new Error("Usuário não encontrado");
 		const answer = await userIdSearch(id);
-		if (answer < 1) throw new Error("Nenhuma amizade foi encontrada");
+		if (answer < 1) throw new Error("Nenhum usuário foi encontrado");
 		res.send(answer[0]);
 	} catch (err) {
 		res.status(400).send({

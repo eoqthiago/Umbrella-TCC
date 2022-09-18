@@ -3,9 +3,9 @@ import "./index.sass";
 
 const Index = (props) => {
 	return (
-		<div className={(props.ativo && "comp-modal-ativo") + " comp-modal"}>
+		<div className={(props.ativo && "comp-modal-texto-ativo") + " comp-modal-texto"}>
 			<main>
-				<button className="comp-modal-exit" onClick={() => props.state()} />
+				<button className="comp-modal-texto-exit" onClick={() => props.state()} />
 				<h1>{props.titulo}</h1>
 				<div>{props.conteudo}</div>
 			</main>
