@@ -47,6 +47,19 @@ export async function communityGet(id) {
 	return answer[0];
 }
 
+export async function communitySearch(nome) {
+	const command = `
+		select
+			nm_comunidade nome,
+			ds_comunidade descricao,
+			img_comunidade imagem,
+			img_banner banner
+		from tb_comunidade
+		where nm_comunidade like '%${nome}%' `;
+	const [answer] = await con.query(command);
+	return answer;
+}
+
 // Alterar comunidade
 export async function communityEdit(community) {
 	const command = `UPDATE tb_comunidade
