@@ -104,7 +104,7 @@ server.put("/usuario", async (req, res) => {
 		}
 		user.id = auth.id;
 		const answer = await userEdit(user);
-		if (answer < 0) throw new Error("Não foi possível alterar o perfil");
+		if (answer < 1) throw new Error("Não foi possível alterar o perfil");
 		res.status(202).send();
 	} catch (err) {
 		res.status(400).send({

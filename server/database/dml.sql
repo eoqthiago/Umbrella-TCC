@@ -80,3 +80,10 @@ select * from tb_admin where ds_email = 'othierrydaora@admin' and bt_root = 1;
 -- Deletar um administrador (root)
 delete from tb_admin where ds_email = 'othierrydaora@admin';
  
+
+
+-- *Comunidade*
+
+-- Cadastrar comunidade
+INSERT INTO tb_comunidade (id_criador, nm_comunidade, ds_comunidade, img_comunidade, img_banner) 
+                   VALUES (?, ?, ?, ?, ?) 
