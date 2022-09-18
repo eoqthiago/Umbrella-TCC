@@ -2,48 +2,31 @@
     background: #3baf69
     display: flex
     flex-flow: row nowrap
-    height: 100vh
+    height: 100%
     width: 30vw
     max-width: 390px
     min-width: 250px
     position: fixed
+    bottom: 0
     z-index: 2
-    right: -50vw
-    transition: .4s ease-in
+    left: -50vw
+    transition: .2s ease-in
     overflow: hidden
     border-left: 1px solid #e0e0e0
     box-shadow: -2px 0px 10px 4px #00000017
     justify-content: space-between
-
-    > .comp-menu-exit
-        position: absolute
-        top: 20px
-        left: 20px
-        width: 30px
-        height: 30px
-        background: url(../../../public/assets/icons/x.svg) no-repeat center
-        background-size: 20px
-        border: none
-        transition: .1s ease
-        z-index: 4
-
-        &:hover
-            transform: scale(1.05)
-        
-        &:active
-                transition: .1s linear
-                transform: scale(.9)
+    visibility: hidden  
 
     > .comp-menu-chats
-        padding-top: 10em
         width: 100%
         background-color: #EEEFF0
-        padding-left: 1.5em
-        position: relative
+        display: flex
+        align-items: flex-start
+        flex-flow: column nowrap
+        padding-top: 3em
 
         > .comp-menu-search
-            position: absolute
-            top: 90px
+            align-self: center
             display: inline-flex
             align-items: center
             width: 90%
@@ -53,8 +36,8 @@
             border-radius: 10px
             box-shadow: 0 0 8px 1px #7575751e
             z-index: 2
-            left: 50%
-            transform: translateX(-50%)
+            margin-bottom: 3em
+            user-select: none
 
             > img
                 width: 25px
@@ -80,6 +63,24 @@
         padding-bottom: 2em
         gap: 20px
         user-select: none
+        height: 100%
+
+        > .comp-menu-exit
+            justify-self: flex-start
+            width: 30px
+            height: 30px
+            background: url(../../../public/assets/icons/x.svg) no-repeat center
+            background-size: 20px
+            border: none
+            transition: .1s ease
+            z-index: 4
+
+            &:hover
+                transform: scale(1.05)
+            
+            &:active
+                transition: .1s linear
+                transform: scale(.9)
 
         img
             width: 30px
@@ -105,5 +106,5 @@
             cursor: pointer
 
 .comp-menu-ativo
-    right: 0
-    transition: .3s ease-out
+    left: 0
+    visibility: visible
