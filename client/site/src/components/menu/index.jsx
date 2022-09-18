@@ -8,13 +8,6 @@ import "./index.sass";
 export default function Index({ ativo, alterar }) {
 	const navigate = useNavigate();
 	const [user, setUser] = useState({});
-	let cred = {};
-	if (storage("user")) cred = storage("user");
-
-	async function consultar() {
-		const r = await userConsulta(cred.id);
-		setUser(r);
-	}
 
 	function logout() {
 		storage.remove("user");
@@ -23,15 +16,19 @@ export default function Index({ ativo, alterar }) {
 	}
 
 	useEffect(() => {
-		if (!cred.id) {
+		if (!storage('user')) {
 			storage.remove("user");
 			toast.warn("Você precisa estar logado para acessar essa página");
 			navigate("/");
 		}
-	}, []);
+	});
 
 	useEffect(() => {
-		setTimeout(() => consultar(), 1000);
+		async function consultar() {
+			const r = await userConsulta(storage('user').id);
+			setUser(r);
+		}
+		consultar()
 	}, []);
 
 	return (

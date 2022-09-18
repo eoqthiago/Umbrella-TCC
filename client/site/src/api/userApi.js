@@ -31,6 +31,6 @@ export async function userConsulta(id) {
 	return r.data;
 }
 
-export async function userImagem(imagem) {
-	if (!userToken) return `${api.getUri()}/${imagem}`;
+export function userImagem(imagem) {
+	return `${api.getUri()}/${imagem}`;
 }
