@@ -21,9 +21,7 @@ export default function Index(props) {
 						Voltar
 					</BotaoLiso>
 				)}
-				{props.menu && (
-					<img className="comp-header-menu-icon" onClick={() => document.getElementById("comp-menu-id").classList.add("comp-menu-ativo")} src="/assets/icons/menu.svg" alt="Menu" />
-				)}
+				{props.menu && <img className="comp-header-menu-icon" onClick={() => props.alterarMenu(!props.estadoMenu)} src="/assets/icons/menu.svg" alt="Menu" />}
 			</nav>
 		</header>
 	);

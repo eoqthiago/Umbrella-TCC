@@ -1,6 +1,7 @@
 import axios from "axios";
+import { baseUrl, userToken } from "./services";
 
-const api = axios.create({ baseURL: "http://localhost:5050" });
+const api = axios.create({ baseURL: baseUrl });
 
 export async function userLogin(email, senha) {
 	const r = await api.post("/usuario/login", {
@@ -20,15 +21,16 @@ export async function userCadastro(nome, email, senha, nascimento) {
 	return r;
 }
 
-export async function userConsulta(id, auth) {
+export async function userConsulta(id) {
+	if (!userToken) return;
 	const r = await api.get(`/usuario/${id}`, {
 		headers: {
-			"x-acess-token": auth,
+			"x-access-token": userToken,
 		},
 	});
 	return r.data;
 }
 
-export async function userImagem(imagem) {
+export function userImagem(imagem) {
 	return `${api.getUri()}/${imagem}`;
 }
