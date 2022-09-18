@@ -3,11 +3,13 @@ import { useNavigate } from "react-router-dom";
 import storage from "local-storage";
 import { toast } from "react-toastify";
 import { userConsulta, userImagem } from "../../api/userApi";
+import CadastrarComunidade from "../modals/cadastrarComunidade";
 import "./index.sass";
 
 export default function Index({ ativo, alterar }) {
 	const navigate = useNavigate();
 	const [user, setUser] = useState({});
+	const [comunidade, setComunidade] = useState(false);
 
 	function logout() {
 		storage.remove("user");
@@ -42,6 +44,7 @@ export default function Index({ ativo, alterar }) {
 
 	return (
 		<div className={ativo ? "comp-menu-bg" : undefined}>
+			<CadastrarComunidade ativo={comunidade} state={setComunidade} />
 			<main className={(ativo && "comp-menu-ativo") + " comp-menu"}>
 				<section className="comp-menu-chats">
 					<div className="comp-menu-search">
@@ -55,7 +58,7 @@ export default function Index({ ativo, alterar }) {
 					<button className="comp-menu-exit" onClick={() => alterar(!ativo)} />
 
 					<div>
-						<img src="/assets/icons/create.svg" alt="Criar comunidade" title="Criar comunidade" />
+						<img src="/assets/icons/create.svg" alt="Criar comunidade" title="Criar comunidade" onClick={() => setComunidade(!comunidade)} />
 						<img src="/assets/icons/edit.svg" alt="Configurações" title="Configurações" />
 						<img src="/assets/icons/exit.svg" alt="Sair" title="Sair" onClick={() => logout()} />
 

@@ -2,36 +2,29 @@
     position: fixed
     top: 50
     left: 50
-    z-index: 3
+    z-index: 5
     width: 100vw
     height: 100vh
     display: flex
     align-items: center
     justify-content: center
     visibility: hidden
-    background: #00000036
+    background: #00000040
+    user-select: none
 
     > main
         background: #fff
         width: 70vw
-        max-width: 450px
+        max-width: 600px
         min-width: 200px
-        max-height: clamp(300px, 60vh, 700px)
-        overflow-y: auto
         position: relative
         padding: 3em clamp(1.4em,5vw, 3em)
         z-index: 4
+        display: flex
+        flex-flow: column wrap
 
         > h1
-            margin: 1em 0
-            font-family: OpenSans-bold
             text-align: center
-            user-select: none
-
-        > div
-            font-family: Roboto-regular
-            text-align: justify
-        
 
         > .comp-modal-exit
             position: absolute
@@ -43,6 +36,49 @@
             background-size: 20px
             border: none
             cursor: pointer
+
+        > section
+            margin-top: 2em
+            display: flex
+            flex-flow: row nowrap
+            justify-content: center
+            gap: 20px
+            width: 100%
+
+            > .comp-modal-inputs
+                width: 100%
+                max-width: 300px
+                min-width: 200px
+                text-align: start
+
+            > .comp-modal-imagem-input
+                margin-top: 10px
+                text-align: center
+
+                > img
+                    margin-top: 10px
+                    min-width: 90px
+                    max-width: 150px
+                    width: 30vw
+                    min-height: 90px
+                    max-height: 150px
+                    height: 30vw
+                    -webkit-user-drag: none
+                    overflow: hidden
+                    cursor: pointer
+                    border-radius: 100%
+
+                > input
+                    display: none
+                    position: fixed
+                    visibility: hidden                    
+                
+        > .comp-modal-botoes
+            width: 100%
+            display: flex
+            flex-direction: row
+            justify-content: flex-end
+            gap: 20px
 
 .comp-modal-ativo
     visibility: visible !important

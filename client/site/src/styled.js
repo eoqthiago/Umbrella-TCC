@@ -67,8 +67,38 @@ const Input = styled.input`
 	}
 `;
 
+const InputArea = styled.textarea`
+	background: ${(props) => props.background || "F7F9FB"};
+	width: clamp(100px, ${(props) => props.width}, 100%);
+	color: ${(props) => props.cor || "#525252"};
+	font-family: OpenSans-medium;
+	height: ${(props) => props.height || "150px"};
+	font-size: clamp(15px, ${(props) => props.fonte}, 20px);
+	user-select: none;
+	padding: 10px 7px;
+	margin-top: 15px;
+	border: 1px solid #b8b8b8;
+	border-radius: 5px;
+	resize: ${(props) => props.resize || "none"};
+	overflow: auto;
+
+	&:focus {
+		outline-color: #17ba76;
+	}
+
+	&:disabled {
+		cursor: not-allowed;
+	}
+
+	@media (max-width: 400px) {
+		height: 30px;
+		margin-top: 9px;
+		font-size: 13px;
+	}
+`;
+
 const BotaoSolido = styled.button`
-	background: #17ba76;
+	background: ${(props) => props.cor || "#17ba76"};
 	text-align: center;
 	color: ${(props) => props.main || "#fff"};
 	border-radius: 3px;
@@ -95,4 +125,4 @@ const BotaoSolido = styled.button`
 	}
 `;
 
-export { Titulo, SubTitulo, BotaoLiso, Input, BotaoSolido };
+export { Titulo, SubTitulo, BotaoLiso, Input, InputArea, BotaoSolido };
