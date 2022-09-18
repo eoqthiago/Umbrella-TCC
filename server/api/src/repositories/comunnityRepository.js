@@ -3,13 +3,51 @@ import con from "./connection.js";
 // Criar comunidade
 export async function communityCreate(id, community) {
 	const command = `
-        INSERT INTO tb_comunidade (id_criador, nm_comunidade, ds_comunidade) 
-                           VALUES (?, ?, ?) `;
-	const [r] = await con.query(command, [id, community.nome, community.descricao]);
+        INSERT INTO tb_comunidade (id_criador, nm_comunidade, ds_comunidade, bt_publica) 
+                           VALUES (?, ?, ?, ?) `;
+	const [r] = await con.query(command, [id, community.nome, community.descricao, community.publica]);
+	community.id = r.insertId;
+	return community;
+}
+
+// Inserir imagem da comunidade
+export async function communityImage(id, image) {
+	const command = `
+		update tb_comunidade
+		   set img_comunidade = ?
+		 where id_comunidade = ? `;
+	const [r] = await con.query(command, [image, id]);
 	return r.affectedRows;
 }
 
-//Alterar comunidade
+// Verificar se o usuário é dono da comunidade
+export async function communityOwner(userId, communityId) {
+	const command = `
+		select 
+			id_usuario id,
+			nm_usuario nome
+		from tb_comunidade
+		inner join tb_usuario on id_criador = id_usuario
+		where id_comunidade = ? and id_criador = ? `;
+	const [answer] = await con.query(command, [communityId, userId]);
+	return answer[0];
+}
+
+// Consultar uma comunidade
+export async function communityGet(id) {
+	const command = `
+		select
+			nm_comunidade nome,
+			ds_comunidade descricao,
+			img_comunidade imagem,
+			img_banner banner
+		from tb_comunidade
+		where id_comunidade = ? `;
+	const [answer] = await con.query(command, [id]);
+	return answer[0];
+}
+
+// Alterar comunidade
 export async function communityEdit(community) {
 	const command = `UPDATE tb_comunidade
                         INNER JOIN tb_usuario ON tb_comunidade.id_criador = tb_usuario.id_usuario
@@ -22,7 +60,7 @@ export async function communityEdit(community) {
 	return r;
 }
 
-export async function communityGet() {
+export async function communitiesGet() {
 	const command = `SELECT * FROM tb_comunidade;`;
 	const [r] = await con.query(command);
 	return r;

@@ -25,7 +25,7 @@ export async function userConsulta(id) {
 	if (!userToken) return;
 	const r = await api.get(`/usuario/${id}`, {
 		headers: {
-			"x-acess-token": userToken,
+			"x-access-token": userToken,
 		},
 	});
 	return r.data;

@@ -1,9 +1,11 @@
 import { Router } from "express";
 import jwt from "jsonwebtoken";
-import { communityCreate, communityEdit, communityGet, communityUser, communityAdmin } from "../repositories/comunnityRepository.js";
+import multer from "multer";
+import { communityCreate, communityEdit, communityUser, communityAdmin, communityOwner, communitiesGet, communityImage, communityGet } from "../repositories/comunnityRepository.js";
 import { userIdSearch } from "../repositories/userRepository.js";
 
 const server = Router();
+const communityImg = multer({ dest: "storage/communities" });
 
 //Adicionar usuario na comunidade
 server.post("/comunidade/convite", (req, res) => {
@@ -22,7 +24,7 @@ server.post("/comunidade/convite", (req, res) => {
 // Criar comunidade
 server.post("/comunidade", async (req, res) => {
 	try {
-		const header = req.header("x-acess-token");
+		const header = req.header("x-access-token");
 		const community = req.body;
 		const auth = jwt.decode(header);
 		switch (true) {
@@ -37,9 +39,39 @@ server.post("/comunidade", async (req, res) => {
 				break;
 		}
 		const answer = await communityCreate(auth.id, community);
-		if (answer < 1) throw new Error("Não foi possível criar a comunidade");
+		if (!answer) throw new Error("Não foi possível criar a comunidade");
 
-		res.status(201).send();
+		res.status(201).send(answer);
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
+// Enviar imagem
+server.put("/comunidade/imagem/:id", communityImg.single("imagem"), async (req, res) => {
+	try {
+		const header = req.header("x-access-token");
+		const id = Number(req.params.id);
+		const auth = jwt.decode(header);
+		switch (true) {
+			case !header || !auth || !(await userIdSearch(auth.id)):
+				throw new Error("Falha na autenticação");
+			case !req.file:
+				throw new Error("Arquivo não encontrado");
+			case !(await communityGet(id)):
+				throw new Error("Comunidade não encontrada");
+			case !(await communityOwner(auth.id, id)):
+				throw new Error("O usuário não possui permissão");
+			default:
+				break;
+		}
+		const img = req.file.path;
+		const answer = await communityImage(id, img);
+		if (answer < 1) throw new Error("Não foi possível alterar a imagem");
+
+		res.status(204).send();
 	} catch (err) {
 		res.status(400).send({
 			err: err.message,
@@ -66,9 +98,9 @@ server.put("/comunidade/:id", async (req, res) => {
 });
 
 //Consultar todas comunidades
-server.get("/comunidade", async (req, res) => {
+server.get("/comunidades", async (req, res) => {
 	try {
-		const r = await communityGet();
+		const r = await communitiesGet();
 		res.status(200).send(r);
 	} catch (err) {
 		res.status(401).send({

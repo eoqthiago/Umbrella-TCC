@@ -92,7 +92,7 @@ server.post("/usuario/login", async (req, res) => {
 server.put("/usuario", async (req, res) => {
 	try {
 		const user = req.body;
-		const header = req.header("x-acess-token");
+		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 		switch (true) {
 			case !header || !auth || !(await userIdSearch(auth.id)):
@@ -116,7 +116,7 @@ server.put("/usuario", async (req, res) => {
 // Enviar imagem
 server.put("/usuario/imagem", usuarioImg.single("imagem"), async (req, res) => {
 	try {
-		const header = req.header("x-acess-token");
+		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 		switch (true) {
 			case !header || !auth || !(await userIdSearch(auth.id)):
@@ -142,7 +142,7 @@ server.put("/usuario/imagem", usuarioImg.single("imagem"), async (req, res) => {
 // Deletar conta
 server.delete("/usuario", async (req, res) => {
 	try {
-		const header = req.header("x-acess-token");
+		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
 		const email = auth.email;
@@ -160,7 +160,7 @@ server.delete("/usuario", async (req, res) => {
 server.get("/usuario/:id/amizades", async (req, res) => {
 	try {
 		const id = Number(req.params.id);
-		const header = req.header("x-acess-token");
+		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
 		if (!(await userIdSearch(id))) throw new Error("Usuário não encontrado");
@@ -178,7 +178,7 @@ server.get("/usuario/:id/amizades", async (req, res) => {
 server.post("/usuario/amizade", async (req, res) => {
 	try {
 		const user = req.body;
-		const header = req.header("x-acess-token");
+		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 		switch (true) {
 			case !header || !auth || !(await userIdSearch(auth.id)):
@@ -206,7 +206,7 @@ server.put("/usuario/amizade/:id/:situacao", async (req, res) => {
 		const user = req.body;
 		const id = Number(req.params.id);
 		const situacao = req.params.situacao.toUpperCase()[0];
-		const header = req.header("x-acess-token");
+		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 		switch (true) {
 			case !header || !auth || !(await userIdSearch(auth.id)):
@@ -245,7 +245,7 @@ server.delete("/usuario/amizade/:id", async (req, res) => {
 	try {
 		const user = req.body;
 		const id = Number(req.params.id);
-		const header = req.header("x-acess-token");
+		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 		switch (true) {
 			case !header || !auth || !(await userIdSearch(auth.id)[0]):
@@ -268,7 +268,7 @@ server.delete("/usuario/amizade/:id", async (req, res) => {
 server.get("/usuario/:id", async (req, res) => {
 	try {
 		const id = Number(req.params.id);
-		const header = req.header("x-acess-token");
+		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
 		if (!(await userIdSearch(id))) throw new Error("Usuário não encontrado");

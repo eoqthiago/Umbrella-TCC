@@ -46,7 +46,7 @@ server.post("/admin/login", async (req, res) => {
 server.post("/admin", async (req, res) => {
 	try {
 		const admin = req.body;
-		const header = req.header("x-acess-token");
+		const header = req.header("x-access-token");
 		switch (true) {
 			case !adminVerificar(jwt.decode(header).email):
 				throw new Error("Falha na autenticação");
@@ -77,7 +77,7 @@ server.post("/admin", async (req, res) => {
 server.delete("/admin", async (req, res) => {
 	try {
 		const admin = req.body;
-		const header = req.header("x-acess-token");
+		const header = req.header("x-access-token");
 		switch (true) {
 			case !adminVerificar(jwt.decode(header).email):
 				throw new Error("Falha na autenticação");
