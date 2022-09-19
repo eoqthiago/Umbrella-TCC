@@ -8,7 +8,7 @@ export async function communityCreate(id, community) {
 	const [r] = await con.query(command, [id, community.nome, community.descricao, community.publica]);
 	community.id = r.insertId;
 	return community;
-}
+};
 
 // Inserir imagem da comunidade
 export async function communityImage(id, image) {
@@ -18,7 +18,7 @@ export async function communityImage(id, image) {
 		 where id_comunidade = ? `;
 	const [r] = await con.query(command, [image, id]);
 	return r.affectedRows;
-}
+};
 
 // Verificar se o usuário é dono da comunidade
 export async function communityOwner(userId, communityId) {
@@ -31,7 +31,7 @@ export async function communityOwner(userId, communityId) {
 		where id_comunidade = ? and id_criador = ? `;
 	const [answer] = await con.query(command, [communityId, userId]);
 	return answer[0];
-}
+};
 
 // Consultar uma comunidade
 export async function communityGet(id) {
@@ -45,7 +45,7 @@ export async function communityGet(id) {
 		where id_comunidade = ? `;
 	const [answer] = await con.query(command, [id]);
 	return answer[0];
-}
+};
 
 // Alterar comunidade
 export async function communityEdit(community) {
@@ -58,24 +58,26 @@ export async function communityEdit(community) {
 
 	const [r] = await con.query(command, [community.name, community.desc, community.id]);
 	return r;
-}
+};
 
 export async function communitiesGet() {
 	const command = `SELECT * FROM tb_comunidade;`;
 	const [r] = await con.query(command);
 	return r;
-}
+};
 
+//Convite comunidade
 export async function communityUser(userId, community) {
 	const command = `INSERT INTO tb_usuario_comunidade(id_usuario, id_comunidade) 
                             VALUES(?, ?)`;
-	const r = await con.query(command, [userId.user, community]);
+	const r = await con.query(command, [userId, community]);
 	return r.data;
-}
+};
 
+// Adicionar um admnistrador à comunidade
 export async function communityAdmin(user) {
 	const command = `INSERT INTO tb_administrador_comunidade(id_usuario_comunidade) 
                             VALUES (?)`;
 	const [r] = await con.query(command, [user.id]);
 	return r;
-}
+};

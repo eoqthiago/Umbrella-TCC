@@ -10,15 +10,21 @@ const communityImg = multer({ dest: "storage/communities" });
 //Adicionar usuario na comunidade
 server.post("/comunidade/convite", (req, res) => {
 	try {
-		const userId = req.query.user;
-		const community = req.query.community;
-		const r = communityUser(userId, community);
+		const header = req.header("x-acess-token");
+		const auth = jwt.decode(header);
+		const communityId = req.query.community;
+		switch (true) {
+			case !header || !auth: throw new Error('Ocorreu um erro de autenticação');
+			case !userIdSearch(auth.id): throw new Error('Não autorizado');
+			default: break;
+		}
+		const r = communityUser(auth.id, communityId.community);
 		res.status(200).send(r);
 	} catch (err) {
 		res.status(401).send({
 			err: err.message,
 		});
-	}
+	};
 });
 
 // Criar comunidade
