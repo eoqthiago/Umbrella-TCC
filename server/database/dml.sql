@@ -55,7 +55,15 @@ update tb_usuario_amizade set ds_situacao = 'N' where id_usuario_amizade = 1;
 -- Remover pedido ou amizade
 delete from tb_usuario_amizade where id_usuario_amizade = 1;
 
-
+-- Procurar usuários por nome
+select 	id_usuario id,
+		nm_usuario nome,
+		ds_usuario descricao,
+		img_usuario imagem,
+		img_banner banner,
+		dt_criacao criacao		
+	from tb_usuario
+	where nm_usuario like '%othierrydaora%';
 
 
 -- *Administrador*
