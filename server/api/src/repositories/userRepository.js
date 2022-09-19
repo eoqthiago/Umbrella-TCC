@@ -40,9 +40,12 @@ export async function userDelete(email) {
 
 export async function userSearch(email) {
 	const command = `
-        select * from tb_usuario where ds_email = ? `;
-	const [answer] = await con.query(command, [email]);
-	return answer;
+        select ds_email email,
+
+		  from tb_usuario
+		   where ds_email = ? `;
+	const [answer] = await con.query(command, [ `%${email}%`]);
+	return answer.affectedRows;
 }
 // esqueci senha
 
