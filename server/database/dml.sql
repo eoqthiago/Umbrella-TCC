@@ -21,6 +21,11 @@ update  tb_usuario
         img_banner = null
   where id_usuario = 1;
 
+-- Inserir imagem
+update tb_usuario
+	set img_usuario = '/path'
+	where id_usuario = 1
+
 -- Deletar
 delete from tb_usuario where ds_email = "othierrydaora";
 
@@ -75,3 +80,33 @@ select * from tb_admin where ds_email = 'othierrydaora@admin' and bt_root = 1;
 -- Deletar um administrador (root)
 delete from tb_admin where ds_email = 'othierrydaora@admin';
  
+
+
+-- *Comunidade*
+
+-- Cadastrar comunidade
+INSERT INTO tb_comunidade (id_criador, nm_comunidade, ds_comunidade, img_comunidade, img_banner) 
+                   VALUES (?, ?, ?, ?, ?) 
+
+-- Inserir imagem da comunidae
+update tb_comunidade
+		   set img_comunidade = ?
+		 where id_comunidade = ? ;
+
+-- Verificar se o usuário é dono da comunidade
+select 
+			id_usuario id,
+			nm_usuario nome
+		from tb_comunidade
+		inner join tb_usuario on id_criador = id_usuario
+		where id_comunidade = ? and id_criador = ? ;
+
+-- Consultar uma comunidade
+select
+			nm_comunidade nome,
+			ds_comunidade descricao,
+			img_comunidade imagem,
+			img_banner banner
+		from tb_comunidade
+		where id_comunidade = ? ;
+  

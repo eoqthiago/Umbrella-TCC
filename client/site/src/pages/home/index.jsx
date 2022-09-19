@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../../components/header";
 import Footer from "../../components/footer";
 import { Titulo, SubTitulo, BotaoLiso } from "../../styled";
@@ -14,6 +15,8 @@ const breakPoints = [
 ];
 
 const Index = () => {
+	const navigate = useNavigate();
+
 	return (
 		<div className="home page">
 			<Header login />
@@ -35,19 +38,19 @@ const Index = () => {
 						</SubTitulo>
 					</div>
 					<div className="home-top-comunidades-cards">
-						<Carousel breakPoints={breakPoints}>
-							<Card />
-							<Card />
-							<Card />
-							<Card />
-							<Card />
-							<Card />
-							<Card />
-							<Card />
-							<Card />
-							<Card />
-							<Card />
-							<Card />
+						<Carousel breakPoints={breakPoints} enableAutoPlay={true}>
+							<Card msg="Entre para ver mais" />
+							<Card msg="Entre para ver mais" />
+							<Card msg="Entre para ver mais" />
+							<Card msg="Entre para ver mais" />
+							<Card msg="Entre para ver mais" />
+							<Card msg="Entre para ver mais" />
+							<Card msg="Entre para ver mais" />
+							<Card msg="Entre para ver mais" />
+							<Card msg="Entre para ver mais" />
+							<Card msg="Entre para ver mais" />
+							<Card msg="Entre para ver mais" />
+							<Card msg="Entre para ver mais" />
 						</Carousel>
 					</div>
 				</section>
@@ -57,7 +60,7 @@ const Index = () => {
 						<SubTitulo fonte="2vw">Crie sua conta para desfrutar dessa experiência ao máximo!</SubTitulo>
 					</div>
 					<div className="home-cadastre-botao">
-						<BotaoLiso main="#fff" fonte="4vw">
+						<BotaoLiso main="#fff" fonte="4vw" onClick={() => navigate("/cadastro")}>
 							Cadastre-se
 						</BotaoLiso>
 					</div>

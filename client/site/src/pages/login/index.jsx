@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import LoadingBar from "react-top-loading-bar";
@@ -15,18 +15,23 @@ const Index = () => {
 	const ref = useRef();
 
 	async function handleLogin() {
+		localstorage.remove("user");
 		setLoading(true);
 		ref.current.continuousStart();
 		try {
 			const r = await userLogin(email, senha);
 			localstorage("user", r);
-			setTimeout(() => navigate("/"), 2000);
+			setTimeout(() => navigate("/home"), 2000);
 		} catch (err) {
 			if (err.response) toast.error(err.response.data.err);
 			setLoading(false);
 			ref.current.complete();
 		}
 	}
+
+	useEffect(() => {
+		localstorage("user") && navigate("/home");
+	});
 
 	return (
 		<div className="login page">
@@ -42,10 +47,7 @@ const Index = () => {
 				</div>
 				<div className="login-corpo">
 					<div className="login-inputs">
-						<Input placeholder="Email" width="100%" type="email" value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} />
-						<Input placeholder="Senha" width="100%" type="password" value={senha} onChange={(e) => setSenha(e.target.value)} disabled={loading} />
-						<div className="login-legenda" >
-							Esqueceu sua senha? Clique <span onClick={() => navigate("/recuperar")}> aqui </span> para recuperá-la
+
 						</div>
 					</div>
 					<div className="login-btn">

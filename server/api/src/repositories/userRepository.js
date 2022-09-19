@@ -31,6 +31,15 @@ export async function userEdit(user) {
 	return answer.affectedRows;
 }
 
+export async function userImg(image, id) {
+	const command = `
+	update tb_usuario
+	set img_usuario = ?
+	where id_usuario = ? `;
+	const [answer] = await con.query(command, [image, id]);
+	return answer.affectedRows;
+}
+
 export async function userDelete(email) {
 	const command = `
         delete from tb_usuario where ds_email = ? `;
@@ -62,7 +71,14 @@ export async function userForgotPassword (code) {
 
 export async function userIdSearch(id) {
 	const command = `
-        select * from tb_usuario where id_usuario = ? `;
+        select 	id_usuario id,
+				nm_usuario nome,
+				ds_usuario descricao,
+				img_usuario imagem,
+				img_banner banner,
+				dt_criacao criacao		
+		   from tb_usuario
+		  where id_usuario = ? `;
 	const [answer] = await con.query(command, [id]);
 	return answer;
 }
@@ -95,7 +111,6 @@ export async function recusarAmizade(idAmizade, idSolicitado) {
 	const command = `
         update tb_usuario_amizade set ds_situacao = 'N' where id_usuario_amizade = ? and id_solicitado = ? `;
 	const [answer] = await con.query(command, [idAmizade, idSolicitado]);
-	console.log('recusar');
 	return answer.affectedRows;
 }
 

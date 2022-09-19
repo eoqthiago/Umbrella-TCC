@@ -1,6 +1,7 @@
 import axios from "axios";
+import { baseUrl, userToken } from "./services";
 
-const api = axios.create({ baseURL: "http://localhost:5050" });
+const api = axios.create({ baseURL: baseUrl });
 
 export async function userLogin(email, senha) {
 	const r = await api.post("/usuario/login", {
