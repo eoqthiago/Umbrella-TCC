@@ -47,7 +47,26 @@ const Index = () => {
 				</div>
 				<div className="login-corpo">
 					<div className="login-inputs">
-
+						<Input
+							placeholder="Email"
+							width="100%"
+							type="email"
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
+							disabled={loading}
+							onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+						/>
+						<Input
+							placeholder="Senha"
+							width="100%"
+							type="password"
+							value={senha}
+							onChange={(e) => setSenha(e.target.value)}
+							disabled={loading}
+							onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+						/>
+						<div className="login-legenda">
+							Esqueceu sua senha? Clique <span onClick={() => navigate('/recuperar')}> aqui </span> para recuperá-la
 						</div>
 					</div>
 					<div className="login-btn">

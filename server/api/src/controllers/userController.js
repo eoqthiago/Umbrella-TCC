@@ -87,25 +87,22 @@ server.post("/usuario/login", async (req, res) => {
 			err: err.message,
 		});
 	}
-}); 
-
+});
 
 //recuperar senha
-server.get("/recuperar-senha/busca"), async (req, res) => {
-	try {
-		const { email } = req.query;
-		const emailUser = await userSearch(email);
-		if(!emailUser) 
-			res.status(404).send("Email não encontrado");
-		else
-			res.send(emailUser);
-		
-	} catch (err) {
-		res.status(404).send({
-			err: err.message,
-		});
-	}
-}
+server.get("/recuperar-senha/busca"),
+	async (req, res) => {
+		try {
+			const { email } = req.query;
+			const emailUser = await userSearch(email);
+			if (!emailUser) res.status(404).send("Email não encontrado");
+			else res.send(emailUser);
+		} catch (err) {
+			res.status(404).send({
+				err: err.message,
+			});
+		}
+	};
 
 // Alterar perfil
 server.put("/usuario", async (req, res) => {
@@ -178,7 +175,7 @@ server.delete("/usuario", async (req, res) => {
 // Procurar usuários por nome
 server.get("/usuario", async (req, res) => {
 	try {
-		const {nome} = req.query;
+		const { nome } = req.query;
 		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
@@ -209,7 +206,6 @@ server.get("/usuario/:id", async (req, res) => {
 		});
 	}
 });
-
 
 // Listar amigos
 server.get("/usuario/:id/amizades", async (req, res) => {

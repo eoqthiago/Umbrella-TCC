@@ -21,3 +21,16 @@ export async function userCadastro(nome, email, senha, nascimento) {
 	return r;
 }
 
+export async function userConsulta(id) {
+	if (!userToken) return;
+	const r = await api.get(`/usuario/${id}`, {
+		headers: {
+			"x-access-token": userToken,
+		},
+	});
+	return r.data;
+}
+
+export function userImagem(imagem) {
+	return `${api.getUri()}/${imagem}`;
+}
