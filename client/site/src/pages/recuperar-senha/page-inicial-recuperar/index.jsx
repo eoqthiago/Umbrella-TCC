@@ -2,10 +2,9 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 // import { toast } from "react-toastify";
-import LoadingBar from "react-top-loading-bar";
 
 
-import { BotaoSolido, Input, SubTitulo, Titulo } from "../../styled";
+import { BotaoSolido, Input, SubTitulo, Titulo } from "../../../styled";
 import "./index.sass";
 
 
@@ -13,25 +12,9 @@ export default function Index () {
 
     const [email, setEmail] = useState('');
     const navigate = useNavigate();
-	const ref = useRef();
-
-    async function handlePassword() {
-		setLoading(true);
-		ref.current.continuousStart();
-		try {
-			const r = await userLogin(email, senha);
-			localstorage("user", r);
-			setTimeout(() => navigate("/"), 2000);
-		} catch (err) {
-			if (err.response) toast.error(err.response.data.err);
-			setLoading(false);
-			ref.current.complete();
-		}
-	}
 
     return (
         <div className="email page">
-            <LoadingBar color="#48d677" ref={ref} />
             <main>
                 <div className="email-titulos">
                     <Titulo cor="#02C17D" fonte="4vw">

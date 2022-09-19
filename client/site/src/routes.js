@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/home";
 import Login from "./pages/login";
 import Cadastro from "./pages/cadastro";
-import Recuperar from "./pages/recuperar-senha"
+import Recuperar from "./pages/recuperar-senha/page-inicial-recuperar"
 import RecuperarCodigo from './pages/recuperar-senha/recuperar-senha-codigo'
 import Alterar from './pages/recuperar-senha/senha-nova'
 

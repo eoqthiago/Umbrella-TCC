@@ -5,8 +5,8 @@ import { toast } from "react-toastify";
 import LoadingBar from "react-top-loading-bar";
 
 
-import { BotaoSolido, Input, SubTitulo, Titulo } from "../../.././styled";
-import "../index.sass";
+import { BotaoSolido, Input, SubTitulo, Titulo } from "../../../styled";
+import "./index.sass";
 
 
 export default function Index () {

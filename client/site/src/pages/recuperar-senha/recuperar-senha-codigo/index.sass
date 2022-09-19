@@ -1,0 +1,54 @@
+.email
+    display: flex
+    align-items: center
+    justify-content: center
+    background: url('../../../../public/assets/images/fundo-wave.png') no-repeat
+    background-size: contain
+    background-position: 100% 100%
+
+    > main
+        width: 70vw
+        max-width: 370px
+        min-width: 200px
+        padding: 3.5em 0
+        background: #FFFFFF
+        border: 1px solid #D7D7D7
+        border-radius: 13px
+        display: flex
+        flex-flow: column nowrap
+        align-items: center
+        user-select: none
+        
+        > .email-titulos
+            text-align: center
+            width: 70%
+
+        > .email-corpo
+            margin-top: 1em
+            width: 100%
+            padding: 0 3em
+            display: flex
+            flex-flow: column nowrap
+
+            > .email-btn
+                margin-top: 2em
+
+            .email-legenda
+                color: #000
+                font-family: Roboto-regular
+                font-size: 13px
+
+                > span
+                    color: #00bb6d
+                    font-weight: bold
+                    cursor: pointer
+
+@media (max-width: 450px) 
+    .email > main  
+        padding: 2em 0
+
+        .email-corpo
+            padding: 0 1em
+
+            .email-legenda
+                font-size: 12px
