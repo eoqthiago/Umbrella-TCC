@@ -1,13 +1,13 @@
 import { Router } from "express";
 import jwt from "jsonwebtoken";
 import multer from "multer";
-import { communityCreate, communityEdit, communityUser, communityAdmin, communityOwner, communitiesGet, communityImage, communityGet } from "../repositories/comunnityRepository.js";
+import { communityCreate, communityEdit, communityUser, communityAdmin, communityOwner, communitiesGet, communityImage, communityGet, communitySearch } from "../repositories/comunnityRepository.js";
 import { userIdSearch } from "../repositories/userRepository.js";
 
 const server = Router();
 const communityImg = multer({ dest: "storage/communities" });
 
-//Adicionar usuario na comunidade
+//Adicionar usuario na comunidade // !alterar
 server.post("/comunidade/convite", (req, res) => {
 	try {
 		const userId = req.query.user;
@@ -33,7 +33,6 @@ server.post("/comunidade", async (req, res) => {
 			case !community.nome || !community.nome.trim() || community.nome.length > 50:
 				throw new Error("O nome inserido é inválido");
 			case community.descricao.length > 700:
-				console.log(community.descricao.length);
 				throw new Error("A descrição inserida é inválida");
 			default:
 				break;
@@ -97,7 +96,30 @@ server.put("/comunidade/:id", async (req, res) => {
 	}
 });
 
-//Consultar todas comunidades
+// Pesquisar comunidade por nome
+server.get("/comunidades", async (req, res) => {
+	try {
+		const header = req.header("x-access-token");
+		const { nome } = req.query;
+		const auth = jwt.decode(header);
+		switch (true) {
+			case !header || !auth || !(await userIdSearch(auth.id)):
+				throw new Error("Falha na autenticação");
+			default:
+				break;
+		}
+		const answer = await communitySearch(nome);
+		if (!answer[0]) throw new Error("Nenhuma comunidade foi encontrada");
+
+		res.status(200).send(answer);
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
+//Consultar todas comunidades // !alterar
 server.get("/comunidades", async (req, res) => {
 	try {
 		const r = await communitiesGet();
@@ -109,7 +131,7 @@ server.get("/comunidades", async (req, res) => {
 	}
 });
 
-//Promover usuario à administrador
+//Promover usuario à administrador // !alterar
 server.post("/comunidade/administrador", async (req, res) => {
 	try {
 		const user = req.body;

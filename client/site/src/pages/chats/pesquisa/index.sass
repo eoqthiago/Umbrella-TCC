@@ -1,0 +1,74 @@
+.pesquisa
+    > main
+        margin-top: 7em
+        display: flex
+        flex-flow: column nowrap
+        width: 100vw
+        align-items: center
+
+        > .pesquisa-categorias
+            display: flex
+            width: 70%
+            color: #229b2c
+            align-items: center
+            flex-flow: row wrap
+            justify-content: center
+            gap: 20px
+            user-select: none
+
+            > nav
+                cursor: pointer
+
+                &:hover
+                    color: #40ca4c 
+
+            > .selecionado
+                color: #5fce68 
+
+        > .pesquisa-input
+            display: inline-flex
+            align-items: center
+            width: clamp(200px, 80vw, 400px)
+            background-color: #f4f5f5
+            overflow: hidden
+            padding: 5px 7px
+            border-radius: 10px
+            box-shadow: 0 0 10px 1px #49494911
+            z-index: 0
+            margin-top: 1em
+            user-select: none
+
+            > img
+                width: 25px
+                cursor: pointer
+            
+            > input
+                border: none
+                font-size: 15px
+                color: #222222
+                font-family: Roboto-regular
+                outline: none
+                height: 27px
+                width: 100%
+                background-color: #f4f5f5
+                padding: 0 15px  
+                
+        > section
+            width: 80vw
+            margin-top: 3em
+            display: flex
+            align-items: center
+            flex-flow: row wrap
+            justify-content: center
+            gap: 2em 4em
+
+@media (max-width: 430px) 
+    .pesquisa > main
+        margin-top: 5em
+
+        > .pesquisa-categorias
+            font-size: 15px
+            flex-direction: column
+            gap: 5px
+            margin-bottom: 1em
+            
