@@ -49,9 +49,24 @@ export async function userDelete(email) {
 
 export async function userSearch(email) {
 	const command = `
-        select * from tb_usuario where ds_email = ? `;
-	const [answer] = await con.query(command, [email]);
-	return answer;
+        select ds_email email,
+
+		  from tb_usuario
+		   where ds_email = ? `;
+	const [answer] = await con.query(command, [ `%${email}%`]);
+	return answer.affectedRows;
+}
+// esqueci senha
+
+export async function userForgotPassword (code) {
+	const command = `
+	select ds_email, num_code
+			from tb_usuario
+			inner join tb_forgotpassword
+		on tb_usuario.id_usuario = tb_forgotpassword.id_usuario
+	where num_code = ? `;
+	const [answer] = await con.query(command, [code]);
+	return answer
 }
 
 export async function userIdSearch(id) {
