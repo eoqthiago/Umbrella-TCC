@@ -1,3 +1,4 @@
+import localStorage from "local-storage";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { BotaoLiso } from "../../styled";
@@ -8,7 +9,7 @@ export default function Index(props) {
 
 	return (
 		<header className="comp-header">
-			<img src="/assets/icons/logo.png" alt="Logo" />
+			<img src="/assets/icons/logo.png" alt="Logo" onClick={() => (localStorage("user") ? navigate("/chat") : navigate("/"))} />
 
 			<nav>
 				{props.login && (

@@ -53,10 +53,6 @@ export default function Index({ ativo, alterar }) {
 			<CadastrarComunidade ativo={comunidade} state={setComunidade} />
 			<main className={(ativo && "comp-menu-ativo") + " comp-menu"}>
 				<section className="comp-menu-chats">
-					<div className="comp-menu-search">
-						<input type="text" placeholder="Pesquisar" value={pesquisa} onChange={(e) => setPesquisa(e.target.value)} />
-						<img src="/assets/icons/search.svg" alt="Pesquisar" />
-					</div>
 					<div>Comunidades</div>
 				</section>
 
@@ -64,6 +60,7 @@ export default function Index({ ativo, alterar }) {
 					<button className="comp-menu-exit" onClick={() => alterar(!ativo)} />
 
 					<div>
+						<img src="/assets/icons/search-light.svg" alt="Pesquisa" title="Pesquisa" onClick={() => navigate('/pesquisa')} />
 						<img src="/assets/icons/create.svg" alt="Criar comunidade" title="Criar comunidade" onClick={() => setComunidade(!comunidade)} />
 						<img src="/assets/icons/edit.svg" alt="Configurações" title="Configurações" />
 						<img src="/assets/icons/exit.svg" alt="Sair" title="Sair" onClick={() => logout()} />
