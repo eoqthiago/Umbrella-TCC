@@ -10,6 +10,7 @@ export default function Index({ ativo, alterar }) {
 	const navigate = useNavigate();
 	const [user, setUser] = useState({});
 	const [comunidade, setComunidade] = useState(false);
+	const [pesquisa, setPesquisa] = useState("");
 
 	function logout() {
 		storage.remove("user");
@@ -42,13 +43,18 @@ export default function Index({ ativo, alterar }) {
 		consultar();
 	}, []);
 
+	useEffect(() => {
+		if (ativo) document.body.style.overflow = "hidden";
+		else document.body.style.overflow = "unset";
+	}, [ativo]);
+
 	return (
 		<div className={ativo ? "comp-menu-bg" : undefined}>
 			<CadastrarComunidade ativo={comunidade} state={setComunidade} />
 			<main className={(ativo && "comp-menu-ativo") + " comp-menu"}>
 				<section className="comp-menu-chats">
 					<div className="comp-menu-search">
-						<input type="text" placeholder="Pesquisar" />
+						<input type="text" placeholder="Pesquisar" value={pesquisa} onChange={(e) => setPesquisa(e.target.value)} />
 						<img src="/assets/icons/search.svg" alt="Pesquisar" />
 					</div>
 					<div>Comunidades</div>
