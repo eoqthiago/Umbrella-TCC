@@ -87,7 +87,25 @@ server.post("/usuario/login", async (req, res) => {
 			err: err.message,
 		});
 	}
-});
+}); 
+
+
+//recuperar senha
+server.get("/recuperar-senha/busca"), async (req, res) => {
+	try {
+		const { email } = req.query;
+		const emailUser = await userSearch(email);
+		if(!emailUser) 
+			res.status(404).send("Email não encontrado");
+		else
+			res.send(emailUser);
+		
+	} catch (err) {
+		res.status(404).send({
+			err: err.message,
+		});
+	}
+}
 
 // Alterar perfil
 server.put("/usuario", async (req, res) => {
