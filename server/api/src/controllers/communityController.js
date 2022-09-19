@@ -1,7 +1,7 @@
 import { Router } from "express";
 import jwt from "jsonwebtoken";
 import multer from "multer";
-import { communityCreate, communityEdit, communityUser, communityAdmin, communityOwner, communitiesGet, communityImage, communityGet } from "../repositories/comunnityRepository.js";
+import { communityCreate, communityEdit, communityUser, communityAdmin, communityOwner, communitiesGet, communityImage, communityId, communityName} from "../repositories/comunnityRepository.js";
 import { userIdSearch } from "../repositories/userRepository.js";
 
 const server = Router();
@@ -103,7 +103,26 @@ server.put("/comunidade/:id", async (req, res) => {
 	}
 });
 
-//Consultar todas comunidades
+//Consultar comunidade por nome/id
+server.get("/comunidade", async (req, res) => {
+	try {
+		const community = req.query.community;
+		if (community[0] == '#') {
+			const r = await communityId(community.substr(1, community.length));
+			res.status(200).send(r);
+		} else {
+			const r = await communityName(community);
+			res.status(200).send(r);
+		}
+	} catch (err) {
+		res.status(401).send({
+			err: err.message,
+		});
+	}
+});
+
+
+//Consultar comunidades
 server.get("/comunidades", async (req, res) => {
 	try {
 		const r = await communitiesGet();
@@ -120,7 +139,7 @@ server.post("/comunidade/administrador", async (req, res) => {
 	try {
 		const user = req.body;
 		if (!user.id || !user.id.trim()) throw new Error("Usuario não esta na comunidade");
-		const r = await communityAdmin(user);
+		const r = await communityAdmin(user);3
 		res.status(202).send();
 	} catch (err) {
 		res.status(401).send({

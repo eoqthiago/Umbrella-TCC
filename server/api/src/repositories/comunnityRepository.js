@@ -33,8 +33,8 @@ export async function communityOwner(userId, communityId) {
 	return answer[0];
 };
 
-// Consultar uma comunidade
-export async function communityGet(id) {
+// Consultar comunidade por ID
+export async function communityId(id) {
 	const command = `
 		select
 			nm_comunidade nome,
@@ -45,6 +45,20 @@ export async function communityGet(id) {
 		where id_comunidade = ? `;
 	const [answer] = await con.query(command, [id]);
 	return answer[0];
+};
+
+// Consultar comunidade por nome
+export async function communityName(comunidade) {
+	const command = `
+			select
+				nm_comunidade nome,
+				ds_comunidade descricao,
+				img_comunidade imagem,
+				img_banner banner
+		   from tb_comunidade
+		   where nm_comunidade like '%${comunidade}%'`;
+	const [answer] = await con.query(command);
+	return answer;
 };
 
 // Alterar comunidade
@@ -60,6 +74,7 @@ export async function communityEdit(community) {
 	return r;
 };
 
+//Consultar todas comunidades
 export async function communitiesGet() {
 	const command = `SELECT * FROM tb_comunidade;`;
 	const [r] = await con.query(command);
