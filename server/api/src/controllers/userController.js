@@ -10,7 +10,6 @@ import {
 	userCadastro,
 	userDelete,
 	userEdit,
-	userForgotPassword,
 	userIdSearch,
 	userLogin,
 	userSearch,
@@ -83,17 +82,23 @@ server.post("/usuario/login", async (req, res) => {
 			err: err.message,
 		});
 	}
-});
+}); 
+
 
 //recuperar senha
-server.post("/recuperar-senha"), async (req, res) => {
+server.get("/recuperar-senha/busca"), async (req, res) => {
 	try {
-		const email = req.query;
+		const { email } = req.query;
 		const emailUser = await userSearch(email);
-		if(!emailUser) throw new Error ("Email não encontrado")
+		if(!emailUser) 
+			res.status(404).send("Email não encontrado");
+		else
+			res.send(emailUser);
 		
 	} catch (err) {
-		
+		res.status(404).send({
+			err: err.message,
+		});
 	}
 }
 
