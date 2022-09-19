@@ -70,7 +70,7 @@ export async function communityEdit(community) {
                         WHERE   tb_comunidade.id_comunidade = ?
                         AND     tb_comunidade.id_criador = tb_usuario.id_usuario`;
 
-	const [r] = await con.query(command, [community.name, community.desc, community.id]);
+	const [r] = await con.query(command, [community.name, community.descricao, community.id]);
 	return r;
 };
 

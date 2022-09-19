@@ -85,17 +85,21 @@ server.put("/comunidade/imagem/:id", communityImg.single("imagem"), async (req, 
 	}
 });
 
-// Alterar comunidade //!alterar
-server.put("/comunidade/:id", async (req, res) => {
+// Alterar comunidade
+server.put("/comunidade", async (req, res) => {
 	try {
+		const header = req.header("x-access-token");
+		const auth = jwt.decode(header);
 		const community = req.body;
-		if (!community.id || !community.id.trim()) throw new Error("O grupo precisa de um ID");
-		if (!community.name || !community.name.trim()) throw new Error("O grupo precisa de um ");
-		else if (!community.desc || !community.desc.trim()) throw new Error("O grupo precisa de um ");
-		else {
+		switch (true) {
+			case !header || !auth: throw new Error('Erro de autenticação');
+			case !community.id || !community.id.trim(): throw new Error("O grupo precisa de um ID");
+			case !community.name || !community.name.trim(): throw new Error("O grupo precisa de um nome");
+			case !community.descricao || !community.descricao.trim(): throw new Error("O grupo precisa de uma descrição");
+			default: break;
+		};
 			const r = await communityEdit(community);
 			res.status(201).send();
-		}
 	} catch (err) {
 		res.status(401).send({
 			err: err.message,
