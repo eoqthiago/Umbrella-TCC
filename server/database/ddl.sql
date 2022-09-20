@@ -1,4 +1,5 @@
 create schema umbrellaDB;
+use umbrellaDB;
 
 -- Admin
 create table tb_admin (
