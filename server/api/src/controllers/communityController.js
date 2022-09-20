@@ -10,7 +10,7 @@ const communityImg = multer({ dest: "storage/communities" });
 //Adicionar usuario na comunidade
 server.post("/comunidade/convite", (req, res) => {
 	try {
-		const header = req.header("x-acess-token");
+		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 		const communityId = req.query.community;
 		switch (true) {
@@ -39,7 +39,6 @@ server.post("/comunidade", async (req, res) => {
 			case !community.nome || !community.nome.trim() || community.nome.length > 50:
 				throw new Error("O nome inserido é inválido");
 			case community.descricao.length > 700:
-				console.log(community.descricao.length);
 				throw new Error("A descrição inserida é inválida");
 			default:
 				break;
@@ -66,7 +65,7 @@ server.put("/comunidade/imagem/:id", communityImg.single("imagem"), async (req, 
 				throw new Error("Falha na autenticação");
 			case !req.file:
 				throw new Error("Arquivo não encontrado");
-			case !(await communityGet(id)):
+			case !(await communityId(id)):
 				throw new Error("Comunidade não encontrada");
 			case !(await communityOwner(auth.id, id)):
 				throw new Error("O usuário não possui permissão");
@@ -86,20 +85,21 @@ server.put("/comunidade/imagem/:id", communityImg.single("imagem"), async (req, 
 });
 
 // Alterar comunidade
+// Se o id do usuario logado for igual do criador deve deixar alterar, se não, lançar um erro
 server.put("/comunidade", async (req, res) => {
 	try {
 		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 		const community = req.body;
 		switch (true) {
-			case !header || !auth: throw new Error('Erro de autenticação');
+			case !header || !auth || !(await communityOwner(auth.id, community.id)): throw new Error('Erro de autenticação');
 			case !community.id || !community.id.trim(): throw new Error("O grupo precisa de um ID");
 			case !community.name || !community.name.trim(): throw new Error("O grupo precisa de um nome");
 			case !community.descricao || !community.descricao.trim(): throw new Error("O grupo precisa de uma descrição");
 			default: break;
 		};
-			const r = await communityEdit(community);
-			res.status(201).send();
+		const r = await communityEdit(community);
+		res.status(201).send('Editada com sucesso');
 	} catch (err) {
 		res.status(401).send({
 			err: err.message,
@@ -117,7 +117,7 @@ server.get("/comunidade", async (req, res) => {
 		} else {
 			const r = await communityName(community);
 			res.status(200).send(r);
-		}
+		};
 	} catch (err) {
 		res.status(401).send({
 			err: err.message,
@@ -126,7 +126,7 @@ server.get("/comunidade", async (req, res) => {
 });
 
 
-//Consultar comunidades
+//Consultar todas comunidades
 server.get("/comunidades", async (req, res) => {
 	try {
 		const r = await communitiesGet();
