@@ -1,24 +1,30 @@
 import { Router } from "express";
 import jwt from "jsonwebtoken";
 import multer from "multer";
-import { communityCreate, communityEdit, communityUser, communityAdmin, communityOwner, communitiesGet, communityImage, communityGet, communitySearch } from "../repositories/comunnityRepository.js";
+import { communityCreate, communityEdit, communityUser, communityAdmin, communityOwner, communitiesGet, communityImage, communityId, communityName} from "../repositories/comunnityRepository.js";
 import { userIdSearch } from "../repositories/userRepository.js";
 
 const server = Router();
 const communityImg = multer({ dest: "storage/communities" });
 
-//Adicionar usuario na comunidade // !alterar
+//Adicionar usuario na comunidade
 server.post("/comunidade/convite", (req, res) => {
 	try {
-		const userId = req.query.user;
-		const community = req.query.community;
-		const r = communityUser(userId, community);
+		const header = req.header("x-access-token");
+		const auth = jwt.decode(header);
+		const communityId = req.query.community;
+		switch (true) {
+			case !header || !auth: throw new Error('Ocorreu um erro de autenticação');
+			case !userIdSearch(auth.id): throw new Error('Não autorizado');
+			default: break;
+		}
+		const r = communityUser(auth.id, communityId.community);
 		res.status(200).send(r);
 	} catch (err) {
 		res.status(401).send({
 			err: err.message,
 		});
-	}
+	};
 });
 
 // Criar comunidade
@@ -59,7 +65,7 @@ server.put("/comunidade/imagem/:id", communityImg.single("imagem"), async (req, 
 				throw new Error("Falha na autenticação");
 			case !req.file:
 				throw new Error("Arquivo não encontrado");
-			case !(await communityGet(id)):
+			case !(await communityId(id)):
 				throw new Error("Comunidade não encontrada");
 			case !(await communityOwner(auth.id, id)):
 				throw new Error("O usuário não possui permissão");
@@ -78,17 +84,22 @@ server.put("/comunidade/imagem/:id", communityImg.single("imagem"), async (req, 
 	}
 });
 
-// Alterar comunidade //!alterar
-server.put("/comunidade/:id", async (req, res) => {
+// Alterar comunidade
+// Se o id do usuario logado for igual do criador deve deixar alterar, se não, lançar um erro
+server.put("/comunidade", async (req, res) => {
 	try {
+		const header = req.header("x-access-token");
+		const auth = jwt.decode(header);
 		const community = req.body;
-		if (!community.id || !community.id.trim()) throw new Error("O grupo precisa de um ID");
-		if (!community.name || !community.name.trim()) throw new Error("O grupo precisa de um ");
-		else if (!community.desc || !community.desc.trim()) throw new Error("O grupo precisa de um ");
-		else {
-			const r = await communityEdit(community);
-			res.status(201).send();
-		}
+		switch (true) {
+			case !header || !auth || !(await communityOwner(auth.id, community.id)): throw new Error('Erro de autenticação');
+			case !community.id || !community.id.trim(): throw new Error("O grupo precisa de um ID");
+			case !community.name || !community.name.trim(): throw new Error("O grupo precisa de um nome");
+			case !community.descricao || !community.descricao.trim(): throw new Error("O grupo precisa de uma descrição");
+			default: break;
+		};
+		const r = await communityEdit(community);
+		res.status(201).send('Editada com sucesso');
 	} catch (err) {
 		res.status(401).send({
 			err: err.message,
@@ -96,30 +107,26 @@ server.put("/comunidade/:id", async (req, res) => {
 	}
 });
 
-// Pesquisar comunidade por nome
-server.get("/comunidades", async (req, res) => {
+//Consultar comunidade por nome/id
+server.get("/comunidade", async (req, res) => {
 	try {
-		const header = req.header("x-access-token");
-		const { nome } = req.query;
-		const auth = jwt.decode(header);
-		switch (true) {
-			case !header || !auth || !(await userIdSearch(auth.id)):
-				throw new Error("Falha na autenticação");
-			default:
-				break;
-		}
-		const answer = await communitySearch(nome);
-		if (!answer[0]) throw new Error("Nenhuma comunidade foi encontrada");
-
-		res.status(200).send(answer);
+		const community = req.query.community;
+		if (community[0] == '#') {
+			const r = await communityId(community.substr(1, community.length));
+			res.status(200).send(r);
+		} else {
+			const r = await communityName(community);
+			res.status(200).send(r);
+		};
 	} catch (err) {
-		res.status(400).send({
+		res.status(401).send({
 			err: err.message,
 		});
 	}
 });
 
-//Consultar todas comunidades // !alterar
+
+//Consultar todas comunidades
 server.get("/comunidades", async (req, res) => {
 	try {
 		const r = await communitiesGet();
@@ -131,12 +138,12 @@ server.get("/comunidades", async (req, res) => {
 	}
 });
 
-//Promover usuario à administrador // !alterar
+//Promover usuario à administrador
 server.post("/comunidade/administrador", async (req, res) => {
 	try {
 		const user = req.body;
 		if (!user.id || !user.id.trim()) throw new Error("Usuario não esta na comunidade");
-		const r = await communityAdmin(user);
+		const r = await communityAdmin(user);3
 		res.status(202).send();
 	} catch (err) {
 		res.status(401).send({
