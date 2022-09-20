@@ -94,7 +94,7 @@ server.get("/recuperar-senha/busca"),
 	async (req, res) => {
 		try {
 			const { email } = req.query;
-			const emailUser = await userSearch(email);
+			const emailUser = await userEmailSearch(email);
 			if (!emailUser) res.status(404).send("Email não encontrado");
 			else res.send(emailUser);
 		} catch (err) {
