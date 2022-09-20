@@ -20,6 +20,18 @@ export async function communityImage(id, image) {
 	return r.affectedRows;
 };
 
+// Procurar por id de usúario na comunidade
+export async function communityUserID(id) {
+	const command = `select tb_usuario_comunidade.id_usuario_comunidade,
+					 tb_usuario.nm_usuario
+				FROM tb_usuario_comunidade
+				INNER JOIN tb_usuario ON tb_usuario_comunidade.id_usuario_comunidade = tb_usuario.id_usuario
+				WHERE tb_usuario_comunidade.id_usuario_comunidade = ?`;
+	
+	const [r] = await con.query(command, [id]);
+	return r;
+}
+
 // Verificar se o usuário é dono da comunidade
 export async function communityOwner(userId, communityId) {
 	const command = `
@@ -89,10 +101,11 @@ export async function communityUser(userId, community) {
 	return r.data;
 };
 
-// Adicionar um admnistrador à comunidade
+// Promover usúario à admnistrador da comunidade
 export async function communityAdmin(user) {
-	const command = `INSERT INTO tb_administrador_comunidade(id_usuario_comunidade) 
-                            VALUES (?)`;
+	const command = `UPDATE tb_usuario_comunidade 
+					SET  bt_admin = true
+					WHERE id_usuario_comunidade = ?`;
 	const [r] = await con.query(command, [user.id]);
 	return r;
 };
