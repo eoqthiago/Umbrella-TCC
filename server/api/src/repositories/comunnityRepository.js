@@ -13,9 +13,9 @@ export async function communityCreate(id, community) {
 // Inserir imagem da comunidade
 export async function communityImage(id, image) {
 	const command = `
-		update tb_comunidade
-		   set img_comunidade = ?
-		 where id_comunidade = ? `;
+		UPDATE tb_comunidade
+		   SET img_comunidade = ?
+		 WHERE id_comunidade = ? `;
 	const [r] = await con.query(command, [image, id]);
 	return r.affectedRows;
 };
@@ -32,17 +32,31 @@ export async function communityUserID(id, comunidade) {
 	
 	const [r] = await con.query(command, [id, comunidade]);
 	return r;
-}
+};
+
+// Procurar por nome de usúario na comunidade
+export async function communityUsername(nome, comunidade) {
+	const command = `SELECT tb_usuario_comunidade.id_usuario_comunidade,
+						 	tb_usuario.nm_usuario
+				 	FROM 	tb_usuario_comunidade
+					INNER JOIN tb_usuario 
+					ON tb_usuario_comunidade.id_usuario_comunidade = tb_usuario.id_usuario
+					WHERE	tb_usuario.nm_usuario = ?
+					AND 	id_comunidade = ?`;
+	
+	const [r] = await con.query(command, [nome, comunidade]);
+	return r;
+};
+
 
 // Verificar se o usuário é dono da comunidade
 export async function communityOwner(userId, communityId) {
 	const command = `
-		select 
-			id_usuario id,
-			nm_usuario nome
-		from tb_comunidade
-		inner join tb_usuario on id_criador = id_usuario
-		where id_comunidade = ? and id_criador = ? `;
+		SELECT 	id_usuario id,
+				nm_usuario nome
+		FROM 	tb_comunidade
+		INNER JOIN tb_usuario ON id_criador = id_usuario
+		WHERE 	id_comunidade = ? AND id_criador = ? `;
 	const [answer] = await con.query(command, [communityId, userId]);
 	return answer[0];
 };
@@ -50,13 +64,12 @@ export async function communityOwner(userId, communityId) {
 // Consultar comunidade por ID
 export async function communityId(id) {
 	const command = `
-		select
-			nm_comunidade nome,
-			ds_comunidade descricao,
-			img_comunidade imagem,
-			img_banner banner
-		from tb_comunidade
-		where id_comunidade = ? `;
+		SELECT 	nm_comunidade nome,
+				ds_comunidade descricao,
+				img_comunidade imagem,
+				img_banner banner
+		FROM 	tb_comunidade
+		WHERE 	id_comunidade = ? `;
 	const [answer] = await con.query(command, [id]);
 	return answer[0];
 };
@@ -64,13 +77,12 @@ export async function communityId(id) {
 // Consultar comunidade por nome
 export async function communityName(comunidade) {
 	const command = `
-			select
-				nm_comunidade nome,
-				ds_comunidade descricao,
-				img_comunidade imagem,
-				img_banner banner
-		   from tb_comunidade
-		   where nm_comunidade like '%${comunidade}%'`;
+			SELECT nm_comunidade nome,
+					ds_comunidade descricao,
+					img_comunidade imagem,
+					img_banner banner
+		   FROM 	tb_comunidade
+		   WHERE 	nm_comunidade like '%${comunidade}%'`;
 	const [answer] = await con.query(command);
 	return answer;
 };

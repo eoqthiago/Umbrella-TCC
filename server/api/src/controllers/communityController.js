@@ -1,7 +1,7 @@
 import { Router } from "express";
 import jwt from "jsonwebtoken";
 import multer from "multer";
-import { communityCreate, communityEdit, communityUser, communityAdmin, communityOwner, communitiesGet, communityImage, communityId, communityName, communityUserID} from "../repositories/comunnityRepository.js";
+import { communityCreate, communityEdit, communityUser, communityAdmin, communityOwner, communitiesGet, communityImage, communityId, communityName, communityUserID, communityUsername} from "../repositories/comunnityRepository.js";
 import { userIdSearch } from "../repositories/userRepository.js";
 
 const server = Router();
@@ -148,7 +148,6 @@ server.put("/comunidade/administrador", async (req, res) => {
 			case !header || !auth || !(await communityOwner(auth.id, user.comunidade)): throw new Error("Erro de autenticação");
 			case !user.id || !(await communityUserID(user.id)): throw new Error("Usuario não esta na comunidade");
 		};
-
 		const r = await communityAdmin(user.id);
 		res.status(202).send(`Usúario de id ${user.id} foi promovido à administrador`);
 	} catch (err) {
@@ -158,12 +157,18 @@ server.put("/comunidade/administrador", async (req, res) => {
 	};
 });
 
-// Procurar usúario na comunidade
+// Procurar usúario na comunidade por id/nome
 server.get("/comunidade/usuario", async (req, res) => {
 	try {
 		const user = req.body;
-		const r = await communityUserID(user.id, user.comunidade);
-		res.status(202).send(r);
+		if (!user.comunidade || !(communityId(user.comunidade))) throw new Error('Comunidade não existe');
+		else if (Number(user.usuario)) {
+			let r = await communityUserID(user.usuario, user.comunidade);
+			res.status(200).send(r);
+		} else if (isNaN(user.usuario)) {
+			const r = await communityUsername(user.usuario, user.comunidade);
+			res.status(200).send(r);
+		};
 	} catch (err) {
 		res.status(401).send({
 			err: err.message
