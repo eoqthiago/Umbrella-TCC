@@ -22,7 +22,7 @@ server.post("/comunidade/convite", (req, res) => {
 		res.status(200).send(r);
 	} catch (err) {
 		res.status(401).send({
-			err: err.message,
+			err: err.message
 		});
 	};
 });
@@ -49,7 +49,7 @@ server.post("/comunidade", async (req, res) => {
 		res.status(201).send(answer);
 	} catch (err) {
 		res.status(400).send({
-			err: err.message,
+			err: err.message
 		});
 	}
 });
@@ -79,7 +79,7 @@ server.put("/comunidade/imagem/:id", communityImg.single("imagem"), async (req, 
 		res.status(204).send();
 	} catch (err) {
 		res.status(400).send({
-			err: err.message,
+			err: err.message
 		});
 	}
 });
@@ -120,7 +120,7 @@ server.get("/comunidade", async (req, res) => {
 		};
 	} catch (err) {
 		res.status(401).send({
-			err: err.message,
+			err: err.message
 		});
 	}
 });
@@ -133,12 +133,12 @@ server.get("/comunidades", async (req, res) => {
 		res.status(200).send(r);
 	} catch (err) {
 		res.status(401).send({
-			err: err.message,
+			err: err.message
 		});
 	}
 });
 
-//Promover usuario à administrador
+// Promover usuario à administrador
 server.put("/comunidade/administrador", async (req, res) => {
 	try {
 		const header = req.header("x-access-token");
@@ -148,14 +148,28 @@ server.put("/comunidade/administrador", async (req, res) => {
 			case !header || !auth || !(await communityOwner(auth.id, user.comunidade)): throw new Error("Erro de autenticação");
 			case !user.id || !(await communityUserID(user.id)): throw new Error("Usuario não esta na comunidade");
 		};
-		
+
 		const r = await communityAdmin(user.id);
 		res.status(202).send(`Usúario de id ${user.id} foi promovido à administrador`);
 	} catch (err) {
 		res.status(401).send({
-			err: err.message,
+			err: err.message
 		});
 	};
 });
+
+// Procurar usúario na comunidade
+server.get("/comunidade/usuario", async (req, res) => {
+	try {
+		const user = req.body;
+		const r = await communityUserID(user.id, user.comunidade);
+		res.status(202).send(r);
+	} catch (err) {
+		res.status(401).send({
+			err: err.message
+		});
+	};
+});
+
 
 export default server;

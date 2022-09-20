@@ -21,14 +21,16 @@ export async function communityImage(id, image) {
 };
 
 // Procurar por id de usúario na comunidade
-export async function communityUserID(id) {
-	const command = `select tb_usuario_comunidade.id_usuario_comunidade,
-					 tb_usuario.nm_usuario
-				FROM tb_usuario_comunidade
-				INNER JOIN tb_usuario ON tb_usuario_comunidade.id_usuario_comunidade = tb_usuario.id_usuario
-				WHERE tb_usuario_comunidade.id_usuario_comunidade = ?`;
+export async function communityUserID(id, comunidade) {
+	const command = `SELECT tb_usuario_comunidade.id_usuario_comunidade,
+						 	tb_usuario.nm_usuario
+				 	FROM 	tb_usuario_comunidade
+					INNER JOIN tb_usuario 
+					ON tb_usuario_comunidade.id_usuario_comunidade = tb_usuario.id_usuario
+					WHERE 	tb_usuario_comunidade.id_usuario_comunidade = ?
+					AND 	id_comunidade = ?`;
 	
-	const [r] = await con.query(command, [id]);
+	const [r] = await con.query(command, [id, comunidade]);
 	return r;
 }
 
@@ -105,7 +107,8 @@ export async function communityUser(userId, community) {
 export async function communityAdmin(user) {
 	const command = `UPDATE tb_usuario_comunidade 
 					SET  bt_admin = true
-					WHERE id_usuario_comunidade = ?`;
+					WHERE id_usuario_comunidade = ?
+					`;
 	const [r] = await con.query(command, [user.id]);
 	return r;
 };
