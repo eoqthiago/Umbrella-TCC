@@ -13,7 +13,8 @@ import {
 	userIdSearch,
 	userImg,
 	userLogin,
-	userSearch,
+	userEmailSearch,
+	userNameSearch,
 } from "../repositories/userRepository.js";
 import { emailTest } from "../utils/expressionTest.js";
 import multer from "multer";
@@ -37,7 +38,7 @@ server.post("/usuario", async (req, res) => {
 			default:
 				break;
 		}
-		const search = await userSearch(user.email);
+		const search = await userEmailSearch(user.email);
 		if (search[0]) throw new Error("Este email já está em uso");
 		user.senha = sha256(user.senha);
 		const answer = await userCadastro(user);
@@ -87,6 +88,21 @@ server.post("/usuario/login", async (req, res) => {
 		});
 	}
 });
+
+//recuperar senha
+server.get("/recuperar-senha/busca"),
+	async (req, res) => {
+		try {
+			const { email } = req.query;
+			const emailUser = await userEmailSearch(email);
+			if (!emailUser) res.status(404).send("Email não encontrado");
+			else res.send(emailUser);
+		} catch (err) {
+			res.status(404).send({
+				err: err.message,
+			});
+		}
+	};
 
 // Alterar perfil
 server.put("/usuario", async (req, res) => {
@@ -149,6 +165,41 @@ server.delete("/usuario", async (req, res) => {
 		const answer = await userDelete(email);
 		if (answer < 1) throw new Error("Um erro ocorreu");
 		res.status(204).send();
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
+// Procurar usuários por nome
+server.get("/usuario", async (req, res) => {
+	try {
+		const { nome } = req.query;
+		const header = req.header("x-access-token");
+		const auth = jwt.decode(header);
+		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
+		const answer = await userNameSearch(nome);
+		if (answer < 1) throw new Error("Nenhum usuário foi encontrado");
+		res.send(answer);
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
+// Procurar usuário por id
+server.get("/usuario/:id", async (req, res) => {
+	try {
+		const id = Number(req.params.id);
+		const header = req.header("x-access-token");
+		const auth = jwt.decode(header);
+		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
+		if (!(await userIdSearch(id))) throw new Error("Usuário não encontrado");
+		const answer = await userIdSearch(id);
+		if (answer < 1) throw new Error("Nenhum usuário foi encontrado");
+		res.send(answer[0]);
 	} catch (err) {
 		res.status(400).send({
 			err: err.message,
@@ -257,24 +308,6 @@ server.delete("/usuario/amizade/:id", async (req, res) => {
 		const answer = await removerAmizade(id, user.id);
 		if (answer < 1) throw new Error("Não foi possível desfazer a amizade");
 		res.status(204).send();
-	} catch (err) {
-		res.status(400).send({
-			err: err.message,
-		});
-	}
-});
-
-// Consultar usuário
-server.get("/usuario/:id", async (req, res) => {
-	try {
-		const id = Number(req.params.id);
-		const header = req.header("x-access-token");
-		const auth = jwt.decode(header);
-		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
-		if (!(await userIdSearch(id))) throw new Error("Usuário não encontrado");
-		const answer = await userIdSearch(id);
-		if (answer < 1) throw new Error("Nenhum usuário foi encontrado");
-		res.send(answer[0]);
 	} catch (err) {
 		res.status(400).send({
 			err: err.message,

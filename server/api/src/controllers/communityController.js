@@ -120,7 +120,7 @@ server.get("/comunidade", async (req, res) => {
 		};
 	} catch (err) {
 		res.status(401).send({
-			err: err.message
+			err: err.message,
 		});
 	}
 });

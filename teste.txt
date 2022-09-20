@@ -1,0 +1,17 @@
+insert into tb_forgotpassword (num_code, id_usuario)
+	values('21345', '1');
+        
+select ds_email, num_code
+		from tb_usuario
+	inner join tb_forgotpassword
+	on tb_usuario.id_usuario = tb_forgotpassword.id_usuario
+ where num_code = '21345';
+
+
+ddl
+ create table tb_forgotpassword (
+	id_usuario int,
+    num_code  varchar(200),
+	foreign key (id_usuario) references tb_usuario (id_usuario)
+
+);

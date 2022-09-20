@@ -55,7 +55,15 @@ update tb_usuario_amizade set ds_situacao = 'N' where id_usuario_amizade = 1;
 -- Remover pedido ou amizade
 delete from tb_usuario_amizade where id_usuario_amizade = 1;
 
-
+-- Procurar usuários por nome
+select 	id_usuario id,
+		nm_usuario nome,
+		ds_usuario descricao,
+		img_usuario imagem,
+		img_banner banner,
+		dt_criacao criacao		
+	from tb_usuario
+	where nm_usuario like '%othierrydaora%';
 
 
 -- *Administrador*
@@ -101,7 +109,7 @@ select
 		inner join tb_usuario on id_criador = id_usuario
 		where id_comunidade = ? and id_criador = ? ;
 
--- Consultar uma comunidade
+-- Consultar uma comunidade por id
 select
 			nm_comunidade nome,
 			ds_comunidade descricao,
@@ -109,4 +117,12 @@ select
 			img_banner banner
 		from tb_comunidade
 		where id_comunidade = ? ;
-  
+
+-- Pesquisar comunidades por nome
+select
+			nm_comunidade nome,
+			ds_comunidade descricao,
+			img_comunidade imagem,
+			img_banner banner
+		from tb_comunidade
+		where nm_comunidade like '%Comunidade daora%' 

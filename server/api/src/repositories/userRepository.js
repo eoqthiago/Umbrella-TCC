@@ -47,10 +47,24 @@ export async function userDelete(email) {
 	return answer.affectedRows;
 }
 
-export async function userSearch(email) {
+export async function userEmailSearch(email) {
 	const command = `
-        select * from tb_usuario where ds_email = ? `;
+        select ds_email email
+		  from tb_usuario
+		   where ds_email = ? `;
 	const [answer] = await con.query(command, [email]);
+	return answer;
+}
+
+// esqueci senha
+export async function userForgotPassword(code) {
+	const command = `
+	select ds_email, num_code
+			from tb_usuario
+			inner join tb_forgotpassword
+		on tb_usuario.id_usuario = tb_forgotpassword.id_usuario
+	where num_code = ? `;
+	const [answer] = await con.query(command, [code]);
 	return answer;
 }
 
@@ -65,6 +79,20 @@ export async function userIdSearch(id) {
 		   from tb_usuario
 		  where id_usuario = ? `;
 	const [answer] = await con.query(command, [id]);
+	return answer;
+}
+
+export async function userNameSearch(nome) {
+	const command = `
+        select 	id_usuario id,
+				nm_usuario nome,
+				ds_usuario descricao,
+				img_usuario imagem,
+				img_banner banner,
+				dt_criacao criacao		
+		   from tb_usuario
+		  where nm_usuario like '%${nome}%' `;
+	const [answer] = await con.query(command);
 	return answer;
 }
 

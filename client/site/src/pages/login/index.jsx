@@ -21,7 +21,7 @@ const Index = () => {
 		try {
 			const r = await userLogin(email, senha);
 			localstorage("user", r);
-			setTimeout(() => navigate("/home"), 2000);
+			setTimeout(() => navigate("/chat"), 2500);
 		} catch (err) {
 			if (err.response) toast.error(err.response.data.err);
 			setLoading(false);
@@ -30,7 +30,7 @@ const Index = () => {
 	}
 
 	useEffect(() => {
-		localstorage("user") && navigate("/home");
+		localstorage("user") && navigate("/chat");
 	});
 
 	return (
@@ -66,7 +66,7 @@ const Index = () => {
 							onKeyDown={(e) => e.key === "Enter" && handleLogin()}
 						/>
 						<div className="login-legenda">
-							Esqueceu sua senha? Clique <span> aqui </span> para recuperá-la
+							Esqueceu sua senha? Clique <span onClick={() => navigate('/recuperar')}> aqui </span> para recuperá-la
 						</div>
 					</div>
 					<div className="login-btn">

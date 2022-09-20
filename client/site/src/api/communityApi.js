@@ -22,7 +22,7 @@ export async function communityCadastro(nome, descricao, publica) {
 }
 
 export async function communityImage(id, imagem) {
-	if (!imagem || !id) return;
+	if (!imagem || !id || !userToken) return;
 	const formd = new FormData();
 	formd.append("imagem", imagem);
 
@@ -33,4 +33,27 @@ export async function communityImage(id, imagem) {
 		},
 	});
 	return r.status;
+}
+
+export async function pesquisar(categoria, conteudo) {
+	if (!userToken || !categoria || !conteudo) return [];
+	let r;
+	switch (categoria) {
+		case "comunidades":
+			r = await api.get(`/comunidades?nome=${conteudo}`, {
+				headers: {
+					"x-access-token": userToken,
+				},
+			});
+			break;
+		// case "usuarios":
+		// 	r = await api.get("");
+		// 	break;
+		// case "chats":
+		// 	r = await api.get("");
+		// 	break;
+		default:
+			return [];
+	}
+	return r.data;
 }
