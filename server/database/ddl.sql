@@ -1,5 +1,4 @@
 create schema umbrellaDB;
-use umbrellaDB;
 
 -- Admin
 create table tb_admin (
@@ -97,7 +96,7 @@ create table tb_comunidade (
     img_comunidade varchar(200),
     img_banner varchar(200),
     dt_criacao date default(curdate()),
-    bt_publica boolean,
+    bt_publica boolean default(false),
     foreign key (id_criador) references tb_usuario (id_usuario)
 );
 
@@ -156,13 +155,6 @@ create table tb_comunidade_report (
     dt_report date default(curdate()),
     foreign key (id_usuario) references tb_usuario (id_usuario),
     foreign key (id_comunidade) references tb_comunidade (id_comunidade) on delete cascade
-);
-
--- administrador comunidade
-create table tb_administrador_comunidade (
-    id_administrador int primary key auto_increment,
-    id_usuario_comunidade int,
-    foreign key (id_usuario_comunidade) references tb_usuario_comunidade (id_usuario_comunidade) on delete cascade
 );
 
 -- Outros

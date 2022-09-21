@@ -1,7 +1,19 @@
 import { Router } from "express";
 import jwt from "jsonwebtoken";
 import multer from "multer";
-import { communityCreate, communityEdit, communityUser, communityAdmin, communityOwner, communitiesGet, communityImage, communityId, communityName, communityUserID, communityUsername} from "../repositories/comunnityRepository.js";
+import {
+	communityCreate,
+	communityEdit,
+	communityUser,
+	communityAdmin,
+	communityOwner,
+	communitiesGet,
+	communityImage,
+	communityId,
+	communityName,
+	communityUserID,
+	communityUsername,
+} from "../repositories/comunnityRepository.js";
 import { userIdSearch } from "../repositories/userRepository.js";
 
 const server = Router();
@@ -14,17 +26,20 @@ server.post("/comunidade/convite", (req, res) => {
 		const auth = jwt.decode(header);
 		const communityId = req.query.community;
 		switch (true) {
-			case !header || !auth: throw new Error('Ocorreu um erro de autenticação');
-			case !userIdSearch(auth.id): throw new Error('Não autorizado');
-			default: break;
+			case !header || !auth:
+				throw new Error("Ocorreu um erro de autenticação");
+			case !userIdSearch(auth.id):
+				throw new Error("Não autorizado");
+			default:
+				break;
 		}
 		const r = communityUser(auth.id, communityId.community);
 		res.status(200).send(r);
 	} catch (err) {
 		res.status(401).send({
-			err: err.message
+			err: err.message,
 		});
-	};
+	}
 });
 
 // Criar comunidade
@@ -49,7 +64,7 @@ server.post("/comunidade", async (req, res) => {
 		res.status(201).send(answer);
 	} catch (err) {
 		res.status(400).send({
-			err: err.message
+			err: err.message,
 		});
 	}
 });
@@ -79,7 +94,7 @@ server.put("/comunidade/imagem/:id", communityImg.single("imagem"), async (req, 
 		res.status(204).send();
 	} catch (err) {
 		res.status(400).send({
-			err: err.message
+			err: err.message,
 		});
 	}
 });
@@ -92,14 +107,19 @@ server.put("/comunidade", async (req, res) => {
 		const auth = jwt.decode(header);
 		const community = req.body;
 		switch (true) {
-			case !header || !auth || !(await communityOwner(auth.id, community.id)): throw new Error('Erro de autenticação');
-			case !community.id || !community.id.trim(): throw new Error("O grupo precisa de um ID");
-			case !community.name || !community.name.trim(): throw new Error("O grupo precisa de um nome");
-			case !community.descricao || !community.descricao.trim(): throw new Error("O grupo precisa de uma descrição");
-			default: break;
-		};
+			case !header || !auth || !(await communityOwner(auth.id, community.id)):
+				throw new Error("Erro de autenticação");
+			case !community.id || !community.id.trim():
+				throw new Error("O grupo precisa de um ID");
+			case !community.name || !community.name.trim():
+				throw new Error("O grupo precisa de um nome");
+			case !community.descricao || !community.descricao.trim():
+				throw new Error("O grupo precisa de uma descrição");
+			default:
+				break;
+		}
 		const r = await communityEdit(community);
-		res.status(201).send('Editada com sucesso');
+		res.status(201).send("Editada com sucesso");
 	} catch (err) {
 		res.status(401).send({
 			err: err.message,
@@ -111,20 +131,19 @@ server.put("/comunidade", async (req, res) => {
 server.get("/comunidade", async (req, res) => {
 	try {
 		const community = req.query.community;
-		if (community[0] == '#') {
+		if (community[0] == "#") {
 			const r = await communityId(community.substr(1, community.length));
 			res.status(200).send(r);
 		} else {
 			const r = await communityName(community);
 			res.status(200).send(r);
-		};
+		}
 	} catch (err) {
 		res.status(401).send({
 			err: err.message,
 		});
 	}
 });
-
 
 //Consultar todas comunidades
 server.get("/comunidades", async (req, res) => {
@@ -133,7 +152,7 @@ server.get("/comunidades", async (req, res) => {
 		res.status(200).send(r);
 	} catch (err) {
 		res.status(401).send({
-			err: err.message
+			err: err.message,
 		});
 	}
 });
@@ -145,36 +164,37 @@ server.put("/comunidade/administrador", async (req, res) => {
 		const auth = jwt.decode(header);
 		const user = req.body;
 		switch (true) {
-			case !header || !auth || !(await communityOwner(auth.id, user.comunidade)): throw new Error("Erro de autenticação");
-			case !user.id || !(await communityUserID(user.id)): throw new Error("Usuario não esta na comunidade");
-		};
+			case !header || !auth || !(await communityOwner(auth.id, user.comunidade)):
+				throw new Error("Erro de autenticação");
+			case !user.id || !(await communityUserID(user.id)):
+				throw new Error("Usuario não esta na comunidade");
+		}
 		const r = await communityAdmin(user.id);
 		res.status(202).send(`Usúario de id ${user.id} foi promovido à administrador`);
 	} catch (err) {
 		res.status(401).send({
-			err: err.message
+			err: err.message,
 		});
-	};
+	}
 });
 
 // Procurar usúario na comunidade por id/nome
 server.get("/comunidade/usuario", async (req, res) => {
 	try {
 		const user = req.body;
-		if (!user.comunidade || !(communityId(user.comunidade))) throw new Error('Comunidade não existe');
+		if (!user.comunidade || !communityId(user.comunidade)) throw new Error("Comunidade não existe");
 		else if (Number(user.usuario)) {
 			let r = await communityUserID(user.usuario, user.comunidade);
 			res.status(200).send(r);
 		} else if (isNaN(user.usuario)) {
 			const r = await communityUsername(user.usuario, user.comunidade);
 			res.status(200).send(r);
-		};
+		}
 	} catch (err) {
 		res.status(401).send({
-			err: err.message
+			err: err.message,
 		});
-	};
+	}
 });
-
 
 export default server;

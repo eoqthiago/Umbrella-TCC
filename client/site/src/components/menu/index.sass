@@ -25,10 +25,10 @@
     left: -50vw
     transition: .2s ease-out
     overflow: hidden
-    border-left: 1px solid #e0e0e0
+    border-right: 1px solid #e0e0e0
     box-shadow: -2px 0px 10px 4px #00000017
     justify-content: space-between
-    visibility: hidden  
+    visibility: hidden
 
     > .comp-menu-chats
         width: 100%
@@ -38,6 +38,23 @@
         flex-flow: column nowrap
         padding: 2em 1em
 
+        > .comp-menu-exit
+            justify-items: flex-start
+            width: 30px
+            height: 30px
+            background: url(../../../public/assets/icons/x.svg) no-repeat center
+            background-size: 20px
+            border: none
+            transition: .1s ease
+            z-index: 4
+            position: absolute
+            right: 20px
+            top: 20px
+            
+            &:active
+                transition: .1s linear
+                transform: scale(.9)
+
     > .comp-menu-config
         width: 80px
         background: #3baf69
@@ -46,27 +63,9 @@
         align-items: center
         padding-bottom: 2em
         user-select: none
-        justify-content: space-between
+        justify-content: flex-end
         height: 100vh
-
-        > .comp-menu-exit
-            justify-items: flex-start
-            width: 30px
-            height: 30px
-            background: url(../../../public/assets/icons/x-light.svg) no-repeat center
-            background-size: 20px
-            border: none
-            transition: .1s ease
-            z-index: 4
-            margin-top: 1em
-
-            &:hover
-                transform: scale(1.1)
-            
-            &:active
-                transition: .1s linear
-                transform: scale(.9)
-
+        
         > div
             display: flex
             flex-flow: column nowrap
