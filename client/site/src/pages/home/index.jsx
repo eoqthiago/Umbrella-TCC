@@ -28,6 +28,27 @@ const Index = () => {
 						<SubTitulo fonte="2vw">Aqui você pode encontrar comunidades geek!</SubTitulo>
 					</div>
 				</section>
+				<section className="msgs-comunidades">
+
+				<Titulo className="txts-comnd" cor="#3A3A3A" fonte="4vw">TORNE TUDO ISSO POSSIVEL COM APENAS UM TOQUE</Titulo>
+					<div className="exemplo-comunidades">
+						<img className= 'card-celular' src="/assets/images/Cardcelular.svg"/>
+						<img className='seta' src="/assets/images/Seta.svg"/>
+						<img className="exemplo-msg"src="/assets/images/chat.svg"/>
+					</div>
+					<Titulo className="txts-comnd" cor="#3A3A3A" fonte="4vw">AQUI NO UMBRELLA TRABALHAMOS COM A PRATICIDADE VEJA ABAIXO:</Titulo>
+				</section>
+				<section className="home-cadastre">
+					<div className="home-cadastre-textos">
+						<Titulo fonte="4vw">Faça parte de tudo isso</Titulo>
+						<SubTitulo fonte="2vw">Crie sua conta para desfrutar dessa experiência ao máximo!</SubTitulo>
+					</div>
+					<div className="home-cadastre-botao">
+						<BotaoLiso main="#fff" fonte="4vw" onClick={() => navigate("/cadastro")}>
+							Cadastre-se
+						</BotaoLiso>
+					</div>
+				</section>
 				<section className="home-top-comunidades">
 					<div className="home-top-comunidades-titulos">
 						<Titulo cor="#3A3A3A" fonte="4vw">
@@ -52,17 +73,6 @@ const Index = () => {
 							<Card msg="Entre para ver mais" />
 							<Card msg="Entre para ver mais" />
 						</Carousel>
-					</div>
-				</section>
-				<section className="home-cadastre">
-					<div className="home-cadastre-textos">
-						<Titulo fonte="4vw">Faça parte de tudo isso</Titulo>
-						<SubTitulo fonte="2vw">Crie sua conta para desfrutar dessa experiência ao máximo!</SubTitulo>
-					</div>
-					<div className="home-cadastre-botao">
-						<BotaoLiso main="#fff" fonte="4vw" onClick={() => navigate("/cadastro")}>
-							Cadastre-se
-						</BotaoLiso>
 					</div>
 				</section>
 				<section className="home-conecte">
