@@ -77,9 +77,10 @@
                      transform: scale(1.1)
 
                  > .seta  
-                     width: 15%          
+                     width: 15%      
 
                  > .exemplo-msg
+                     min-width: 350px
                      transition: 0.7s
                      
                  > .exemplo-msg:hover
@@ -195,3 +196,26 @@
 
             > .home-cadaste-botao
                 background-size: 100%
+
+
+@media (max-width: 500px)
+   .home > main
+        > .msgs-comunidades
+            align-items: center
+
+            > .exemplo-comunidades
+              display: flex
+              flex-direction: column
+              align-items: center
+
+              > .card-celular
+                    width: 50%
+                    margin-right: 2em
+            
+              > .seta
+                     transform: rotate(90deg)
+                     margin: 2em
+                     width: 25%
+     
+              > .exemplo-msg
+                   max-width: 100px   
