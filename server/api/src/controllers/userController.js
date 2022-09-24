@@ -39,7 +39,7 @@ server.post("/usuario", async (req, res) => {
 				break;
 		}
 		const search = await userEmailSearch(user.email);
-		if (search[0]) throw new Error("Este email já está em uso");
+		if (search) throw new Error("Este email já está em uso");
 		user.senha = sha256(user.senha);
 		const answer = await userCadastro(user);
 		res.status(201).send();
@@ -74,7 +74,7 @@ server.post("/usuario/login", async (req, res) => {
 			},
 			process.env.JWT_KEY,
 			{
-				expiresIn: "10d",
+				expiresIn: "3d",
 			}
 		);
 		res.status(202).send({
@@ -89,20 +89,24 @@ server.post("/usuario/login", async (req, res) => {
 	}
 });
 
-//recuperar senha
-server.get("/recuperar-senha/busca"),
-	async (req, res) => {
-		try {
-			const { email } = req.query;
-			const emailUser = await userEmailSearch(email);
-			if (!emailUser) res.status(404).send("Email não encontrado");
-			else res.send(emailUser);
-		} catch (err) {
-			res.status(404).send({
-				err: err.message,
-			});
-		}
-	};
+// Procurar usuário
+server.get("/usuario", async (req, res) => {
+	try {
+		const { email, id } = req.query;
+		const header = req.header("x-access-token");
+		const auth = jwt.decode(header);
+		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
+		else if (!email && !id) throw new Error("Campos incompletos");
+		if (id) id = Number(id);
+		const answer = email ? await userEmailSearch(email) : await userIdSearch(id);
+		if (!answer) throw new Error("Usuário não encontrado");
+		res.send(answer);
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
 
 // Alterar perfil
 server.put("/usuario", async (req, res) => {
@@ -173,7 +177,7 @@ server.delete("/usuario", async (req, res) => {
 });
 
 // Procurar usuários por nome
-server.get("/usuario", async (req, res) => {
+server.get("/usuarios", async (req, res) => {
 	try {
 		const { nome } = req.query;
 		const header = req.header("x-access-token");
@@ -182,24 +186,6 @@ server.get("/usuario", async (req, res) => {
 		const answer = await userNameSearch(nome);
 		if (answer < 1) throw new Error("Nenhum usuário foi encontrado");
 		res.send(answer);
-	} catch (err) {
-		res.status(400).send({
-			err: err.message,
-		});
-	}
-});
-
-// Procurar usuário por id
-server.get("/usuario/:id", async (req, res) => {
-	try {
-		const id = Number(req.params.id);
-		const header = req.header("x-access-token");
-		const auth = jwt.decode(header);
-		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
-		if (!(await userIdSearch(id))) throw new Error("Usuário não encontrado");
-		const answer = await userIdSearch(id);
-		if (answer < 1) throw new Error("Nenhum usuário foi encontrado");
-		res.send(answer[0]);
 	} catch (err) {
 		res.status(400).send({
 			err: err.message,

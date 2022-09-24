@@ -53,7 +53,7 @@ export async function userEmailSearch(email) {
 		  from tb_usuario
 		   where ds_email = ? `;
 	const [answer] = await con.query(command, [email]);
-	return answer;
+	return answer[0];
 }
 
 // esqueci senha

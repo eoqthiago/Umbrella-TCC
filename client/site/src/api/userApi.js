@@ -23,7 +23,7 @@ export async function userCadastro(nome, email, senha, nascimento) {
 
 export async function userConsulta(id) {
 	if (!userToken) return;
-	const r = await api.get(`/usuario/${id}`, {
+	const r = await api.get(`/usuario?id=${id}`, {
 		headers: {
 			"x-access-token": userToken,
 		},
