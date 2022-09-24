@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { sha256 } from "js-sha256";
 import jwt from "jsonwebtoken";
+import codeRecuperarSenha from "../services/services.js" 
+import nodemailer from "nodemailer"
 import {
 	aceitarAmizade,
 	amigosConsulta,
@@ -21,6 +23,7 @@ import multer from "multer";
 
 const server = Router();
 const usuarioImg = multer({ dest: "storage/users" });
+const code = codeRecuperarSenha()
 
 // Cadastro
 server.post("/usuario", async (req, res) => {
@@ -90,19 +93,50 @@ server.post("/usuario/login", async (req, res) => {
 });
 
 //recuperar senha
-server.get("/recuperar-senha/busca"),
-	async (req, res) => {
-		try {
-			const { email } = req.query;
-			const emailUser = await userEmailSearch(email);
-			if (!emailUser) res.status(404).send("Email não encontrado");
-			else res.send(emailUser);
-		} catch (err) {
-			res.status(404).send({
-				err: err.message,
+server.get("/usuario/recuperar", async (req, res) => {
+	try {
+		const { email } = req.query;
+		const header = req.header("x-access-token");
+		const auth = jwt.decode(header);
+		if (!header || !auth || !(await  userIdSearch(auth.id))) throw new Error("Falha na autenticação");
+		const answer = await userEmailSearch(email);
+		if (answer < 1) throw new Error("Email não foi encontrado");
+		else {
+			res.send(answer);
+
+			var transport = nodemailer.createTransport({
+				host: "smtp.mailtrap.io",
+				port: 2525,
+				auth: {
+				  user: "0e31a2348ee1a0",
+				  pass: "103a36ad5b7dd6"
+				}
 			});
+			
+			var message = {
+				from: "noreply@celki.com.br",
+				to: "teste@celki.com.br",
+				subject: "Seu codigo de recuperação de senha",
+				text: "Plaintext version of the message",
+				html: `<p>${code}</p>`
+			};
+
+			transport.sendMail(message, function(err) {
+				if(err) return res.status(400).json ({
+					erro: true,
+					mensagem: "E-mail não enviado!"
+				});
+			})
+
+
 		}
-	};
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
 
 // Alterar perfil
 server.put("/usuario", async (req, res) => {
