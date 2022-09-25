@@ -79,7 +79,7 @@ export async function userIdSearch(id) {
 		   from tb_usuario
 		  where id_usuario = ? `;
 	const [answer] = await con.query(command, [id]);
-	return answer;
+	return answer[0];
 }
 
 export async function userNameSearch(nome) {

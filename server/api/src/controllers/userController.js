@@ -62,7 +62,6 @@ server.post("/usuario/login", async (req, res) => {
 			default:
 				break;
 		}
-
 		user.senha = sha256(user.senha);
 		const answer = await userLogin(user);
 		if (!answer) throw new Error("Email ou senha incorretos");
@@ -97,12 +96,12 @@ server.get("/usuario", async (req, res) => {
 		const auth = jwt.decode(header);
 		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
 		else if (!email && !id) throw new Error("Campos incompletos");
-		if (id) id = Number(id);
-		const answer = email ? await userEmailSearch(email) : await userIdSearch(id);
+		const answer = email ? await userEmailSearch(email) : await userIdSearch(Number(id));
+
 		if (!answer) throw new Error("Usuário não encontrado");
 		res.send(answer);
 	} catch (err) {
-		res.status(400).send({
+		res.status(404).send({
 			err: err.message,
 		});
 	}
@@ -165,8 +164,8 @@ server.delete("/usuario", async (req, res) => {
 		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
-		const email = auth.email;
-		const answer = await userDelete(email);
+
+		const answer = await userDelete(auth.email);
 		if (answer < 1) throw new Error("Um erro ocorreu");
 		res.status(204).send();
 	} catch (err) {
@@ -183,6 +182,7 @@ server.get("/usuarios", async (req, res) => {
 		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
+
 		const answer = await userNameSearch(nome);
 		if (answer < 1) throw new Error("Nenhum usuário foi encontrado");
 		res.send(answer);
@@ -201,6 +201,7 @@ server.get("/usuario/:id/amizades", async (req, res) => {
 		const auth = jwt.decode(header);
 		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
 		if (!(await userIdSearch(id))) throw new Error("Usuário não encontrado");
+
 		const answer = await amigosConsulta(id);
 		if (answer < 1) throw new Error("Nenhuma amizade foi encontrada");
 		res.send(answer);
@@ -229,7 +230,7 @@ server.post("/usuario/amizade", async (req, res) => {
 		const answer = await solicitarAmizade(user.id, user.usuarioSolicitado);
 
 		if (answer < 1) throw new Error("Um erro ocorreu");
-		res.send();
+		res.status(204).send();
 	} catch (err) {
 		res.status(400).send({
 			err: err.message,
@@ -238,11 +239,9 @@ server.post("/usuario/amizade", async (req, res) => {
 });
 
 // Aceitar / recusar pedido de amizade
-server.put("/usuario/amizade/:id/:situacao", async (req, res) => {
+server.put("/usuario/amizade", async (req, res) => {
 	try {
-		const user = req.body;
-		const id = Number(req.params.id);
-		const situacao = req.params.situacao.toUpperCase()[0];
+		const { situacao, id } = req.query;
 		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 		switch (true) {
@@ -253,23 +252,19 @@ server.put("/usuario/amizade/:id/:situacao", async (req, res) => {
 			default:
 				break;
 		}
-		user.id = auth.id;
 		let answer;
 		switch (situacao) {
 			case "A":
-				answer = await aceitarAmizade(id, user.id);
+				answer = await aceitarAmizade(Number(id), auth.id);
 				break;
 			case "N":
-				answer = await recusarAmizade(id, user.id);
+				answer = await recusarAmizade(Number(id), auth.id);
 				break;
 			default:
 				break;
 		}
-		if (answer < 1) {
-			throw new Error(`Não foi possível ${situacao == "N" ? "rejeitar" : "aceitar"} a amizade`);
-		}
-
-		res.send();
+		if (answer < 1) throw new Error(`Não foi possível ${situacao == "N" ? "rejeitar" : "aceitar"} a amizade`);
+		res.status(204).send();
 	} catch (err) {
 		res.status(400).send({
 			err: err.message,
@@ -277,21 +272,19 @@ server.put("/usuario/amizade/:id/:situacao", async (req, res) => {
 	}
 });
 
-// Remover pedido / amizade
-server.delete("/usuario/amizade/:id", async (req, res) => {
+// Remover amizade
+server.delete("/usuario/amizade", async (req, res) => {
 	try {
-		const user = req.body;
-		const id = Number(req.params.id);
+		const { id } = req.query;
 		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 		switch (true) {
-			case !header || !auth || !(await userIdSearch(auth.id)[0]):
+			case !header || !auth || !(await userIdSearch(auth.id)):
 				throw new Error("Falha na autenticação");
 			case !id:
 				throw new Error("Campos inválidos");
 		}
-		user.id = auth.id;
-		const answer = await removerAmizade(id, user.id);
+		const answer = await removerAmizade(Number(id), auth.id);
 		if (answer < 1) throw new Error("Não foi possível desfazer a amizade");
 		res.status(204).send();
 	} catch (err) {
