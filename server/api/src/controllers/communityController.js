@@ -13,6 +13,7 @@ import {
 	communityName,
 	communityUserID,
 	communityUsername,
+	QtdUsersCommunity,
 } from "../repositories/comunnityRepository.js";
 import { userIdSearch } from "../repositories/userRepository.js";
 
@@ -193,6 +194,19 @@ server.get("/comunidade/usuario", async (req, res) => {
 	} catch (err) {
 		res.status(401).send({
 			err: err.message,
+		});
+	}
+});
+
+//Consultar quantidade de usúarios na comunidade
+server.get("/comunidade/:id/usuarios", async (req, res) => {
+	try {
+		const community = req.params.id;
+		const r = await QtdUsersCommunity(community);
+		res.status(200).send(r);
+	} catch (err) {
+		res.status(401).send({
+			err: err.message
 		});
 	}
 });

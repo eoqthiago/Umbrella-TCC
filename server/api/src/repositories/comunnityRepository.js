@@ -34,6 +34,18 @@ export async function communityUserID(id, comunidade) {
 	return r;
 };
 
+//Consultar quantidade de usúarios na comunidade
+export async function QtdUsersCommunity(id) {
+	const command = `SELECT COUNT(*) as quantidade_de_usuarios
+					FROM tb_usuario_comunidade
+					INNER JOIN tb_comunidade 
+					ON tb_usuario_comunidade.id_comunidade = tb_comunidade.id_comunidade
+					WHERE tb_usuario_comunidade.id_comunidade = ?`;
+	
+	const [r] = await con.query(command, [id]);
+	return r;
+}
+
 // Procurar por nome de usúario na comunidade
 export async function communityUsername(nome, comunidade) {
 	const command = `SELECT tb_usuario_comunidade.id_usuario_comunidade,
