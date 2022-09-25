@@ -51,7 +51,9 @@ const Index = () => {
 					<img src="/assets/icons/search.svg" alt="Pesquisar" onClick={() => consultar()} />
 				</div>
 				<section>
-					{selecionado === "comunidades" && comunidades.map(() => <Card />)}
+					{selecionado === "comunidades" && comunidades.map(item => 
+						<Card nome={item.nome} descricao={item.descricao} imagem={item.imagem} />
+					)}
 					{selecionado === "usuarios" && usuarios.map(() => <>Usuarios</>)}
 					{selecionado === "mensagens" && mensagens.map(() => <>Mensagens</>)}
 				</section>

@@ -40,7 +40,7 @@ export async function pesquisar(categoria, conteudo) {
 	let r;
 	switch (categoria) {
 		case "comunidades":
-			r = await api.get(`/comunidades?nome=${conteudo}`, {
+			r = await api.get(`/comunidade?community=${conteudo}`, {
 				headers: {
 					"x-access-token": userToken,
 				},
@@ -56,4 +56,8 @@ export async function pesquisar(categoria, conteudo) {
 			return [];
 	}
 	return r.data;
+}
+
+export function BuscarComunidadeImg(path) {
+	return `${api.getUri()}/${path}`;
 }

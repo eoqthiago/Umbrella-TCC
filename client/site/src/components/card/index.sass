@@ -1,24 +1,38 @@
 .comp-card
-    max-width: 160px
-    min-width: 100px
-    width: 40vw
-    min-height: 180px
-    max-height: 250px
+    display: inline-block
+    width: 200px
+    height: 325px
     overflow: hidden
     text-align: center
     transition: ease .6s
     cursor: default
     user-select: none
+    border-radius: 20px
+    background-color: #FFFFFF
+    box-shadow: 0px 1px 27px 0px #0000001c
 
     > img
-        border-radius: 25px
+        border-top-left-radius: 20px
+        border-top-right-radius: 20px
         width: 100%
+        height: 11em
         -webkit-user-drag: none
         -webkit-user-select: none
 
-    > div
-        margin-top: .3em
-        color: #373535
-        font-family: Roboto-medium
-        font-size: clamp(16px, 2vw, 20px)
+    > div 
+        font-family: Roboto-Medium
+        font-size: clamp(13px, 1.7vw, 15px)
+        color: #2c2b2b
 
+        > div > p
+            font-family: Roboto-Regular
+            color: #424242
+
+.info-cont 
+        display: flex
+        flex-direction: column
+        justify-content: space-between
+        margin-top: .3em
+        height: 8em
+        color: #373535
+        font-size: clamp(16px, 2vw, 18px)
