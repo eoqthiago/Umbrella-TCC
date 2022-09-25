@@ -16,7 +16,7 @@ import {
 	userEmailSearch,
 	userNameSearch,
 } from "../repositories/userRepository.js";
-import { emailTest } from "../utils/expressionTest.js";
+import { emailTest, nameTest } from "../utils/expressionTest.js";
 import multer from "multer";
 
 const server = Router();
@@ -27,14 +27,14 @@ server.post("/usuario", async (req, res) => {
 	try {
 		const user = req.body;
 		switch (true) {
-			case !user.nome || !user.nome.trim() || user.nome.length > 50:
+			case !nameTest(user.nome):
 				throw new Error("O nome de usuário inserido é inválido");
 			case !emailTest(user.email):
 				throw new Error("O email inserido é inválido");
 			case !user.senha || !user.senha.trim():
 				throw new Error("A senha é obrigatória");
-			case !user.nascimento:
-				throw new Error("A data de nascimento é obrigatória");
+			case !user.nascimento || new Date().getFullYear() - user.nascimento.getFullYear() < 13:
+				throw new Error("A idade mínima permitida é 13 anos");
 			default:
 				break;
 		}
@@ -42,6 +42,7 @@ server.post("/usuario", async (req, res) => {
 		if (search) throw new Error("Este email já está em uso");
 		user.senha = sha256(user.senha);
 		const answer = await userCadastro(user);
+		if (answer < 1) throw new Error("Não foi possível realizar o cadastro");
 		res.status(201).send();
 	} catch (err) {
 		res.status(401).send({
@@ -64,7 +65,7 @@ server.post("/usuario/login", async (req, res) => {
 		}
 		user.senha = sha256(user.senha);
 		const answer = await userLogin(user);
-		if (!answer) throw new Error("Email ou senha incorretos");
+		if (!answer) throw new Error("Não foi possível fazer login");
 
 		const token = jwt.sign(
 			{
@@ -116,14 +117,14 @@ server.put("/usuario", async (req, res) => {
 		switch (true) {
 			case !header || !auth || !(await userIdSearch(auth.id)):
 				throw new Error("Falha na autenticação");
-			case !user.nome || !user.nome.trim() || user.nome.length > 50:
-				throw new Error("O nome é obrigatório");
+			case !nameTest(user.nome):
+				throw new Error("O nome de usuário inserido é inválido");
 			default:
 				break;
 		}
 		user.id = auth.id;
 		const answer = await userEdit(user);
-		if (answer < 1) throw new Error("Não foi possível alterar o perfil");
+		if (answer < 1) throw new Error("Não foi possível alterar o perfil de usuário");
 		res.status(202).send();
 	} catch (err) {
 		res.status(400).send({

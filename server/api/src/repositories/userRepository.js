@@ -5,7 +5,7 @@ export async function userCadastro(user) {
         insert into tb_usuario (nm_usuario, ds_email, ds_senha, dt_nascimento)
         values (?, ?, ?, ?) `;
 	const [answer] = await con.query(command, [user.nome, user.email, user.senha, user.nascimento]);
-	return answer;
+	return answer.affectedRows;
 }
 
 export async function userLogin(user) {

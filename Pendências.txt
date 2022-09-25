@@ -1,4 +1,3 @@
-Implementar validação de idade no processo de cadastro
 Ajustar token nos endpoints de usuário administrador 
 Inserir links das redes sociais no footer
 Implementar validação com token nos endpoints de comunidade
