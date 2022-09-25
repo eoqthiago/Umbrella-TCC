@@ -1,10 +1,10 @@
 import React from "react";
 import "./index.sass";
-import { BuscarComunidadeImg } from "../../api/communityApi";
+import { BuscarComunidadeImg, usuariosCommunityQtd } from "../../api/communityApi";
 import counterIcon from "../../assets/icons/icon_counter.png"
 
 
-export function Index(props){
+export function Index(props) {	
 	return (
 		<div className="comp-card">
 			<img src={BuscarComunidadeImg(props.imagem)} alt="Comunidade" />
@@ -15,7 +15,7 @@ export function Index(props){
 				</div>
 				<div style={{"display": "flex", "flexDirection": "row-reverse", "marginRight": "1em"}}>
 					<img src={counterIcon} alt=""/>
-					<p>{props.usuarios}</p>
+					<p>{/*usuariosCommunityQtd(props.id)*/}</p>
 				</div>
 			</div>
 		</div>

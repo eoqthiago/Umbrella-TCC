@@ -60,4 +60,9 @@ export async function pesquisar(categoria, conteudo) {
 
 export function BuscarComunidadeImg(path) {
 	return `${api.getUri()}/${path}`;
-}
+};
+
+export async function usuariosCommunityQtd(id) {
+	const r = await api.get(`/comunidade/${id}/usuarios`);
+	return r.data;
+};

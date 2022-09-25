@@ -52,7 +52,7 @@ const Index = () => {
 				</div>
 				<section>
 					{selecionado === "comunidades" && comunidades.map(item => 
-						<Card nome={item.nome} descricao={item.descricao} imagem={item.imagem} />
+						<Card nome={item.nm_comunidade} descricao={item.ds_comunidade} imagem={item.img_comunidade} id={item.id_comunidade}/>
 					)}
 					{selecionado === "usuarios" && usuarios.map(() => <>Usuarios</>)}
 					{selecionado === "mensagens" && mensagens.map(() => <>Mensagens</>)}

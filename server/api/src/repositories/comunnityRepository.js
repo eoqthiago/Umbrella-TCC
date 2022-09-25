@@ -43,7 +43,7 @@ export async function QtdUsersCommunity(id) {
 					WHERE tb_usuario_comunidade.id_comunidade = ?`;
 	
 	const [r] = await con.query(command, [id]);
-	return r;
+	return r[0];
 }
 
 // Procurar por nome de usúario na comunidade
@@ -76,11 +76,7 @@ export async function communityOwner(userId, communityId) {
 // Consultar comunidade por ID
 export async function communityId(id) {
 	const command = `
-		SELECT 	nm_comunidade nome,
-				ds_comunidade descricao,
-				img_comunidade imagem,
-				img_banner banner
-		FROM 	tb_comunidade
+		SELECT * FROM tb_comunidade
 		WHERE 	id_comunidade = ? `;
 	const [answer] = await con.query(command, [id]);
 	return answer[0];
@@ -89,11 +85,7 @@ export async function communityId(id) {
 // Consultar comunidade por nome
 export async function communityName(comunidade) {
 	const command = `
-			SELECT nm_comunidade nome,
-					ds_comunidade descricao,
-					img_comunidade imagem,
-					img_banner banner
-		   FROM 	tb_comunidade
+			SELECT * FROM tb_comunidade
 		   WHERE 	nm_comunidade like '%${comunidade}%'`;
 	const [answer] = await con.query(command);
 	return answer;
