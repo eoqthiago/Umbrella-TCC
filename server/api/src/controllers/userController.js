@@ -20,6 +20,7 @@ import {
 } from "../repositories/userRepository.js";
 import { emailTest } from "../utils/expressionTest.js";
 import multer from "multer";
+import "dotenv/config";
 
 const server = Router();
 const usuarioImg = multer({ dest: "storage/users" });
@@ -93,7 +94,7 @@ server.post("/usuario/login", async (req, res) => {
 });
 
 //recuperar senha
-server.get("/usuario/recuperar", async (req, res) => {
+server.post("/usuario/recuperar", async (req, res) => {
 	try {
 		const { email } = req.query;
 		const header = req.header("x-access-token");
@@ -105,28 +106,37 @@ server.get("/usuario/recuperar", async (req, res) => {
 			res.send(answer);
 
 			var transport = nodemailer.createTransport({
-				host: "smtp.mailtrap.io",
-				port: 2525,
+				host: "smtp.gmail.com",
+				port: 587,
 				auth: {
-				  user: "0e31a2348ee1a0",
-				  pass: "103a36ad5b7dd6"
+				  user: process.env.EMAIL,
+				  pass: process.env.PASS
+				//   kspaeiiketaddqbt
+				},
+				tls: {
+					rejectUnauthorized: false
 				}
 			});
 			
-			var message = {
-				from: "noreply@celki.com.br",
-				to: "teste@celki.com.br",
+			let message = {
+				from: "noreply.umbrellacontact@gmail.com",
+				to: `${email}`,
 				subject: "Seu codigo de recuperação de senha",
-				text: "Plaintext version of the message",
-				html: `<p>${code}</p>`
+				text: "Recuperar senha!",
+				html: `<h2>Valide seu codigo para recuperação de senha</h2><br>
+						<center><h1>${code}<h1/><center/> <br><br>
+						<p>Nunca informe seus dados de acesso para outra pessoa.</p>`
 			};
 
-			transport.sendMail(message, function(err) {
-				if(err) return res.status(400).json ({
-					erro: true,
-					mensagem: "E-mail não enviado!"
-				});
-			})
+			transport.sendMail(message, (err) =>  {
+				if(err)  {
+					console.log(err)
+					return
+				}
+				
+			});
+			console.log("E-mail enviado");
+
 
 
 		}
@@ -136,6 +146,8 @@ server.get("/usuario/recuperar", async (req, res) => {
 		});
 	}
 });
+
+// ALTERAR SENHA 
 
 
 // Alterar perfil
