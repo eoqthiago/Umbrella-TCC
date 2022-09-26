@@ -53,19 +53,18 @@ export async function userEmailSearch(email) {
 		  from tb_usuario
 		   where ds_email = ? `;
 	const [answer] = await con.query(command, [email]);
-	return answer;
+	return answer[0];
 }
 
 // esqueci senha
-export async function userForgotPassword(code) {
+export async function userAlterarPassword(user) {
 	const command = `
-	select ds_email, num_code
-			from tb_usuario
-			inner join tb_forgotpassword
-		on tb_usuario.id_usuario = tb_forgotpassword.id_usuario
-	where num_code = ? `;
-	const [answer] = await con.query(command, [code]);
-	return answer;
+		update  tb_usuario
+		set ds_senha = ?
+	where id_usuario = ?
+	`;
+	const [answer] = await con.query(command, [user.senha, user.id]);
+	return answer.affectedRows;
 }
 
 export async function userIdSearch(id) {

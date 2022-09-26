@@ -31,6 +31,15 @@ export async function userConsulta(id) {
 	return r.data;
 }
 
+export async function userEmailSearch(email) {
+	const r = await api.post(`/usuario/recuperar?email=${email}`, {
+		email: email
+
+	});
+
+	return r.data;
+}
+
 export function userImagem(imagem) {
 	return `${api.getUri()}/${imagem}`;
 }

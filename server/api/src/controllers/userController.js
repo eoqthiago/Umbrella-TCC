@@ -17,6 +17,7 @@ import {
 	userLogin,
 	userEmailSearch,
 	userNameSearch,
+	userAlterarPassword,
 } from "../repositories/userRepository.js";
 import { emailTest } from "../utils/expressionTest.js";
 import multer from "multer";
@@ -96,12 +97,22 @@ server.post("/usuario/login", async (req, res) => {
 //recuperar senha
 server.post("/usuario/recuperar", async (req, res) => {
 	try {
-		const { email } = req.query;
-		const header = req.header("x-access-token");
-		const auth = jwt.decode(header);
-		if (!header || !auth || !(await  userIdSearch(auth.id))) throw new Error("Falha na autenticação");
+		const {email} = req.query;
+
 		const answer = await userEmailSearch(email);
+		if (!answer) throw new Error("Email incorreto");
+
+		switch (true) {
+			case !emailTest(email):
+				throw new Error("O email inserido é inválido");
+			case !email || !email.trim():
+				throw new Error("O email inserida é inválida");
+			default:
+				break;
+		}
+		
 		if (answer < 1) throw new Error("Email não foi encontrado");
+		// if (search[0]) throw new Error("E-mail enviado");
 		else {
 			res.send(answer);
 
@@ -147,7 +158,48 @@ server.post("/usuario/recuperar", async (req, res) => {
 	}
 });
 
+// codigo
+
+server.get("/usuario/codigo"), async (req, res) => {
+	try {
+		const {codigo} = number(req.body);
+		const header = req.header("x-access-token");
+		const auth = jwt.decode(header);
+		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
+		if (codigo != code) throw new Error("codigo incorreto");
+		res.status(202).send();
+
+	} catch (err) {
+		
+	}
+}
+
 // ALTERAR SENHA 
+
+server.put("/usuario/alterar-senha", async (req, res) => {
+	try {
+		const user = req.body;
+		const header = req.header("x-access-token");
+		const auth = jwt.decode(header);
+		switch (true) {
+			case !header || !auth || !(await userIdSearch(auth.id)):
+				throw new Error("Falha na autenticação");
+			case !user.senha || !user.senha.trim() || user.senha.length > 50:
+				throw new Error("A senha é obrigatório");
+			default:
+				break;
+		}
+		user.id = auth.id;
+		user.senha = sha256(user.senha);
+		const answer = await userAlterarPassword(user);
+		if (answer < 1) throw new Error("Não foi possível alterar a senha");
+		res.status(202).send();
+	} catch (err) {
+		res.status(400).send({
+			err: "Um erro ocorreu",
+		});
+	}
+});
 
 
 // Alterar perfil
