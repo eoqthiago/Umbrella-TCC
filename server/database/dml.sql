@@ -110,25 +110,51 @@ select
 		where id_comunidade = ? and id_criador = ? ;
 
 -- Consultar uma comunidade por id
-select
-			nm_comunidade nome,
-			ds_comunidade descricao,
-			img_comunidade imagem,
-			img_banner banner
-		from tb_comunidade
-		where id_comunidade = ? ;
+SELECT
+	id_comunidade id,
+	nm_comunidade nome,
+	ds_comunidade descricao,
+	img_comunidade imagem,
+	img_banner banner,
+	bt_publica publica,
+	dt_criacao dataCriacao,
+	id_criador criador,
+	(select count(id_usuario) 
+		from tb_usuario_comunidade 
+		inner join tb_comunidade 
+		on tb_usuario_comunidade.id_usuario_comunidade = tb_comunidade.id_comunidade
+		where tb_usuario_comunidade.id_comunidade = 1) qtdUsuarios
+FROM tb_comunidade
+WHERE 	id_comunidade = 1;
 
--- Pesquisar comunidades por nome
-select
-			nm_comunidade nome,
-			ds_comunidade descricao,
-			img_comunidade imagem,
-			img_banner banner
-		from tb_comunidade
-		where nm_comunidade like '%Comunidade daora%';
+
+
+-- Pesquisar comunidades por nome --! Alterar
+SELECT
+	id_comunidade id,
+	nm_comunidade nome,
+	ds_comunidade descricao,
+	img_comunidade imagem,
+	img_banner banner,
+	bt_publica publica,
+	dt_criacao dataCriacao,
+	id_criador criador,
+	(select count(id_usuario) 
+		from tb_usuario_comunidade 
+		inner join tb_comunidade on tb_usuario_comunidade.id_usuario_comunidade = tb_comunidade.id_comunidade
+		where tb_comunidade.nm_comunidade like '%daora%') qtdUsuarios
+FROM tb_comunidade
+WHERE 	nm_comunidade like '%daora%';
+
+
 
 -- Atualizar campos da comunidade
 update 	tb_comunidade 
    set 	nm_comunidade = 'daora',
 		ds_comunidade = 'legal'
 where id_criador = 1 and id_comunidade = 1;
+
+-- Inserir usuário em comunidade
+INSERT INTO 
+	tb_usuario_comunidade	(id_usuario, id_comunidade) 
+				    VALUES	(1, 1);
