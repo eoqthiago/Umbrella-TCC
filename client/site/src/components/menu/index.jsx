@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import storage from "local-storage";
+import localStorage from "local-storage";
 import { toast } from "react-toastify";
+import { useJwt } from 'react-jwt'
 import { userConsulta, userImagem } from "../../api/userApi";
 import CadastrarComunidade from "../modals/cadastrarComunidade";
 import "./index.sass";
 
 export default function Index({ ativo, alterar }) {
+	const { isExpired } = useJwt(localStorage('user').token ?? '');
 	const navigate = useNavigate();
 	const [user, setUser] = useState({});
 	const [comunidade, setComunidade] = useState(false);
 
 	function logout() {
-		storage.remove("user");
+		localStorage.remove("user");
 		toast.success("Logout feito com sucesso!");
 		navigate("/");
 	}
@@ -27,8 +29,8 @@ export default function Index({ ativo, alterar }) {
 	}
 
 	useEffect(() => {
-		if (!storage("user")) {
-			storage.remove("user");
+		if (!localStorage("user")) {
+			localStorage.remove("user");
 			toast.warn("Você precisa estar logado para acessar essa página");
 			navigate("/");
 		}
@@ -36,7 +38,7 @@ export default function Index({ ativo, alterar }) {
 
 	useEffect(() => {
 		async function consultar() {
-			const r = await userConsulta(storage("user").id);
+			const r = await userConsulta(localStorage("user").id);
 			setUser(r);
 		}
 		consultar();
@@ -46,6 +48,8 @@ export default function Index({ ativo, alterar }) {
 		if (ativo) document.body.style.overflow = "hidden";
 		else document.body.style.overflow = "unset";
 	}, [ativo]);
+
+	useEffect(() => isExpired ? logout() : undefined, [isExpired]);
 
 	return (
 		<div className={ativo ? "comp-menu-bg" : undefined}>
