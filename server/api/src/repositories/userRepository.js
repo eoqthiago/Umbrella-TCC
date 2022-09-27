@@ -5,7 +5,7 @@ export async function userCadastro(user) {
         insert into tb_usuario (nm_usuario, ds_email, ds_senha, dt_nascimento)
         values (?, ?, ?, ?) `;
 	const [answer] = await con.query(command, [user.nome, user.email, user.senha, user.nascimento]);
-	return answer;
+	return answer.affectedRows;
 }
 
 export async function userLogin(user) {
@@ -53,7 +53,7 @@ export async function userEmailSearch(email) {
 		  from tb_usuario
 		   where ds_email = ? `;
 	const [answer] = await con.query(command, [email]);
-	return answer;
+	return answer[0];
 }
 
 // esqueci senha
@@ -79,7 +79,7 @@ export async function userIdSearch(id) {
 		   from tb_usuario
 		  where id_usuario = ? `;
 	const [answer] = await con.query(command, [id]);
-	return answer;
+	return answer[0];
 }
 
 export async function userNameSearch(nome) {

@@ -16,7 +16,7 @@ import {
 	userEmailSearch,
 	userNameSearch,
 } from "../repositories/userRepository.js";
-import { emailTest } from "../utils/expressionTest.js";
+import { emailTest, nameTest } from "../utils/expressionTest.js";
 import multer from "multer";
 
 const server = Router();
@@ -27,21 +27,22 @@ server.post("/usuario", async (req, res) => {
 	try {
 		const user = req.body;
 		switch (true) {
-			case !user.nome || !user.nome.trim() || user.nome.length > 50:
+			case !nameTest(user.nome):
 				throw new Error("O nome de usuário inserido é inválido");
 			case !emailTest(user.email):
 				throw new Error("O email inserido é inválido");
 			case !user.senha || !user.senha.trim():
 				throw new Error("A senha é obrigatória");
-			case !user.nascimento:
-				throw new Error("A data de nascimento é obrigatória");
+			case !user.nascimento || new Date().getFullYear() - user.nascimento.getFullYear() < 13:
+				throw new Error("A idade mínima permitida é 13 anos");
 			default:
 				break;
 		}
 		const search = await userEmailSearch(user.email);
-		if (search[0]) throw new Error("Este email já está em uso");
+		if (search) throw new Error("Este email já está em uso");
 		user.senha = sha256(user.senha);
 		const answer = await userCadastro(user);
+		if (answer < 1) throw new Error("Não foi possível realizar o cadastro");
 		res.status(201).send();
 	} catch (err) {
 		res.status(401).send({
@@ -62,10 +63,9 @@ server.post("/usuario/login", async (req, res) => {
 			default:
 				break;
 		}
-
 		user.senha = sha256(user.senha);
 		const answer = await userLogin(user);
-		if (!answer) throw new Error("Email ou senha incorretos");
+		if (!answer) throw new Error("Não foi possível fazer login");
 
 		const token = jwt.sign(
 			{
@@ -74,7 +74,7 @@ server.post("/usuario/login", async (req, res) => {
 			},
 			process.env.JWT_KEY,
 			{
-				expiresIn: "10d",
+				expiresIn: "3d",
 			}
 		);
 		res.status(202).send({
@@ -89,20 +89,24 @@ server.post("/usuario/login", async (req, res) => {
 	}
 });
 
-//recuperar senha
-server.get("/recuperar-senha/busca"),
-	async (req, res) => {
-		try {
-			const { email } = req.query;
-			const emailUser = await userEmailSearch(email);
-			if (!emailUser) res.status(404).send("Email não encontrado");
-			else res.send(emailUser);
-		} catch (err) {
-			res.status(404).send({
-				err: err.message,
-			});
-		}
-	};
+// Procurar usuário
+server.get("/usuario", async (req, res) => {
+	try {
+		const { email, id } = req.query;
+		const header = req.header("x-access-token");
+		const auth = jwt.decode(header);
+		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
+		else if (!email && !id) throw new Error("Campos incompletos");
+		const answer = email ? await userEmailSearch(email) : await userIdSearch(Number(id));
+
+		if (!answer) throw new Error("Usuário não encontrado");
+		res.send(answer);
+	} catch (err) {
+		res.status(404).send({
+			err: err.message,
+		});
+	}
+});
 
 // Alterar perfil
 server.put("/usuario", async (req, res) => {
@@ -113,14 +117,14 @@ server.put("/usuario", async (req, res) => {
 		switch (true) {
 			case !header || !auth || !(await userIdSearch(auth.id)):
 				throw new Error("Falha na autenticação");
-			case !user.nome || !user.nome.trim() || user.nome.length > 50:
-				throw new Error("O nome é obrigatório");
+			case !nameTest(user.nome):
+				throw new Error("O nome de usuário inserido é inválido");
 			default:
 				break;
 		}
 		user.id = auth.id;
 		const answer = await userEdit(user);
-		if (answer < 1) throw new Error("Não foi possível alterar o perfil");
+		if (answer < 1) throw new Error("Não foi possível alterar o perfil de usuário");
 		res.status(202).send();
 	} catch (err) {
 		res.status(400).send({
@@ -161,8 +165,8 @@ server.delete("/usuario", async (req, res) => {
 		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
-		const email = auth.email;
-		const answer = await userDelete(email);
+
+		const answer = await userDelete(auth.email);
 		if (answer < 1) throw new Error("Um erro ocorreu");
 		res.status(204).send();
 	} catch (err) {
@@ -173,33 +177,16 @@ server.delete("/usuario", async (req, res) => {
 });
 
 // Procurar usuários por nome
-server.get("/usuario", async (req, res) => {
+server.get("/usuarios", async (req, res) => {
 	try {
 		const { nome } = req.query;
 		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
+
 		const answer = await userNameSearch(nome);
 		if (answer < 1) throw new Error("Nenhum usuário foi encontrado");
 		res.send(answer);
-	} catch (err) {
-		res.status(400).send({
-			err: err.message,
-		});
-	}
-});
-
-// Procurar usuário por id
-server.get("/usuario/:id", async (req, res) => {
-	try {
-		const id = Number(req.params.id);
-		const header = req.header("x-access-token");
-		const auth = jwt.decode(header);
-		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
-		if (!(await userIdSearch(id))) throw new Error("Usuário não encontrado");
-		const answer = await userIdSearch(id);
-		if (answer < 1) throw new Error("Nenhum usuário foi encontrado");
-		res.send(answer[0]);
 	} catch (err) {
 		res.status(400).send({
 			err: err.message,
@@ -215,6 +202,7 @@ server.get("/usuario/:id/amizades", async (req, res) => {
 		const auth = jwt.decode(header);
 		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
 		if (!(await userIdSearch(id))) throw new Error("Usuário não encontrado");
+
 		const answer = await amigosConsulta(id);
 		if (answer < 1) throw new Error("Nenhuma amizade foi encontrada");
 		res.send(answer);
@@ -243,7 +231,7 @@ server.post("/usuario/amizade", async (req, res) => {
 		const answer = await solicitarAmizade(user.id, user.usuarioSolicitado);
 
 		if (answer < 1) throw new Error("Um erro ocorreu");
-		res.send();
+		res.status(204).send();
 	} catch (err) {
 		res.status(400).send({
 			err: err.message,
@@ -252,11 +240,9 @@ server.post("/usuario/amizade", async (req, res) => {
 });
 
 // Aceitar / recusar pedido de amizade
-server.put("/usuario/amizade/:id/:situacao", async (req, res) => {
+server.put("/usuario/amizade", async (req, res) => {
 	try {
-		const user = req.body;
-		const id = Number(req.params.id);
-		const situacao = req.params.situacao.toUpperCase()[0];
+		const { situacao, id } = req.query;
 		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 		switch (true) {
@@ -267,23 +253,19 @@ server.put("/usuario/amizade/:id/:situacao", async (req, res) => {
 			default:
 				break;
 		}
-		user.id = auth.id;
 		let answer;
 		switch (situacao) {
 			case "A":
-				answer = await aceitarAmizade(id, user.id);
+				answer = await aceitarAmizade(Number(id), auth.id);
 				break;
 			case "N":
-				answer = await recusarAmizade(id, user.id);
+				answer = await recusarAmizade(Number(id), auth.id);
 				break;
 			default:
 				break;
 		}
-		if (answer < 1) {
-			throw new Error(`Não foi possível ${situacao == "N" ? "rejeitar" : "aceitar"} a amizade`);
-		}
-
-		res.send();
+		if (answer < 1) throw new Error(`Não foi possível ${situacao == "N" ? "rejeitar" : "aceitar"} a amizade`);
+		res.status(204).send();
 	} catch (err) {
 		res.status(400).send({
 			err: err.message,
@@ -291,21 +273,19 @@ server.put("/usuario/amizade/:id/:situacao", async (req, res) => {
 	}
 });
 
-// Remover pedido / amizade
-server.delete("/usuario/amizade/:id", async (req, res) => {
+// Remover amizade
+server.delete("/usuario/amizade", async (req, res) => {
 	try {
-		const user = req.body;
-		const id = Number(req.params.id);
+		const { id } = req.query;
 		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 		switch (true) {
-			case !header || !auth || !(await userIdSearch(auth.id)[0]):
+			case !header || !auth || !(await userIdSearch(auth.id)):
 				throw new Error("Falha na autenticação");
 			case !id:
 				throw new Error("Campos inválidos");
 		}
-		user.id = auth.id;
-		const answer = await removerAmizade(id, user.id);
+		const answer = await removerAmizade(Number(id), auth.id);
 		if (answer < 1) throw new Error("Não foi possível desfazer a amizade");
 		res.status(204).send();
 	} catch (err) {

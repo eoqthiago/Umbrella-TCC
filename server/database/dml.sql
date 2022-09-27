@@ -125,4 +125,10 @@ select
 			img_comunidade imagem,
 			img_banner banner
 		from tb_comunidade
-		where nm_comunidade like '%Comunidade daora%' 
+		where nm_comunidade like '%Comunidade daora%';
+
+-- Atualizar campos da comunidade
+update 	tb_comunidade 
+   set 	nm_comunidade = 'daora',
+		ds_comunidade = 'legal'
+where id_criador = 1 and id_comunidade = 1;

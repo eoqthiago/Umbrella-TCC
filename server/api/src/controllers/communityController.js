@@ -102,8 +102,9 @@ server.put("/comunidade/imagem/:id", communityImg.single("imagem"), async (req, 
 
 // Alterar comunidade
 // Se o id do usuario logado for igual do criador deve deixar alterar, se não, lançar um erro
-server.put("/comunidade", async (req, res) => {
+server.put("/comunidade/:id", async (req, res) => {
 	try {
+		const { id } = req.params;
 		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 		const community = req.body;
@@ -119,7 +120,9 @@ server.put("/comunidade", async (req, res) => {
 			default:
 				break;
 		}
+		community.id = Number(id);
 		const r = await communityEdit(community);
+		if (r < 1) throw new Error("Não foi possível fazer as alterações na comunidade");
 		res.status(201).send("Editada com sucesso");
 	} catch (err) {
 		res.status(401).send({
@@ -159,21 +162,28 @@ server.get("/comunidades", async (req, res) => {
 });
 
 // Promover usuario à administrador
-server.put("/comunidade/administrador", async (req, res) => {
+server.put("/comunidade/admin/usuario", async (req, res) => {
 	try {
+		const { situacao, id, comunidade } = req.query;
 		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
-		const user = req.body;
 		switch (true) {
-			case !header || !auth || !(await communityOwner(auth.id, user.comunidade)):
-				throw new Error("Erro de autenticação");
-			case !user.id || !(await communityUserID(user.id)):
-				throw new Error("Usuario não esta na comunidade");
+			case !(await communityId(comunidade)):
+				throw new Error("Comunidade não encontrada");
+			case !header || !auth || !(await userIdSearch(auth.id)) || !(await communityOwner(auth.id, comunidade)):
+				throw new Error("Falha na autenticação");
+			case !id || !situacao || !comunidade || !["A", "N"].includes(situacao):
+				throw new Error("Campos inválidos");
+			case !(await communityUserID(id, comunidade)):
+				throw new Error("Usuário não encontrado");
+			default:
+				break;
 		}
-		const r = await communityAdmin(user.id);
-		res.status(202).send(`Usúario de id ${user.id} foi promovido à administrador`);
+		const answer = await communityAdmin(id, situacao[0] === "A");
+		if (answer < 1) throw new Error("Não foi possível alterar as permissões do usuário administrador");
+		res.status(204).send();
 	} catch (err) {
-		res.status(401).send({
+		res.status(400).send({
 			err: err.message,
 		});
 	}

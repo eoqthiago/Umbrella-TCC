@@ -8,7 +8,7 @@ export async function communityCreate(id, community) {
 	const [r] = await con.query(command, [id, community.nome, community.descricao, community.publica]);
 	community.id = r.insertId;
 	return community;
-};
+}
 
 // Inserir imagem da comunidade
 export async function communityImage(id, image) {
@@ -18,7 +18,7 @@ export async function communityImage(id, image) {
 		 WHERE id_comunidade = ? `;
 	const [r] = await con.query(command, [image, id]);
 	return r.affectedRows;
-};
+}
 
 // Procurar por id de usúario na comunidade
 export async function communityUserID(id, comunidade) {
@@ -29,10 +29,10 @@ export async function communityUserID(id, comunidade) {
 					ON tb_usuario_comunidade.id_usuario_comunidade = tb_usuario.id_usuario
 					WHERE 	tb_usuario_comunidade.id_usuario_comunidade = ?
 					AND 	id_comunidade = ?`;
-	
+
 	const [r] = await con.query(command, [id, comunidade]);
 	return r;
-};
+}
 
 //Consultar quantidade de usúarios na comunidade
 export async function QtdUsersCommunity(id) {
@@ -55,11 +55,10 @@ export async function communityUsername(nome, comunidade) {
 					ON tb_usuario_comunidade.id_usuario_comunidade = tb_usuario.id_usuario
 					WHERE	tb_usuario.nm_usuario = ?
 					AND 	id_comunidade = ?`;
-	
+
 	const [r] = await con.query(command, [nome, comunidade]);
 	return r;
-};
-
+}
 
 // Verificar se o usuário é dono da comunidade
 export async function communityOwner(userId, communityId) {
@@ -71,7 +70,7 @@ export async function communityOwner(userId, communityId) {
 		WHERE 	id_comunidade = ? AND id_criador = ? `;
 	const [answer] = await con.query(command, [communityId, userId]);
 	return answer[0];
-};
+}
 
 // Consultar comunidade por ID
 export async function communityId(id) {
@@ -80,7 +79,7 @@ export async function communityId(id) {
 		WHERE 	id_comunidade = ? `;
 	const [answer] = await con.query(command, [id]);
 	return answer[0];
-};
+}
 
 // Consultar comunidade por nome
 export async function communityName(comunidade) {
@@ -89,27 +88,25 @@ export async function communityName(comunidade) {
 		   WHERE 	nm_comunidade like '%${comunidade}%'`;
 	const [answer] = await con.query(command);
 	return answer;
-};
+}
 
 // Alterar comunidade
-export async function communityEdit(community) {
-	const command = `UPDATE tb_comunidade
-                        INNER JOIN tb_usuario ON tb_comunidade.id_criador = tb_usuario.id_usuario
-                        SET     tb_comunidade.nm_comunidade = ?,
-                                tb_comunidade.ds_comunidade = ?
-                        WHERE   tb_comunidade.id_comunidade = ?
-                        AND     tb_comunidade.id_criador = tb_usuario.id_usuario`;
-
-	const [r] = await con.query(command, [community.name, community.descricao, community.id]);
-	return r;
-};
+export async function communityEdit(community, ownerId) {
+	const command = `
+		update 	tb_comunidade 
+		set 	nm_comunidade = ?,
+			ds_comunidade = ?
+	where id_criador = ? and id_comunidade = ? `;
+	const [r] = await con.query(command, [community.name, community.descricao, ownerId, community.id]);
+	return r.affectedRows;
+}
 
 //Consultar todas comunidades
 export async function communitiesGet() {
 	const command = `SELECT * FROM tb_comunidade;`;
 	const [r] = await con.query(command);
 	return r;
-};
+}
 
 //Convite comunidade
 export async function communityUser(userId, community) {
@@ -117,14 +114,15 @@ export async function communityUser(userId, community) {
                             VALUES(?, ?)`;
 	const r = await con.query(command, [userId, community]);
 	return r.data;
-};
+}
 
 // Promover usúario à admnistrador da comunidade
-export async function communityAdmin(user) {
-	const command = `UPDATE tb_usuario_comunidade 
-					SET  bt_admin = true
-					WHERE id_usuario_comunidade = ?
+export async function communityAdmin(id, admin) {
+	const command = `
+	UPDATE tb_usuario_comunidade 
+	   SET  bt_admin = ${admin}
+	 WHERE id_usuario_comunidade = ?
 					`;
-	const [r] = await con.query(command, [user.id]);
-	return r;
-};
+	const [r] = await con.query(command, [id]);
+	return r.affectedRows;
+}
