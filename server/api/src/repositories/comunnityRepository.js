@@ -94,7 +94,7 @@ export async function communityEdit(community, ownerId) {
 			ds_comunidade = ?
 	where id_criador = ? and id_comunidade = ? `;
 	const [r] = await con.query(command, [community.name, community.descricao, ownerId, community.id]);
-	return r;
+	return r.affectedRows;
 }
 
 //Consultar todas comunidades
