@@ -101,8 +101,9 @@ server.put("/comunidade/imagem/:id", communityImg.single("imagem"), async (req, 
 
 // Alterar comunidade
 // Se o id do usuario logado for igual do criador deve deixar alterar, se não, lançar um erro
-server.put("/comunidade", async (req, res) => {
+server.put("/comunidade/:id", async (req, res) => {
 	try {
+		const { id } = req.params;
 		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 		const community = req.body;
@@ -118,7 +119,9 @@ server.put("/comunidade", async (req, res) => {
 			default:
 				break;
 		}
+		community.id = Number(id);
 		const r = await communityEdit(community);
+		if (r < 1) throw new Error("Não foi possível fazer as alterações na comunidade");
 		res.status(201).send("Editada com sucesso");
 	} catch (err) {
 		res.status(401).send({

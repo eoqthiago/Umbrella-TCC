@@ -86,11 +86,14 @@ export async function communityName(comunidade) {
 	return answer;
 }
 
-// Alterar comunidade //!alterar
-export async function communityEdit(community) {
-	const command = ``;
-
-	const [r] = await con.query(command, [community.name, community.descricao, community.id]);
+// Alterar comunidade
+export async function communityEdit(community, ownerId) {
+	const command = `
+		update 	tb_comunidade 
+		set 	nm_comunidade = ?,
+			ds_comunidade = ?
+	where id_criador = ? and id_comunidade = ? `;
+	const [r] = await con.query(command, [community.name, community.descricao, ownerId, community.id]);
 	return r;
 }
 
