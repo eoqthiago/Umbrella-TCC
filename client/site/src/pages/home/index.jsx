@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../../components/header";
 import Footer from "../../components/footer";
 import { Titulo, SubTitulo, BotaoLiso } from "../../styled";
-import Card from "../../components/card";
+import Card from "../../components/card-initials";
 import Carousel from "react-elastic-carousel";
 import "./index.sass";
 

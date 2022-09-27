@@ -11,9 +11,9 @@ export function Index(props) {
 			<div className="info-cont">
 				<div>
 					<div>{props.nome}</div>
-					<p>{props.descricao}</p>
+					<p>{props.descricao.substr(0, 84)}</p>
 				</div>
-				<div style={{"display": "flex", "flexDirection": "row-reverse", "marginRight": "1em"}}>
+				<div className='qtd-info'>
 					<img src={counterIcon} alt=""/>
 					<p>{/*usuariosCommunityQtd(props.id)*/}</p>
 				</div>
