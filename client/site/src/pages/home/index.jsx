@@ -28,15 +28,13 @@ const Index = () => {
 						<SubTitulo fonte="2vw">Aqui você pode encontrar comunidades geek!</SubTitulo>
 					</div>
 				</section>
-				<section className="msgs-comunidades">
-
-				<Titulo className="txts-comnd" cor="#3A3A3A" fonte="4vw">TORNE TUDO ISSO POSSIVEL COM APENAS UM TOQUE</Titulo>
-					<div className="exemplo-comunidades">
-						<img className= 'card-celular' src="/assets/images/Cardcelular.svg"/>
-						<img className='seta' src="/assets/images/Seta.svg"/>
-						<img className="exemplo-msg"src="/assets/images/chat.svg"/>
-					</div>
-					<Titulo className="txts-comnd" cor="#3A3A3A" fonte="4vw">AQUI NO UMBRELLA TRABALHAMOS COM A PRATICIDADE VEJA ABAIXO:</Titulo>
+				<section className="home-mensagens-comunidades">
+					<Titulo className="textos-mensagens" cor="#3A3A3A" fonte="4vw">TORNE TUDO ISSO POSSIVEL COM APENAS UM TOQUE</Titulo>
+						<div className="exemplo-comunidades">
+							<img className= 'card-celular' src="/assets/images/Cardcelular.svg"/>
+							<img className='seta' src="/assets/images/Seta.svg"/>
+							<img className="exemplo-mensagem-card"src="/assets/images/chat.svg"/>
+						</div>
 				</section>
 				<section className="home-cadastre">
 					<div className="home-cadastre-textos">
@@ -59,7 +57,7 @@ const Index = () => {
 						</SubTitulo>
 					</div>
 					<div className="home-top-comunidades-cards">
-						<Carousel breakPoints={breakPoints} enableAutoPlay={true}>
+						<Carousel breakPoints={breakPoints} enableAutoPlay={true} showArrows={false}>
 							<Card msg="Entre para ver mais" />
 							<Card msg="Entre para ver mais" />
 							<Card msg="Entre para ver mais" />
