@@ -12,8 +12,7 @@ import {
 	communityId,
 	communityName,
 	communityUserID,
-	communityUsername,
-	QtdUsersCommunity,
+	communityUsername
 } from "../repositories/comunnityRepository.js";
 import { userIdSearch } from "../repositories/userRepository.js";
 

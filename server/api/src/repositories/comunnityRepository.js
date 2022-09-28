@@ -5,7 +5,12 @@ export async function communityCreate(id, community) {
 	const command = `
         INSERT INTO tb_comunidade (id_criador, nm_comunidade, ds_comunidade, bt_publica) 
                            VALUES (?, ?, ?, ?) `;
+	const insert = `
+	INSERT INTO tb_usuario_comunidade (id_usuario, id_comunidade) 
+									VALUES (?, ?) `;
+
 	const [r] = await con.query(command, [id, community.nome, community.descricao, community.publica]);
+	const [s] = await con.query(insert, [id, r.insertId]);
 	community.id = r.insertId;
 	return community;
 }
@@ -32,18 +37,6 @@ export async function communityUserID(id, comunidade) {
 
 	const [r] = await con.query(command, [id, comunidade]);
 	return r;
-}
-
-//Consultar quantidade de usúarios na comunidade
-export async function QtdUsersCommunity(id) {
-	const command = `SELECT COUNT(*) as quantidade_de_usuarios
-					FROM tb_usuario_comunidade
-					INNER JOIN tb_comunidade 
-					ON tb_usuario_comunidade.id_comunidade = tb_comunidade.id_comunidade
-					WHERE tb_usuario_comunidade.id_comunidade = ?`;
-
-	const [r] = await con.query(command, [id]);
-	return r[0];
 }
 
 // Procurar por nome de usúario na comunidade

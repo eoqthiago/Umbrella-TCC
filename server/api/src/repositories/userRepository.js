@@ -125,8 +125,7 @@ export async function userComunidadesConsulta(id) {
 		bt_publica publica
 	from tb_usuario_comunidade 
 	inner join tb_comunidade on tb_usuario_comunidade.id_comunidade = tb_comunidade.id_comunidade
-	where id_usuario_comunidade = ?;
-	`;
+	where id_usuario = ? `;
 	const [answer] = await con.query(command, [id]);
 	return answer;
 }
