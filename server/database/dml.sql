@@ -33,9 +33,30 @@ delete from tb_usuario where ds_email = "othierrydaora";
 select * from tb_usuario where ds_email = "othierry@daora";
 
 -- Consultar amigos
-select *
-  from tb_usuario_amizade
-  where	id_solicitante = 1 or id_solicitado = 1 and ds_situacao = 'A';
+select 
+	id_usuario id,
+	nm_usuario nome,
+	ds_usuario descricao,
+	img_usuario imagem,
+	img_banner banner,
+	dt_criacao criacao
+from tb_usuario where id_usuario in (
+	select id_solicitado
+	from tb_usuario_amizade
+	where (id_solicitado = ? or id_solicitante = ?) and ds_situacao = 'A'
+);
+
+-- Consultar comunidades do usuário
+select 
+	tb_comunidade.id_comunidade id,
+	nm_comunidade nome,
+	ds_comunidade descricao,
+	img_comunidade imagem,
+	img_banner banner,
+	bt_publica publica
+from tb_usuario_comunidade 
+inner join tb_comunidade on tb_usuario_comunidade.id_comunidade = tb_comunidade.id_comunidade
+where id_usuario_comunidade = 1;
 
 -- Ver pedidos de amizade recebidos
 select 	*
