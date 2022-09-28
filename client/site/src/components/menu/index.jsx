@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import localStorage from "local-storage";
 import { toast } from "react-toastify";
-import { useJwt } from 'react-jwt'
+import { useJwt } from "react-jwt";
 import { userConsulta, userImagem } from "../../api/userApi";
 import CadastrarComunidade from "../modals/cadastrarComunidade";
 import "./index.sass";
 
 export default function Index({ ativo, alterar }) {
-	const { isExpired } = useJwt(localStorage('user').token ?? '');
+	const { isExpired } = useJwt(localStorage("user").token ?? "");
 	const navigate = useNavigate();
 	const [user, setUser] = useState({});
 	const [comunidade, setComunidade] = useState(false);
@@ -49,7 +49,7 @@ export default function Index({ ativo, alterar }) {
 		else document.body.style.overflow = "unset";
 	}, [ativo]);
 
-	useEffect(() => isExpired ? logout() : undefined, [isExpired]);
+	useEffect(() => (isExpired ? logout() : undefined));
 
 	return (
 		<div className={ativo ? "comp-menu-bg" : undefined}>
