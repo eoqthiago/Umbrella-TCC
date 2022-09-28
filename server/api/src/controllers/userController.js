@@ -102,10 +102,27 @@ server.post("/usuario/login", async (req, res) => {
 server.post("/usuario/recuperar", async (req, res) => {
 	try {
 		const {email} = req.query;
-
 		const answer = await userEmailSearch(email);
 		const r = await codeAleatorio(code)
 		if (!answer) throw new Error("Email incorreto");
+
+		const token = jwt.sign(
+			{
+				id: answer.id,
+				email: answer.email,
+			},
+			process.env.JWT_KEY,
+			{
+				expiresIn: "10d",
+			}
+		);
+		res.status(202).send({
+			id: answer.id,
+			nome: answer.nome,
+			token: token,
+		});
+
+
 
 		switch (true) {
 			case !emailTest(email):
@@ -168,10 +185,26 @@ server.post("/usuario/recuperar", async (req, res) => {
 server.get("/usuario/:codigo", async (req, res) => {
 	try {
 		const codigo = Number(req.params.codigo);
-
 		const answer = await userCodeSearch(codigo);
 		if (answer < 1) throw new Error("codigo incorreto");
 		res.send(answer[0]);
+		const token = jwt.sign(
+			{
+				id: answer.id,
+				email: answer.email,
+			},
+			process.env.JWT_KEY,
+			{
+				expiresIn: "10d",
+			}
+		);
+		res.status(202).send({
+			id: answer.id,
+			nome: answer.nome,
+			token: token,
+		});
+		
+		
 	} catch (err) {
 		res.status(400).send({
 			err: err.message,
@@ -184,22 +217,31 @@ server.get("/usuario/:codigo", async (req, res) => {
 server.put("/usuario/alterar-senha", async (req, res) => {
 	try {
 		const user = req.body;
-		const header = req.header("x-access-token");
-		const auth = jwt.decode(header);
-		switch (true) {
-			case !header || !auth || !(await userIdSearch(auth.id)):
-				throw new Error("Falha na autenticação");
-			case !user.senha || !user.senha.trim() || user.senha.length > 50:
-				throw new Error("A senha é obrigatório");
-			default:
-				break;
-		}
-		user.id = auth.id;
-		user.senha = sha256(user.senha);
+
+
 		const answer = await userAlterarPassword(user);
 		if (answer < 1) throw new Error("Não foi possível alterar a senha");
+		user.senha = sha256(user.senha);
+
+		const token = jwt.sign(
+			{
+				id: answer.id,
+				email: answer.email,
+			},
+			process.env.JWT_KEY,
+			{
+				expiresIn: "10d",
+			}
+		);
+		res.status(202).send({
+			id: answer.id,
+			nome: answer.nome,
+			token: token,
+		});
+
 		res.status(202).send();
 	} catch (err) {
+		console.log(err);
 		res.status(400).send({
 			err: "Um erro ocorreu",
 		});

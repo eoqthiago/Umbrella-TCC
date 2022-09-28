@@ -31,6 +31,17 @@ export async function userConsulta(id) {
 	return r.data;
 }
 
+export async function userAlterarPassword(senha) {
+	const r = await api.put('/usuario/alterar-senha', {
+		headers: {
+			"x-access-token": userToken,
+		},
+		// senha: senha
+	});
+
+	return r.data;
+}
+
 export async function userEmailSearch(email) {
 	const r = await api.post(`/usuario/recuperar?email=${email}`, {
 		email: email
