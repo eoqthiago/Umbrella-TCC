@@ -15,6 +15,7 @@ import {
 	userLogin,
 	userEmailSearch,
 	userNameSearch,
+	userComunidadesConsulta,
 } from "../repositories/userRepository.js";
 import { emailTest, nameTest } from "../utils/expressionTest.js";
 import multer from "multer";
@@ -202,12 +203,27 @@ server.get("/usuario/:id/amizades", async (req, res) => {
 		const auth = jwt.decode(header);
 		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
 		if (!(await userIdSearch(id))) throw new Error("Usuário não encontrado");
-
 		const answer = await amigosConsulta(id);
-		if (answer < 1) throw new Error("Nenhuma amizade foi encontrada");
 		res.send(answer);
 	} catch (err) {
-		res.status(404).send({
+		res.status(401).send({
+			err: err.message,
+		});
+	}
+});
+
+// Listar comunidades do usuário
+server.get("/usuario/:id/comunidades", async (req, res) => {
+	try {
+		const id = Number(req.params.id);
+		const header = req.header("x-access-token");
+		const auth = jwt.decode(header);
+		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
+		if (!(await userIdSearch(id))) throw new Error("Usuário não encontrado");
+		const answer = await userComunidadesConsulta(id);
+		res.send(answer);
+	} catch (err) {
+		res.status(401).send({
 			err: err.message,
 		});
 	}

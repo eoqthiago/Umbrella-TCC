@@ -33,9 +33,30 @@ delete from tb_usuario where ds_email = "othierrydaora";
 select * from tb_usuario where ds_email = "othierry@daora";
 
 -- Consultar amigos
-select *
-  from tb_usuario_amizade
-  where	id_solicitante = 1 or id_solicitado = 1 and ds_situacao = 'A';
+select 
+	id_usuario id,
+	nm_usuario nome,
+	ds_usuario descricao,
+	img_usuario imagem,
+	img_banner banner,
+	dt_criacao criacao
+from tb_usuario where id_usuario in (
+	select id_solicitado
+	from tb_usuario_amizade
+	where (id_solicitado = ? or id_solicitante = ?) and ds_situacao = 'A'
+);
+
+-- Consultar comunidades do usuário
+select 
+	tb_comunidade.id_comunidade id,
+	nm_comunidade nome,
+	ds_comunidade descricao,
+	img_comunidade imagem,
+	img_banner banner,
+	bt_publica publica
+from tb_usuario_comunidade 
+inner join tb_comunidade on tb_usuario_comunidade.id_comunidade = tb_comunidade.id_comunidade
+where id_usuario_comunidade = 1;
 
 -- Ver pedidos de amizade recebidos
 select 	*
@@ -110,28 +131,54 @@ select
 		where id_comunidade = ? and id_criador = ? ;
 
 -- Consultar uma comunidade por id
-select
-			nm_comunidade nome,
-			ds_comunidade descricao,
-			img_comunidade imagem,
-			img_banner banner
-		from tb_comunidade
-		where id_comunidade = ? ;
+SELECT
+	id_comunidade id,
+	nm_comunidade nome,
+	ds_comunidade descricao,
+	img_comunidade imagem,
+	img_banner banner,
+	bt_publica publica,
+	dt_criacao dataCriacao,
+	id_criador criador,
+	(select count(id_usuario) 
+		from tb_usuario_comunidade 
+		inner join tb_comunidade 
+		on tb_usuario_comunidade.id_usuario_comunidade = tb_comunidade.id_comunidade
+		where tb_usuario_comunidade.id_comunidade = 1) qtdUsuarios
+FROM tb_comunidade
+WHERE 	id_comunidade = 1;
 
--- Pesquisar comunidades por nome
-select
-			nm_comunidade nome,
-			ds_comunidade descricao,
-			img_comunidade imagem,
-			img_banner banner
-		from tb_comunidade
-		where nm_comunidade like '%Comunidade daora%';
+
+
+-- Pesquisar comunidades por nome --! Alterar
+SELECT
+	id_comunidade id,
+	nm_comunidade nome,
+	ds_comunidade descricao,
+	img_comunidade imagem,
+	img_banner banner,
+	bt_publica publica,
+	dt_criacao dataCriacao,
+	id_criador criador,
+	(select count(id_usuario) 
+		from tb_usuario_comunidade 
+		inner join tb_comunidade on tb_usuario_comunidade.id_usuario_comunidade = tb_comunidade.id_comunidade
+		where tb_comunidade.nm_comunidade like '%daora%') qtdUsuarios
+FROM tb_comunidade
+WHERE 	nm_comunidade like '%daora%';
+
+
 
 -- Atualizar campos da comunidade
 update 	tb_comunidade 
    set 	nm_comunidade = 'daora',
 		ds_comunidade = 'legal'
 where id_criador = 1 and id_comunidade = 1;
+
+-- Inserir usuário em comunidade
+INSERT INTO 
+	tb_usuario_comunidade	(id_usuario, id_comunidade) 
+				    VALUES	(1, 1);
 
 -- Inserir canal     
        insert into tb_comunidade_canal(id_comunidade, nm_canal)
@@ -141,4 +188,4 @@ where id_criador = 1 and id_comunidade = 1;
        select id_comunidade as idcomunidade,
 			  nm_canal as nomecanal 
               from tb_comunidade_canal
-              where id_comunidade =2 ;
+              where id_comunidade = 2;

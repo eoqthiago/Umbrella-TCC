@@ -98,10 +98,35 @@ export async function userNameSearch(nome) {
 
 export async function amigosConsulta(id) {
 	const command = `
-        select *
-        from tb_usuario_amizade
-        where	id_solicitante = ? or id_solicitado = ? and ds_situacao = 'A' `;
+	select 
+		id_usuario id,
+		nm_usuario nome,
+		ds_usuario descricao,
+		img_usuario imagem,
+		img_banner banner,
+		dt_criacao criacao
+	from tb_usuario where id_usuario in (
+		select id_solicitado
+		from tb_usuario_amizade
+		where (id_solicitado = ? or id_solicitante = ?) and ds_situacao = 'A'
+	)`;
 	const [answer] = await con.query(command, [id, id]);
+	return answer;
+}
+
+export async function userComunidadesConsulta(id) {
+	const command = `
+	select 
+		tb_comunidade.id_comunidade id,
+		nm_comunidade nome,
+		ds_comunidade descricao,
+		img_comunidade imagem,
+		img_banner banner,
+		bt_publica publica
+	from tb_usuario_comunidade 
+	inner join tb_comunidade on tb_usuario_comunidade.id_comunidade = tb_comunidade.id_comunidade
+	where id_usuario = ? `;
+	const [answer] = await con.query(command, [id]);
 	return answer;
 }
 
@@ -115,7 +140,9 @@ export async function solicitarAmizade(solicitante, solicitado) {
 
 export async function aceitarAmizade(idAmizade, idSolicitado) {
 	const command = `
-        update tb_usuario_amizade set dt_confirmacao = curdate() and ds_situacao = 'A' where id_usuario_amizade = ? and id_solicitado = ?`;
+        update tb_usuario_amizade
+		set dt_confirmacao = curdate(), ds_situacao = 'A'
+		where id_usuario_amizade = ? and id_solicitado = ?`;
 	const [answer] = await con.query(command, [idAmizade, idSolicitado]);
 	return answer.affectedRows;
 }

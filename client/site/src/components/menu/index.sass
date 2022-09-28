@@ -34,9 +34,24 @@
         width: 100%
         background-color: #EEEFF0
         display: flex
-        align-items: flex-start
+        align-items: center
         flex-flow: column nowrap
-        padding: 2em 1em
+        padding-top: 5em
+        
+        > div
+            align-self: flex-start
+            font-family: Roboto-regular
+            font-size: 18px
+            margin: 0 0 1em 1em
+            user-select: none
+
+        > section
+            width: 100%
+            margin-bottom: 3em
+            display: flex
+            flex-flow: column nowrap
+            align-items: center
+            gap: 5px
 
         > .comp-menu-exit
             justify-items: flex-start
@@ -50,6 +65,7 @@
             position: absolute
             right: 20px
             top: 20px
+            cursor: pointer
             
             &:active
                 transition: .1s linear

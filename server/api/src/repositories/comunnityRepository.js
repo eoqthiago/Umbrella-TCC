@@ -5,7 +5,12 @@ export async function communityCreate(id, community) {
 	const command = `
         INSERT INTO tb_comunidade (id_criador, nm_comunidade, ds_comunidade, bt_publica) 
                            VALUES (?, ?, ?, ?) `;
+	const insert = `
+	INSERT INTO tb_usuario_comunidade (id_usuario, id_comunidade) 
+									VALUES (?, ?) `;
+
 	const [r] = await con.query(command, [id, community.nome, community.descricao, community.publica]);
+	const [s] = await con.query(insert, [id, r.insertId]);
 	community.id = r.insertId;
 	return community;
 }
@@ -32,18 +37,6 @@ export async function communityUserID(id, comunidade) {
 
 	const [r] = await con.query(command, [id, comunidade]);
 	return r;
-}
-
-//Consultar quantidade de usúarios na comunidade
-export async function QtdUsersCommunity(id) {
-	const command = `SELECT COUNT(*) as quantidade_de_usuarios
-					FROM tb_usuario_comunidade
-					INNER JOIN tb_comunidade 
-					ON tb_usuario_comunidade.id_comunidade = tb_comunidade.id_comunidade
-					WHERE tb_usuario_comunidade.id_comunidade = ?`;
-	
-	const [r] = await con.query(command, [id]);
-	return r[0];
 }
 
 // Procurar por nome de usúario na comunidade
@@ -75,16 +68,41 @@ export async function communityOwner(userId, communityId) {
 // Consultar comunidade por ID
 export async function communityId(id) {
 	const command = `
-		SELECT * FROM tb_comunidade
-		WHERE 	id_comunidade = ? `;
-	const [answer] = await con.query(command, [id]);
+		SELECT
+		id_comunidade id,
+		nm_comunidade nome,
+		ds_comunidade descricao,
+		img_comunidade imagem,
+		img_banner banner,
+		bt_publica publica,
+		dt_criacao dataCriacao,
+		id_criador criador,
+		(select count(id_usuario) 
+			from tb_usuario_comunidade 
+			inner join tb_comunidade 
+			on tb_usuario_comunidade.id_usuario_comunidade = tb_comunidade.id_comunidade
+			where tb_usuario_comunidade.id_comunidade = ?) qtdUsuarios
+	FROM tb_comunidade
+	WHERE 	id_comunidade = ?;`;
+	const [answer] = await con.query(command, [id, id]);
 	return answer[0];
 }
 
-// Consultar comunidade por nome
+// Consultar comunidade por nome //! Alterar
 export async function communityName(comunidade) {
 	const command = `
-			SELECT * FROM tb_comunidade
+			SELECT
+				nm_comunidade nome,
+				ds_comunidade descricao,
+				img_comunidade imagem,
+				img_banner banner,
+				bt_publica publica,
+				dt_criacao dataCriacao,
+				(   select count(id_usuario)
+					from tb_usuario_comunidade
+					inner join tb_comunidade on tb_usuario_comunidade.id_comunidade = tb_comunidade.id_comunidade
+					where tb_comunidade.nm_comunidade like '%${comunidade}%' ) qtdUsuarios
+			FROM tb_comunidade
 		   WHERE 	nm_comunidade like '%${comunidade}%'`;
 	const [answer] = await con.query(command);
 	return answer;
@@ -109,11 +127,12 @@ export async function communitiesGet() {
 }
 
 //Convite comunidade
-export async function communityUser(userId, community) {
-	const command = `INSERT INTO tb_usuario_comunidade(id_usuario, id_comunidade) 
-                            VALUES(?, ?)`;
+export async function communityUserAdd(userId, community) {
+	const command = `
+		INSERT INTO tb_usuario_comunidade (id_usuario, id_comunidade) 
+                            	   VALUES (?, ?)`;
 	const r = await con.query(command, [userId, community]);
-	return r.data;
+	return r.affectedRows;
 }
 
 // Promover usúario à admnistrador da comunidade

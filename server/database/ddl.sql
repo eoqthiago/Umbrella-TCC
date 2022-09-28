@@ -96,7 +96,7 @@ create table tb_comunidade (
     img_comunidade varchar(200),
     img_banner varchar(200),
     dt_criacao date default(curdate()),
-    bt_publica boolean default(false),
+    bt_publica boolean not null,
     foreign key (id_criador) references tb_usuario (id_usuario)
 );
 

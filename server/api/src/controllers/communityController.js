@@ -4,7 +4,7 @@ import multer from "multer";
 import {
 	communityCreate,
 	communityEdit,
-	communityUser,
+	communityUserAdd,
 	communityAdmin,
 	communityOwner,
 	communitiesGet,
@@ -12,9 +12,9 @@ import {
 	communityId,
 	communityName,
 	communityUserID,
+	communityUsername
 	communityUsername,
-	QtdUsersCommunity,
-	communityCanal,
+	communityCanal
 } from "../repositories/comunnityRepository.js";
 import { userIdSearch } from "../repositories/userRepository.js";
 
@@ -35,7 +35,7 @@ server.post("/comunidade/convite", (req, res) => {
 			default:
 				break;
 		}
-		const r = communityUser(auth.id, communityId.community);
+		const r = communityUserAdd(auth.id, communityId.community);
 		res.status(200).send(r);
 	} catch (err) {
 		res.status(401).send({
@@ -209,19 +209,6 @@ server.get("/comunidade/usuario", async (req, res) => {
 	}
 });
 
-//Consultar quantidade de usúarios na comunidade
-server.get("/comunidade/:id/usuarios", async (req, res) => {
-	try {
-		const community = req.params.id;
-		const r = await QtdUsersCommunity(community);
-		res.status(200).send(r);
-	} catch (err) {
-		res.status(401).send({
-			err: err.message
-		});
-	}
-});
-
 // Criar canal
 server.post("/comunidade/canal", async (req ,res) =>{
 	try{
@@ -233,7 +220,6 @@ server.post("/comunidade/canal", async (req ,res) =>{
 			err: err.message
 		});
 	}
-
 })
 
 export default server;

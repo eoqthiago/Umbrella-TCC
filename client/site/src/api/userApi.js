@@ -31,6 +31,22 @@ export async function userConsulta(id) {
 	return r.data;
 }
 
-export function userImagem(imagem) {
-	return `${api.getUri()}/${imagem}`;
+export async function userAmigosConsulta(id) {
+	if (!userToken) return;
+	const r = await api.get(`/usuario/${id}/amizades`, {
+		headers: {
+			"x-access-token": userToken,
+		},
+	});
+	return r.data;
+}
+
+export async function userComunidadesConsulta(id) {
+	if (!userToken) return;
+	const r = await api.get(`/usuario/${id}/comunidades`, {
+		headers: {
+			"x-access-token": userToken,
+		},
+	});
+	return r.data;
 }
