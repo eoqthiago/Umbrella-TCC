@@ -132,3 +132,13 @@ update 	tb_comunidade
    set 	nm_comunidade = 'daora',
 		ds_comunidade = 'legal'
 where id_criador = 1 and id_comunidade = 1;
+
+-- Inserir canal     
+       insert into tb_comunidade_canal(id_comunidade, nm_canal)
+       values (2, "canal 4");
+       
+-- Listar canais por comunidade   
+       select id_comunidade as idcomunidade,
+			  nm_canal as nomecanal 
+              from tb_comunidade_canal
+              where id_comunidade =2 ;
