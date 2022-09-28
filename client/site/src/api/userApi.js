@@ -40,6 +40,14 @@ export async function userEmailSearch(email) {
 	return r.data;
 }
 
+export async function userCodeSearch (codigo) {
+	const r = await api.get(`/usuario/${codigo}`, {
+		codigo: codigo
+	});
+
+	return r.data;
+}
+
 export function userImagem(imagem) {
 	return `${api.getUri()}/${imagem}`;
 }

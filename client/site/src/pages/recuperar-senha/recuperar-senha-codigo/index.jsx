@@ -1,6 +1,10 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import LoadingBar from "react-top-loading-bar";
+import localstorage from "local-storage";
+import { userCodeSearch } from "../../../api/userApi";
+
 import { BotaoSolido, Input, SubTitulo, Titulo } from "../../../styled";
 import "./index.sass";
 
@@ -8,6 +12,36 @@ export default function Index() {
 	const [codigo, setCodigo] = useState("");
 	const navigate = useNavigate();
 	const ref = useRef();
+	const [loading, setLoading] = useState(false);
+
+
+
+	
+	async function handleCode() {
+		localstorage.remove("user");
+		setLoading(true);
+		ref.current.continuousStart();
+
+		try {
+			// const r = await axios.post('')
+			const r = await userCodeSearch(codigo);
+			console.log(r)
+			if (r != codigo) {
+				setTimeout(() => navigate("/alterar-senha"), 2000);
+				toast.success("Altere sua senha");	
+			} else  {
+				toast.warn("codigo incorreto");	
+
+			}
+			
+		} catch (err) {
+			if (err.response) toast.error(err.response.data.err);
+			setLoading(false);
+			ref.current.complete();
+		}
+	}
+
+
 
 	return (
 		<div className="email page">
@@ -23,10 +57,10 @@ export default function Index() {
 				</div>
 				<div className="email-corpo">
 					<div className="email-inputs">
-						<Input placeholder="Código" width="100%" type="email" value={codigo} onChange={(e) => setCodigo(e.target.value)} />
+						<Input placeholder="Código" width="100%" type="email" value={codigo} onChange={(e) => setCodigo(Number(e.target.value))} />
 					</div>
 					<div className="email-btn">
-						<BotaoSolido fonte="4vw" width="100%" onClick={() => navigate("/alterar-senha")}>
+						<BotaoSolido fonte="4vw" width="100%" onClick={handleCode}>
 							Confirmar
 						</BotaoSolido>
 					</div>

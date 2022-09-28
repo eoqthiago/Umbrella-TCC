@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { sha256 } from "js-sha256";
 import jwt from "jsonwebtoken";
-import codeRecuperarSenha from "../services/services.js" 
 import nodemailer from "nodemailer"
 import {
 	aceitarAmizade,
@@ -18,14 +17,19 @@ import {
 	userEmailSearch,
 	userNameSearch,
 	userAlterarPassword,
+	codeAleatorio,
+	userCodeSearch,
 } from "../repositories/userRepository.js";
 import { emailTest } from "../utils/expressionTest.js";
 import multer from "multer";
 import "dotenv/config";
+import codeAl from "../services/services.js";
+
+const code = codeAl();
+
 
 const server = Router();
 const usuarioImg = multer({ dest: "storage/users" });
-const code = codeRecuperarSenha()
 
 // Cadastro
 server.post("/usuario", async (req, res) => {
@@ -100,6 +104,7 @@ server.post("/usuario/recuperar", async (req, res) => {
 		const {email} = req.query;
 
 		const answer = await userEmailSearch(email);
+		const r = await codeAleatorio(code)
 		if (!answer) throw new Error("Email incorreto");
 
 		switch (true) {
@@ -160,19 +165,19 @@ server.post("/usuario/recuperar", async (req, res) => {
 
 // codigo
 
-server.get("/usuario/codigo"), async (req, res) => {
+server.get("/usuario/:codigo", async (req, res) => {
 	try {
-		const {codigo} = number(req.body);
-		const header = req.header("x-access-token");
-		const auth = jwt.decode(header);
-		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
-		if (codigo != code) throw new Error("codigo incorreto");
-		res.status(202).send();
+		const codigo = Number(req.params.codigo);
 
+		const answer = await userCodeSearch(codigo);
+		if (answer < 1) throw new Error("codigo incorreto");
+		res.send(answer[0]);
 	} catch (err) {
-		
+		res.status(400).send({
+			err: err.message,
+		});
 	}
-}
+});
 
 // ALTERAR SENHA 
 

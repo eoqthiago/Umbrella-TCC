@@ -57,6 +57,26 @@ export async function userEmailSearch(email) {
 }
 
 // esqueci senha
+
+export async function codeAleatorio (codigo) {
+	const command = `
+	insert into tb_codigo (ds_codigo)
+	values (?) 
+	`;
+	const [answer] = await con.query(command, [codigo])
+	return answer
+}
+
+export async function userCodeSearch(codigo) {
+	const command = `
+	select 	ds_codigo
+	from tb_codigo
+		where ds_codigo = ?
+	`;
+	const [answer] = await con.query(command, [codigo])
+	return answer
+}
+
 export async function userAlterarPassword(user) {
 	const command = `
 		update  tb_usuario
