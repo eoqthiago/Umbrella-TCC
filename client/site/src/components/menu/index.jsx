@@ -23,15 +23,6 @@ export default function Index({ ativo, alterar }) {
 		navigate("/");
 	}
 
-	function exibirImagem() {
-		try {
-			if (!user.imagem) throw new Error("Imagem não encontrada");
-			return BuscarImg(user.imagem);
-		} catch (err) {
-			return "/assets/images/user.png";
-		}
-	}
-
 	useEffect(() => (isExpired ? logout() : undefined));
 
 	useEffect(() => {
@@ -44,8 +35,10 @@ export default function Index({ ativo, alterar }) {
 
 	useEffect(() => {
 		async function consultarUsuario() {
-			const r = await userConsulta(localStorage("user").id);
-			setUser(r);
+			try {
+				const r = await userConsulta(localStorage("user").id);
+				setUser(r);
+			} catch (err) {}
 		}
 		consultarUsuario();
 	}, []);
@@ -80,7 +73,13 @@ export default function Index({ ativo, alterar }) {
 						<img src="/assets/icons/edit.svg" alt="Configurações" title="Configurações" />
 						<img src="/assets/icons/exit.svg" alt="Sair" title="Sair" onClick={() => logout()} />
 						<hr />
-						<img src={exibirImagem()} alt="Usuário" title={user.nome ?? "Usuário"} className="comp-menu-img-user" onClick={() => navigate(`/usuario/${user.id}`)} />
+						<img
+							src={user.imagem ? BuscarImg(user.imagem) : "/assets/images/user.png"}
+							alt="Usuário"
+							title={user.nome ?? "Usuário"}
+							className="comp-menu-img-user"
+							onClick={() => navigate(`/usuario/${user.id}`)}
+						/>
 					</div>
 				</section>
 				<section className="comp-menu-chats">
