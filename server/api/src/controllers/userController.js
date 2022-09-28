@@ -34,7 +34,7 @@ server.post("/usuario", async (req, res) => {
 				throw new Error("O email inserido é inválido");
 			case !user.senha || !user.senha.trim():
 				throw new Error("A senha é obrigatória");
-			case !user.nascimento || new Date().getFullYear() - user.nascimento.getFullYear() < 13:
+			case !user.nascimento || new Date().getFullYear() - new Date(user.nascimento).getFullYear() < 13:
 				throw new Error("A idade mínima permitida é 13 anos");
 			default:
 				break;

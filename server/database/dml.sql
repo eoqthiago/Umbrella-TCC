@@ -179,3 +179,13 @@ where id_criador = 1 and id_comunidade = 1;
 INSERT INTO 
 	tb_usuario_comunidade	(id_usuario, id_comunidade) 
 				    VALUES	(1, 1);
+
+-- Inserir canal     
+       insert into tb_comunidade_canal(id_comunidade, nm_canal)
+       values (2, "canal 4");
+       
+-- Listar canais por comunidade   
+       select id_comunidade as idcomunidade,
+			  nm_canal as nomecanal 
+              from tb_comunidade_canal
+              where id_comunidade = 2;

@@ -13,6 +13,8 @@ import {
 	communityName,
 	communityUserID,
 	communityUsername
+	communityUsername,
+	communityCanal
 } from "../repositories/comunnityRepository.js";
 import { userIdSearch } from "../repositories/userRepository.js";
 
@@ -206,5 +208,18 @@ server.get("/comunidade/usuario", async (req, res) => {
 		});
 	}
 });
+
+// Criar canal
+server.post("/comunidade/canal", async (req ,res) =>{
+	try{
+		const canal = req.body;
+		const r = await communityCanal(canal);
+		res.status(200).send();
+	} catch (err) {
+		res.status(401).send({
+			err: err.message
+		});
+	}
+})
 
 export default server;

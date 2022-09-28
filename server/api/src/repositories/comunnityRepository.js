@@ -145,3 +145,12 @@ export async function communityAdmin(id, admin) {
 	const [r] = await con.query(command, [id]);
 	return r.affectedRows;
 }
+
+// Criar canal
+export async function communityCanal(canal) {
+	const command = `
+		insert into tb_comunidade_canal(id_comunidade, nm_canal)
+		values (?,  ?) `;
+	const [r] = await con.query(command, [canal.id, canal.name]);
+	return r;
+}

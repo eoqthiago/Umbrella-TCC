@@ -52,6 +52,41 @@
                 width: 85%
                 text-align: center
 
+        > .home-mensagens-comunidades
+            display: flex
+            flex-direction: column
+            align-items: center
+
+            > .textos-mensagens
+                width: 20em
+                text-align: center
+
+            > .exemplo-comunidades 
+                 display: flex
+                 flex-direction: row
+                 justify-content: space-between
+                 padding: 3em
+                 padding-bottom: 2em
+                 margin-left: 3em
+
+                 > .card-celular  
+                     width: 25% 
+                     transition: 0.5s
+
+                 > .card-celular:hover
+                     transform: scale(1.1)
+
+                 > .seta  
+                     width: 15%      
+
+                 > .exemplo-mensagem-card
+                     min-width: 350px
+                     transition: 0.5s
+                     
+                 > .exemplo-mensagem-card:hover
+                     transform: scale(1.1) 
+       
+
         > .home-top-comunidades
             > .home-top-comunidades-titulos
                 text-align: center
@@ -161,3 +196,29 @@
 
             > .home-cadaste-botao
                 background-size: 100%
+
+
+@media (max-width: 600px)
+   .home > main
+        > .home-mensagens-comunidades
+            align-items: center
+
+            > .textos-mensagens
+                 width: 60%
+
+            > .exemplo-comunidades
+              display: flex
+              flex-direction: column
+              align-items: center
+
+              > .card-celular
+                    width: 50%
+                    margin-right: 2em
+            
+              > .seta
+                     transform: rotate(90deg)
+                     margin: 2em
+                     width: 25%
+     
+              > .exemplo-mensagem-card
+                   max-width: 100px   

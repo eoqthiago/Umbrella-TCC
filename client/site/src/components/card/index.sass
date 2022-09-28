@@ -19,20 +19,26 @@
         -webkit-user-drag: none
         -webkit-user-select: none
 
-    > div 
-        font-family: Roboto-Medium
-        font-size: clamp(13px, 1.7vw, 15px)
-        color: #2c2b2b
-
-        > div > p
-            font-family: Roboto-Regular
-            color: #424242
-
 .info-cont 
         display: flex
         flex-direction: column
         justify-content: space-between
         margin-top: .3em
-        height: 8em
+        height: 9em
         color: #373535
         font-size: clamp(16px, 2vw, 18px)
+
+        > div 
+        font-family: Roboto-Medium
+        font-size: clamp(13px, 1.7vw, 15px)
+        color: #2c2b2b
+
+        > div > p
+            margin: .3em .3em 0 .3em
+            font-family: Roboto-Regular
+            color: #424242
+
+.qtd-info 
+    display: flex
+    flex-direction: row-reverse
+    margin: 0 .8em .2em 0
