@@ -19,6 +19,7 @@ import {
 	userAlterarPassword,
 	codeAleatorio,
 	userCodeSearch,
+	userIDandEmailSearch,
 } from "../repositories/userRepository.js";
 import { emailTest } from "../utils/expressionTest.js";
 import multer from "multer";
@@ -102,7 +103,7 @@ server.post("/usuario/login", async (req, res) => {
 server.post("/usuario/recuperar", async (req, res) => {
 	try {
 		const {email} = req.query;
-		const answer = await userEmailSearch(email);
+		const answer = await userIDandEmailSearch(email);
 		const r = await codeAleatorio(code)
 		if (!answer) throw new Error("Email incorreto");
 
@@ -118,7 +119,7 @@ server.post("/usuario/recuperar", async (req, res) => {
 		);
 		res.status(202).send({
 			id: answer.id,
-			nome: answer.nome,
+			email: answer.email,
 			token: token,
 		});
 
@@ -185,9 +186,10 @@ server.post("/usuario/recuperar", async (req, res) => {
 server.get("/usuario/:codigo", async (req, res) => {
 	try {
 		const codigo = Number(req.params.codigo);
+
 		const answer = await userCodeSearch(codigo);
 		if (answer < 1) throw new Error("codigo incorreto");
-		res.send(answer[0]);
+
 		const token = jwt.sign(
 			{
 				id: answer.id,
@@ -200,9 +202,12 @@ server.get("/usuario/:codigo", async (req, res) => {
 		);
 		res.status(202).send({
 			id: answer.id,
-			nome: answer.nome,
+			email: answer.email,
 			token: token,
 		});
+
+		res.send(answer[0]);
+
 		
 		
 	} catch (err) {
@@ -217,28 +222,19 @@ server.get("/usuario/:codigo", async (req, res) => {
 server.put("/usuario/alterar-senha", async (req, res) => {
 	try {
 		const user = req.body;
-
-
-		const answer = await userAlterarPassword(user);
+		const header = req.header("x-access-token");
+		const auth = jwt.decode(header);
+		switch (true) {
+			case !header || !auth || !(await userIdSearch(auth.id)):
+				throw new Error("Falha na autenticação");
+			case !user.senha || !user.senha.trim() || user.senha.length > 50:
+				throw new Error("A Senha é obrigatório");
+			default:
+				break;
+		}
+		user.id = auth.id;
+		const answer = await userEdit(user);
 		if (answer < 1) throw new Error("Não foi possível alterar a senha");
-		user.senha = sha256(user.senha);
-
-		const token = jwt.sign(
-			{
-				id: answer.id,
-				email: answer.email,
-			},
-			process.env.JWT_KEY,
-			{
-				expiresIn: "10d",
-			}
-		);
-		res.status(202).send({
-			id: answer.id,
-			nome: answer.nome,
-			token: token,
-		});
-
 		res.status(202).send();
 	} catch (err) {
 		console.log(err);

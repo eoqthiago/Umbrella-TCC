@@ -56,6 +56,16 @@ export async function userEmailSearch(email) {
 	return answer[0];
 }
 
+export async function userIDandEmailSearch(email) {
+	const command = `
+        select ds_email email,
+			id_usuario id
+		  from tb_usuario
+		   where ds_email = ? `;
+	const [answer] = await con.query(command, [email]);
+	return answer[0];
+}
+
 // esqueci senha
 
 export async function codeAleatorio (codigo) {

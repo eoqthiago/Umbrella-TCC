@@ -25,6 +25,7 @@ export default function Index() {
 		try {
 			// const r = await axios.post('')
 			const r = await userCodeSearch(codigo);
+			localstorage("user", r);
 			console.log(r)
 			if (r != codigo) {
 				setTimeout(() => navigate("/alterar-senha"), 2000);

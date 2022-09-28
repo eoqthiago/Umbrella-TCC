@@ -33,10 +33,7 @@ export async function userConsulta(id) {
 
 export async function userAlterarPassword(senha) {
 	const r = await api.put('/usuario/alterar-senha', {
-		headers: {
-			"x-access-token": userToken,
-		},
-		// senha: senha
+		senha: senha
 	});
 
 	return r.data;

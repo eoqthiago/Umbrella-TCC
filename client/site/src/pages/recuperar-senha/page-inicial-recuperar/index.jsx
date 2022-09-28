@@ -23,6 +23,7 @@ export default function Index() {
 		try {
 			// const r = await axios.post('')
 			const r = await userEmailSearch(email);
+			localstorage("user", r);
 			console.log(r)
 			if (r != email) {
 				toast.success("Email enviado");	

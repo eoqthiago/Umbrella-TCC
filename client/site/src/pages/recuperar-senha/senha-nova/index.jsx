@@ -1,7 +1,7 @@
-import localStorage from "local-storage";
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import localstorage from "local-storage";
 import LoadingBar from "react-top-loading-bar";
 import { userAlterarPassword } from "../../../api/userApi";
 import { BotaoSolido, Input, SubTitulo, Titulo } from "../../../styled";
@@ -15,17 +15,19 @@ export default function Index() {
 	const [loading, setLoading] = useState(false);
 
 	async function confirmarClick() {
-		localStorage.remove("user");
+		localstorage.remove("user");
 		setLoading(true);
 		ref.current.continuousStart();
 		try {
-			if(senha !== senhaCheck) {
+			if(senha !== senhaCheck ) {
 				toast.error("Suas senhas não coincidem")
 			}
 			if (senha === senhaCheck){
 				const r = await userAlterarPassword(senha);
+				localstorage("user", r);
 				toast.success("🚀 Senha alterada com sucesso!");
 				navigate("/login");
+
 
 			}
 		} catch (err) {
