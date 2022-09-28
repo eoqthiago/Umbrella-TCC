@@ -4,7 +4,7 @@ import Menu from "../../../components/menu";
 import "./index.sass";
 
 const Index = () => {
-	const [menu, setMenu] = useState(true);
+	const [menu, setMenu] = useState(false);
 	return (
 		<div className="initial page ">
 			<Header menu alterarMenu={setMenu} estadoMenu={menu} />

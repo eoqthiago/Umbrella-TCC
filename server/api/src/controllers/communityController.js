@@ -12,7 +12,6 @@ import {
 	communityId,
 	communityName,
 	communityUserID,
-	communityUsername
 	communityUsername,
 	communityCanal
 } from "../repositories/comunnityRepository.js";

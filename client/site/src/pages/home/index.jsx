@@ -29,12 +29,14 @@ const Index = () => {
 					</div>
 				</section>
 				<section className="home-mensagens-comunidades">
-					<Titulo className="textos-mensagens" cor="#3A3A3A" fonte="4vw">TORNE TUDO ISSO POSSIVEL COM APENAS UM TOQUE</Titulo>
-						<div className="exemplo-comunidades">
-							<img className= 'card-celular' src="/assets/images/Cardcelular.svg"/>
-							<img className='seta' src="/assets/images/Seta.svg"/>
-							<img className="exemplo-mensagem-card"src="/assets/images/chat.svg"/>
-						</div>
+					<Titulo className="textos-mensagens" cor="#3A3A3A" fonte="4vw">
+						TORNE TUDO ISSO POSSIVEL COM APENAS UM TOQUE
+					</Titulo>
+					<div className="exemplo-comunidades">
+						<img className="card-celular" src="/assets/images/Cardcelular.svg" alt="" />
+						<img className="seta" src="/assets/images/Seta.svg" alt="" />
+						<img className="exemplo-mensagem-card" src="/assets/images/chat.svg" alt="" />
+					</div>
 				</section>
 				<section className="home-cadastre">
 					<div className="home-cadastre-textos">
