@@ -147,10 +147,21 @@ export async function communityAdmin(id, admin) {
 }
 
 // Criar canal
-export async function communityCanal(canal) {
+export async function communityCanal(comunitty, canal) {
 	const command = `
 		insert into tb_comunidade_canal(id_comunidade, nm_canal)
 		values (?,  ?) `;
-	const [r] = await con.query(command, [canal.id, canal.name]);
+	const [r] = await con.query(command, [comunitty.id, canal.name]);
+	return r;
+}
+
+// Listar canais
+export async function listarCanais(id){
+	const command = `
+		select id_comunidade as id,
+		nm_canal as nome
+	 from tb_comunidade_canal
+	 where id_comunidade =?`;
+	const [r] = await con.query(command, [id]);
 	return r;
 }

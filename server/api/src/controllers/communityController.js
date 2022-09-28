@@ -13,7 +13,8 @@ import {
 	communityName,
 	communityUserID,
 	communityUsername,
-	communityCanal
+	communityCanal,
+	listarCanais,
 } from "../repositories/comunnityRepository.js";
 import { userIdSearch } from "../repositories/userRepository.js";
 
@@ -212,9 +213,25 @@ server.get("/comunidade/usuario", async (req, res) => {
 server.post("/comunidade/canal", async (req ,res) =>{
 	try{
 		const canal = req.body;
-		const r = await communityCanal(canal);
+		const community = req.body;
+		const r = await communityCanal(community, canal);
 		res.status(200).send();
 	} catch (err) {
+		res.status(401).send({
+			err: err.message
+		});
+	}
+})
+
+// Listar canais
+
+server.get("/comunidade/canal/:id", async (req, res) => {
+	try{
+		const { id }= req.params;
+		const r= await listarCanais(id);
+		res.status(200).send(r);
+		
+	}catch(err){
 		res.status(401).send({
 			err: err.message
 		});
