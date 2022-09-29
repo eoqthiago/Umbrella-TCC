@@ -17,7 +17,7 @@ export function Index({ comunidade }) {
 					<div>{comunidade.nome ?? "Comunidade"}</div>
 					<p>{comunidade.descricao ?? "Descrição"}</p>
 				</div>
-				<div style={{ display: "flex", flexDirection: "row-reverse", marginRight: "1em" }}>
+				<div className="qtd-info">
 					<img src={""} alt="" />
 					<p>{comunidade.qtdUsuarios ?? "0"}</p>
 				</div>
