@@ -31,6 +31,19 @@
 						}
 					}
 				],
+				"requestBody": {
+					"description": "",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"$ref": "#/components/user"
+							}
+						}
+					}
+				},
+
 				"responses": {
 					"201": {
 						"description": "Credenciais aceitas",
@@ -70,10 +83,12 @@
 			"type": "object",
 			"properties": {
 				"email": {
-					"type": "string"
+					"type": "string",
+					"enum": ["othierry@daora.com"]
 				},
 				"senha": {
-					"type": "string"
+					"type": "string",
+					"enum": ["1234"]
 				}
 			}
 		}
