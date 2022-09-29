@@ -9,62 +9,68 @@
 		{
 			"name": "user",
 			"description": "Endpoints relacionados ao usuário"
+		},
+		{
+			"name": "comunidade"
 		}
 	],
 	"schemes": ["https", "http"],
+	"servers": [
+		{
+			"url": "http://localhost:5050",
+			"description": "Api teste"
+		}
+	],
 	"paths": {
-		"/usuario/login": {
-			"post": {
-				"tags": ["user"],
-				"summary": "Realiza o login do usuário",
+		"/usuario/{id}/amizades": {
+			"get": {
+				"tags": ["user, comunidade"],
+				"summary": "Lista as amizades do usuário",
 
 				"consumes": ["application/json"],
 				"produces": ["application/json"],
 				"parameters": [
 					{
-						"in": "body",
-						"name": "body",
+						"name": "id",
+						"in": "path",
+						"description": "ID do usuário",
 						"required": true,
-						"schema": {
-							"type": "object",
-							"$ref": "#/components/user"
-						}
+						"type": "integer",
+						"format": "int64"
 					}
 				],
-				"requestBody": {
-					"description": "",
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"type": "object",
-								"$ref": "#/components/user"
-							}
-						}
-					}
-				},
-
 				"responses": {
-					"201": {
+					"200": {
 						"description": "Credenciais aceitas",
 						"schema": {
-							"type": "object",
-
-							"properties": {
-								"id": {
-									"type": "string"
-								},
-								"nome": {
-									"type": "string"
-								},
-								"token": {
-									"type": "string"
+							"type": "array",
+							"items": {
+								"properties": {
+									"id": {
+										"type": "integer"
+									},
+									"nome": {
+										"type": "string"
+									},
+									"descricao": {
+										"type": "string"
+									},
+									"imagem": {
+										"type": "string"
+									},
+									"banner": {
+										"type": "string"
+									},
+									"criacao": {
+										"type": "string",
+										"format": "date-time"
+									}
 								}
 							}
 						}
 					},
-					"401": {
-						"description": "Credenciais inválidas",
+					"404": {
+						"description": "Não encontrado",
 						"schema": {
 							"type": "object",
 							"properties": {
