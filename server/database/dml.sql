@@ -114,8 +114,11 @@ delete from tb_admin where ds_email = 'othierrydaora@admin';
 -- *Comunidade*
 
 -- Cadastrar comunidade
-INSERT INTO tb_comunidade (id_criador, nm_comunidade, ds_comunidade, img_comunidade, img_banner) 
-                   VALUES (?, ?, ?, ?, ?) 
+INSERT INTO tb_comunidade (id_criador, nm_comunidade, ds_comunidade, bt_publica) 
+                           VALUES (?, ?, ?, ?);
+		set @last = last_insert_id();
+		INSERT INTO tb_usuario_comunidade (id_usuario, id_comunidade) 
+									VALUES (?, @last);
 
 -- Inserir imagem da comunidae
 update tb_comunidade

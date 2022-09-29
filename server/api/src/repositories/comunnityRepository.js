@@ -4,15 +4,14 @@ import con from "./connection.js";
 export async function communityCreate(id, community) {
 	const command = `
         INSERT INTO tb_comunidade (id_criador, nm_comunidade, ds_comunidade, bt_publica) 
-                           VALUES (?, ?, ?, ?) `;
-	const insert = `
-	INSERT INTO tb_usuario_comunidade (id_usuario, id_comunidade) 
-									VALUES (?, ?) `;
-
-	const [r] = await con.query(command, [id, community.nome, community.descricao, community.publica]);
-	const [s] = await con.query(insert, [id, r.insertId]);
-	community.id = r.insertId;
-	return community;
+                           VALUES (?, ?, ?, ?);
+		set @last = last_insert_id();
+		INSERT INTO tb_usuario_comunidade (id_usuario, id_comunidade) 
+									VALUES (?, @last)
+		`;
+	const [r] = await con.query(command, [id, community.nome, community.descricao, community.publica, id]);
+	community.id = r[0].insertId;
+	return community;	
 }
 
 // Inserir imagem da comunidade
@@ -156,7 +155,7 @@ export async function communityCanal(comunitty, canal) {
 }
 
 // Listar canais
-export async function listarCanais(id){
+export async function listarCanais(id) {
 	const command = `
 		select id_comunidade as id,
 		nm_canal as nome
