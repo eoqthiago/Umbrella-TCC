@@ -6,6 +6,7 @@ import { BotaoSolido, Input, SubTitulo, Titulo } from "../../../styled";
 import { toast } from "react-toastify";
 import localstorage from "local-storage";
 import LoadingBar from "react-top-loading-bar";
+
 import "./index.sass";
 
 export default function Index() {

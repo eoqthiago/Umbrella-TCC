@@ -9,38 +9,8 @@ import { BotaoSolido, Input, SubTitulo, Titulo } from "../../../styled";
 import "./index.sass";
 
 export default function Index() {
-	const [codigo, setCodigo] = useState("");
 	const navigate = useNavigate();
 	const ref = useRef();
-	const [loading, setLoading] = useState(false);
-
-
-
-	
-	async function handleCode() {
-		localstorage.remove("user");
-		setLoading(true);
-		ref.current.continuousStart();
-
-		try {
-			// const r = await axios.post('')
-			const r = await userCodeSearch(codigo);
-			localstorage("user", r);
-			console.log(r)
-			if (r != codigo) {
-				setTimeout(() => navigate("/alterar-senha"), 2000);
-				toast.success("Altere sua senha");	
-			} else  {
-				toast.warn("codigo incorreto");	
-
-			}
-			
-		} catch (err) {
-			if (err.response) toast.error(err.response.data.err);
-			setLoading(false);
-			ref.current.complete();
-		}
-	}
 
 
 
@@ -49,20 +19,15 @@ export default function Index() {
 			<LoadingBar color="#48d677" ref={ref} />
 			<main>
 				<div className="email-titulos">
-					<Titulo cor="#02C17D" fonte="4vw">
-						Recuperar senha
-					</Titulo>
 					<SubTitulo cor="#3F3F3F" fonte="2.5vw">
-						Insira o código enviado no email
+					Link de recuperação foi enviado para o seu E-mail <br/>
+						não recebeu o E-mail? clique no botão para reenviar  
 					</SubTitulo>
 				</div>
 				<div className="email-corpo">
-					<div className="email-inputs">
-						<Input placeholder="Código" width="100%" type="email" value={codigo} onChange={(e) => setCodigo(Number(e.target.value))} />
-					</div>
 					<div className="email-btn">
-						<BotaoSolido fonte="4vw" width="100%" onClick={handleCode}>
-							Confirmar
+						<BotaoSolido fonte="4vw" width="100%" onClick={() => navigate('/recuperar')}>
+							Reenviar
 						</BotaoSolido>
 					</div>
 				</div>

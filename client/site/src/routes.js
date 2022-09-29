@@ -20,7 +20,7 @@ export default function Index() {
 				<Route path="/pesquisa" exact element={<Pesquisa />} />
 				<Route path="/recuperar" exact element={<Recuperar />} />
 				<Route path="/code" exact element={<RecuperarCodigo />} />
-				<Route path="/alterar-senha" exact element={<Alterar />} />
+				<Route path="/alterar-senha" element={<Alterar />} />
 			</Routes>
 		</BrowserRouter>
 	);

@@ -1,9 +1,10 @@
-import React, { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useRef, useEffect } from "react";
+import { Router, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import localstorage from "local-storage";
 import LoadingBar from "react-top-loading-bar";
-import { userAlterarPassword } from "../../../api/userApi";
+
+import { userAlterarPassword, userConsulta } from "../../../api/userApi";
 import { BotaoSolido, Input, SubTitulo, Titulo } from "../../../styled";
 import "./index.sass";
 
@@ -13,6 +14,35 @@ export default function Index() {
 	const navigate = useNavigate();
 	const ref = useRef();
 	const [loading, setLoading] = useState(false);
+	const [parametro] = useSearchParams();
+	const token = parametro.get('token')
+	const id = parametro.get('id')
+	
+	
+
+
+	useEffect(() => {
+		async function verifQuery() {
+			try {
+				console.log(id, token)
+				let idcode = Number(id)
+
+				if(!token || !idcode) throw new Error ("invalidos");
+
+				const r = await userConsulta(idcode);
+				localstorage("user", r);
+				console.log(r)
+				if(r !== idcode) throw new Error("invalidos 2");
+				navigate("/alterar-senha");
+			} catch (err) {
+				console.log(err.message)
+				toast.error(err.message);
+				
+			}
+		}
+		verifQuery();
+		
+	}, []);
 
 	async function confirmarClick() {
 		localstorage.remove("user");

@@ -114,14 +114,12 @@ server.post("/usuario/recuperar", async (req, res) => {
 			},
 			process.env.JWT_KEY,
 			{
-				expiresIn: "10d",
+				expiresIn: "10m",
 			}
 		);
-		res.status(202).send({
-			id: answer.id,
-			email: answer.email,
-			token: token,
-		});
+
+		const id = answer.id
+
 
 
 
@@ -137,15 +135,14 @@ server.post("/usuario/recuperar", async (req, res) => {
 		if (answer < 1) throw new Error("Email não foi encontrado");
 		// if (search[0]) throw new Error("E-mail enviado");
 		else {
-			res.send(answer);
-
+			
 			var transport = nodemailer.createTransport({
 				host: "smtp.gmail.com",
 				port: 587,
 				auth: {
 				  user: process.env.EMAIL,
 				  pass: process.env.PASS
-				//   kspaeiiketaddqbt
+				  //   kspaeiiketaddqbt
 				},
 				tls: {
 					rejectUnauthorized: false
@@ -158,10 +155,10 @@ server.post("/usuario/recuperar", async (req, res) => {
 				subject: "Seu codigo de recuperação de senha",
 				text: "Recuperar senha!",
 				html: `<h2>Valide seu codigo para recuperação de senha</h2><br>
-						<center><h1>${code}<h1/><center/> <br><br>
-						<p>Nunca informe seus dados de acesso para outra pessoa.</p>`
+				<center><h5>http://localhost:3000/alterar-senha?id=${id}&token=${token}<h1/><center/> <br><br>
+				<p>Nunca informe seus dados de acesso para outra pessoa.</p>`
 			};
-
+			
 			transport.sendMail(message, (err) =>  {
 				if(err)  {
 					console.log(err)
@@ -170,6 +167,8 @@ server.post("/usuario/recuperar", async (req, res) => {
 				
 			});
 			console.log("E-mail enviado");
+			res.send('link enviado para o email');
+			
 
 
 
@@ -183,30 +182,24 @@ server.post("/usuario/recuperar", async (req, res) => {
 
 // codigo
 
-server.get("/usuario/:codigo", async (req, res) => {
+server.get("/alterar-senha?id&token", async (req, res) => {
+	
 	try {
-		const codigo = Number(req.params.codigo);
+		const {id, token} = req.params
 
-		const answer = await userCodeSearch(codigo);
-		if (answer < 1) throw new Error("codigo incorreto");
+		if(id != answer.id) {
+			res.send('invalid')
+		}
 
-		const token = jwt.sign(
-			{
-				id: answer.id,
-				email: answer.email,
-			},
-			process.env.JWT_KEY,
-			{
-				expiresIn: "10d",
-			}
-		);
-		res.status(202).send({
-			id: answer.id,
-			email: answer.email,
-			token: token,
-		});
+		const secret = process.env.JWT_KEY + answer.password
+		try {
+			const payload = jwt.verify(token, secret)
+			res.render('alterar-senha', {email: answer.email})
+		} catch (err) {
+			console.log(err.message);
+			res.send(err.message)
+		}
 
-		res.send(answer[0]);
 
 		
 		
@@ -219,7 +212,7 @@ server.get("/usuario/:codigo", async (req, res) => {
 
 // ALTERAR SENHA 
 
-server.put("/usuario/alterar-senha", async (req, res) => {
+server.put("/alterar-senha/:id/:token", async (req, res) => {
 	try {
 		const user = req.body;
 		const header = req.header("x-access-token");
@@ -233,7 +226,7 @@ server.put("/usuario/alterar-senha", async (req, res) => {
 				break;
 		}
 		user.id = auth.id;
-		const answer = await userEdit(user);
+		const answer = await userAlterarPassword(user);
 		if (answer < 1) throw new Error("Não foi possível alterar a senha");
 		res.status(202).send();
 	} catch (err) {
