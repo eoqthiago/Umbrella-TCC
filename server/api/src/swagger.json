@@ -3,6 +3,79 @@
 	"swagger": "2.0",
 	"openapi": "3.0",
 	"info": {
-		"title": "Documentação API Umbrella"
+		"title": "Documentação Umbrella"
+	},
+	"tags": [
+		{
+			"name": "user",
+			"description": "Endpoints relacionados ao usuário"
+		}
+	],
+	"schemes": ["https", "http"],
+	"paths": {
+		"/usuario/login": {
+			"post": {
+				"tags": ["user"],
+				"summary": "Realiza o login do usuário",
+
+				"consumes": ["application/json"],
+				"produces": ["application/json"],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"required": true,
+						"schema": {
+							"type": "object",
+							"$ref": "#/components/user"
+						}
+					}
+				],
+				"responses": {
+					"201": {
+						"description": "Credenciais aceitas",
+						"schema": {
+							"type": "object",
+
+							"properties": {
+								"id": {
+									"type": "string"
+								},
+								"nome": {
+									"type": "string"
+								},
+								"token": {
+									"type": "string"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Credenciais inválidas",
+						"schema": {
+							"type": "object",
+							"properties": {
+								"err": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"user": {
+			"type": "object",
+			"properties": {
+				"email": {
+					"type": "string"
+				},
+				"senha": {
+					"type": "string"
+				}
+			}
+		}
 	}
 }

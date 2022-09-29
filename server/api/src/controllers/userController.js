@@ -56,6 +56,7 @@ server.post("/usuario", async (req, res) => {
 server.post("/usuario/login", async (req, res) => {
 	try {
 		const user = req.body;
+		console.log(user)
 		switch (true) {
 			case !emailTest(user.email):
 				throw new Error("O email inserido é inválido");
