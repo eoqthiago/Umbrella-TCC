@@ -23,19 +23,56 @@
 				"summary": "API para cadastrar usuario",
 				"tags": ["Cadastrar"],
 				"description": "Rota Responsável por cadastrar um novo usuario",
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"type": "object",
-								"$ref": "#/components/schemas/Cadastrar"
-							}
-						}
+				"consumes": ["application/json"],
+				"produces": ["application/json"],
+				"parameters": [
+					{
+						"name": "nome",
+						"in": "path",
+						"description": "Nome do usuário",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "email",
+						"in": "path",
+						"description": "E-mail do usuário",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "senha",
+						"in": "path",
+						"description": "Senha do usuário",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "nascimento",
+						"in": "path",
+						"description": "Ano de nascimento do usuário",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "imagem",
+						"in": "formData",
+						"description": "Imagem de perfil",
+						"required": false,
+						"type": "file"
+					},
+					{
+						"name": "imagem banner",
+						"in": "formData",
+						"description": "Capa de perfil do usuário",
+						"required": false,
+						"type": "file"
 					}
-				},
+				],
+				
 				"responses": {
 					"200": {
-						"description": "Validas",
+						"description": "Sucesso",
 						"schema": {
 							"type": "object",
 
