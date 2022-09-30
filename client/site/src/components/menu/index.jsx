@@ -18,6 +18,7 @@ export default function Index({ ativo, alterar }) {
 	const [amigos, setAmigos] = useState([]);
 
 	function logout() {
+		document.body.style.overflow = "unset";
 		localStorage.remove("user");
 		toast.success("Logout feito com sucesso!");
 		navigate("/");
@@ -68,9 +69,25 @@ export default function Index({ ativo, alterar }) {
 			<main className={(ativo && "comp-menu-ativo") + " comp-menu"}>
 				<section className="comp-menu-config">
 					<div>
-						<img src="/assets/icons/search-light.svg" alt="Pesquisa" title="Pesquisa" onClick={() => navigate("/pesquisa")} />
+						<img
+							src="/assets/icons/search-light.svg"
+							alt="Pesquisa"
+							title="Pesquisa"
+							onClick={() => {
+								document.body.style.overflow = "unset";
+								navigate("/pesquisa");
+							}}
+						/>
 						<img src="/assets/icons/create.svg" alt="Criar comunidade" title="Criar comunidade" onClick={() => setComunidadeModal(!comunidadeModal)} />
-						<img src="/assets/icons/edit.svg" alt="Configurações" title="Configurações" />
+						<img
+							src="/assets/icons/edit.svg"
+							alt="Configurações"
+							title="Configurações"
+							onClick={() => {
+								document.body.style.overflow = "unset";
+								navigate("/settings");
+							}}
+						/>
 						<img src="/assets/icons/exit.svg" alt="Sair" title="Sair" onClick={() => logout()} />
 						<hr />
 						<img
@@ -78,7 +95,10 @@ export default function Index({ ativo, alterar }) {
 							alt="Usuário"
 							title={user.nome ?? "Usuário"}
 							className="comp-menu-img-user"
-							onClick={() => navigate(`/usuario/${user.id}`)}
+							onClick={() => {
+								document.body.style.overflow = "unset";
+								navigate(`/usuario/${user.id}`);
+							}}
 						/>
 					</div>
 				</section>

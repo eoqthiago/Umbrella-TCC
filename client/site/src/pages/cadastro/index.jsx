@@ -81,7 +81,7 @@ const Index = () => {
 			<main>
 				<div className="cadastro-titulos">
 					<Titulo cor="#02C17D" fonte="4vw">
-						cadastro
+						Cadastro
 					</Titulo>
 					<SubTitulo cor="#3F3F3F" fonte="2.5vw">
 						Seja bem-vindo!

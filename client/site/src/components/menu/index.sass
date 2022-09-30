@@ -37,7 +37,21 @@
         align-items: center
         flex-flow: column nowrap
         padding-top: 5em
+        overflow-y: auto
+
+        &::-webkit-scrollbar 
+            width: 6px
+
+        &::-webkit-scrollbar-track 
+            background: #EEEFF0
         
+        &::-webkit-scrollbar-thumb 
+            background: #9e9e9e
+            border-radius: 4px
+
+        &::-webkit-scrollbar-thumb:hover
+            background: #919191
+
         > div
             align-self: flex-start
             font-family: Roboto-regular

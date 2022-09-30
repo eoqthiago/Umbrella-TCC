@@ -4,7 +4,6 @@ const Titulo = styled.h1`
 	font-weigth: 800;
 	font-size: clamp(25px, ${(props) => props.fonte}, 35px);
 	line-height: 35px;
-	text-transform: uppercase;
 	color: ${(props) => props.cor || "#fff"};
 	font-family: "OpenSans-bold", sans;
 `;

@@ -81,6 +81,7 @@ server.post("/usuario/login", async (req, res) => {
 		res.status(202).send({
 			id: answer.id,
 			nome: answer.nome,
+			email: answer.email,
 			token: token,
 		});
 	} catch (err) {
