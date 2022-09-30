@@ -70,7 +70,7 @@ export default function Index({ ativo, alterar }) {
 					<div>
 						<img src="/assets/icons/search-light.svg" alt="Pesquisa" title="Pesquisa" onClick={() => navigate("/pesquisa")} />
 						<img src="/assets/icons/create.svg" alt="Criar comunidade" title="Criar comunidade" onClick={() => setComunidadeModal(!comunidadeModal)} />
-						<img src="/assets/icons/edit.svg" alt="Configurações" title="Configurações" />
+						<img src="/assets/icons/edit.svg" alt="Configurações" title="Configurações" onClick={() => navigate("/settings")} />
 						<img src="/assets/icons/exit.svg" alt="Sair" title="Sair" onClick={() => logout()} />
 						<hr />
 						<img
