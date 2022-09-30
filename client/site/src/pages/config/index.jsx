@@ -1,5 +1,6 @@
 import React from "react";
 import Header from "../../components/header";
+import localStorage from "local-storage";
 import { BotaoSolido, Titulo } from "../../styled";
 import "./index.sass";
 
@@ -13,8 +14,8 @@ const Index = () => {
 						Minha conta
 					</Titulo>
 					<div>
-						<li>ID de usuário: </li>
-						<li>Email: </li>
+						<li>ID de usuário: {localStorage("user").id ?? ""}</li>
+						<li>Email: {localStorage("user").email ?? ""}</li>
 						<li>Senha: *********</li>
 					</div>
 					<div>
