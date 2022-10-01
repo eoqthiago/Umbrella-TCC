@@ -1,18 +1,38 @@
 .comp-modal-menu
-    width: 100vw
-    height: 100vh
+    background-color: #1ca179
     position: fixed
+    z-index: 5
+    width: 200px
+    height: fit-content
     display: none
-    z-index: 4
-    top: 0
-    left: 0
+    border-radius: 10px
+    color: #fff
+    font-family: OpenSans-medium
+    font-size: 15px
+    overflow: hidden
+    user-select: none
+    -webkit-user-drag: none
+    box-shadow: 0px 1px 10px 3px #00000023
 
-    > main
-        background-color: gray
-        position: fixed
-        z-index: 5
-        width: 200px
-        height: 250px
+    > div
+        width: 100%
+        padding: 10px 8px
+        display: inline-flex
+        align-items: center
+        gap: 5px
+        cursor: pointer
+
+        &:hover
+            background-color: #32ad89
+
+        &:nth-child(1)
+            font-weight: 700
+            background: #1b8d6b !important
+            user-select: text
+            cursor: default
+
+        > img
+            width: 20px
 
 .comp-modal-menu-ativo
-    display: block
+    display: block !important

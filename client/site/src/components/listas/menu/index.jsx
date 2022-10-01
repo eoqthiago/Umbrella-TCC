@@ -5,7 +5,7 @@ import "./index.sass";
 const Index = ({ item, selecionado, convMenu }) => {
 	return (
 		<div
-			className={"comp-lista-menu " + ((selecionado || convMenu.ativo) && "comp-lista-menu-selecionado")}
+			className={"comp-lista-menu " + (selecionado && "comp-lista-menu-selecionado")}
 			onMouseDownCapture={(e) => {
 				if (e.button === 2) {
 					convMenu.setSelecionada(item);
