@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import localStorage from "local-storage";
 import { toast } from "react-toastify";
@@ -6,6 +6,7 @@ import { useJwt } from "react-jwt";
 import { userAmigosConsulta, userComunidadesConsulta, userConsulta } from "../../api/userApi";
 import { BuscarImg } from "../../api/services";
 import CadastrarComunidade from "../modals/cadastrarComunidade";
+import MenuListaModal from "../modals/menu";
 import ListaMenu from "../listas/menu";
 import "./index.sass";
 
@@ -16,6 +17,26 @@ export default function Index({ ativo, alterar }) {
 	const [comunidadeModal, setComunidadeModal] = useState(false);
 	const [comunidades, setComunidades] = useState([]);
 	const [amigos, setAmigos] = useState([]);
+	const [pos, setPos] = useState({ x: 0, y: 0 });
+	const [convModal, setConvModal] = useState(false);
+	const [coSelec, setCoSelec] = useState(null);
+	const [modalTipo, setModalTipo] = useState("");
+	const modalRef = useRef();
+
+	function openModal() {
+		setConvModal(true);
+		document.body.addEventListener("click", closeModal);
+	}
+
+	function closeModal(e) {
+		e.stopPropagation();
+		const contain = modalRef.current.contains(e.target);
+		if (!contain) {
+			setConvModal(false);
+			document.body.removeEventListener("click", closeModal);
+			document.oncontextmenu = document.body.oncontextmenu = () => true;
+		}
+	}
 
 	function logout() {
 		document.body.style.overflow = "unset";
@@ -66,6 +87,7 @@ export default function Index({ ativo, alterar }) {
 	return (
 		<div className={ativo ? "comp-menu-bg" : undefined}>
 			<CadastrarComunidade ativo={comunidadeModal} state={setComunidadeModal} />
+			<MenuListaModal modalRef={modalRef} position={pos} ativo={convModal} setAtivo={setConvModal} selecionada={coSelec} tipo={modalTipo} />
 			<main className={(ativo && "comp-menu-ativo") + " comp-menu"}>
 				<section className="comp-menu-config">
 					<div>
@@ -103,19 +125,31 @@ export default function Index({ ativo, alterar }) {
 					</div>
 				</section>
 				<section className="comp-menu-chats">
-					<button className="comp-menu-exit" onClick={() => alterar(!ativo)} />
+					<button className="comp-menu-exit" onClick={() => alterar(false)} />
 
 					<div>Comunidades</div>
 					<section>
 						{comunidades.map((item) => (
-							<ListaMenu item={item} />
+							<ListaMenu
+								tipo="comunidade"
+								setTipo={setModalTipo}
+								item={item}
+								convMenu={{ ativo: convModal, open: openModal, pos: pos, setPos: setPos, selecionada: coSelec, setSelecionada: setCoSelec }}
+								key={item.id}
+							/>
 						))}
 					</section>
 
 					<div>Amizades</div>
 					<section>
 						{amigos.map((item) => (
-							<ListaMenu item={item} />
+							<ListaMenu
+								tipo="usuario"
+								setTipo={setModalTipo}
+								item={item}
+								convMenu={{ ativo: convModal, open: openModal, pos: pos, setPos: setPos, selecionada: coSelec, setSelecionada: setCoSelec }}
+								key={item.id}
+							/>
 						))}
 					</section>
 				</section>
