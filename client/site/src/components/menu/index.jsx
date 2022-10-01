@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import localStorage from "local-storage";
 import { toast } from "react-toastify";
@@ -20,6 +20,22 @@ export default function Index({ ativo, alterar }) {
 	const [pos, setPos] = useState({ x: 0, y: 0 });
 	const [convModal, setConvModal] = useState(false);
 	const [coSelec, setCoSelec] = useState(null);
+	const modalRef = useRef();
+
+	function openModal() {
+		setConvModal(true);
+		document.body.addEventListener("click", closeModal);
+	}
+
+	function closeModal(e) {
+		e.stopPropagation();
+		const contain = modalRef.current.contains(e.target);
+		if (!contain) {
+			setConvModal(false);
+			document.body.removeEventListener("click", closeModal);
+			document.oncontextmenu = document.body.oncontextmenu = () => true;
+		}
+	}
 
 	function logout() {
 		document.body.style.overflow = "unset";
@@ -70,7 +86,7 @@ export default function Index({ ativo, alterar }) {
 	return (
 		<div className={ativo ? "comp-menu-bg" : undefined}>
 			<CadastrarComunidade ativo={comunidadeModal} state={setComunidadeModal} />
-			<MenuListaModal position={pos} ativo={convModal} setAtivo={setConvModal} selecionada={coSelec} onClick={(e) => console.log("clica")} />
+			<MenuListaModal modalRef={modalRef} position={pos} ativo={convModal} setAtivo={setConvModal} selecionada={coSelec} />
 			<main className={(ativo && "comp-menu-ativo") + " comp-menu"}>
 				<section className="comp-menu-config">
 					<div>
@@ -113,14 +129,14 @@ export default function Index({ ativo, alterar }) {
 					<div>Comunidades</div>
 					<section>
 						{comunidades.map((item) => (
-							<ListaMenu item={item} convMenu={{ ativo: convModal, setAtivo: setConvModal, pos: pos, setPos: setPos, selecionada: coSelec, setSelecionada: setCoSelec }} key={item.id} />
+							<ListaMenu item={item} convMenu={{ ativo: convModal, open: openModal, pos: pos, setPos: setPos, selecionada: coSelec, setSelecionada: setCoSelec }} key={item.id} />
 						))}
 					</section>
 
 					<div>Amizades</div>
 					<section>
 						{amigos.map((item) => (
-							<ListaMenu item={item} convMenu={{ ativo: convModal, setAtivo: setConvModal, pos: pos, setPos: setPos, selecionada: coSelec, setSelecionada: setCoSelec }} key={item.id} />
+							<ListaMenu item={item} convMenu={{ ativo: convModal, open: openModal, pos: pos, setPos: setPos, selecionada: coSelec, setSelecionada: setCoSelec }} key={item.id} />
 						))}
 					</section>
 				</section>
