@@ -1,15 +1,21 @@
 .inputs
      display: flex
+     align-items: center
+     justify-content: center
+     width: 100%
+     height: 100%
+     margin-top: -5em
+    
 
 .input-texto
     height: 45px
-    width: 80vh
+    width: 70%
     border-radius: 25px
     background-color: #B8B8B8
     outline-color: none
-    margin-bottom: 4em
     border: none
     padding: 5px 10px
+
 
     &:focus 
          outline-color: #505050
@@ -19,5 +25,14 @@
      font-family: Roboto-medium
      font-size: 15px
 
-.input-imagem
-   
+.img-enviar
+     cursor: pointer
+     margin: 1em
+
+#imagem
+    visibility: hidden
+    position: absolute
+
+.imagem
+     margin: 1em
+          

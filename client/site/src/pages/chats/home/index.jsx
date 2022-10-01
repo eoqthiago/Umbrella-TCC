@@ -8,13 +8,13 @@ const Index = () => {
 	const [menu, setMenu] = useState(false);
 	return (
 		<div>
-		<div className="initial page ">
-			<Header menu alterarMenu={setMenu} estadoMenu={menu} />
-			<Menu ativo={menu} alterar={setMenu} />
-		</div>
-		<div className="input">
-		<Input/>
-		</div>
+			<div className="initial page ">
+				<Header menu alterarMenu={setMenu} estadoMenu={menu} />
+				<Menu ativo={menu} alterar={setMenu} />
+			</div>
+				<div className="input">
+					<Input/>
+				</div>
 		</div>
 	);
 };
