@@ -9,10 +9,9 @@
     color: #fff
     font-family: OpenSans-medium
     font-size: 15px
-    overflow: hidden
     user-select: none
     -webkit-user-drag: none
-    box-shadow: 0px 1px 10px 3px #00000023
+    box-shadow: 0 0 10px 1px #00000036
 
     > div
         width: 100%
@@ -26,13 +25,29 @@
             background-color: #32ad89
 
         &:nth-child(1)
+            border-radius: 0 10px 0 0
             font-weight: 700
             background: #1b8d6b !important
             user-select: text
             cursor: default
 
+        &:nth-last-child(-n + 1)
+            border-radius: 0 0 10px 10px            
+
         > img
             width: 20px
+
+    .comp-modal-menu-pointer
+        position: absolute
+        top: 0
+        left: -15px
+        width: 0
+        height: 0
+        border-left: 15px solid transparent
+        border-top: 15px solid #1b8d6b
+        cursor: default
+        z-index: 4 !important
+        background: none !important
 
 .comp-modal-menu-ativo
     display: block !important

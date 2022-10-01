@@ -11,6 +11,7 @@ const Index = ({ ativo, position, selecionada, modalRef, tipo }) => {
 			}}
 			ref={modalRef}>
 			<div>{selecionada ? selecionada.nome : ""}</div>
+			<div className="comp-modal-menu-pointer" />
 			<div>
 				<img src="/assets/icons/talk.svg" alt="Conversar" />
 				Conversar
