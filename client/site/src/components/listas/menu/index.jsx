@@ -2,12 +2,13 @@ import React from "react";
 import { BuscarImg } from "../../../api/services";
 import "./index.sass";
 
-const Index = ({ item, selecionado, convMenu }) => {
+const Index = ({ item, selecionado, convMenu, tipo, setTipo }) => {
 	return (
 		<div
 			className={"comp-lista-menu " + (selecionado && "comp-lista-menu-selecionado")}
 			onMouseDownCapture={(e) => {
 				if (e.button === 2) {
+					setTipo(tipo);
 					convMenu.setSelecionada(item);
 					convMenu.setPos({ x: e.clientX, y: e.clientY });
 					convMenu.open();

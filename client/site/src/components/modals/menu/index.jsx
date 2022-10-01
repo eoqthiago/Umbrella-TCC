@@ -1,7 +1,7 @@
 import React from "react";
 import "./index.sass";
 
-const Index = ({ ativo, position, selecionada, modalRef }) => {
+const Index = ({ ativo, position, selecionada, modalRef, tipo }) => {
 	return (
 		<span
 			className={"comp-modal-menu " + (ativo ? "comp-modal-menu-ativo" : "")}
@@ -12,17 +12,27 @@ const Index = ({ ativo, position, selecionada, modalRef }) => {
 			ref={modalRef}>
 			<div>{selecionada ? selecionada.nome : ""}</div>
 			<div>
-				<img src="/assets/icons/config.svg" alt="Configurar" /> Configurar
+				<img src="/assets/icons/talk.svg" alt="Conversar" />
+				Conversar
 			</div>
-			<div>
-				<img src="/assets/icons/removeFriend.svg" alt="Remover Amizade" /> Desfazer Amizade
-			</div>
+			{tipo === "comunidade" && (
+				<div>
+					<img src="/assets/icons/config.svg" alt="Configurar" /> Configurar
+				</div>
+			)}
+			{tipo === "usuario" && (
+				<div>
+					<img src="/assets/icons/removeFriend.svg" alt="Remover Amizade" /> Desfazer Amizade
+				</div>
+			)}
 			<div>
 				<img src="/assets/icons/danger.svg" alt="Reportar" /> Reportar
 			</div>
-			<div>
-				<img src="/assets/icons/exit.svg" alt="Sair" /> Sair
-			</div>
+			{tipo === "comunidade" && (
+				<div>
+					<img src="/assets/icons/exit.svg" alt="Sair" /> Sair
+				</div>
+			)}
 		</span>
 	);
 };

@@ -20,6 +20,7 @@ export default function Index({ ativo, alterar }) {
 	const [pos, setPos] = useState({ x: 0, y: 0 });
 	const [convModal, setConvModal] = useState(false);
 	const [coSelec, setCoSelec] = useState(null);
+	const [modalTipo, setModalTipo] = useState("");
 	const modalRef = useRef();
 
 	function openModal() {
@@ -86,7 +87,7 @@ export default function Index({ ativo, alterar }) {
 	return (
 		<div className={ativo ? "comp-menu-bg" : undefined}>
 			<CadastrarComunidade ativo={comunidadeModal} state={setComunidadeModal} />
-			<MenuListaModal modalRef={modalRef} position={pos} ativo={convModal} setAtivo={setConvModal} selecionada={coSelec} />
+			<MenuListaModal modalRef={modalRef} position={pos} ativo={convModal} setAtivo={setConvModal} selecionada={coSelec} tipo={modalTipo} />
 			<main className={(ativo && "comp-menu-ativo") + " comp-menu"}>
 				<section className="comp-menu-config">
 					<div>
@@ -129,14 +130,26 @@ export default function Index({ ativo, alterar }) {
 					<div>Comunidades</div>
 					<section>
 						{comunidades.map((item) => (
-							<ListaMenu item={item} convMenu={{ ativo: convModal, open: openModal, pos: pos, setPos: setPos, selecionada: coSelec, setSelecionada: setCoSelec }} key={item.id} />
+							<ListaMenu
+								tipo="comunidade"
+								setTipo={setModalTipo}
+								item={item}
+								convMenu={{ ativo: convModal, open: openModal, pos: pos, setPos: setPos, selecionada: coSelec, setSelecionada: setCoSelec }}
+								key={item.id}
+							/>
 						))}
 					</section>
 
 					<div>Amizades</div>
 					<section>
 						{amigos.map((item) => (
-							<ListaMenu item={item} convMenu={{ ativo: convModal, open: openModal, pos: pos, setPos: setPos, selecionada: coSelec, setSelecionada: setCoSelec }} key={item.id} />
+							<ListaMenu
+								tipo="usuario"
+								setTipo={setModalTipo}
+								item={item}
+								convMenu={{ ativo: convModal, open: openModal, pos: pos, setPos: setPos, selecionada: coSelec, setSelecionada: setCoSelec }}
+								key={item.id}
+							/>
 						))}
 					</section>
 				</section>
