@@ -66,23 +66,21 @@ export async function communityOwner(userId, communityId) {
 
 // Consultar comunidade por ID
 export async function communityId(id) {
-	const command = `
-		SELECT
-		id_comunidade id,
-		nm_comunidade nome,
-		ds_comunidade descricao,
-		img_comunidade imagem,
-		img_banner banner,
-		bt_publica publica,
-		dt_criacao dataCriacao,
-		id_criador criador,
-		(select count(id_usuario) 
-			from tb_usuario_comunidade 
-			inner join tb_comunidade 
-			on tb_usuario_comunidade.id_usuario_comunidade = tb_comunidade.id_comunidade
-			where tb_usuario_comunidade.id_comunidade = ?) qtdUsuarios
-	FROM tb_comunidade
-	WHERE 	id_comunidade = ?;`;
+	const command = `SELECT		id_comunidade 	as	id,
+								nm_comunidade 	as	nome,
+								ds_comunidade 	as	descricao,
+								img_comunidade 	as	imagem,
+								img_banner 		as	banner,
+								bt_publica 		as	publica,
+								dt_criacao 		as	dataCriacao,
+								id_criador 		as	criador,
+					(SELECT COUNT(*)
+					FROM tb_usuario_comunidade
+					INNER JOIN tb_comunidade 
+					ON tb_usuario_comunidade.id_comunidade = tb_comunidade.id_comunidade
+					WHERE tb_usuario_comunidade.id_comunidade = ?) as qtd_usuarios
+					FROM tb_comunidade
+					WHERE 	id_comunidade = ?`;
 	const [answer] = await con.query(command, [id, id]);
 	return answer[0];
 }
