@@ -84,6 +84,9 @@ export default function Index({ ativo, alterar }) {
 				const r = await userComunidadesConsulta(localStorage("user").id);
 				setComunidades(r);
 			} catch (err) {}
+			setTimeout(() => {
+				consultasMenu();
+			}, 10000);
 		}
 		consultasMenu();
 	}, []);

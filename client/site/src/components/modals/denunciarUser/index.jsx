@@ -48,10 +48,10 @@ const Index = ({ ativo, state, info }) => {
 					</div>
 				</section>
 				<section className="comp-modal-denuncia-user-botoes">
-					<BotaoSolido disabled={loading} cor="#f84a4a" fonte="1vw" onClick={exit}>
+					<BotaoSolido disabled={loading} cor="#f84a4a" disBg="#a8a8a8" fonte="1vw" onClick={exit}>
 						Cancelar
 					</BotaoSolido>
-					<BotaoSolido disabled={loading} cor="#929292" fonte="1vw" onClick={handleDenuncia}>
+					<BotaoSolido disabled={loading} cor="#929292" disBg="#a8a8a8" fonte="1vw" onClick={handleDenuncia}>
 						Denunciar
 					</BotaoSolido>
 				</section>

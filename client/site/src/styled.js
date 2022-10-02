@@ -115,7 +115,7 @@ const BotaoSolido = styled.button`
 	}
 
 	&:disabled {
-		background: #51bb8f;
+		background: ${(props) => props.disBg || "#51bb8f"};
 		cursor: not-allowed;
 
 		&:active {

@@ -1,7 +1,21 @@
 import React from "react";
+import { toast } from "react-toastify";
+import { removerAmizade } from "../../../api/userApi";
 import "./index.sass";
 
 const Index = ({ ativo, position, selecionada, modalRef, tipo, user, comunidade, setAtivo }) => {
+	async function handleRemoveAmigo() {
+		try {
+			if (!selecionada.id || tipo !== "usuario") throw new Error("Não foi possível concluir essa operação");
+			const r = await removerAmizade(selecionada.id);
+			if (r !== 204) throw new Error("Não foi possível remover a amizade");
+			toast.warning("Amizade removida");
+		} catch (err) {
+			if (err.response) toast.error(err.response.data.err);
+			else toast.error(err.message);
+		}
+	}
+
 	return (
 		<span
 			className={"comp-modal-menu " + (ativo ? "comp-modal-menu-ativo" : "")}
@@ -22,7 +36,7 @@ const Index = ({ ativo, position, selecionada, modalRef, tipo, user, comunidade,
 				</div>
 			)}
 			{tipo === "usuario" && (
-				<div>
+				<div onClick={() => handleRemoveAmigo()}>
 					<img src="/assets/icons/removeFriend.svg" alt="Remover Amizade" /> Desfazer Amizade
 				</div>
 			)}

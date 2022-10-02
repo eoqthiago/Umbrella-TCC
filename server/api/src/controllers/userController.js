@@ -17,6 +17,7 @@ import {
 	userNameSearch,
 	userComunidadesConsulta,
 	userDenuncia,
+	consultarIdAmizade,
 } from "../repositories/userRepository.js";
 import { emailTest, nameTest } from "../utils/expressionTest.js";
 import multer from "multer";
@@ -294,16 +295,18 @@ server.put("/usuario/amizade", async (req, res) => {
 // Remover amizade
 server.delete("/usuario/amizade", async (req, res) => {
 	try {
-		const { id } = req.query;
+		const query = req.query;
+		let id = Number(query.id);
 		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 		switch (true) {
 			case !header || !auth || !(await userIdSearch(auth.id)):
 				throw new Error("Falha na autenticação");
-			case !id:
+			case !id || !query.type:
 				throw new Error("Campos inválidos");
 		}
-		const answer = await removerAmizade(Number(id), auth.id);
+		if (query.type === "user") id = await consultarIdAmizade(id, auth.id);
+		const answer = await removerAmizade(id, auth.id);
 		if (answer < 1) throw new Error("Não foi possível desfazer a amizade");
 		res.status(204).send();
 	} catch (err) {

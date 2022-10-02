@@ -168,3 +168,12 @@ export async function userDenuncia(idUsuario, email, idReportado, motivo) {
 	const [answer] = await con.query(command, [idUsuario, email, idReportado, motivo]);
 	return answer.affectedRows;
 }
+
+export async function consultarIdAmizade(idUsuario, idUsuarioB) {
+	const command = `
+		select id_usuario_amizade 
+		from tb_usuario_amizade
+		where (id_solicitante = ? and id_solicitado = ?) or (id_solicitado = ? and id_solicitante = ?) `;
+	const [answer] = await con.query(command, [idUsuario, idUsuarioB, idUsuario, idUsuarioB]);
+	return answer[0].id_usuario_amizade;
+}
