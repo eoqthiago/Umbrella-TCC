@@ -50,3 +50,30 @@ export async function userComunidadesConsulta(id) {
 	});
 	return r.data;
 }
+
+export async function userReport(id, email, motivo) {
+	if (!userToken) return;
+	const r = await api.post(
+		`/usuario/${id}/denuncia`,
+		{
+			email: email,
+			motivo: motivo,
+		},
+		{
+			headers: {
+				"x-access-token": userToken,
+			},
+		}
+	);
+	return r.status;
+}
+
+export async function removerAmizade(id) {
+	if (!userToken || !id) return;
+	const r = await api.delete(`/usuario/amizade?id=${id}&type=user`, {
+		headers: {
+			"x-access-token": userToken,
+		},
+	});
+	return r.status;
+}

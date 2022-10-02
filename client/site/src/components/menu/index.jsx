@@ -8,6 +8,8 @@ import { BuscarImg } from "../../api/services";
 import CadastrarComunidade from "../modals/cadastrarComunidade";
 import MenuListaModal from "../modals/menu";
 import ListaMenu from "../listas/menu";
+import UserDenuncia from "../modals/denunciarUser";
+import ComunidadeDenuncia from "../modals/denunciarComunidade";
 import "./index.sass";
 
 export default function Index({ ativo, alterar }) {
@@ -21,6 +23,8 @@ export default function Index({ ativo, alterar }) {
 	const [convModal, setConvModal] = useState(false);
 	const [coSelec, setCoSelec] = useState(null);
 	const [modalTipo, setModalTipo] = useState("");
+	const [denunciaUser, setDenunciaUser] = useState(false);
+	const [denunciaComunidade, setDenunciaComunidade] = useState(false);
 	const modalRef = useRef();
 
 	function openModal() {
@@ -33,6 +37,7 @@ export default function Index({ ativo, alterar }) {
 		const contain = modalRef.current.contains(e.target);
 		if (!contain) {
 			setConvModal(false);
+			setCoSelec(null);
 			document.body.removeEventListener("click", closeModal);
 			document.oncontextmenu = document.body.oncontextmenu = () => true;
 		}
@@ -80,14 +85,29 @@ export default function Index({ ativo, alterar }) {
 				const r = await userComunidadesConsulta(localStorage("user").id);
 				setComunidades(r);
 			} catch (err) {}
+			setTimeout(() => {
+				consultasMenu();
+			}, 10000);
 		}
 		consultasMenu();
 	}, []);
 
 	return (
 		<div className={ativo ? "comp-menu-bg" : undefined}>
+			<UserDenuncia ativo={denunciaUser} state={setDenunciaUser} info={coSelec} />
+			<ComunidadeDenuncia ativo={denunciaComunidade} state={setDenunciaComunidade} info={coSelec} />
 			<CadastrarComunidade ativo={comunidadeModal} state={setComunidadeModal} />
-			<MenuListaModal modalRef={modalRef} position={pos} ativo={convModal} setAtivo={setConvModal} selecionada={coSelec} tipo={modalTipo} />
+			<MenuListaModal
+				modalRef={modalRef}
+				position={pos}
+				ativo={convModal}
+				setAtivo={setConvModal}
+				selecionada={coSelec}
+				tipo={modalTipo}
+				user={{ userDenuncia: denunciaUser, setUserDenuncia: setDenunciaUser }}
+				comunidade={{ comDenuncia: denunciaComunidade, setComDenuncia: setDenunciaComunidade }}
+			/>
+
 			<main className={(ativo && "comp-menu-ativo") + " comp-menu"}>
 				<section className="comp-menu-config">
 					<div>
@@ -102,7 +122,7 @@ export default function Index({ ativo, alterar }) {
 						/>
 						<img src="/assets/icons/create.svg" alt="Criar comunidade" title="Criar comunidade" onClick={() => setComunidadeModal(!comunidadeModal)} />
 						<img
-							src="/assets/icons/edit.svg"
+							src="/assets/icons/config.svg"
 							alt="Configurações"
 							title="Configurações"
 							onClick={() => {
@@ -136,6 +156,7 @@ export default function Index({ ativo, alterar }) {
 								item={item}
 								convMenu={{ ativo: convModal, open: openModal, pos: pos, setPos: setPos, selecionada: coSelec, setSelecionada: setCoSelec }}
 								key={item.id}
+								selecionado={coSelec}
 							/>
 						))}
 					</section>

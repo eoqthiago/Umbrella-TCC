@@ -57,3 +57,20 @@ export async function pesquisar(categoria, conteudo) {
 	}
 	return r.data;
 }
+
+export async function communityReport(id, email, motivo) {
+	if (!userToken) return;
+	const r = await api.post(
+		`/comunidade/${id}/denuncia`,
+		{
+			email: email,
+			motivo: motivo,
+		},
+		{
+			headers: {
+				"x-access-token": userToken,
+			},
+		}
+	);
+	return r.status;
+}
