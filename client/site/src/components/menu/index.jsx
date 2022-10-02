@@ -37,6 +37,7 @@ export default function Index({ ativo, alterar }) {
 		const contain = modalRef.current.contains(e.target);
 		if (!contain) {
 			setConvModal(false);
+			setCoSelec(null);
 			document.body.removeEventListener("click", closeModal);
 			document.oncontextmenu = document.body.oncontextmenu = () => true;
 		}
@@ -155,6 +156,7 @@ export default function Index({ ativo, alterar }) {
 								item={item}
 								convMenu={{ ativo: convModal, open: openModal, pos: pos, setPos: setPos, selecionada: coSelec, setSelecionada: setCoSelec }}
 								key={item.id}
+								selecionado={coSelec}
 							/>
 						))}
 					</section>
