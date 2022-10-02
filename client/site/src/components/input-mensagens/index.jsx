@@ -3,9 +3,7 @@ import { useState } from 'react';
 
 export default function Index(){
     const abrirInput = () => document.getElementById("imagem").click();
-
-
-
+    
     return(
         <section className="inputs">
             <img className='imagem' src= "/assets/icons/imagem.svg"  onClick={() => abrirInput()}/>
