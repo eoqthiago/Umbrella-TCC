@@ -1,7 +1,7 @@
 import React from "react";
 import "./index.sass";
 
-const Index = ({ ativo, position, selecionada, modalRef, tipo }) => {
+const Index = ({ ativo, position, selecionada, modalRef, tipo, user, comunidade }) => {
 	return (
 		<span
 			className={"comp-modal-menu " + (ativo ? "comp-modal-menu-ativo" : "")}
@@ -26,7 +26,7 @@ const Index = ({ ativo, position, selecionada, modalRef, tipo }) => {
 					<img src="/assets/icons/removeFriend.svg" alt="Remover Amizade" /> Desfazer Amizade
 				</div>
 			)}
-			<div>
+			<div onClick={() => tipo === "comunidade" ? comunidade.setComDenuncia(!comunidade.comDenuncia) : user.setUserDenuncia(!user.userDenuncia)} >
 				<img src="/assets/icons/danger.svg" alt="Reportar" /> Reportar
 			</div>
 			{tipo === "comunidade" && (

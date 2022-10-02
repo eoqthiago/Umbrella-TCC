@@ -8,6 +8,8 @@ import { BuscarImg } from "../../api/services";
 import CadastrarComunidade from "../modals/cadastrarComunidade";
 import MenuListaModal from "../modals/menu";
 import ListaMenu from "../listas/menu";
+import UserDenuncia from "../modals/denunciarUser";
+import ComunidadeDenuncia from "../modals/denunciarComunidade";
 import "./index.sass";
 
 export default function Index({ ativo, alterar }) {
@@ -21,6 +23,8 @@ export default function Index({ ativo, alterar }) {
 	const [convModal, setConvModal] = useState(false);
 	const [coSelec, setCoSelec] = useState(null);
 	const [modalTipo, setModalTipo] = useState("");
+	const [denunciaUser, setDenunciaUser] = useState(false);
+	const [denunciaComunidade, setDenunciaComunidade] = useState(false);
 	const modalRef = useRef();
 
 	function openModal() {
@@ -60,7 +64,7 @@ export default function Index({ ativo, alterar }) {
 			try {
 				const r = await userConsulta(localStorage("user").id);
 				setUser(r);
-			} catch (err) {}
+			} catch (err) { }
 		}
 		consultarUsuario();
 	}, []);
@@ -75,19 +79,31 @@ export default function Index({ ativo, alterar }) {
 			try {
 				const r = await userAmigosConsulta(localStorage("user").id);
 				setAmigos(r);
-			} catch (err) {}
+			} catch (err) { }
 			try {
 				const r = await userComunidadesConsulta(localStorage("user").id);
 				setComunidades(r);
-			} catch (err) {}
+			} catch (err) { }
 		}
 		consultasMenu();
 	}, []);
 
 	return (
 		<div className={ativo ? "comp-menu-bg" : undefined}>
+			<UserDenuncia ativo={denunciaUser} state={setDenunciaUser} />
+			<ComunidadeDenuncia ativo={denunciaComunidade} state={setDenunciaComunidade} />
 			<CadastrarComunidade ativo={comunidadeModal} state={setComunidadeModal} />
-			<MenuListaModal modalRef={modalRef} position={pos} ativo={convModal} setAtivo={setConvModal} selecionada={coSelec} tipo={modalTipo} />
+			<MenuListaModal
+				modalRef={modalRef}
+				position={pos}
+				ativo={convModal}
+				setAtivo={setConvModal}
+				selecionada={coSelec}
+				tipo={modalTipo}
+				user={{ userDenuncia: denunciaUser, setUserDenuncia: setDenunciaUser }}
+				comunidade={{ comDenuncia: denunciaComunidade, setComDenuncia: setDenunciaComunidade }}
+			/>
+
 			<main className={(ativo && "comp-menu-ativo") + " comp-menu"}>
 				<section className="comp-menu-config">
 					<div>
