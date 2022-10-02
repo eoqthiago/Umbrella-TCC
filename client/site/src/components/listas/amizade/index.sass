@@ -1,0 +1,66 @@
+.comp-lista-amizade
+    list-style: none
+    background-color: #fff
+    width: 90vw
+    max-width: 550px
+    height: 65px
+    border: 1px solid #c0c0c0
+    border-radius: 10px
+    display: flex
+    flex-flow: row nowrap
+    align-items: center
+    padding: 0 15px
+    gap: 10px
+
+    > img
+        width: 45px
+        height: 45px
+        cursor: pointer
+        -webkit-user-drag: none
+
+    > div
+        display: flex
+        flex-flow: row nowrap
+        justify-content: space-between
+        align-items: center
+        width: 100%
+
+        > span
+            font-size: 17px       
+            color: #222222
+            text-overflow: ellipsis
+            word-break: break-all
+            word-wrap: break-word
+            cursor: pointer
+            max-width: 85%
+
+        > div
+            display: flex
+            flex-flow: row nowrap
+            align-items: center
+            gap: 10px
+
+            > img
+                width: 30px
+                height: 30px
+
+            > button
+                border: 2px solid #63bb80
+                color: #63bb80
+                padding: 3px 15px
+                font-family: Roboto-medium
+                font-size: 15px
+                background: none
+                border-radius: 10px
+                transition: ease-in-out .1s
+
+                &:hover
+                    color: #fff
+                    background: #63bb80
+
+                &:active
+                    transform: scale(1.05)
+
+            > *
+                cursor: pointer
+                -webkit-user-drag: none
