@@ -160,3 +160,11 @@ export async function removerAmizade(idAmizade, idUsuario) {
 	const [answer] = await con.query(command, [idAmizade, idUsuario, idUsuario]);
 	return answer.affectedRows;
 }
+
+export async function userDenuncia(idUsuario, email, idReportado, motivo) {
+	const command = `
+		insert into tb_usuario_report (id_usuario, ds_email, id_usuario_reportado, ds_report)
+							     values (?, ?, ?, ?) `;
+	const [answer] = await con.query(command, [idUsuario, email, idReportado, motivo]);
+	return answer.affectedRows;
+}

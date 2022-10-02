@@ -86,6 +86,9 @@ select 	id_usuario id,
 	from tb_usuario
 	where nm_usuario like '%othierrydaora%';
 
+-- Denunciar usuário
+insert into tb_usuario_report (id_usuario, ds_email, id_usuario_reportado, ds_report)
+							     values (?, ?, ?, ?);
 
 -- *Administrador*
 
