@@ -9,6 +9,7 @@ import Recuperar from "./pages/recuperar-senha/page-inicial-recuperar";
 import RecuperarCodigo from "./pages/recuperar-senha/recuperar-senha-codigo";
 import Alterar from "./pages/recuperar-senha/senha-nova";
 import Config from "./pages/config";
+import Amizades from "./pages/amizades";
 
 export default function Index() {
 	return (
@@ -23,6 +24,7 @@ export default function Index() {
 				<Route path="/code" exact element={<RecuperarCodigo />} />
 				<Route path="/alterar-senha" exact element={<Alterar />} />
 				<Route path="/settings" exact element={<Config />} />
+				<Route path="/amizades" exact element={<Amizades />} />
 			</Routes>
 		</BrowserRouter>
 	);
