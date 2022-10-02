@@ -11,7 +11,7 @@ export async function communityCreate(id, community) {
 		`;
 	const [r] = await con.query(command, [id, community.nome, community.descricao, community.publica, id]);
 	community.id = r[0].insertId;
-	return community;	
+	return community;
 }
 
 // Inserir imagem da comunidade
@@ -163,4 +163,12 @@ export async function listarCanais(id) {
 	 where id_comunidade =?`;
 	const [r] = await con.query(command, [id]);
 	return r;
+}
+
+export async function communityDenuncia(idUsuario, email, idReportado, motivo) {
+	const command = `
+		insert into tb_comunidade_report (id_usuario, ds_email, id_comunidade, ds_report)
+							     values (?, ?, ?, ?) `;
+	const [answer] = await con.query(command, [idUsuario, email, idReportado, motivo]);
+	return answer.affectedRows;
 }

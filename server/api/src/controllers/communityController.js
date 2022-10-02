@@ -210,32 +210,59 @@ server.get("/comunidade/usuario", async (req, res) => {
 });
 
 // Criar canal
-server.post("/comunidade/canal", async (req ,res) =>{
-	try{
+server.post("/comunidade/canal", async (req, res) => {
+	try {
 		const canal = req.body;
 		const community = req.body;
 		const r = await communityCanal(community, canal);
 		res.status(200).send();
 	} catch (err) {
 		res.status(401).send({
-			err: err.message
+			err: err.message,
 		});
 	}
-})
+});
 
 // Listar canais
-
 server.get("/comunidade/canal/:id", async (req, res) => {
-	try{
-		const { id }= req.params;
-		const r= await listarCanais(id);
+	try {
+		const { id } = req.params;
+		const r = await listarCanais(id);
 		res.status(200).send(r);
-		
-	}catch(err){
+	} catch (err) {
 		res.status(401).send({
-			err: err.message
+			err: err.message,
 		});
 	}
-})
+});
+
+// Denunciar comunidade
+server.post("/comunidade/:id/denuncia", async (req, res) => {
+	try {
+		const id = Number(req.params.id);
+		const user = req.body;
+		const header = req.header("x-access-token");
+		const auth = jwt.decode(header);
+		switch (true) {
+			case !header || !auth || !(await userIdSearch(auth.id)):
+				throw new Error("Falha na autenticação");
+			case !id || !(await communityId(id)):
+				throw new Error("Comunidade não encontrada");
+			case !emailTest(user.email):
+				throw new Error("o email inserido é inválido");
+			case user.motivo == undefined || !user.motivo.trim():
+				throw new Error("O motivo inserido é inválido");
+			case user.motivo.length > 500:
+				throw new Error("Motivo excede a quantidade de caracteres permitida");
+		}
+		const answer = await userDenuncia(auth.id, user.email, id, user.motivo);
+		if (answer < 1) throw new Error("Não foi possível fazer a denúncia");
+		res.status(204).send();
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
 
 export default server;

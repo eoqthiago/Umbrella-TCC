@@ -195,3 +195,7 @@ INSERT INTO
 			  nm_canal as nomecanal 
               from tb_comunidade_canal
               where id_comunidade = 2;
+
+-- Denunciar comunidade
+insert into tb_comunidade_report (id_usuario, ds_email, id_comunidade, ds_report)
+							     values (?, ?, ?, ?);
