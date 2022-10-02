@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { BotaoSolido, Input, InputArea, SubTitulo, Titulo } from "../../../styled";
+import { BotaoSolido, Input, InputArea, Titulo } from "../../../styled";
 import "./index.sass";
 import { toast } from "react-toastify";
 import LoadingBar from "react-top-loading-bar";
@@ -27,7 +27,6 @@ const Index = ({ ativo, state, idComunidade }) => {
 						<Input type="text" placeholder="Seu email" width="100%" value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} />
 						<InputArea type="text" placeholder="Motivo" width="100%" resize="none" height="120px" value={motivo} onChange={(e) => setMotivo(e.target.value)} disabled={loading} />
 					</div>
-
 				</section>
 				<section className="comp-modal-denuncia-comunidade-botoes">
 					<BotaoSolido disabled={loading} cor="#f84a4a" fonte="1vw" onClick={exit}>

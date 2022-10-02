@@ -64,7 +64,7 @@ export default function Index({ ativo, alterar }) {
 			try {
 				const r = await userConsulta(localStorage("user").id);
 				setUser(r);
-			} catch (err) { }
+			} catch (err) {}
 		}
 		consultarUsuario();
 	}, []);
@@ -79,11 +79,11 @@ export default function Index({ ativo, alterar }) {
 			try {
 				const r = await userAmigosConsulta(localStorage("user").id);
 				setAmigos(r);
-			} catch (err) { }
+			} catch (err) {}
 			try {
 				const r = await userComunidadesConsulta(localStorage("user").id);
 				setComunidades(r);
-			} catch (err) { }
+			} catch (err) {}
 		}
 		consultasMenu();
 	}, []);
