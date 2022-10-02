@@ -29,6 +29,7 @@ const Index = () => {
 				break;
 		}
 	}
+	console.log(comunidades)
 
 	return (
 		<div className="pesquisa page ">
@@ -51,8 +52,8 @@ const Index = () => {
 					<img src="/assets/icons/search.svg" alt="Pesquisar" onClick={() => consultar()} />
 				</div>
 				<section>
-					{selecionado === "comunidades" && comunidades.map(item => 
-						<Card nome={item.nm_comunidade} descricao={item.ds_comunidade} imagem={item.img_comunidade} id={item.id_comunidade}/>
+					{selecionado === "comunidades" && comunidades.map(item =>
+						<Card nome={item.nome} descricao={item.descricao} imagem={item.imagem} id={item.id} usuarios={item.qtdUsuarios} />
 					)}
 					{selecionado === "usuarios" && usuarios.map(() => <>Usuarios</>)}
 					{selecionado === "mensagens" && mensagens.map(() => <>Mensagens</>)}
