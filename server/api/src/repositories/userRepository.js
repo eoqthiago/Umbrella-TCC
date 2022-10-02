@@ -177,3 +177,27 @@ export async function consultarIdAmizade(idUsuario, idUsuarioB) {
 	const [answer] = await con.query(command, [idUsuario, idUsuarioB, idUsuario, idUsuarioB]);
 	return answer[0].id_usuario_amizade;
 }
+
+export async function pedidosAmizadeConsulta(id) {
+	const command = `
+		select 
+			id_usuario id,
+			nm_usuario nome,
+			img_usuario imagem
+		from tb_usuario_amizade
+		inner join tb_usuario on tb_usuario_amizade.id_solicitante = tb_usuario.id_usuario
+		where id_solicitado = ? and ds_situacao = 'P';
+		select 
+			id_usuario id,
+			nm_usuario nome,
+			img_usuario imagem
+		from tb_usuario_amizade
+			inner join tb_usuario on tb_usuario_amizade.id_solicitado = tb_usuario.id_usuario
+		where id_solicitante = ? and ds_situacao = 'P'`;
+	let [answer] = await con.query(command, [id, id]);
+	answer = {
+		solicitados: [...answer[0]],
+		solicitacoes: [...answer[1]],
+	};
+	return answer;
+}
