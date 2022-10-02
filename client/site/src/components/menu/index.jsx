@@ -121,7 +121,7 @@ export default function Index({ ativo, alterar }) {
 						/>
 						<img src="/assets/icons/create.svg" alt="Criar comunidade" title="Criar comunidade" onClick={() => setComunidadeModal(!comunidadeModal)} />
 						<img
-							src="/assets/icons/edit.svg"
+							src="/assets/icons/config.svg"
 							alt="Configurações"
 							title="Configurações"
 							onClick={() => {

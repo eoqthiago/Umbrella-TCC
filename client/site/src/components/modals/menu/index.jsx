@@ -32,7 +32,7 @@ const Index = ({ ativo, position, selecionada, modalRef, tipo, user, comunidade,
 			</div>
 			{tipo === "comunidade" && (
 				<div>
-					<img src="/assets/icons/config.svg" alt="Configurar" /> Configurar
+					<img src="/assets/icons/edit.svg" alt="Configurar" /> Configurar
 				</div>
 			)}
 			{tipo === "usuario" && (
