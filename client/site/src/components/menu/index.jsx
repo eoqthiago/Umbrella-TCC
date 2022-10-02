@@ -90,8 +90,8 @@ export default function Index({ ativo, alterar }) {
 
 	return (
 		<div className={ativo ? "comp-menu-bg" : undefined}>
-			<UserDenuncia ativo={denunciaUser} state={setDenunciaUser} />
-			<ComunidadeDenuncia ativo={denunciaComunidade} state={setDenunciaComunidade} />
+			<UserDenuncia ativo={denunciaUser} state={setDenunciaUser} info={coSelec} />
+			<ComunidadeDenuncia ativo={denunciaComunidade} state={setDenunciaComunidade} info={coSelec} />
 			<CadastrarComunidade ativo={comunidadeModal} state={setComunidadeModal} />
 			<MenuListaModal
 				modalRef={modalRef}

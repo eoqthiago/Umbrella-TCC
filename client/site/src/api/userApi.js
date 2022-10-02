@@ -50,3 +50,20 @@ export async function userComunidadesConsulta(id) {
 	});
 	return r.data;
 }
+
+export async function userReport(id, email, motivo) {
+	if (!userToken) return;
+	const r = await api.post(
+		`/usuario/${id}/denuncia`,
+		{
+			email: email,
+			motivo: motivo,
+		},
+		{
+			headers: {
+				"x-access-token": userToken,
+			},
+		}
+	);
+	return r.status;
+}

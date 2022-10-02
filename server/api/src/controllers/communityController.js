@@ -15,8 +15,10 @@ import {
 	communityUsername,
 	communityCanal,
 	listarCanais,
+	communityDenuncia,
 } from "../repositories/comunnityRepository.js";
 import { userIdSearch } from "../repositories/userRepository.js";
+import { emailTest } from "../utils/expressionTest.js";
 
 const server = Router();
 const communityImg = multer({ dest: "storage/communities" });
@@ -255,7 +257,7 @@ server.post("/comunidade/:id/denuncia", async (req, res) => {
 			case user.motivo.length > 500:
 				throw new Error("Motivo excede a quantidade de caracteres permitida");
 		}
-		const answer = await userDenuncia(auth.id, user.email, id, user.motivo);
+		const answer = await communityDenuncia(auth.id, user.email, id, user.motivo);
 		if (answer < 1) throw new Error("Não foi possível fazer a denúncia");
 		res.status(204).send();
 	} catch (err) {
