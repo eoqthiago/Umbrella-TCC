@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 import {
 	aceitarAmizade,
 	amigosConsulta,
-	recusarAmizade,
 	removerAmizade,
 	solicitarAmizade,
 	userCadastro,
@@ -18,6 +17,7 @@ import {
 	userComunidadesConsulta,
 	userDenuncia,
 	consultarIdAmizade,
+	pedidosAmizadeConsulta,
 } from "../repositories/userRepository.js";
 import { emailTest, nameTest } from "../utils/expressionTest.js";
 import multer from "multer";
@@ -278,7 +278,7 @@ server.put("/usuario/amizade", async (req, res) => {
 				answer = await aceitarAmizade(Number(id), auth.id);
 				break;
 			case "N":
-				answer = await recusarAmizade(Number(id), auth.id);
+				answer = await removerAmizade(Number(id));
 				break;
 			default:
 				break;
@@ -302,10 +302,16 @@ server.delete("/usuario/amizade", async (req, res) => {
 		switch (true) {
 			case !header || !auth || !(await userIdSearch(auth.id)):
 				throw new Error("Falha na autenticação");
-			case !id || !query.type:
+			case id === undefined || !query.type:
 				throw new Error("Campos inválidos");
 		}
-		if (query.type === "user") id = await consultarIdAmizade(id, auth.id);
+		if (query.type === "user") {
+			try {
+				id = await consultarIdAmizade(id, auth.id);
+			} catch (err) {
+				throw new Error("Essa amizade não existe");
+			}
+		}
 		const answer = await removerAmizade(id, auth.id);
 		if (answer < 1) throw new Error("Não foi possível desfazer a amizade");
 		res.status(204).send();
@@ -340,6 +346,21 @@ server.post("/usuario/:id/denuncia", async (req, res) => {
 		res.status(204).send();
 	} catch (err) {
 		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
+// Listar pedidos de amizade
+server.get("/usuario/amizades/pedidos", async (req, res) => {
+	try {
+		const header = req.header("x-access-token");
+		const auth = jwt.decode(header);
+		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
+		const answer = await pedidosAmizadeConsulta(auth.id);
+		res.send(answer);
+	} catch (err) {
+		res.status(401).send({
 			err: err.message,
 		});
 	}

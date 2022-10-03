@@ -77,3 +77,28 @@ export async function removerAmizade(id) {
 	});
 	return r.status;
 }
+
+export async function consultarPedidosAmizade() {
+	if (!userToken) return;
+	const r = await api.get("/usuario/amizades/pedidos", {
+		headers: {
+			"x-access-token": userToken,
+		},
+	});
+	return r.data;
+}
+
+export async function acoesAmizade(situacao, id) {
+	if (!userToken || !["A", "N"].includes(situacao) || !id) return;
+	const r = await api.put(
+		`/usuario/amizade?id=${id}&situacao=${situacao}`,
+		{},
+		{
+			headers: {
+				"x-access-token": userToken,
+			},
+		}
+	);
+	return r.status;
+}
+//api.put(`/usuario/amizade?id=${id}&situacao=${situacao}`

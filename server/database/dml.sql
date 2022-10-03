@@ -90,6 +90,24 @@ select 	id_usuario id,
 insert into tb_usuario_report (id_usuario, ds_email, id_usuario_reportado, ds_report)
 							     values (?, ?, ?, ?);
 
+-- Consultar pedidos de amizade
+select 
+			id_usuario_amizade,
+			id_usuario id,
+			nm_usuario nome,
+			img_usuario imagem
+		from tb_usuario_amizade
+		inner join tb_usuario on tb_usuario_amizade.id_solicitante = tb_usuario.id_usuario
+		where id_solicitado = ? and ds_situacao = 'P';
+		select 
+			id_usuario_amizade,
+			id_usuario id,
+			nm_usuario nome,
+			img_usuario imagem
+		from tb_usuario_amizade
+			inner join tb_usuario on tb_usuario_amizade.id_solicitado = tb_usuario.id_usuario
+		where id_solicitante = ? and ds_situacao = 'P'
+
 -- *Administrador*
 
 -- Login
