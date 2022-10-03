@@ -1,0 +1,45 @@
+.comp-users 
+    display: flex
+    flex-direction: row
+    width: 400px
+    height: 55px
+    justify-content: space-between
+    overflow: hidden
+    align-items: center
+    transition: ease .6s
+    cursor: default
+    user-select: none
+    border-radius: 10px
+    border: 1px solid #DBDBDB
+    padding: .6em
+    box-shadow: 0px 1px 27px 0px #00000004
+    transition: .2s ease-out
+    background: #ffffff56
+    &:hover
+        transform: translateY(-3%)
+        transition: .1s ease-in
+
+    > div
+        display: inline-flex
+        flex-direction: row
+        justify-content: space-between
+        align-items: center
+        height: 2.5em
+        width: 8.2em
+
+    > div > img
+        height: 2.5em
+
+    > span 
+        height: 2.1em
+
+    > span > button
+        background: url("../../assets/images/Vector.png") #2CA75D no-repeat .3em
+        align-self: flex-end
+        height: 2.5em
+        width: 2.5em
+        border-radius: .5em 
+        border: none
+        &:active
+            transform: scale(.98)
+

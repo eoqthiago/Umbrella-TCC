@@ -46,9 +46,13 @@ export async function pesquisar(categoria, conteudo) {
 				},
 			});
 			break;
-		// case "usuarios":
-		// 	r = await api.get("");
-		// 	break;
+		case "usuarios":
+			r = await api.get(`/usuarios?nome=${conteudo}`, {
+				headers: {
+					"x-access-token": userToken,
+				},
+			});
+			break;
 		// case "chats":
 		// 	r = await api.get("");
 		// 	break;

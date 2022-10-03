@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Header from "../../../components/header";
 import Menu from "../../../components/menu";
 import Card from "../../../components/card";
+import User from "../../../components/users-components"
 import "./index.sass";
 import { pesquisar } from "../../../api/communityApi";
 
@@ -29,10 +30,8 @@ const Index = () => {
 				break;
 		}
 	}
-	console.log(comunidades)
-
 	return (
-		<div className="pesquisa page ">
+		<div className="pesquisa page">
 			<Header menu alterarMenu={setMenu} estadoMenu={menu} />
 			<Menu ativo={menu} alterar={setMenu} />
 			<main>
@@ -48,14 +47,16 @@ const Index = () => {
 					</nav>
 				</ul>
 				<div className="pesquisa-input">
-					<input type="text" placeholder="Pesquisar" value={pesquisa} onChange={(e) => setPesquisa(e.target.value)} />
+					<input type="text" placeholder="Pesquisar" value={pesquisa} onChange={(e) => setPesquisa(e.target.value)} onKeyDown={(e) => e.key === "Enter" && consultar(pesquisa)}/>
 					<img src="/assets/icons/search.svg" alt="Pesquisar" onClick={() => consultar()} />
 				</div>
 				<section>
 					{selecionado === "comunidades" && comunidades.map(item =>
 						<Card nome={item.nome} descricao={item.descricao} imagem={item.imagem} id={item.id} usuarios={item.qtdUsuarios} />
 					)}
-					{selecionado === "usuarios" && usuarios.map(() => <>Usuarios</>)}
+					{selecionado === "usuarios" && usuarios.map(item =>
+						<User nome={item.nome} imagem={item.imagem} id={item.id} />
+					)}
 					{selecionado === "mensagens" && mensagens.map(() => <>Mensagens</>)}
 				</section>
 			</main>
