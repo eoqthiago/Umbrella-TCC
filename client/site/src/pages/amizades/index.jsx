@@ -21,6 +21,7 @@ const Index = () => {
 				setSolicitacoes(r.solicitacoes);
 				setSolicitados(r.solicitados);
 				setAmigos(s);
+				setTimeout(() => consulta(), 10000);
 			} catch (err) {}
 		}
 		consulta();

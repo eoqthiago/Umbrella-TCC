@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 import {
 	aceitarAmizade,
 	amigosConsulta,
-	recusarAmizade,
 	removerAmizade,
 	solicitarAmizade,
 	userCadastro,
@@ -279,7 +278,7 @@ server.put("/usuario/amizade", async (req, res) => {
 				answer = await aceitarAmizade(Number(id), auth.id);
 				break;
 			case "N":
-				answer = await recusarAmizade(Number(id), auth.id);
+				answer = await removerAmizade(Number(id));
 				break;
 			default:
 				break;

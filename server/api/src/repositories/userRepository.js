@@ -147,17 +147,10 @@ export async function aceitarAmizade(idAmizade, idSolicitado) {
 	return answer.affectedRows;
 }
 
-export async function recusarAmizade(idAmizade, idSolicitado) {
+export async function removerAmizade(idAmizade) {
 	const command = `
-        update tb_usuario_amizade set ds_situacao = 'N' where id_usuario_amizade = ? and id_solicitado = ? `;
-	const [answer] = await con.query(command, [idAmizade, idSolicitado]);
-	return answer.affectedRows;
-}
-
-export async function removerAmizade(idAmizade, idUsuario) {
-	const command = `
-        delete from tb_usuario_amizade where id_usuario_amizade = ? and (id_solicitante = ? or id_solicitado = ?)`;
-	const [answer] = await con.query(command, [idAmizade, idUsuario, idUsuario]);
+        delete from tb_usuario_amizade where id_usuario_amizade = ?`;
+	const [answer] = await con.query(command, [idAmizade]);
 	return answer.affectedRows;
 }
 
@@ -181,6 +174,7 @@ export async function consultarIdAmizade(idUsuario, idUsuarioB) {
 export async function pedidosAmizadeConsulta(id) {
 	const command = `
 		select 
+			id_usuario_amizade amizade,
 			id_usuario id,
 			nm_usuario nome,
 			img_usuario imagem
@@ -188,6 +182,7 @@ export async function pedidosAmizadeConsulta(id) {
 		inner join tb_usuario on tb_usuario_amizade.id_solicitante = tb_usuario.id_usuario
 		where id_solicitado = ? and ds_situacao = 'P';
 		select 
+			id_usuario_amizade amizade,
 			id_usuario id,
 			nm_usuario nome,
 			img_usuario imagem
@@ -196,8 +191,8 @@ export async function pedidosAmizadeConsulta(id) {
 		where id_solicitante = ? and ds_situacao = 'P'`;
 	let [answer] = await con.query(command, [id, id]);
 	answer = {
-		solicitados: [...answer[0]],
-		solicitacoes: [...answer[1]],
+		solicitacoes: [...answer[0]],
+		solicitados: [...answer[1]],
 	};
 	return answer;
 }
