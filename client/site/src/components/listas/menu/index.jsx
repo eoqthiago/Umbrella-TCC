@@ -5,7 +5,7 @@ import "./index.sass";
 const Index = ({ item, selecionado, convMenu, tipo, setTipo }) => {
 	return (
 		<div
-			className={"comp-lista-menu " + ((selecionado ? selecionado.id : "") === (item ? item.id : 0) && "comp-lista-menu-selecionado")}
+			className={"comp-lista-menu " /* + ((selecionado ? selecionado.id : "") === (item ? item.id : 0) && "comp-lista-menu-selecionado") */}
 			onMouseDownCapture={(e) => {
 				if (e.button === 2) {
 					setTipo(tipo);

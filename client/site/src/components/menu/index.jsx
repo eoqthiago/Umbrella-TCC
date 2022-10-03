@@ -37,7 +37,6 @@ export default function Index({ ativo, alterar }) {
 		const contain = modalRef.current.contains(e.target);
 		if (!contain) {
 			setConvModal(false);
-			setCoSelec(null);
 			document.body.removeEventListener("click", closeModal);
 			document.oncontextmenu = document.body.oncontextmenu = () => true;
 		}

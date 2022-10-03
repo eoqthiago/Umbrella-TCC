@@ -106,9 +106,12 @@ export async function amigosConsulta(id) {
 		img_banner banner,
 		dt_criacao criacao
 	from tb_usuario where id_usuario in (
-		select id_solicitado
+		(select id_solicitante
 		from tb_usuario_amizade
-		where (id_solicitado = ? or id_solicitante = ?) and ds_situacao = 'A'
+		where id_solicitado = ? and ds_situacao = 'A'),
+        (select id_solicitante
+		from tb_usuario_amizade
+		where id_solicitante = ? and ds_situacao = 'A')
 	)`;
 	const [answer] = await con.query(command, [id, id]);
 	return answer;
