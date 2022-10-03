@@ -8,6 +8,7 @@ import Pesquisa from "./pages/chats/pesquisa";
 import Recuperar from "./pages/recuperar-senha/page-inicial-recuperar";
 import RecuperarCodigo from "./pages/recuperar-senha/recuperar-senha-codigo";
 import Alterar from "./pages/recuperar-senha/senha-nova";
+import ChatComunidade from './pages/chats/chatcomunidade'
 
 export default function Index() {
 	return (
@@ -21,6 +22,7 @@ export default function Index() {
 				<Route path="/recuperar" exact element={<Recuperar />} />
 				<Route path="/code" exact element={<RecuperarCodigo />} />
 				<Route path="/alterar-senha" exact element={<Alterar />} />
+				<Route path="/comunidade/:id" element={<ChatComunidade />} />
 			</Routes>
 		</BrowserRouter>
 	);
