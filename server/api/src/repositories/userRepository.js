@@ -68,32 +68,32 @@ export async function userIDandEmailSearch(email) {
 
 // esqueci senha
 
-export async function codeAleatorio (codigo) {
-	const command = `
-	insert into tb_codigo (ds_codigo)
-	values (?) 
-	`;
-	const [answer] = await con.query(command, [codigo])
-	return answer
-}
+// export async function codeAleatorio (codigo) {
+// 	const command = `
+// 	insert into tb_codigo (ds_codigo)
+// 	values (?) 
+// 	`;
+// 	const [answer] = await con.query(command, [codigo])
+// 	return answer
+// }
 
-export async function userCodeSearch(codigo) {
-	const command = `
-	select 	ds_codigo
-	from tb_codigo
-		where ds_codigo = ?
-	`;
-	const [answer] = await con.query(command, [codigo])
-	return answer
-}
+// export async function userCodeSearch(codigo) {
+// 	const command = `
+// 	select 	ds_codigo
+// 	from tb_codigo
+// 		where ds_codigo = ?
+// 	`;
+// 	const [answer] = await con.query(command, [codigo])
+// 	return answer
+// }
 
-export async function userAlterarPassword(user) {
+export async function userAlterarPassword(senha, userId) {
 	const command = `
 		update  tb_usuario
 		set ds_senha = ?
 	where id_usuario = ?
 	`;
-	const [answer] = await con.query(command, [user.senha, user.id]);
+	const [answer] = await con.query(command, [senha, userId]);
 	return answer.affectedRows;
 }
 
