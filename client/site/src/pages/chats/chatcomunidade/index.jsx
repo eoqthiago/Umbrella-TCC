@@ -1,47 +1,42 @@
 import React, { useEffect, useState } from "react";
 import Header from "../../../components/header";
 import Menu from "../../../components/menu";
-import Input from "../../../components/input-mensagens"
-import { mostrarCanais } from "../../../api/communityApi"; 
-import storage from 'local-storage'
+import InputMensagem from "../../../components/input-mensagens";
+import { mostrarCanais } from "../../../api/communityApi";
+import { useParams } from "react-router-dom";
 import "./index.sass";
 
 const Index = () => {
-	const [menu, setMenu] = useState(false);
-	const [canal, setCanal] = useState([]);
+    const [menu, setMenu] = useState(false);
+    const [canal, setCanal] = useState([]);
 
-	async function aparecerCanais(){
-		const r = await mostrarCanais(storage('usuario-logado').id)
-		setCanal(r);
+    const { id } = useParams();
 
-	}
-	useEffect(() =>{
-		aparecerCanais();
-	},[])
-	return (
-		<div>
-			
-			<div className="initial page ">
-				<Header menu alterarMenu={setMenu} estadoMenu={menu} />
-				<Menu ativo={menu} alterar={setMenu} />
+    useEffect(() => {
+        async function aparecerCanais() {
+            const r = await mostrarCanais(id);
+            setCanal(r);
+        }
 
-				<section className="canais-page">
-					<div className="canais">
-							<ul className="tabela">
-								{canal.map(item =>
-									<li>{item.nome}</li> 
-								)}
-								
-							</ul>
-						
-					</div>
-				</section>
-			</div>
+        aparecerCanais();
+    }, []);
 
-				<Input/>
-				
-		</div>
-	);
+    return (
+        <div>
+            <div className="comunidade page">
+                <Header menu alterarMenu={setMenu} estadoMenu={menu} />
+                <Menu ativo={menu} alterar={setMenu} />
+
+                <section className="comunidade-canais-page">
+                    {canal.map((item) => (
+                        <li>{item.nome}</li>
+                    ))}
+                </section>
+            </div>
+
+            <InputMensagem />
+        </div>
+    );
 };
 
 export default Index;

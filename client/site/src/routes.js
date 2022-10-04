@@ -17,12 +17,12 @@ export default function Index() {
 				<Route path="/" exact element={<Home />} />
 				<Route path="/login" exact element={<Login />} />
 				<Route path="/cadastro" exact element={<Cadastro />} />
-				<Route path="/chat" exact element={<Inicial />} />
+				<Route path="/home" exact element={<Inicial />} />
 				<Route path="/pesquisa" exact element={<Pesquisa />} />
 				<Route path="/recuperar" exact element={<Recuperar />} />
 				<Route path="/code" exact element={<RecuperarCodigo />} />
 				<Route path="/alterar-senha" exact element={<Alterar />} />
-				<Route path="/comunidade/:id" element={<ChatComunidade />} />
+				<Route path="/chat/comunidade/:id" exact element={<ChatComunidade />} />
 			</Routes>
 		</BrowserRouter>
 	);

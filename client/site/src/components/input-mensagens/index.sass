@@ -1,37 +1,34 @@
-.inputs
+.comp-input-mensagem
      display: flex
      align-items: center
      justify-content: center
      width: 100%
-     height: 100%
-     margin-top: -5em
-    
-.input-texto
-    height: 45px
-    width: 70%
-    border-radius: 25px
-    background-color: #B8B8B8
-    outline-color: none
-    border: none
-    padding: 5px 10px
+     height: 40px
+     position: fixed
+     bottom: 40px
+     gap: 10px
+     
+     .input-texto
+          height: 45px
+          width: 70%
+          max-width: 700px
+          border-radius: 25px
+          background-color: #E4E4E4
+          outline-color: none
+          border: none
+          padding: 5px 10px
 
-    &:focus 
-         outline-color: #505050
-    
-#mensagem::placeholder
-     color: #4D4D4D
-     font-family: Roboto-medium
-     font-size: 15px
+          &:focus 
+               outline-color: #505050
+               
+     #mensagem::placeholder
+          color: #585858
+          font-family: Roboto-medium
+          font-size: 15px
 
-.img-enviar
-     cursor: pointer
-     margin: 1em
+     #imagem-mensagem
+          visibility: hidden
+          position: absolute     
 
-#imagem
-    visibility: hidden
-    position: absolute
-
-.imagem
-     margin: 1em
-     cursor: pointer
- 
+     > img
+          cursor: pointer
