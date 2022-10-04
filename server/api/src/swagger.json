@@ -53,20 +53,6 @@
 						"description": "Ano de nascimento do usuário",
 						"required": true,
 						"type": "string"
-					},
-					{
-						"name": "imagem",
-						"in": "formData",
-						"description": "Imagem de perfil",
-						"required": false,
-						"type": "file"
-					},
-					{
-						"name": "imagem banner",
-						"in": "formData",
-						"description": "Capa de perfil do usuário",
-						"required": false,
-						"type": "file"
 					}
 				],
 				
