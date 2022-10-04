@@ -22,6 +22,7 @@ export default function Index() {
     async function verifQuery() {
       try {
         setLoading(true);
+        
         ref.current.continuousStart();
         let idcode = Number(id);
         if (!token || !idcode) throw new Error();
@@ -36,10 +37,10 @@ export default function Index() {
           console.log(r);
           if (r.id !== idcode) throw new Error();
           navigate("/alterar-senha");
-          toast("certro");
         } catch (err) {
-          toast.error(err.message);
+         
           navigate("/recuperar");
+          toast.error("Link invalido");
         }
       } catch (err) {}
     }
@@ -55,6 +56,7 @@ export default function Index() {
       const r = await userAlterarPassword(senha);
       localStorage("user", senha);
       toast.success("🚀 Senha alterada com sucesso!");
+      localStorage.remove("user")
       navigate("/login");
     } catch (err) {
       if (err.response) toast.error(err.response.data.err);

@@ -22,7 +22,9 @@ export async function userCadastro(nome, email, senha, nascimento) {
 }
 
 export async function userConsulta(id) {
-  const r = await api.get(`/usuario/${id}`, {
+  const r = await api.get(
+    `/usuario/${id}`,
+    {
     headers: {
       "x-access-token": userToken,
     },
