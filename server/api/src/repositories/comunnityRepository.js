@@ -89,22 +89,23 @@ export async function communityId(id) {
 
 // Consultar comunidade por nome //! Alterar
 export async function communityName(comunidade) {
-	const command = `
-			SELECT
-				nm_comunidade nome,
-				ds_comunidade descricao,
-				img_comunidade imagem,
-				img_banner banner,
-				bt_publica publica,
-				dt_criacao dataCriacao,
-				(   select count(id_usuario)
-					from tb_usuario_comunidade
-					inner join tb_comunidade on tb_usuario_comunidade.id_comunidade = tb_comunidade.id_comunidade
-					where tb_comunidade.nm_comunidade like '%${comunidade}%' ) qtdUsuarios
-			FROM tb_comunidade
-		   WHERE 	nm_comunidade like '%${comunidade}%'`;
-	const [answer] = await con.query(command);
-	return answer;
+    const command = `
+            SELECT
+                id_comunidade id,
+                nm_comunidade nome,
+                ds_comunidade descricao,
+                img_comunidade imagem,
+                img_banner banner,
+                bt_publica publica,
+                dt_criacao dataCriacao,
+                (   select count(id_usuario)
+                    from tb_usuario_comunidade
+                    inner join tb_comunidade on tb_usuario_comunidade.id_comunidade = tb_comunidade.id_comunidade
+                    where tb_comunidade.nm_comunidade like '%${comunidade}%' ) qtdUsuarios
+            FROM tb_comunidade
+           WHERE     nm_comunidade like '%${comunidade}%'`;
+    const [answer] = await con.query(command);
+    return answer;
 }
 
 // Alterar comunidade

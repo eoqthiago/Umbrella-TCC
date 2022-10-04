@@ -57,3 +57,8 @@ export async function pesquisar(categoria, conteudo) {
 	}
 	return r.data;
 }
+
+export async function mostrarCanais(id){
+	const r= await api.get(`/comunidade/canal/${id}`);
+	return r.data;
+}
