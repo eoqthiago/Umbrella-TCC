@@ -15,6 +15,8 @@ import {
     communityUsername,
     communityCanal,
     listarCanais,
+    apagarCanal,
+    alterarCanal,
 } from "../repositories/comunnityRepository.js";
 import { userIdSearch } from "../repositories/userRepository.js";
 
@@ -259,4 +261,30 @@ server.get("/comunidade/canal/:id", async (req, res) => {
     }
 });
 
+// Deletar canal
+server.delete("/comunidade/canal/:id", async(req, res) =>{
+    try{
+        const idCanal = Number(req.params.id);
+        const r = await apagarCanal(idCanal);
+        res.status(200).send()
+    }catch(err){
+        res.status(401).send({
+            err: err.message
+        })
+    }
+})
+
+// Alterar canal 
+server.put("/comunidade/canal/:id", async(req, res) =>{
+    try{
+        const nome = req.body.nome;
+        const idCanal = Number(req.params.id);
+        const r = await alterarCanal(nome, idCanal);
+        res.status(200).send()
+    }catch(err){
+        res.status(401).send({
+            err: err.message
+        })
+    }
+})
 export default server;

@@ -177,3 +177,23 @@ export async function listarCanais(id) {
     const [r] = await con.query(command, [id]);
     return r;
 }
+
+// Deletar canal
+export async function apagarCanal(idCanal){
+    const command =`	   
+        delete from tb_comunidade_canal
+        where id_comunidade_canal =?
+`
+    const [r] = await con.query(command, [idCanal])
+    return r;
+}
+
+// Alterar nome do canal
+export async function alterarCanal(nome, idCanal){ 
+    const command = `
+    update tb_comunidade_canal
+        set nm_canal = ? 
+    where id_comunidade_canal = ?`;
+    const [r] = await con.query(command, [nome, idCanal]);
+    return r.affectedRows;
+}
