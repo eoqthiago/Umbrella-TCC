@@ -188,7 +188,8 @@ INSERT INTO
        values (2, "canal 4");
        
 -- Listar canais por comunidade   
-       select id_comunidade as idcomunidade,
-			  nm_canal as nomecanal 
+       select id_comunidade as idComunidade,
+			  id_comunidade_canal as idCanal,
+			  nm_canal as nomeCanal
               from tb_comunidade_canal
-              where id_comunidade = 2;
+              where id_comunidade = 1;
