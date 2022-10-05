@@ -193,3 +193,13 @@ INSERT INTO
 			  nm_canal as nomeCanal
               from tb_comunidade_canal
               where id_comunidade = 1;
+
+-- Apagar Canal
+	delete from tb_comunidade_canal
+		where id_comunidade_canal =1;
+
+-- Alterar nome do canal		
+
+	update tb_comunidade_canal
+		set nm_canal = 'canal nauan' 
+		where id_comunidade_canal = 10;
