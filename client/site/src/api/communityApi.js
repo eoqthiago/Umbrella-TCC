@@ -40,11 +40,19 @@ export async function pesquisar(categoria, conteudo) {
 	let r;
 	switch (categoria) {
 		case "comunidades":
-			r = await api.get(`/comunidade?community=${conteudo}`, {
-				headers: {
-					"x-access-token": userToken,
-				},
-			});
+			if (isNaN(conteudo[0])) {
+				r = await api.get(`/comunidade?community=${conteudo}`, {
+					headers: {
+						"x-access-token": userToken,
+					},
+				})
+			} else {
+				r = await api.get(`/comunidadeId?community=${conteudo}`, {
+					headers: {
+						"x-access-token": userToken,
+					},
+				})
+			}
 			break;
 		case "usuarios":
 			r = await api.get(`/usuarios?nome=${conteudo}`, {
@@ -78,3 +86,12 @@ export async function communityReport(id, email, motivo) {
 	);
 	return r.status;
 }
+
+export async function searchCommunityId(id) {
+	const r = await api.get(`/comunidadeId?community=${id}`, {
+		headers: {
+			"x-access-token": userToken,
+		},
+	});
+	return r.data
+} 

@@ -89,6 +89,7 @@ export async function communityId(id) {
 export async function communityName(comunidade) {
 	const command = `
 			SELECT
+				id_comunidade id,
 				nm_comunidade nome,
 				ds_comunidade descricao,
 				img_comunidade imagem,
