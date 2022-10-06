@@ -1,0 +1,42 @@
+.comp-input-mensagem
+     display: flex
+     align-items: center
+     justify-content: center
+     width: 100%
+     height: 40px
+     position: fixed
+     bottom: 40px
+     gap: 10px
+     
+     .input-texto
+          height: 45px
+          width: 70%
+          max-width: 700px
+          border-radius: 25px
+          background-color: #E4E4E4
+          outline-color: none
+          border: none
+          padding: 5px 10px
+
+          &:focus 
+               outline-color: #505050
+               
+     #mensagem::placeholder
+          color: #585858
+          font-family: Roboto-medium
+          font-size: 15px
+
+     #imagem-mensagem
+          visibility: hidden
+          position: absolute     
+
+     > img
+          cursor: pointer
+
+     .mensagem-imagem 
+          width:20%
+          height: 200px
+          border-radius: 20px 
+          position: absolute
+          bottom: 60px 
+          left: 40px     

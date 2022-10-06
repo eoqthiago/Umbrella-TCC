@@ -10,7 +10,9 @@ import RecuperarCodigo from "./pages/recuperar-senha/recuperar-senha-codigo";
 import Alterar from "./pages/recuperar-senha/senha-nova";
 import Config from "./pages/config";
 import Amizades from "./pages/amizades";
-import CommunitiesInfo from "./pages/communities-info"
+import CommunitiesInfo from "./pages/communities-info";
+import ChatComunidade from "./pages/chats/chat-comunidades";
+import ComunidadeConfig from "./pages/comunidade-config";
 
 export default function Index() {
 	return (
@@ -19,14 +21,16 @@ export default function Index() {
 				<Route path="/" exact element={<Home />} />
 				<Route path="/login" exact element={<Login />} />
 				<Route path="/cadastro" exact element={<Cadastro />} />
-				<Route path="/chat" exact element={<Inicial />} />
+				<Route path="/home" exact element={<Inicial />} />
 				<Route path="/pesquisa" exact element={<Pesquisa />} />
 				<Route path="/recuperar" exact element={<Recuperar />} />
 				<Route path="/code" exact element={<RecuperarCodigo />} />
 				<Route path="/alterar-senha" exact element={<Alterar />} />
 				<Route path="/settings" exact element={<Config />} />
 				<Route path="/amizades" exact element={<Amizades />} />
-				<Route path="/communities/:idParam/information" exact element={<CommunitiesInfo />} />
+				<Route path="/comunidade/:idParam/info" exact element={<CommunitiesInfo />} />
+				<Route path="/chat/comunidade/:id" exact element={<ChatComunidade />} />
+				<Route path="/comunidade/:id/settings" exact element={<ComunidadeConfig />} />
 			</Routes>
 		</BrowserRouter>
 	);

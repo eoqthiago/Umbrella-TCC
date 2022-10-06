@@ -155,10 +155,11 @@ export async function communityCanal(comunitty, canal) {
 // Listar canais
 export async function listarCanais(id) {
 	const command = `
-		select id_comunidade as id,
-		nm_canal as nome
+		select id_comunidade as idComunidade,
+		nm_canal as nome,
+        id_comunidade_canal as idCanal
 	 from tb_comunidade_canal
-	 where id_comunidade =?`;
+	 where id_comunidade = ?`;
 	const [r] = await con.query(command, [id]);
 	return r;
 }

@@ -1,101 +1,51 @@
-.communities-info
-    display: flex
-    flex-direction: column
-    justify-content: center
-    align-items: center
-    user-select: none
-
+.community-info
     > main
         display: flex
-        flex-direction: row
+        flex-flow: column nowrap
         justify-content: space-between
-        margin-top: 7em
-        height: 15em
-        width: 36em
-        border-radius: 0.8em
-        background-color: #ffffff
-        box-shadow: 0 1px 25px 0 #00000015
+        margin-top: 55px
+        width: 100vw
+        align-items: center
 
-        > div
+        > .community-info-card
+            background: #fff
+            margin-top: 4em
+            width: 90vw
+            max-width: 900px
+            min-width: 200px
+            height: fit-content
             display: flex
-            flex-direction: column
-            align-items: flex-start
-            justify-content: space-between
-            padding: 1em .5em
-            height: 100%
-            width: 19em
+            flex-flow: row nowrap
+            box-shadow: 0px 1px 25px #0000001a
+            gap: 30px
+            border-radius: 30px
+            overflow: hidden
 
-            > button
-                height: 1.8em
-                width: 17.5em
+            > img
+                width: clamp(200px, 40vw, 320px)
+                height: auto
+                -webkit-user-drag: none
+                user-select: none
 
-                font-family: Roboto-Medium
-                font-size: 15px
-                color: #ffffff
-
-                border: none
-                border-radius: .3em
-                background-color: #2CA75D
-                cursor: pointer
-                &:active
-                    transform: scale(.95)
-
-            >  span
-                height: 7em
+            > div
+                width: 100%
+                padding: 1.5em 30px 1.5em 0
+                display: flex
+                flex-flow: column nowrap
                 justify-content: space-between
 
-            > span > h1
-                font-family: 'Open Sans'
-                color: #373535
-                font-size: clamp(22px, 2em, 3.5vh)
+                > div
+                    font-family: Roboto-regular
+                    font-size: 16px
+                    text-overflow: ellipsis
+                    word-wrap: break-word
 
-            > span > p
-                height: 10em
-                width: 18em
-                margin-top: .5em
-                text-overflow: ellipsis
-                overflow-wrap: break-word
-                overflow-y: hidden
-                font-family: Roboto-Regular
-                font-size: 14px
-                color: #494949
-
-
-        > span > img
-            height: 100%
-            width: 14em
-            border-top-left-radius: 0.8em
-            border-bottom-left-radius: 0.8em
-            -webkit-user-drag: none
-
-.communities-cards
-    display: flex
-    flex-direction: column
-    justify-content: space-around
-    align-items: center
-    height: fit-content
-    margin-top: 8em
-
-    > button
-        height: 3em
-        width: 13em
-        border: none
-        border-radius: .5em
-        margin-bottom: 3em
-        align-items: center
-        color: #ffffff
-        font-family: Roboto-Bold
-        background-color: #2CA75D
-
-    > ul
-        display: flex
-        flex-direction: row
-        list-style: none
-        flex-wrap: wrap
-        height: fit-content
-        justify-content: center
-        width: clamp(25em, 59em, 70em)
-        justify-content: space-evenly
-
-        > li
-            margin-bottom: 3em
+        > .community-info-others
+            width: 95vw
+            max-width: 1000px
+            min-width: 200px
+            margin-top: 8em
+            display: flex
+            flex-flow: row wrap
+            gap: 40px
+            justify-content: center

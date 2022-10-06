@@ -1,0 +1,97 @@
+.comunidade-conf
+    > main
+        display: flex
+        flex-flow: column nowrap
+        justify-content: space-between
+        margin-top: 55px
+        width: 100vw
+        align-items: center
+
+        > .comunidade-conf-inicial
+            width: 100vw
+            height: 300px
+            overflow: hidden
+
+            > .comunidade-conf-banner
+                transition: ease-in-out .3s
+
+                > img
+                    width: 100vw
+                    height: 300px
+                    user-select: none
+                    -webkit-user-drag: none
+
+                > .comunidade-conf-banner-button
+                    background: #00000042
+                    width: 100vw
+                    height: 300px
+                    position: absolute
+                    bottom: calc( 100vh - 355px )
+                    left: 0
+                    z-index: 2
+                    align-items: center
+                    justify-content: center
+                    display: none
+
+                    > button
+                        background: #fff
+                        padding: 15px 40px
+                        border-radius: 10px
+                        border: none
+                        outline: none
+                        font-family: Roboto-medium
+                        font-size: 17px
+                        color: #199D3E
+                        cursor: pointer
+                        transition: ease-in-out .15s
+
+                        &:hover
+                            background-color: #199D3E
+                            color: #fff 
+
+            > .comunidade-conf-banner-img
+                > img
+                    width: 200px
+                    height: 200px
+                    background: #fff
+                    border-radius: 100%
+                    position: absolute
+                    bottom: calc( 100vh - 455px )
+                    left: 70px
+                    box-shadow: 0 0 25px #0000001a
+                    user-select: none
+                    -webkit-user-drag: none
+                    z-index: 3
+
+                > .comunidade-conf-banner-img-button
+                    background: #00000042
+                    width: 200px
+                    height: 200px
+                    border-radius: 100%
+                    position: absolute
+                    bottom: calc( 100vh - 455px )
+                    left: 70px
+                    z-index: 4
+                    align-items: center
+                    justify-content: center
+                    display: none
+
+                    > button
+                        background: #fff
+                        padding: 10px 20px
+                        border-radius: 10px
+                        border: none
+                        outline: none
+                        font-family: Roboto-medium
+                        font-size: 17px
+                        color: #199D3E
+                        cursor: pointer
+                        transition: ease-in-out .15s
+                        z-index: 3
+
+                        &:hover
+                            background-color: #199D3E
+                            color: #fff 
+
+    .ativo
+        display: flex !important
