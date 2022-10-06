@@ -138,8 +138,7 @@ export async function communityAdmin(id, admin) {
 	const command = `
 	UPDATE tb_usuario_comunidade 
 	   SET  bt_admin = ${admin}
-	 WHERE id_usuario_comunidade = ?
-					`;
+	 WHERE id_usuario_comunidade = ? `;
 	const [r] = await con.query(command, [id]);
 	return r.affectedRows;
 }
@@ -164,10 +163,29 @@ export async function listarCanais(id) {
 	return r;
 }
 
+// Denunciar comunidade
 export async function communityDenuncia(idUsuario, email, idReportado, motivo) {
 	const command = `
 		insert into tb_comunidade_report (id_usuario, ds_email, id_comunidade, ds_report)
 							     values (?, ?, ?, ?) `;
 	const [answer] = await con.query(command, [idUsuario, email, idReportado, motivo]);
+	return answer.affectedRows;
+}
+
+// Pesquisar usuario em comunidade
+export async function communityUserIdSearch(id) {
+	const command = `
+		select id_usuario_comunidade idUsuarioComunidade 
+		from tb_usuario_comunidade 
+		where id_usuario_comunidade = ? `;
+	const [answer] = await con.query(command, [id]);
+	return answer[0];
+}
+
+// Sair da comunidade
+export async function communityUserDelete(idUsuario) {
+	const command = `
+		delete from tb_usuario_comunidade where id_usuario_comunidade = ? `;
+	const [answer] = await con.query(command, [idUsuario]);
 	return answer.affectedRows;
 }
