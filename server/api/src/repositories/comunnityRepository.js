@@ -30,12 +30,12 @@ export async function communityUserID(id, comunidade) {
 						 	tb_usuario.nm_usuario
 				 	FROM 	tb_usuario_comunidade
 					INNER JOIN tb_usuario 
-					ON tb_usuario_comunidade.id_usuario_comunidade = tb_usuario.id_usuario
-					WHERE 	tb_usuario_comunidade.id_usuario_comunidade = ?
+					ON tb_usuario_comunidade.id_usuario = tb_usuario.id_usuario
+					WHERE 	tb_usuario_comunidade.id_usuario = ?
 					AND 	id_comunidade = ?`;
 
 	const [r] = await con.query(command, [id, comunidade]);
-	return r;
+	return r[0];
 }
 
 // Procurar por nome de usúario na comunidade
@@ -183,9 +183,9 @@ export async function communityUserIdSearch(id) {
 }
 
 // Sair da comunidade
-export async function communityUserDelete(idUsuario) {
+export async function communityUserDelete(idUsuario, idComunidade) {
 	const command = `
-		delete from tb_usuario_comunidade where id_usuario_comunidade = ? `;
-	const [answer] = await con.query(command, [idUsuario]);
+		delete from tb_usuario_comunidade where id_usuario = ? and id_comunidade = ? `;
+	const [answer] = await con.query(command, [idUsuario, idComunidade]);
 	return answer.affectedRows;
 }

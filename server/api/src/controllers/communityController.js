@@ -278,19 +278,21 @@ server.post("/comunidade/:id/denuncia", async (req, res) => {
 });
 
 // Sair da comunidade
-server.delete("/comunidade/usuario/:id", async (req, res) => {
+server.delete("/comunidade/:comunidade/usuario/:id", async (req, res) => {
 	try {
 		const id = Number(req.params.id);
+		const comunidade = Number(req.params.comunidade);
 		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 		switch (true) {
 			case !header || !auth || !(await userIdSearch(auth.id)):
 				throw new Error("Falha na autenticação");
-			case !id || !(await communityUserIdSearch(id)):
+			case !id || !comunidade || !(await communityUserID(id, comunidade)):
 				throw new Error("Usuário não encontrado");
 		}
-		const answer = await communityUserDelete(id);
-		if (answer < 1) throw new Error("Não foi possível fazer a denúncia");
+
+		const answer = await communityUserDelete(id, comunidade);
+		if (answer < 1) throw new Error("Não foi possível sair da comunidade");
 		res.status(204).send();
 	} catch (err) {
 		res.status(401).send({
