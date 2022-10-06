@@ -134,25 +134,17 @@ server.put("/comunidade/:id", async (req, res) => {
 	}
 });
 
-//Consultar comunidade por nome
+//Consultar comunidade por nome/id
 server.get("/comunidade", async (req, res) => {
 	try {
 		const community = req.query.community;
-		const r = await communityName(community);
-		res.status(200).send(r);
-	} catch (err) {
-		res.status(401).send({
-			err: err.message,
-		});
-	}
-});
-
-//Consultar comunidade por id
-server.get("/comunidadeId", async (req, res) => {
-	try {
-		const community = req.query.community;
-		const r = await communityId(community);
-		res.status(200).send(r);
+		if (community[0] == "#") {
+			const r = await communityId(community.substr(1, community.length));
+			res.status(200).send(r);
+		} else {
+			const r = await communityName(community);
+			res.status(200).send(r);
+		}
 	} catch (err) {
 		res.status(401).send({
 			err: err.message,
@@ -224,7 +216,7 @@ server.post("/comunidade/canal", async (req, res) => {
 	try {
 		const canal = req.body;
 		const community = req.body;
-   
+
 		const r = await communityCanal(community, canal);
 		res.status(200).send();
 	} catch (err) {

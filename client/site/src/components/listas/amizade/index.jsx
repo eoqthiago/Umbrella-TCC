@@ -13,7 +13,7 @@ const Index = ({ item, tipo }) => {
 		try {
 			const r = await acoesAmizade(acao, item.amizade);
 			if (r !== 204) throw new Error("Um erro ocorreu");
-			toast.success(acao === "A" ? "Solicitação aceita" : (tipo === "recebido" ? "Solicitação recusada" : "Solicitação desfeita"));
+			toast.success(acao === "A" ? "Solicitação aceita" : tipo === "recebido" ? "Solicitação recusada" : "Solicitação desfeita");
 			setInvisible(true);
 		} catch (err) {
 			if (err.response) toast.error(err.response.data.err);

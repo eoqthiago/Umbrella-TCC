@@ -10,9 +10,8 @@ import RecuperarCodigo from "./pages/recuperar-senha/recuperar-senha-codigo";
 import Alterar from "./pages/recuperar-senha/senha-nova";
 import Config from "./pages/config";
 import Amizades from "./pages/amizades";
-import CommunitiesInfo from "./pages/communities-info"
-import ChatComunidade from "./pages/chats/chat-comunidades"
-
+import CommunitiesInfo from "./pages/communities-info";
+import ChatComunidade from "./pages/chats/chat-comunidades";
 
 export default function Index() {
 	return (
@@ -28,8 +27,8 @@ export default function Index() {
 				<Route path="/alterar-senha" exact element={<Alterar />} />
 				<Route path="/settings" exact element={<Config />} />
 				<Route path="/amizades" exact element={<Amizades />} />
-				<Route path="/communities/:idParam/information" exact element={<CommunitiesInfo />} />
-				<Route path="/chat/comunidade/:id"exact element={<ChatComunidade />} />
+				<Route path="/comunidade/:idParam/info" exact element={<CommunitiesInfo />} />
+				<Route path="/chat/comunidade/:id" exact element={<ChatComunidade />} />
 			</Routes>
 		</BrowserRouter>
 	);

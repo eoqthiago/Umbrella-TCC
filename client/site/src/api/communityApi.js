@@ -45,13 +45,13 @@ export async function pesquisar(categoria, conteudo) {
 					headers: {
 						"x-access-token": userToken,
 					},
-				})
+				});
 			} else {
-				r = await api.get(`/comunidadeId?community=${conteudo}`, {
+				r = await api.get(`/comunidade?community=#${conteudo}`, {
 					headers: {
 						"x-access-token": userToken,
 					},
-				})
+				});
 			}
 			break;
 		case "usuarios":
@@ -65,8 +65,9 @@ export async function pesquisar(categoria, conteudo) {
 		// 	r = await api.get("");
 		// 	break;
 		default:
-			return [];
-	}
+			break;
+		}
+		console.log(r.data)
 	return r.data;
 }
 
@@ -87,16 +88,7 @@ export async function communityReport(id, email, motivo) {
 	return r.status;
 }
 
-export async function searchCommunityId(id) {
-	const r = await api.get(`/comunidadeId?community=${id}`, {
-		headers: {
-			"x-access-token": userToken,
-		},
-	});
-	return r.data
-} 
-
-export async function mostrarCanais(id){
-	const r= await api.get(`/comunidade/canal/${id}`);
+export async function mostrarCanais(id) {
+	const r = await api.get(`/comunidade/canal/${id}`);
 	return r.data;
 }
