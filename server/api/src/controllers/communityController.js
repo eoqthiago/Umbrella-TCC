@@ -16,6 +16,8 @@ import {
 	communityCanal,
 	listarCanais,
 	communityDenuncia,
+	communityUserDelete,
+	communityUserIdSearch,
 } from "../repositories/comunnityRepository.js";
 import { userIdSearch } from "../repositories/userRepository.js";
 import { emailTest } from "../utils/expressionTest.js";
@@ -263,6 +265,30 @@ server.post("/comunidade/:id/denuncia", async (req, res) => {
 		res.status(204).send();
 	} catch (err) {
 		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
+// Sair da comunidade
+server.delete("/comunidade/:comunidade/usuario/:id", async (req, res) => {
+	try {
+		const id = Number(req.params.id);
+		const comunidade = Number(req.params.comunidade);
+		const header = req.header("x-access-token");
+		const auth = jwt.decode(header);
+		switch (true) {
+			case !header || !auth || !(await userIdSearch(auth.id)) || auth.id !== id:
+				throw new Error("Falha na autenticação");
+			case !id || !comunidade || !(await communityUserID(id, comunidade)):
+				throw new Error("Você não está nessa comunidade");
+		}
+
+		const answer = await communityUserDelete(id, comunidade);
+		if (answer < 1) throw new Error("Não foi possível sair da comunidade");
+		res.status(204).send();
+	} catch (err) {
+		res.status(401).send({
 			err: err.message,
 		});
 	}

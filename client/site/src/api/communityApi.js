@@ -88,6 +88,26 @@ export async function communityReport(id, email, motivo) {
 	return r.status;
 }
 
+export async function searchCommunityId(id) {
+	if (!userToken) return;
+	const r = await api.get(`/comunidadeId?community=${id}`, {
+		headers: {
+			"x-access-token": userToken,
+		},
+	});
+	return r.data;
+}
+
+export async function exitCommunity(idComunidade, idUsuario) {
+	if (!userToken || !idComunidade || !idUsuario) return;
+	const r = await api.delete(`/comunidade/${idComunidade}/usuario/${idUsuario}`, {
+		headers: {
+			"x-access-token": userToken,
+		},
+	});
+	return r.status;
+}
+
 export async function mostrarCanais(id) {
 	const r = await api.get(`/comunidade/canal/${id}`);
 	return r.data;
