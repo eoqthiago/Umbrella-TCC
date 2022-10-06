@@ -224,6 +224,7 @@ server.post("/comunidade/canal", async (req, res) => {
 	try {
 		const canal = req.body;
 		const community = req.body;
+   
 		const r = await communityCanal(community, canal);
 		res.status(200).send();
 	} catch (err) {
