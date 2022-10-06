@@ -1,5 +1,7 @@
+import localStorage from "local-storage";
 import React from "react";
 import { toast } from "react-toastify";
+import { exitCommunity } from "../../../api/communityApi";
 import { removerAmizade } from "../../../api/userApi";
 import "./index.sass";
 
@@ -10,6 +12,18 @@ const Index = ({ ativo, position, selecionada, modalRef, tipo, user, comunidade,
 			const r = await removerAmizade(selecionada.id);
 			if (r !== 204) throw new Error("Não foi possível remover a amizade");
 			toast.warning("Amizade removida");
+		} catch (err) {
+			if (err.response) toast.error(err.response.data.err);
+			else toast.error(err.message);
+		}
+	}
+
+	async function handleExitComunidade() {
+		try {
+			if (!selecionada.id || tipo !== "comunidade") throw new Error("Não foi possível concluir essa operação");
+			const r = await exitCommunity(selecionada.id, localStorage("user").id);
+			if (r !== 204) throw new Error("Não foi possível sair da comunidade");
+			toast.warning("Você saiu da comunidade");
 		} catch (err) {
 			if (err.response) toast.error(err.response.data.err);
 			else toast.error(err.message);
@@ -53,7 +67,7 @@ const Index = ({ ativo, position, selecionada, modalRef, tipo, user, comunidade,
 				<img src="/assets/icons/danger.svg" alt="Reportar" /> Reportar
 			</div>
 			{tipo === "comunidade" && (
-				<div>
+				<div onClick={() => handleExitComunidade()}>
 					<img src="/assets/icons/exit.svg" alt="Sair" /> Sair
 				</div>
 			)}

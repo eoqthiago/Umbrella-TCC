@@ -285,10 +285,10 @@ server.delete("/comunidade/:comunidade/usuario/:id", async (req, res) => {
 		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 		switch (true) {
-			case !header || !auth || !(await userIdSearch(auth.id)):
+			case !header || !auth || !(await userIdSearch(auth.id)) || auth.id !== id:
 				throw new Error("Falha na autenticação");
 			case !id || !comunidade || !(await communityUserID(id, comunidade)):
-				throw new Error("Usuário não encontrado");
+				throw new Error("Você não está nessa comunidade");
 		}
 
 		const answer = await communityUserDelete(id, comunidade);

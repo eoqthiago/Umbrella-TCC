@@ -45,13 +45,13 @@ export async function pesquisar(categoria, conteudo) {
 					headers: {
 						"x-access-token": userToken,
 					},
-				})
+				});
 			} else {
 				r = await api.get(`/comunidadeId?community=${conteudo}`, {
 					headers: {
 						"x-access-token": userToken,
 					},
-				})
+				});
 			}
 			break;
 		case "usuarios":
@@ -88,10 +88,21 @@ export async function communityReport(id, email, motivo) {
 }
 
 export async function searchCommunityId(id) {
+	if (!userToken) return;
 	const r = await api.get(`/comunidadeId?community=${id}`, {
 		headers: {
 			"x-access-token": userToken,
 		},
 	});
-	return r.data
-} 
+	return r.data;
+}
+
+export async function exitCommunity(idComunidade, idUsuario) {
+	if (!userToken || !idComunidade || !idUsuario) return;
+	const r = await api.delete(`/comunidade/${idComunidade}/usuario/${idUsuario}`, {
+		headers: {
+			"x-access-token": userToken,
+		},
+	});
+	return r.status;
+}
