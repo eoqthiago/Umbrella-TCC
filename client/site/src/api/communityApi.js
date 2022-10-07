@@ -18,7 +18,7 @@ export async function communityCadastro(nome, descricao, publica) {
 			},
 		}
 	);
-	return r.data;
+	return r;
 }
 
 export async function communityImage(id, imagem) {

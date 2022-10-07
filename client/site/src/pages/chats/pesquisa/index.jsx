@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Header from "../../../components/header";
 import Menu from "../../../components/menu";
 import Card from "../../../components/card";
-import User from "../../../components/users-components"
+import User from "../../../components/listas/usuario";
 import "./index.sass";
 import { pesquisar } from "../../../api/communityApi";
 
@@ -47,16 +47,12 @@ const Index = () => {
 					</nav>
 				</ul>
 				<div className="pesquisa-input">
-					<input type="text" placeholder="Pesquisar" value={pesquisa} onChange={(e) => setPesquisa(e.target.value)} onKeyDown={(e) => e.key === "Enter" && consultar(pesquisa)}/>
+					<input type="text" placeholder="Pesquisar" value={pesquisa} onChange={(e) => setPesquisa(e.target.value)} onKeyDown={(e) => e.key === "Enter" && consultar(pesquisa)} />
 					<img src="/assets/icons/search.svg" alt="Pesquisar" onClick={() => consultar()} />
 				</div>
 				<section>
-					{selecionado === "comunidades" && comunidades.map(item =>
-						<Card nome={item.nome} descricao={item.descricao} imagem={item.imagem} id={item.id} usuarios={item.qtdUsuarios} />
-					)}
-					{selecionado === "usuarios" && usuarios.map(item =>
-						<User nome={item.nome} imagem={item.imagem} id={item.id} />
-					)}
+					{selecionado === "comunidades" && comunidades.map((item) => <Card nome={item.nome} descricao={item.descricao} imagem={item.imagem} id={item.id} usuarios={item.qtdUsuarios} />)}
+					{selecionado === "usuarios" && usuarios.map((item) => <User item={item} key={item.id} />)}
 					{selecionado === "mensagens" && mensagens.map(() => <>Mensagens</>)}
 				</section>
 			</main>

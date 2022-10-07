@@ -86,7 +86,7 @@ export default function Index({ ativo, alterar }) {
 			} catch (err) {}
 			setTimeout(() => {
 				consultasMenu();
-			}, 10000);
+			}, 5000);
 		}
 		consultasMenu();
 	}, []);

@@ -5,6 +5,7 @@ import "./index.sass";
 import { toast } from "react-toastify";
 import { communityCadastro, communityImage } from "../../../api/communityApi";
 import LoadingBar from "react-top-loading-bar";
+import { useNavigate } from "react-router-dom";
 
 const Index = ({ ativo, state }) => {
 	const [nome, setNome] = useState("");
@@ -13,6 +14,7 @@ const Index = ({ ativo, state }) => {
 	const [imagem, setImagem] = useState("");
 	const [loading, setLoading] = useState(false);
 	const ref = useRef();
+	const navigate = useNavigate();
 
 	const setarImagem = () => document.getElementById("nova-comunidade-imagem-input").click();
 	const showImage = () => (typeof imagem == "object" ? URL.createObjectURL(imagem) : undefined);
@@ -31,13 +33,13 @@ const Index = ({ ativo, state }) => {
 		try {
 			if (!nome.trim()) throw new Error("Preencha o campo nome corretamente");
 			const r = await communityCadastro(nome, descricao, publica);
-
+			if (r.status !== 201) throw new Error("Não foi possível criar a comunidade");
 			if (imagem) {
 				const s = await communityImage(r.id, imagem);
-				if (s !== 204) throw new Error("Não foi possível salvar a imagem");
+				if (s !== 204) toast.warning("Não foi possível salvar a imagem");
 			}
-
 			toast.success("Comunidade criada com sucesso!\nEm instantes você será redirecionado 🚀");
+			setTimeout(() => navigate(`/chat/comunidade/${r.data.id}`), 2000);
 		} catch (err) {
 			if (err.response) toast.error(err.response.data.err);
 			else toast.error(err.message);

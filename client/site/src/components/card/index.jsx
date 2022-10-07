@@ -7,7 +7,7 @@ export function Index(props) {
 	const navigate = useNavigate();
 
 	return (
-		<div className="comp-card" onClick={() => navigate(`/communities/${props.id}/information`)}>
+		<div className="comp-card" onClick={() => navigate(`/comunidade/${props.id}/info`)}>
 			<img src={props.imagem ? BuscarImg(props.imagem) : "/assets/images/star-wars.webp"} alt="Comunidade" />
 			<div className="info-cont">
 				<div>

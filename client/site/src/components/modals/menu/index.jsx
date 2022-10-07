@@ -1,11 +1,14 @@
 import localStorage from "local-storage";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { exitCommunity } from "../../../api/communityApi";
 import { removerAmizade } from "../../../api/userApi";
 import "./index.sass";
 
 const Index = ({ ativo, position, selecionada, modalRef, tipo, user, comunidade, setAtivo }) => {
+	const navigate = useNavigate();
+
 	async function handleRemoveAmigo() {
 		try {
 			if (!selecionada.id || tipo !== "usuario") throw new Error("Não foi possível concluir essa operação");
@@ -40,7 +43,15 @@ const Index = ({ ativo, position, selecionada, modalRef, tipo, user, comunidade,
 			ref={modalRef}>
 			<div>{selecionada ? selecionada.nome : ""}</div>
 			<div className="comp-modal-menu-pointer" />
-			<div>
+			<div
+				onClick={() => {
+					if (tipo === "comunidade") {
+						setAtivo(!ativo);
+						navigate(`/chat/comunidade/${selecionada.id}`);
+					} else if (tipo === "usuario") {
+						setAtivo(!ativo);
+					}
+				}}>
 				<img src="/assets/icons/talk.svg" alt="Conversar" />
 				Conversar
 			</div>

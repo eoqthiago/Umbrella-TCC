@@ -199,3 +199,23 @@ export async function pedidosAmizadeConsulta(id) {
 	};
 	return answer;
 }
+
+export async function verificarPedidoFeito(solicitante, solicitado) {
+	const command = `
+		select * from tb_usuario_amizade 
+		where (id_solicitante = ? and id_solicitado = ? and ds_situacao = 'P')
+		or (id_solicitado = ? and id_solicitante = ? and ds_situacao = 'P')
+	`;
+	const [answer] = await con.query(command, [solicitante, solicitado, solicitado, solicitante]);
+	return answer[0];
+}
+
+export async function verificarAmizade(solicitante, solicitado) {
+	const command = `
+		select * from tb_usuario_amizade 
+		where (id_solicitante = ? and id_solicitado = ? and ds_situacao = 'A')
+		or (id_solicitado = ? and id_solicitante = ? and ds_situacao = 'A')
+	`;
+	const [answer] = await con.query(command, [solicitante, solicitado, solicitado, solicitante]);
+	return answer[0];
+}

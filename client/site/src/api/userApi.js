@@ -101,4 +101,19 @@ export async function acoesAmizade(situacao, id) {
 	);
 	return r.status;
 }
-//api.put(`/usuario/amizade?id=${id}&situacao=${situacao}`
+
+export async function pedirAmizade(idSolicitado) {
+	if (!userToken || !idSolicitado) return;
+	const r = await api.post(
+		"/usuario/amizade",
+		{
+			usuarioSolicitado: idSolicitado,
+		},
+		{
+			headers: {
+				"x-access-token": userToken,
+			},
+		}
+	);
+	return r.status;
+}

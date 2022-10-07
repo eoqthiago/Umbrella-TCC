@@ -154,18 +154,6 @@ server.get("/comunidade", async (req, res) => {
 	}
 });
 
-//Consultar todas comunidades
-server.get("/comunidades", async (req, res) => {
-	try {
-		const r = await communitiesGet();
-		res.status(200).send(r);
-	} catch (err) {
-		res.status(401).send({
-			err: err.message,
-		});
-	}
-});
-
 // Promover usuario à administrador
 server.put("/comunidade/admin/usuario", async (req, res) => {
 	try {

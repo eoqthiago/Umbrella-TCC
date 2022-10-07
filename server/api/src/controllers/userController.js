@@ -18,6 +18,8 @@ import {
 	userDenuncia,
 	consultarIdAmizade,
 	pedidosAmizadeConsulta,
+	verificarPedidoFeito,
+	verificarAmizade,
 } from "../repositories/userRepository.js";
 import { emailTest, nameTest } from "../utils/expressionTest.js";
 import multer from "multer";
@@ -247,6 +249,9 @@ server.post("/usuario/amizade", async (req, res) => {
 				break;
 		}
 		user.id = auth.id;
+		if (await verificarPedidoFeito(user.id, user.usuarioSolicitado)) throw new Error("Um pedido de amizade já foi enviado");
+		if (await verificarAmizade(user.id, user.usuarioSolicitado)) throw new Error("Você já é amigo desse usuário");
+
 		const answer = await solicitarAmizade(user.id, user.usuarioSolicitado);
 
 		if (answer < 1) throw new Error("Um erro ocorreu");
