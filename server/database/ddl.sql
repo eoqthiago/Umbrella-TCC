@@ -79,14 +79,6 @@ create table tb_mensagem (
     foreign key (id_usuario_conversa) references tb_usuario_conversa (id_usuario_conversa) on delete cascade
 );
 
-create table tb_mensagem_arquivo (
-    id_mensagem_arquivo int primary key auto_increment,
-    id_usuario_conversa int,
-    ds_arquivo varchar(400) not null,
-    dt_arquivo datetime default(now()),
-    foreign key (id_usuario_conversa) references tb_usuario_conversa (id_usuario_conversa) on delete cascade
-);
-
 -- Comunidade
 create table tb_comunidade (
     id_comunidade int primary key auto_increment,
@@ -122,16 +114,6 @@ create table tb_comunidade_mensagem (
     id_comunidade_canal int,
     ds_mensagem varchar(2500) not null,
     dt_mensagem datetime default(now()),
-    foreign key (id_usuario_comunidade) references tb_usuario_comunidade (id_usuario_comunidade) on delete cascade,
-    foreign key (id_comunidade_canal) references tb_comunidade_canal (id_comunidade_canal) on delete cascade
-);
-
-create table tb_comunidade_mensagem_arquivo (
-    id_mensagem_arquivo int primary key auto_increment,
-    id_usuario_comunidade int,
-    id_comunidade_canal int,
-    ds_arquivo varchar(400) not null,
-    dt_arquivo datetime default(now()),
     foreign key (id_usuario_comunidade) references tb_usuario_comunidade (id_usuario_comunidade) on delete cascade,
     foreign key (id_comunidade_canal) references tb_comunidade_canal (id_comunidade_canal) on delete cascade
 );
