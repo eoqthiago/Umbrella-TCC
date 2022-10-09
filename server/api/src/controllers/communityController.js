@@ -18,6 +18,8 @@ import {
 	communityDenuncia,
 	communityUserDelete,
 	communityUserIdSearch,
+	communityDelete,
+	communityUsers,
 } from "../repositories/comunnityRepository.js";
 import { userIdSearch } from "../repositories/userRepository.js";
 import { emailTest } from "../utils/expressionTest.js";
@@ -136,17 +138,25 @@ server.put("/comunidade/:id", async (req, res) => {
 	}
 });
 
-//Consultar comunidade por nome/id
+//Consultar comunidade por nome
 server.get("/comunidade", async (req, res) => {
 	try {
 		const community = req.query.community;
-		if (community[0] == "#") {
-			const r = await communityId(community.substr(1, community.length));
-			res.status(200).send(r);
-		} else {
-			const r = await communityName(community);
-			res.status(200).send(r);
-		}
+		const r = await communityName(community);
+		res.status(200).send(r);
+	} catch (err) {
+		res.status(401).send({
+			err: err.message,
+		});
+	}
+});
+
+//Consultar comunidade por ID
+server.get("/comunidadeId", async (req, res) => {
+	try {
+		const community = req.query.community;
+		const r = await communityId(community);
+		res.status(200).send(r);
 	} catch (err) {
 		res.status(401).send({
 			err: err.message,
@@ -206,7 +216,6 @@ server.post("/comunidade/canal", async (req, res) => {
 	try {
 		const canal = req.body;
 		const community = req.body;
-
 		const r = await communityCanal(community, canal);
 		res.status(200).send();
 	} catch (err) {
@@ -271,7 +280,6 @@ server.delete("/comunidade/:comunidade/usuario/:id", async (req, res) => {
 			case !id || !comunidade || !(await communityUserID(id, comunidade)):
 				throw new Error("Você não está nessa comunidade");
 		}
-
 		const answer = await communityUserDelete(id, comunidade);
 		if (answer < 1) throw new Error("Não foi possível sair da comunidade");
 		res.status(204).send();
@@ -279,6 +287,47 @@ server.delete("/comunidade/:comunidade/usuario/:id", async (req, res) => {
 		res.status(401).send({
 			err: err.message,
 		});
+	}
+});
+
+// Excluir comunidade
+server.delete("/comunidade/configuracao/:id", async (req, res) => {
+	try {
+		const id = Number(req.params.id);
+		const header = req.header("x-access-token");
+		const auth = jwt.decode(header);
+		switch (true) {
+			case !header || !auth || !(await userIdSearch(auth.id)):
+				throw new Error("Falha na autenticação");
+			case !(await communityUserID(auth.id, id)) || !(await communityOwner(auth.id, id)) || !(await communityId(id)):
+				throw new Error("Não autorizado");
+		}
+		console.log()
+		const del = await communityDelete(id);
+		res.status(200).send();
+	} catch(err) {
+		res.status(401).send({
+			err: err.message,
+	})
+	}
+})
+
+// Consultar todos usuarios da comunidade
+server.get("/comunidade/configuracao/:id", async (req, res) => {
+	try {
+		const id = Number(req.params.id);
+		const header = req.header("x-access-token");
+		const auth = jwt.decode(header);
+		switch(true) {
+			case !(await communityId(id)):
+				throw new Error("Não autorizado");
+		}
+		const users = await communityUsers(id);
+		res.status(200).send(users);
+	} catch(err) {
+		res.status(401).send({
+			err: err.message,
+	})
 	}
 });
 

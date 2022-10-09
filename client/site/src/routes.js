@@ -13,6 +13,7 @@ import Amizades from "./pages/amizades";
 import CommunitiesInfo from "./pages/communities-info";
 import ChatComunidade from "./pages/chats/chat-comunidades";
 import ComunidadeConfig from "./pages/comunidade-config";
+import NotFound from "./pages/notFound"
 
 export default function Index() {
 	return (
@@ -31,6 +32,7 @@ export default function Index() {
 				<Route path="/comunidade/:idParam/info" exact element={<CommunitiesInfo />} />
 				<Route path="/chat/comunidade/:id" exact element={<ChatComunidade />} />
 				<Route path="/comunidade/:id/settings" exact element={<ComunidadeConfig />} />
+				<Route path="*" element={<NotFound/>} />
 			</Routes>
 		</BrowserRouter>
 	);

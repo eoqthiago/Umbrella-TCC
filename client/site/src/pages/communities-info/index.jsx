@@ -3,30 +3,26 @@ import { BuscarImg } from "../../api/services";
 import Header from "../../components/header";
 import Menu from "../../components/menu";
 import Card from "../../components/card";
-import { pesquisar } from "../../api/communityApi";
-import { useParams } from "react-router-dom";
+import { searchCommunityId } from "../../api/communityApi";
 import { BotaoSolido, Titulo } from "../../styled";
-import { toast } from "react-toastify";
+import { useNavigate, useParams } from "react-router-dom";
 import "./index.sass";
 
 export default function Index() {
 	const [menu, setMenu] = useState(false);
-	const [comunidade, setComunidade] = useState({});
-	const { idParam } = useParams();
-	console.log(comunidade);
+	const [comunidade, setComunidade] = useState("");
+	const navigate = useNavigate();
 
-	useEffect(() => {
-		async function carregarPage() {
-			try {
-				const r = await pesquisar("comunidade", "#" + idParam);
-				if (r.status !== 200) throw new Error("Um erro ocorreu ao carregar a comunidade");
-				setComunidade(r);
-			} catch (err) {
-				if (err.response) toast.error(err.response.data.err);
-			}
-		}
-		carregarPage();
-	});
+	const { idParam } = useParams();
+
+useEffect(() => {
+	async function carregarPage() {
+		const r = await searchCommunityId(idParam);
+		if(!r) navigate("*");
+		else setComunidade(r)
+	}
+	carregarPage();
+});
 
 	return (
 		<div className="community-info page">
@@ -39,14 +35,13 @@ export default function Index() {
 					<div>
 						<div>
 							<Titulo fonte="1vw" cor="#131313">
-								{comunidade.nome ?? "Comunidade"}
+								{comunidade.nome}
 							</Titulo>
 							<div>
-								{comunidade.descricao ??
-									`Lorem, ipsum dolor sit amet consectetur adipisicing elit. Commodi inventore mollitia enim sunt ab qui, officiis id, eius saepe ratione praesentium iure hic repellendus fugit sit porro error voluptatum vero.`}
+								{comunidade.descricao}
 							</div>
 						</div>
-						<BotaoSolido width="100%" fonte="2vw">
+						<BotaoSolido width="100%" fonte="2vw" onClick={() => navigate(`/chat/comunidade/${idParam}`)}>
 							Entrar
 						</BotaoSolido>
 					</div>

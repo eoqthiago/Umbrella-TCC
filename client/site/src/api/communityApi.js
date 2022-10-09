@@ -47,7 +47,7 @@ export async function pesquisar(categoria, conteudo) {
 					},
 				});
 			} else {
-				r = await api.get(`/comunidade?community=#${conteudo}`, {
+				r = await api.get(`/comunidadeId?community=${conteudo}`, {
 					headers: {
 						"x-access-token": userToken,
 					},
@@ -67,7 +67,6 @@ export async function pesquisar(categoria, conteudo) {
 		default:
 			break;
 		}
-		console.log(r.data)
 	return r.data;
 }
 
@@ -108,7 +107,21 @@ export async function exitCommunity(idComunidade, idUsuario) {
 	return r.status;
 }
 
-export async function mostrarCanais(id) {
+export async function consultarCanais(id) {
 	const r = await api.get(`/comunidade/canal/${id}`);
+	return r.data;
+}
+
+export async function excluirComunidade(comId) {
+	const r = await api.delete(`/comunidade/configuracao/${comId}`);
+	return r.data; 
+}
+
+export async function consultarUsuarios(comId) {
+	const r = await api.get(`/comunidade/configuracao/${comId}`, {
+		headers: {
+			"x-access-token": userToken.token,
+		},
+	});
 	return r.data;
 }

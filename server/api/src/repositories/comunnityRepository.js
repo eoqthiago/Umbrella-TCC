@@ -35,6 +35,25 @@ export async function communityUserID(id, comunidade) {
 					AND 	id_comunidade = ?`;
 
 	const [r] = await con.query(command, [id, comunidade]);
+	return r;
+}
+
+// Consultar todos usuarios da comunidade
+export async function communityUsers(idCom) {
+	const command = `SELECT
+		tb_usuario_comunidade.id_usuario_comunidade as id,
+		tb_usuario_comunidade.id_usuario as id_usuario,
+		tb_usuario_comunidade.id_comunidade as comunidade,
+		tb_usuario_comunidade.bt_admin as admin,
+		tb_usuario.nm_usuario as nome,
+		tb_usuario.ds_usuario as descricao,
+		tb_usuario.img_usuario as imagem,
+		tb_usuario.img_banner as banner
+		FROM tb_usuario_comunidade
+		INNER JOIN tb_usuario on tb_usuario_comunidade.id_usuario = tb_usuario.id_usuario
+		WHERE tb_usuario_comunidade.id_comunidade = ?`
+
+	const [r] = await con.query(command, [idCom]);
 	return r[0];
 }
 
@@ -61,7 +80,7 @@ export async function communityOwner(userId, communityId) {
 		INNER JOIN tb_usuario ON id_criador = id_usuario
 		WHERE 	id_comunidade = ? AND id_criador = ? `;
 	const [answer] = await con.query(command, [communityId, userId]);
-	return answer[0];
+	return answer;
 }
 
 // Consultar comunidade por ID
@@ -144,11 +163,11 @@ export async function communityAdmin(id, admin) {
 }
 
 // Criar canal
-export async function communityCanal(comunitty, canal) {
+export async function communityCanal(community, canal) {
 	const command = `
 		insert into tb_comunidade_canal(id_comunidade, nm_canal)
 		values (?,  ?) `;
-	const [r] = await con.query(command, [comunitty.id, canal.name]);
+	const [r] = await con.query(command, [community.id, canal.name]);
 	return r;
 }
 
@@ -189,4 +208,14 @@ export async function communityUserDelete(idUsuario, idComunidade) {
 		delete from tb_usuario_comunidade where id_usuario = ? and id_comunidade = ? `;
 	const [answer] = await con.query(command, [idUsuario, idComunidade]);
 	return answer.affectedRows;
+}
+
+// Excluir comunidade
+export async function communityDelete(idCommunity) {
+	const command = `
+		delete 	from tb_comunidade
+		   where id_comunidade = ?`;
+
+	const [r] = await con.query(command, [idCommunity]);
+	return r.affectedRows;
 }
