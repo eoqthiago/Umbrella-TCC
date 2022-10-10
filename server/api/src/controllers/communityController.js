@@ -7,7 +7,6 @@ import {
 	communityUserAdd,
 	communityAdmin,
 	communityOwner,
-	communitiesGet,
 	communityImage,
 	communityId,
 	communityName,
@@ -141,9 +140,9 @@ server.put("/comunidade/:id", async (req, res) => {
 //Consultar comunidade por nome
 server.get("/comunidade", async (req, res) => {
 	try {
-		const community = req.query.community;
+		const community = req.query.name;
 		const r = await communityName(community);
-		res.status(200).send(r);
+		res.send(r);
 	} catch (err) {
 		res.status(401).send({
 			err: err.message,
@@ -152,13 +151,14 @@ server.get("/comunidade", async (req, res) => {
 });
 
 //Consultar comunidade por ID
-server.get("/comunidadeId", async (req, res) => {
+server.get("/comunidade/:id", async (req, res) => {
 	try {
-		const community = req.query.community;
+		const community = Number(req.params.id);
 		const r = await communityId(community);
-		res.status(200).send(r);
+		
+		res.send(r);
 	} catch (err) {
-		res.status(401).send({
+		res.status(400).send({
 			err: err.message,
 		});
 	}
@@ -301,16 +301,17 @@ server.delete("/comunidade/configuracao/:id", async (req, res) => {
 				throw new Error("Falha na autenticação");
 			case !(await communityUserID(auth.id, id)) || !(await communityOwner(auth.id, id)) || !(await communityId(id)):
 				throw new Error("Não autorizado");
-			default: break
+			default:
+				break;
 		}
 		const del = await communityDelete(id);
 		res.status(200).send();
-	} catch(err) {
+	} catch (err) {
 		res.status(401).send({
 			err: err.message,
-	})
+		});
 	}
-})
+});
 
 // Consultar todos usuarios da comunidade
 server.get("/comunidade/configuracao/:id", async (req, res) => {
@@ -318,16 +319,16 @@ server.get("/comunidade/configuracao/:id", async (req, res) => {
 		const id = Number(req.params.id);
 		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
-		switch(true) {
+		switch (true) {
 			case !(await communityId(id)):
 				throw new Error("Não autorizado");
 		}
 		const users = await communityUsers(id);
 		res.status(200).send(users);
-	} catch(err) {
+	} catch (err) {
 		res.status(401).send({
 			err: err.message,
-	})
+		});
 	}
 });
 

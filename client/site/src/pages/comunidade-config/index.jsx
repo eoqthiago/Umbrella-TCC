@@ -2,12 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "../../components/header";
 import Menu from "../../components/menu";
-import "../../components/listas/usuario/index.sass"
-import { toast } from "react-toastify"
+import "../../components/listas/usuario/index.sass";
+import { toast } from "react-toastify";
 import { consultarCanais, consultarUsuarios, excluirComunidade, searchCommunityId } from "../../api/communityApi";
 import "./index.sass";
-import { BuscarImg } from "../../api/services";
-import { pedirAmizade } from "../../api/userApi";
 
 export default function Index() {
 	const [menu, setMenu] = useState(false);
@@ -20,54 +18,28 @@ export default function Index() {
 	const { id } = useParams();
 	const navigate = useNavigate();
 
-async function handleAmizade(id) {
-	try {
-		const r = await pedirAmizade(id);
+	async function eListener() {
+		const r = await excluirComunidade(id);
 		console.log(r);
-		if (r !== 204) throw new Error("Não foi possível pedir em amizade");
-		toast.success("Pedido de amizade feito com sucesso");
-		setBlock(true);
-	} catch (err) {
-		if (err.response) toast.error(err.response.data.err);
-		else toast.error(err.message);
+		if (r !== 200) {
+			toast.error("Não foi possível deletar a comunidade");
+		} else {
+			toast.success(`A comunidade ${comunidade.nome} foi deletada!`);
+			navigate("/pesquisa");
+		}
 	}
-}
 
-async function eListener() {
-	const r = await excluirComunidade(id);
-	console.log(r)
-	if(r !== 200) {
-		toast.error("Não foi possível deletar a comunidade");
-	} else {
-		toast.success(`A comunidade ${comunidade.nome} foi deletada!`);
-		navigate("/pesquisa");
-	}
-}
-
-useEffect(() => {
-	async function carregarPage() {
-		const r = await searchCommunityId(id);
-		setComunidade(r);
-	}
-	carregarPage();
-});
-
-useEffect(() => {
-	async function carregarPage() {
-		const r = await consultarUsuarios(id);
-		setUsuarios(r);
-		console.log(r)
-	}
-	carregarPage();
-}, []);
-
-useEffect(() => {
-	async function carregarCanais() {
-		const r = await consultarCanais(id);
-		setCanais(r);
-	}
-	carregarCanais();
-});
+	useEffect(() => {
+		async function carregarPage() {
+			const r = await consultarUsuarios(id);
+			setUsuarios(r);
+			const s = await searchCommunityId(id);
+			setComunidade(s);
+			const t = await consultarCanais(id);
+			setCanais(t);
+		}
+		carregarPage();
+	}, [id]);
 
 	return (
 		<div className="comunidade-conf page">
@@ -97,9 +69,7 @@ useEffect(() => {
 					<span>
 						<ul>
 							{canais.map((item) => (
-								<li>
-									{item.nome}
-								</li>
+								<li>{item.nome}</li>
 							))}
 						</ul>
 						<button>+ Criar canal</button>

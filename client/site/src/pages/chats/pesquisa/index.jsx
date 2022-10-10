@@ -18,7 +18,8 @@ const Index = () => {
 		const r = await pesquisar(selecionado, pesquisa);
 		switch (selecionado) {
 			case "comunidades":
-				setComunidades(r);
+				if (r.tipo !== "array") setComunidades([r]);
+				else setComunidades(r);
 				break;
 			case "usuarios":
 				setUsuarios(r);
@@ -30,6 +31,7 @@ const Index = () => {
 				break;
 		}
 	}
+
 	return (
 		<div className="pesquisa page">
 			<Header menu alterarMenu={setMenu} estadoMenu={menu} />
@@ -51,7 +53,8 @@ const Index = () => {
 					<img src="/assets/icons/search.svg" alt="Pesquisar" onClick={() => consultar()} />
 				</div>
 				<section>
-					{selecionado === "comunidades" && comunidades.map((item) => <Card nome={item.nome} descricao={item.descricao} imagem={item.imagem} id={item.id} usuarios={item.qtdUsuarios} />)}
+					{selecionado === "comunidades" &&
+						comunidades.map((item) => <Card key={item.id} nome={item.nome} descricao={item.descricao} imagem={item.imagem} id={item.id} usuarios={item.qtdUsuarios} />)}
 					{selecionado === "usuarios" && usuarios.map((item) => <User item={item} key={item.id} />)}
 					{selecionado === "mensagens" && mensagens.map(() => <>Mensagens</>)}
 				</section>

@@ -40,14 +40,15 @@ export async function pesquisar(categoria, conteudo) {
 	let r;
 	switch (categoria) {
 		case "comunidades":
-			if (isNaN(conteudo[0])) {
-				r = await api.get(`/comunidade?community=${conteudo}`, {
+			if (conteudo[0] !== "#" || isNaN(conteudo.substring(1, conteudo.length))) {
+				r = await api.get(`/comunidade?name=${conteudo}`, {
 					headers: {
 						"x-access-token": userToken,
 					},
 				});
+				r.data.tipo = "array";
 			} else {
-				r = await api.get(`/comunidadeId?community=${conteudo}`, {
+				r = await api.get(`/comunidade/${conteudo.substring(1, conteudo.length)}`, {
 					headers: {
 						"x-access-token": userToken,
 					},
@@ -66,7 +67,7 @@ export async function pesquisar(categoria, conteudo) {
 		// 	break;
 		default:
 			break;
-		}
+	}
 	return r.data;
 }
 
@@ -118,7 +119,7 @@ export async function excluirComunidade(comId) {
 			"x-access-token": userToken,
 		},
 	});
-	return r.status; 
+	return r.status;
 }
 
 export async function consultarUsuarios(comId) {
