@@ -1,11 +1,11 @@
-.comp-lista-usuario
+@mixin DisplayUser($width, $height,$radius: 0)
     list-style: none
     background-color: #fff
-    width: 90vw
+    width: $width
     max-width: 550px
-    height: 65px
+    height: $height
     border: 1px solid #c0c0c0
-    border-radius: 10px
+    border-radius: $radius
     display: flex
     flex-flow: row nowrap
     align-items: center
@@ -45,3 +45,9 @@
                 width: 30px
                 height: 30px
                 cursor: pointer
+
+.membersDisplay
+    @include DisplayUser(15vw, 55px, $radius: 20px)
+
+.comp-lista-usuario
+    @include DisplayUser(90vw, 65px, $radius: 10px)

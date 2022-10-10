@@ -20,14 +20,14 @@ const Index = () => {
         }
 
         aparecerCanais();
-    }, []);
+    }, [id]);
 
     return (
         <div>
             <div className="comunidade page">
                 <Header menu alterarMenu={setMenu} estadoMenu={menu} />
                 <Menu ativo={menu} alterar={setMenu} />
-                <section className="comunidade-canais-page" onClick={() => excluirComunidade(id) && navigate('/pesquisa')}>
+                <section className="comunidade-canais-page">
                 </section>
             </div>
 

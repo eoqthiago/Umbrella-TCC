@@ -301,8 +301,8 @@ server.delete("/comunidade/configuracao/:id", async (req, res) => {
 				throw new Error("Falha na autenticação");
 			case !(await communityUserID(auth.id, id)) || !(await communityOwner(auth.id, id)) || !(await communityId(id)):
 				throw new Error("Não autorizado");
+			default: break
 		}
-		console.log()
 		const del = await communityDelete(id);
 		res.status(200).send();
 	} catch(err) {

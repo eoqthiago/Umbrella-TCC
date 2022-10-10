@@ -113,8 +113,12 @@ export async function consultarCanais(id) {
 }
 
 export async function excluirComunidade(comId) {
-	const r = await api.delete(`/comunidade/configuracao/${comId}`);
-	return r.data; 
+	const r = await api.delete(`/comunidade/configuracao/${comId}`, {
+		headers: {
+			"x-access-token": userToken,
+		},
+	});
+	return r.status; 
 }
 
 export async function consultarUsuarios(comId) {
