@@ -8,8 +8,8 @@ export async function communityCadastro(nome, descricao, publica) {
 	const r = await api.post(
 		"/comunidade",
 		{
-			nome: nome,
-			descricao: descricao,
+			nome,
+			descricao,
 			publica: publica === true,
 		},
 		{
@@ -133,4 +133,22 @@ export async function consultarUsuarios(comId) {
 		{}
 	);
 	return r.data;
+}
+
+export async function communityEdit(nome, descricao, publica, id) {
+	if (!userToken) return;
+	const r = await api.put(
+		`/comunidade/${id}`,
+		{
+			nome,
+			descricao,
+			publica: publica === true,
+		},
+		{
+			headers: {
+				"x-access-token": userToken,
+			},
+		}
+	);
+	return r.status;
 }

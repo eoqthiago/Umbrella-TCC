@@ -110,28 +110,28 @@ server.put("/comunidade/imagem/:id", communityImg.single("imagem"), async (req, 
 // Se o id do usuario logado for igual do criador deve deixar alterar, se não, lançar um erro
 server.put("/comunidade/:id", async (req, res) => {
 	try {
-		const { id } = req.params;
+		const id = Number(req.params.id);
 		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 		const community = req.body;
 		switch (true) {
+			case !id || !(await communityId(id)):
+				throw new Error("Comunidade não encontrada");
 			case !header || !auth || !(await communityOwner(auth.id, community.id)):
-				throw new Error("Erro de autenticação");
-			case !community.id || !community.id.trim():
-				throw new Error("O grupo precisa de um ID");
-			case !community.name || !community.name.trim():
-				throw new Error("O grupo precisa de um nome");
-			case !community.descricao || !community.descricao.trim():
-				throw new Error("O grupo precisa de uma descrição");
+				throw new Error("Falha na autenticação");
+			case !community.nome || !community.nome.trim():
+				throw new Error("O nome inserido é inválido");
+			case community.publica == undefined:
+				throw new Error("Insira a visibilidade da comunidade");
 			default:
 				break;
 		}
-		community.id = Number(id);
-		const r = await communityEdit(community);
+		community.id = id;
+		const r = await communityEdit(community, auth.id);
 		if (r < 1) throw new Error("Não foi possível fazer as alterações na comunidade");
-		res.status(201).send("Editada com sucesso");
+		res.status(204);
 	} catch (err) {
-		res.status(401).send({
+		res.status(400).send({
 			err: err.message,
 		});
 	}
@@ -196,7 +196,7 @@ server.put("/comunidade/admin/usuario", async (req, res) => {
 server.get("/comunidade/usuario", async (req, res) => {
 	try {
 		const user = req.body;
-		if (!user.comunidade || !communityId(user.comunidade)) throw new Error("Comunidade não existe");
+		if (!user.comunidade || !(await communityId(user.comunidade))) throw new Error("Comunidade não existe");
 		else if (Number(user.usuario)) {
 			let r = await communityUserID(user.usuario, user.comunidade);
 			res.status(200).send(r);

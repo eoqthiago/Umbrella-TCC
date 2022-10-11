@@ -13,7 +13,6 @@ const Index = ({ item }) => {
 	async function handleAmizade() {
 		try {
 			const r = await pedirAmizade(item.id);
-			console.log(r);
 			if (r !== 204) throw new Error("Não foi possível pedir em amizade");
 			toast.success("Pedido de amizade feito com sucesso");
 			setBlock(true);

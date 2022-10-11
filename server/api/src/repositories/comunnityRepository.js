@@ -135,9 +135,11 @@ export async function communityEdit(community, ownerId) {
 	const command = `
 		update 	tb_comunidade 
 		set 	nm_comunidade = ?,
-			ds_comunidade = ?
+				ds_comunidade = ?,
+				bt_publica = ?
 	where id_criador = ? and id_comunidade = ? `;
-	const [r] = await con.query(command, [community.name, community.descricao, ownerId, community.id]);
+	const [r] = await con.query(command, [community.nome, community.descricao, community.publica, ownerId, community.id]);
+	console.log(r.affectedRows)
 	return r.affectedRows;
 }
 
