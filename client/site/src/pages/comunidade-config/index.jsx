@@ -11,7 +11,7 @@ export default function Index() {
 	const [menu, setMenu] = useState(false);
 	const [block, setBlock] = useState(false);
 	const [banner, setBanner] = useState("");
-	const [comunidade, setComunidade] = useState([]);
+	const [comunidade, setComunidade] = useState({});
 	const [canais, setCanais] = useState([]);
 	const [usuarios, setUsuarios] = useState([]);
 	const [img, setImg] = useState("");
@@ -19,13 +19,14 @@ export default function Index() {
 	const navigate = useNavigate();
 
 	async function eListener() {
-		const r = await excluirComunidade(id);
-		console.log(r);
-		if (r !== 200) {
-			toast.error("Não foi possível deletar a comunidade");
-		} else {
-			toast.success(`A comunidade ${comunidade.nome} foi deletada!`);
-			navigate("/pesquisa");
+		try {
+			const r = await excluirComunidade(id);
+			if (r !== 204) throw new Error("Não foi possível excluir a comunidade");
+			toast.success(`A comunidade ${comunidade.nome} foi excluída com sucesso! Você será redirecionado em instantes`);
+			setTimeout(() => navigate("/home"), 3000);
+		} catch (err) {
+			if (err.response) toast.error(err.response.data.err);
+			else toast.error(err.message);
 		}
 	}
 
@@ -60,10 +61,10 @@ export default function Index() {
 						<img src="/assets/images/user.png" alt="" />
 					</div>
 				</section>
-				<div className="cont-community-info">
-					<h1>{comunidade.nome}</h1>
-					<p>{comunidade.descricao}</p>
-				</div>
+				<section className="cont-community-info">
+					<h1>{comunidade.nome ?? "Comunidade"}</h1>
+					<p>{comunidade.descricao ?? "Descrição"}</p>
+				</section>
 
 				<div className="cont-membrs">
 					<span>
@@ -81,17 +82,12 @@ export default function Index() {
 						</span>
 						<section>
 							<span>
-								Filtrar por nome: <input></input>
+								Filtrar por nome: <input />
 							</span>
 							<div className="cont-mebrs-dspl">
 								<li className="membersDisplay">
 									<img src="/assets/images/user.png" alt="Usuário" />
-									<div>
-										<span>USUARIO</span>
-										<div>
-											<img src="/assets/icons/addFriend.svg" alt="Adicionar amigo" disabled={block} />
-										</div>
-									</div>
+									<div>USUARIO</div>
 								</li>
 							</div>
 						</section>

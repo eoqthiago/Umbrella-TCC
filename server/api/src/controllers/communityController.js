@@ -155,7 +155,7 @@ server.get("/comunidade/:id", async (req, res) => {
 	try {
 		const community = Number(req.params.id);
 		const r = await communityId(community);
-		
+
 		res.send(r);
 	} catch (err) {
 		res.status(400).send({
@@ -305,9 +305,10 @@ server.delete("/comunidade/configuracao/:id", async (req, res) => {
 				break;
 		}
 		const del = await communityDelete(id);
-		res.status(200).send();
+		if (del < 1) throw new Error("Não foi possível excluir a comunidade");
+		res.status(204).send();
 	} catch (err) {
-		res.status(401).send({
+		res.status(400).send({
 			err: err.message,
 		});
 	}
