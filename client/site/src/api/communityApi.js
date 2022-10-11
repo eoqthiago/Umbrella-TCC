@@ -8,8 +8,8 @@ export async function communityCadastro(nome, descricao, publica) {
 	const r = await api.post(
 		"/comunidade",
 		{
-			nome: nome,
-			descricao: descricao,
+			nome,
+			descricao,
 			publica: publica === true,
 		},
 		{
@@ -40,14 +40,15 @@ export async function pesquisar(categoria, conteudo) {
 	let r;
 	switch (categoria) {
 		case "comunidades":
-			if (isNaN(conteudo[0])) {
-				r = await api.get(`/comunidade?community=${conteudo}`, {
+			if (conteudo[0] !== "#" || isNaN(conteudo.substring(1, conteudo.length))) {
+				r = await api.get(`/comunidade?name=${conteudo}`, {
 					headers: {
 						"x-access-token": userToken,
 					},
 				});
+				r.data.tipo = "array";
 			} else {
-				r = await api.get(`/comunidadeId?community=${conteudo}`, {
+				r = await api.get(`/comunidade/${conteudo.substring(1, conteudo.length)}`, {
 					headers: {
 						"x-access-token": userToken,
 					},
@@ -66,7 +67,7 @@ export async function pesquisar(categoria, conteudo) {
 		// 	break;
 		default:
 			break;
-		}
+	}
 	return r.data;
 }
 
@@ -89,7 +90,7 @@ export async function communityReport(id, email, motivo) {
 
 export async function searchCommunityId(id) {
 	if (!userToken) return;
-	const r = await api.get(`/comunidadeId?community=${id}`, {
+	const r = await api.get(`/comunidade/${id}`, {
 		headers: {
 			"x-access-token": userToken,
 		},
@@ -113,19 +114,41 @@ export async function consultarCanais(id) {
 }
 
 export async function excluirComunidade(comId) {
-	const r = await api.delete(`/comunidade/configuracao/${comId}`, {
+	const r = await api.delete(`/comunidade/${comId}`, {
 		headers: {
 			"x-access-token": userToken,
 		},
 	});
-	return r.status; 
+	return r.status;
 }
 
 export async function consultarUsuarios(comId) {
-	const r = await api.get(`/comunidade/configuracao/${comId}`, {
-		headers: {
-			"x-access-token": userToken.token,
+	const r = await api.get(
+		`/comunidade/${comId}/usuarios`,
+		{
+			headers: {
+				"x-access-token": userToken,
+			},
 		},
-	});
+		{}
+	);
 	return r.data;
+}
+
+export async function communityEdit(nome, descricao, publica, id) {
+	if (!userToken) return;
+	const r = await api.put(
+		`/comunidade/${id}`,
+		{
+			nome,
+			descricao,
+			publica: publica === true,
+		},
+		{
+			headers: {
+				"x-access-token": userToken,
+			},
+		}
+	);
+	return r.status;
 }

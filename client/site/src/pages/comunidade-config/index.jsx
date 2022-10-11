@@ -2,72 +2,87 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "../../components/header";
 import Menu from "../../components/menu";
-import "../../components/listas/usuario/index.sass"
-import { toast } from "react-toastify"
-import { consultarCanais, consultarUsuarios, excluirComunidade, searchCommunityId } from "../../api/communityApi";
-import "./index.sass";
+import { toast } from "react-toastify";
+import { communityEdit, consultarCanais, consultarUsuarios, excluirComunidade, searchCommunityId } from "../../api/communityApi";
+import localStorage from "local-storage";
+import { BotaoSolido, Input, InputArea } from "../../styled";
 import { BuscarImg } from "../../api/services";
-import { pedirAmizade } from "../../api/userApi";
+import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
+import "../../components/listas/usuario/index.sass";
+import "./index.sass";
 
 export default function Index() {
 	const [menu, setMenu] = useState(false);
-	const [block, setBlock] = useState(false);
 	const [banner, setBanner] = useState("");
-	const [comunidade, setComunidade] = useState([]);
+	const [comunidade, setComunidade] = useState({});
 	const [canais, setCanais] = useState([]);
 	const [usuarios, setUsuarios] = useState([]);
 	const [img, setImg] = useState("");
-	const { id } = useParams();
+	const [editando, setEditando] = useState(false);
+	const [nome, setNome] = useState("");
+	const [descricao, setDescricao] = useState("");
+	const [publica, setPublica] = useState(true);
 	const navigate = useNavigate();
+	const { id } = useParams();
 
-async function handleAmizade(id) {
-	try {
-		const r = await pedirAmizade(id);
-		console.log(r);
-		if (r !== 204) throw new Error("Não foi possível pedir em amizade");
-		toast.success("Pedido de amizade feito com sucesso");
-		setBlock(true);
-	} catch (err) {
-		if (err.response) toast.error(err.response.data.err);
-		else toast.error(err.message);
+	async function handleAlteracao() {
+		try {
+			const r = await communityEdit(nome, descricao, publica, comunidade.id);
+			if (r !== 204) throw new Error("Não foi possível salvar as alterações");
+			setEditando(false);
+			toast.success("Alterações feitas com sucesso!");
+			async function carregarPage() {
+				const s = await searchCommunityId(id);
+				if (!s || s.criador !== localStorage("user").id) {
+					toast.warning("Um erro ocorreu");
+					navigate("/");
+				}
+				setComunidade(s);
+				setNome(s.nome);
+				setDescricao(s.descricao);
+				setPublica(s.publica);
+				const r = await consultarUsuarios(id);
+				setUsuarios(r);
+				const t = await consultarCanais(id);
+				setCanais(t);
+			}
+			carregarPage();
+		} catch (err) {
+			if (err.response) toast.error(err.response.data.err);
+			else toast.error(err.message);
+		}
 	}
-}
 
-async function eListener() {
-	const r = await excluirComunidade(id);
-	console.log(r)
-	if(r !== 200) {
-		toast.error("Não foi possível deletar a comunidade");
-	} else {
-		toast.success(`A comunidade ${comunidade.nome} foi deletada!`);
-		navigate("/pesquisa");
+	async function eListener() {
+		try {
+			const r = await excluirComunidade(id);
+			if (r !== 204) throw new Error("Não foi possível excluir a comunidade");
+			toast.success(`A comunidade ${comunidade.nome} foi excluída com sucesso! Você será redirecionado em instantes`);
+			setTimeout(() => navigate("/home"), 3000);
+		} catch (err) {
+			if (err.response) toast.error(err.response.data.err);
+			else toast.error(err.message);
+		}
 	}
-}
 
-useEffect(() => {
-	async function carregarPage() {
-		const r = await searchCommunityId(id);
-		setComunidade(r);
-	}
-	carregarPage();
-});
-
-useEffect(() => {
-	async function carregarPage() {
-		const r = await consultarUsuarios(id);
-		setUsuarios(r);
-		console.log(r)
-	}
-	carregarPage();
-}, []);
-
-useEffect(() => {
-	async function carregarCanais() {
-		const r = await consultarCanais(id);
-		setCanais(r);
-	}
-	carregarCanais();
-});
+	useEffect(() => {
+		async function carregarPage() {
+			const s = await searchCommunityId(id);
+			if (!s || s.criador !== localStorage("user").id) {
+				toast.warning("Um erro ocorreu");
+				navigate("/");
+			}
+			setComunidade(s);
+			setNome(s.nome);
+			setDescricao(s.descricao);
+			setPublica(s.publica);
+			const r = await consultarUsuarios(id);
+			setUsuarios(r);
+			const t = await consultarCanais(id);
+			setCanais(t);
+		}
+		carregarPage();
+	}, [id, navigate]);
 
 	return (
 		<div className="comunidade-conf page">
@@ -79,7 +94,7 @@ useEffect(() => {
 						<div className={"comunidade-conf-banner-button " + banner}>
 							<button>Alterar capa</button>
 						</div>
-						<img src="/assets/images/banner.png" alt="" />
+						<img src={!comunidade.imagem ? "/assets/images/banner.png" : BuscarImg(comunidade.imagem)} alt="" />
 					</div>
 					<div className="comunidade-conf-banner-img" onMouseEnter={() => setImg("ativo")} onMouseLeave={() => setImg("")}>
 						<div className={"comunidade-conf-banner-img-button " + img}>
@@ -88,18 +103,45 @@ useEffect(() => {
 						<img src="/assets/images/user.png" alt="" />
 					</div>
 				</section>
-				<div className="cont-community-info">
-					<h1>{comunidade.nome}</h1>
-					<p>{comunidade.descricao}</p>
-				</div>
+
+				<section className="cont-community-info">
+					<div className="cont-community-edit" onClick={() => setEditando(true)} style={{ display: editando && "none" }} />
+
+					<h1 onClick={() => setEditando(true)} style={{ display: editando && "none" }}>
+						{comunidade.nome ?? "Comunidade"}
+					</h1>
+
+					<p onClick={() => setEditando(true)} style={{ display: editando && "none" }}>
+						{comunidade.descricao ?? "Descrição"}
+					</p>
+
+					<Input type="text" placeholder="Nome da comunidade*" width="100%" style={{ display: !editando && "none" }} value={nome} onChange={(e) => setNome(e.target.value)} />
+					<InputArea
+						type="text"
+						placeholder="Descrição da comunidade"
+						width="100%"
+						resize="none"
+						height="120px"
+						style={{ display: !editando && "none" }}
+						value={descricao}
+						onChange={(e) => setDescricao(e.target.value)}
+					/>
+					<FormControl sx={{ display: !editando && "none" }}>
+						<RadioGroup defaultValue={"publica"} name="tipo-comunidade" value={publica} onChange={(e) => setPublica(e.target.value)}>
+							<FormControlLabel value={true} control={<Radio color="success" />} label="Pública" />
+							<FormControlLabel value={false} control={<Radio color="success" />} label="Privada" />
+						</RadioGroup>
+					</FormControl>
+					<BotaoSolido fonte="1vw" style={{ display: !editando && "none" }} onClick={() => handleAlteracao()}>
+						Salvar
+					</BotaoSolido>
+				</section>
 
 				<div className="cont-membrs">
 					<span>
 						<ul>
 							{canais.map((item) => (
-								<li>
-									{item.nome}
-								</li>
+								<li key={item.idCanal}>{item.nome}</li>
 							))}
 						</ul>
 						<button>+ Criar canal</button>
@@ -111,18 +153,15 @@ useEffect(() => {
 						</span>
 						<section>
 							<span>
-								Filtrar por nome: <input></input>
+								Filtrar por nome: <input />
 							</span>
 							<div className="cont-mebrs-dspl">
-								<li className="membersDisplay">
-									<img src="/assets/images/user.png" alt="Usuário" />
-									<div>
-										<span>USUARIO</span>
-										<div>
-											<img src="/assets/icons/addFriend.svg" alt="Adicionar amigo" disabled={block} />
-										</div>
-									</div>
-								</li>
+								{usuarios.map((item) => (
+									<li className="membersDisplay" key={item.id}>
+										<img src="/assets/images/user.png" alt="Usuário" />
+										<div>{item.nome}</div>
+									</li>
+								))}
 							</div>
 						</section>
 						<div>

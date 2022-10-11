@@ -125,7 +125,8 @@ export async function userComunidadesConsulta(id) {
 		ds_comunidade descricao,
 		img_comunidade imagem,
 		img_banner banner,
-		bt_publica publica
+		bt_publica publica,
+		id_criador criador
 	from tb_usuario_comunidade 
 	inner join tb_comunidade on tb_usuario_comunidade.id_comunidade = tb_comunidade.id_comunidade
 	where id_usuario = ? `;
