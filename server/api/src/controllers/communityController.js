@@ -129,7 +129,7 @@ server.put("/comunidade/:id", async (req, res) => {
 		community.id = id;
 		const r = await communityEdit(community, auth.id);
 		if (r < 1) throw new Error("Não foi possível fazer as alterações na comunidade");
-		res.status(204);
+		res.status(204).send();
 	} catch (err) {
 		res.status(400).send({
 			err: err.message,
@@ -291,7 +291,7 @@ server.delete("/comunidade/:comunidade/usuario/:id", async (req, res) => {
 });
 
 // Excluir comunidade
-server.delete("/comunidade/configuracao/:id", async (req, res) => {
+server.delete("/comunidade/:id", async (req, res) => {
 	try {
 		const id = Number(req.params.id);
 		const header = req.header("x-access-token");

@@ -139,7 +139,6 @@ export async function communityEdit(community, ownerId) {
 				bt_publica = ?
 	where id_criador = ? and id_comunidade = ? `;
 	const [r] = await con.query(command, [community.nome, community.descricao, community.publica, ownerId, community.id]);
-	console.log(r.affectedRows)
 	return r.affectedRows;
 }
 

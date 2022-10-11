@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "../../components/header";
 import Menu from "../../components/menu";
-import "../../components/listas/usuario/index.sass";
 import { toast } from "react-toastify";
 import { communityEdit, consultarCanais, consultarUsuarios, excluirComunidade, searchCommunityId } from "../../api/communityApi";
 import localStorage from "local-storage";
-import "./index.sass";
 import { BotaoSolido, Input, InputArea } from "../../styled";
 import { BuscarImg } from "../../api/services";
 import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
+import "../../components/listas/usuario/index.sass";
+import "./index.sass";
 
 export default function Index() {
 	const [menu, setMenu] = useState(false);
@@ -31,6 +31,22 @@ export default function Index() {
 			if (r !== 204) throw new Error("Não foi possível salvar as alterações");
 			setEditando(false);
 			toast.success("Alterações feitas com sucesso!");
+			async function carregarPage() {
+				const s = await searchCommunityId(id);
+				if (!s || s.criador !== localStorage("user").id) {
+					toast.warning("Um erro ocorreu");
+					navigate("/");
+				}
+				setComunidade(s);
+				setNome(s.nome);
+				setDescricao(s.descricao);
+				setPublica(s.publica);
+				const r = await consultarUsuarios(id);
+				setUsuarios(r);
+				const t = await consultarCanais(id);
+				setCanais(t);
+			}
+			carregarPage();
 		} catch (err) {
 			if (err.response) toast.error(err.response.data.err);
 			else toast.error(err.message);
@@ -66,7 +82,7 @@ export default function Index() {
 			setCanais(t);
 		}
 		carregarPage();
-	}, []);
+	}, [id, navigate]);
 
 	return (
 		<div className="comunidade-conf page">
@@ -140,10 +156,12 @@ export default function Index() {
 								Filtrar por nome: <input />
 							</span>
 							<div className="cont-mebrs-dspl">
-								<li className="membersDisplay">
-									<img src="/assets/images/user.png" alt="Usuário" />
-									<div>USUARIO</div>
-								</li>
+								{usuarios.map((item) => (
+									<li className="membersDisplay" key={item.id}>
+										<img src="/assets/images/user.png" alt="Usuário" />
+										<div>{item.nome}</div>
+									</li>
+								))}
 							</div>
 						</section>
 						<div>

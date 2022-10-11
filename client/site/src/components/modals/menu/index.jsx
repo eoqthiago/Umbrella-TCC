@@ -27,6 +27,7 @@ const Index = ({ ativo, position, selecionada, modalRef, tipo, user, comunidade,
 			const r = await exitCommunity(selecionada.id, localStorage("user").id);
 			if (r !== 204) throw new Error("Não foi possível sair da comunidade");
 			toast.warning("Você saiu da comunidade");
+			setAtivo(false);
 		} catch (err) {
 			if (err.response) toast.error(err.response.data.err);
 			else toast.error(err.message);
@@ -55,11 +56,11 @@ const Index = ({ ativo, position, selecionada, modalRef, tipo, user, comunidade,
 				<img src="/assets/icons/talk.svg" alt="Conversar" />
 				Conversar
 			</div>
-			{tipo === "comunidade" && (
-				<div>
+			{tipo === "comunidade" && selecionada.criador === localStorage("user").id ? (
+				<div onClick={() => navigate(`/comunidade/${selecionada.id}/settings`)}>
 					<img src="/assets/icons/edit.svg" alt="Configurar" /> Configurar
 				</div>
-			)}
+			) : null}
 			{tipo === "usuario" && (
 				<div onClick={() => handleRemoveAmigo()}>
 					<img src="/assets/icons/removeFriend.svg" alt="Remover Amizade" /> Desfazer Amizade
