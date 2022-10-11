@@ -315,17 +315,21 @@ server.delete("/comunidade/configuracao/:id", async (req, res) => {
 });
 
 // Consultar todos usuarios da comunidade
-server.get("/comunidade/configuracao/:id", async (req, res) => {
+server.get("/comunidade/:id/usuarios", async (req, res) => {
 	try {
 		const id = Number(req.params.id);
 		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 		switch (true) {
-			case !(await communityId(id)):
+			case !header || !auth || !(await userIdSearch(auth.id)):
+				throw new Error("Falha na autenticação");
+			case !(await communityUserID(auth.id, id)) || !(await communityOwner(auth.id, id)) || !(await communityId(id)):
 				throw new Error("Não autorizado");
+			default:
+				break;
 		}
 		const users = await communityUsers(id);
-		res.status(200).send(users);
+		res.send(users);
 	} catch (err) {
 		res.status(401).send({
 			err: err.message,

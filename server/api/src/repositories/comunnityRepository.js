@@ -40,21 +40,21 @@ export async function communityUserID(id, comunidade) {
 
 // Consultar todos usuarios da comunidade
 export async function communityUsers(idCom) {
-	const command = `SELECT
-		tb_usuario_comunidade.id_usuario_comunidade as id,
-		tb_usuario_comunidade.id_usuario as id_usuario,
-		tb_usuario_comunidade.id_comunidade as comunidade,
-		tb_usuario_comunidade.bt_admin as admin,
-		tb_usuario.nm_usuario as nome,
-		tb_usuario.ds_usuario as descricao,
-		tb_usuario.img_usuario as imagem,
-		tb_usuario.img_banner as banner
+	const command = `
+		SELECT
+			tb_usuario_comunidade.id_usuario_comunidade as id,
+			tb_usuario_comunidade.id_usuario as id_usuario,
+			tb_usuario_comunidade.id_comunidade as comunidade,
+			tb_usuario_comunidade.bt_admin as admin,
+			tb_usuario.nm_usuario as nome,
+			tb_usuario.ds_usuario as descricao,
+			tb_usuario.img_usuario as imagem,
+			tb_usuario.img_banner as banner
 		FROM tb_usuario_comunidade
 		INNER JOIN tb_usuario on tb_usuario_comunidade.id_usuario = tb_usuario.id_usuario
 		WHERE tb_usuario_comunidade.id_comunidade = ?`;
-
 	const [r] = await con.query(command, [idCom]);
-	return r[0];
+	return r;
 }
 
 // Procurar por nome de usúario na comunidade
@@ -86,19 +86,23 @@ export async function communityOwner(userId, communityId) {
 // Consultar comunidade por ID
 export async function communityId(id) {
 	const command = `
-		SELECT		id_comunidade 	as	id,
-					nm_comunidade 	as	nome,
-					ds_comunidade 	as	descricao,
-					img_comunidade 	as	imagem,
-					img_banner 		as	banner,
-					bt_publica 		as	publica,
-					dt_criacao 		as	dataCriacao,
-					id_criador 		as	criador,
-		(SELECT COUNT(id_usuario_comunidade)
-		FROM tb_usuario_comunidade
-		INNER JOIN tb_comunidade 
-		ON tb_usuario_comunidade.id_comunidade = tb_comunidade.id_comunidade
-		WHERE tb_usuario_comunidade.id_comunidade = ?) as qtd_usuarios
+		SELECT		
+			id_comunidade 	as	id,
+			nm_comunidade 	as	nome,
+			ds_comunidade 	as	descricao,
+			img_comunidade 	as	imagem,
+			img_banner 		as	banner,
+			bt_publica 		as	publica,
+			dt_criacao 		as	dataCriacao,
+			id_criador 		as	criador,
+			(
+				SELECT 
+					COUNT(id_usuario_comunidade)
+				FROM tb_usuario_comunidade
+					INNER JOIN tb_comunidade 
+					ON tb_usuario_comunidade.id_comunidade = tb_comunidade.id_comunidade
+				WHERE tb_usuario_comunidade.id_comunidade = ?
+			) as qtd_usuarios
 		FROM tb_comunidade
 		WHERE 	id_comunidade = ?`;
 	const [answer] = await con.query(command, [id, id]);

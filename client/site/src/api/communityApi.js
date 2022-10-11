@@ -90,7 +90,7 @@ export async function communityReport(id, email, motivo) {
 
 export async function searchCommunityId(id) {
 	if (!userToken) return;
-	const r = await api.get(`/comunidadeId?community=${id}`, {
+	const r = await api.get(`/comunidade/${id}`, {
 		headers: {
 			"x-access-token": userToken,
 		},
@@ -123,10 +123,14 @@ export async function excluirComunidade(comId) {
 }
 
 export async function consultarUsuarios(comId) {
-	const r = await api.get(`/comunidade/configuracao/${comId}`, {
-		headers: {
-			"x-access-token": userToken.token,
+	const r = await api.get(
+		`/comunidade/${comId}/usuarios`,
+		{
+			headers: {
+				"x-access-token": userToken,
+			},
 		},
-	});
+		{}
+	);
 	return r.data;
 }

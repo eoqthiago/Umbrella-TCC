@@ -5,6 +5,7 @@ import Menu from "../../components/menu";
 import "../../components/listas/usuario/index.sass";
 import { toast } from "react-toastify";
 import { consultarCanais, consultarUsuarios, excluirComunidade, searchCommunityId } from "../../api/communityApi";
+import localStorage from "local-storage";
 import "./index.sass";
 
 export default function Index() {
@@ -32,15 +33,19 @@ export default function Index() {
 
 	useEffect(() => {
 		async function carregarPage() {
+			const s = await searchCommunityId(id);
+			if (!s || s.criador !== localStorage("user").id) {
+				toast.warning("Um erro ocorreu");
+				navigate("/");
+			}
+			setComunidade(s);
 			const r = await consultarUsuarios(id);
 			setUsuarios(r);
-			const s = await searchCommunityId(id);
-			setComunidade(s);
 			const t = await consultarCanais(id);
 			setCanais(t);
 		}
 		carregarPage();
-	}, [id]);
+	}, [id, navigate]);
 
 	return (
 		<div className="comunidade-conf page">
@@ -70,7 +75,7 @@ export default function Index() {
 					<span>
 						<ul>
 							{canais.map((item) => (
-								<li>{item.nome}</li>
+								<li key={item.idCanal}>{item.nome}</li>
 							))}
 						</ul>
 						<button>+ Criar canal</button>
