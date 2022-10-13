@@ -1,7 +1,7 @@
 import { Router } from "express";
 import jwt from "jsonwebtoken";
 import { sha256 } from "js-sha256";
-import { adminCadastro, adminDelete, adminLogin, adminSearch, adminVerificar } from "../repositories/adminRepository.js";
+import { adminCadastro, adminDelete, adminLogin, adminSearch, rootVerificar } from "../repositories/adminRepository.js";
 import { cpfTest, emailTest, telefoneTest } from "../utils/expressionTest.js";
 
 const server = Router();
@@ -48,7 +48,7 @@ server.post("/admin", async (req, res) => {
 		const admin = req.body;
 		const header = req.header("x-access-token");
 		switch (true) {
-			case !adminVerificar(jwt.decode(header).email):
+			case !rootVerificar(jwt.decode(header).email):
 				throw new Error("Falha na autenticação");
 			case !emailTest(admin.novoAdmin.email):
 				throw new Error("Email inválido");
@@ -66,6 +66,7 @@ server.post("/admin", async (req, res) => {
 
 		admin.novoAdmin.senha = sha256(admin.novoAdmin.senha);
 		const answer = await adminCadastro(admin.novoAdmin);
+		if (answer < 1) throw new Error("Não foi possível realizar o cadastro");
 		res.status(201).send();
 	} catch (err) {
 		res.status(401).send({
