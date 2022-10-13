@@ -9,7 +9,6 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
-app.use("/storage/files", express.static("storage/files"));
 app.use("/storage/users", express.static("storage/users"));
 app.use("/storage/communities", express.static("storage/communities"));
 app.use(userController);

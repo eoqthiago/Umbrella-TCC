@@ -11,7 +11,7 @@ create table tb_admin (
     ds_telefone varchar(14) unique not null,
     ds_cpf varchar(14) unique not null,
     dt_criacao date default(curdate()),
-    bt_root boolean not null
+    bt_root boolean default(false) not null
 );
 
 -- Usuario
