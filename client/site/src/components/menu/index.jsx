@@ -49,10 +49,8 @@ export default function Index({ ativo, alterar }) {
 		navigate("/");
 	}
 
-	useEffect(() => (isExpired ? logout() : undefined));
-
 	useEffect(() => {
-		if (!localStorage("user")) {
+		if (!localStorage("user") || isExpired ) {
 			localStorage.remove("user");
 			toast.warn("Você precisa estar logado para acessar essa página");
 			navigate("/");
