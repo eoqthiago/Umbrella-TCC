@@ -1,13 +1,13 @@
-import React, { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import localstorage from "local-storage";
-import LoadingBar from "react-top-loading-bar";
-import Checkbox from "@mui/material/Checkbox";
-import { userCadastro } from "../../api/userApi";
-import { BotaoSolido, Input, SubTitulo, Titulo } from "../../styled";
-import Modal from "../../components/modals/textModal";
-import "./index.sass";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import localstorage from 'local-storage';
+import { HashLoader } from 'react-spinners';
+import Checkbox from '@mui/material/Checkbox';
+import { userCadastro } from '../../api/userApi';
+import { BotaoSolido, Input, SubTitulo, Titulo } from '../../styled';
+import Modal from '../../components/modals/textModal';
+import './index.sass';
 
 const condicoes = `
 Requisitos de idade e responsabilidade dos pais e responsáveis.
@@ -41,33 +41,30 @@ A Umbrella aceita certos métodos de pagamento. Estes podem variar de acordo com
 `;
 
 const Index = () => {
-	const [nome, setNome] = useState("");
-	const [email, setEmail] = useState("");
-	const [senha, setSenha] = useState("");
-	const [senhaconf, setSenhaconf] = useState("");
+	const [nome, setNome] = useState('');
+	const [email, setEmail] = useState('');
+	const [senha, setSenha] = useState('');
+	const [senhaconf, setSenhaconf] = useState('');
 	const [nascimento, setNascimento] = useState();
 	const [termos, setTermos] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
-	const ref = useRef();
 	const [modal, setModal] = useState(false);
 
 	async function handleCadastro() {
 		if (!termos) return;
 
-		localstorage.remove("user");
+		localstorage.remove('user');
 		setLoading(true);
-		ref.current.continuousStart();
 		try {
-			if (senha !== senhaconf) throw new Error("As senhas são coincidem");
+			if (senha !== senhaconf) throw new Error('As senhas são coincidem');
 			await userCadastro(nome, email, senha, nascimento);
-			toast.success("🚀 Conta criada com sucesso!");
+			toast.success('🚀 Conta criada com sucesso!');
 		} catch (err) {
 			if (err.response) toast.error(err.response.data.err);
 			else toast.warning(err.message);
 		}
 		setLoading(false);
-		ref.current.complete();
 	}
 
 	function ativar() {
@@ -75,80 +72,114 @@ const Index = () => {
 	}
 
 	return (
-		<div className="cadastro page">
-			<LoadingBar color="#48d677" ref={ref} />
-			<Modal ativo={modal} state={ativar} titulo="Termos e condições" conteudo={condicoes} />
+		<div className='cadastro page'>
+			<HashLoader
+				color='#2d95b1'
+				loading={loading}
+				cssOverride={{
+					position: 'absolute',
+					left: '50%',
+					top: '50%',
+					transform: 'translate(-50%, -50%)',
+					zIndex: '10',
+					background: '#0000002d',
+					width: '100vw',
+					height: '100vh',
+				}}
+				size={50}
+				aria-label='Loading Spinner'
+				data-testid='loader'
+			/>
+			<Modal
+				ativo={modal}
+				state={ativar}
+				titulo='Termos e condições'
+				conteudo={condicoes}
+			/>
 			<main>
-				<div className="cadastro-titulos">
-					<Titulo cor="#02C17D" fonte="4vw">
+				<div className='cadastro-titulos'>
+					<Titulo
+						cor='#02C17D'
+						fonte='4vw'>
 						Cadastro
 					</Titulo>
-					<SubTitulo cor="#3F3F3F" fonte="2.5vw">
+					<SubTitulo
+						cor='#3F3F3F'
+						fonte='2.5vw'>
 						Seja bem-vindo!
 					</SubTitulo>
 				</div>
-				<div className="cadastro-corpo">
-					<div className="cadastro-inputs">
+				<div className='cadastro-corpo'>
+					<div className='cadastro-inputs'>
 						<Input
-							placeholder="Nome de usuário"
-							width="100%"
-							type="text"
+							placeholder='Nome de usuário'
+							width='100%'
+							type='text'
 							value={nome}
-							onChange={(e) => setNome(e.target.value)}
+							onChange={e => setNome(e.target.value)}
 							disabled={loading}
-							onKeyDown={(e) => e.key === "Enter" && handleCadastro()}
+							onKeyDown={e => e.key === 'Enter' && handleCadastro()}
 						/>
 						<Input
-							placeholder="Email"
-							width="100%"
-							type="email"
+							placeholder='Email'
+							width='100%'
+							type='email'
 							value={email}
-							onChange={(e) => setEmail(e.target.value)}
+							onChange={e => setEmail(e.target.value)}
 							disabled={loading}
-							onKeyDown={(e) => e.key === "Enter" && handleCadastro()}
+							onKeyDown={e => e.key === 'Enter' && handleCadastro()}
 						/>
 						<Input
-							placeholder="Data de nascimento"
-							width="100%"
-							onFocus={(e) => (e.target.type = "date")}
-							onBlur={(e) => (e.target.type = "text")}
+							placeholder='Data de nascimento'
+							width='100%'
+							onFocus={e => (e.target.type = 'date')}
+							onBlur={e => (e.target.type = 'text')}
 							value={nascimento}
-							onChange={(e) => setNascimento(e.target.value)}
+							onChange={e => setNascimento(e.target.value)}
 							disabled={loading}
-							onKeyDown={(e) => e.key === "Enter" && handleCadastro()}
+							onKeyDown={e => e.key === 'Enter' && handleCadastro()}
 						/>
 						<Input
-							placeholder="Senha"
-							width="100%"
-							type="password"
+							placeholder='Senha'
+							width='100%'
+							type='password'
 							value={senha}
-							onChange={(e) => setSenha(e.target.value)}
+							onChange={e => setSenha(e.target.value)}
 							disabled={loading}
-							onKeyDown={(e) => e.key === "Enter" && handleCadastro()}
+							onKeyDown={e => e.key === 'Enter' && handleCadastro()}
 						/>
 						<Input
-							placeholder="Confirme sua senha"
-							width="100%"
-							type="password"
+							placeholder='Confirme sua senha'
+							width='100%'
+							type='password'
 							value={senhaconf}
-							onChange={(e) => setSenhaconf(e.target.value)}
+							onChange={e => setSenhaconf(e.target.value)}
 							disabled={loading}
-							onKeyDown={(e) => e.key === "Enter" && handleCadastro()}
+							onKeyDown={e => e.key === 'Enter' && handleCadastro()}
 						/>
-						<div className="cadastro-legenda" style={{ marginTop: "10px" }}>
-							<Checkbox value={termos} onClick={(e) => setTermos(!termos)} />
+						<div
+							className='cadastro-legenda'
+							style={{ marginTop: '10px' }}>
+							<Checkbox
+								value={termos}
+								onClick={e => setTermos(!termos)}
+							/>
 							<div>
 								Tenho mais de 13 anos e concordo com os <span onClick={() => ativar()}> termos e condições </span>
 							</div>
 						</div>
 					</div>
-					<div className="cadastro-btn">
-						<BotaoSolido fonte="4vw" width="100%" onClick={handleCadastro} disabled={loading || !termos}>
+					<div className='cadastro-btn'>
+						<BotaoSolido
+							fonte='4vw'
+							width='100%'
+							onClick={handleCadastro}
+							disabled={loading || !termos}>
 							Confirmar
 						</BotaoSolido>
-						<div className="cadastro-legenda">
+						<div className='cadastro-legenda'>
 							<div>
-								Já possui uma conta? Clique <span onClick={() => navigate("/login")}> aqui </span> para fazer login
+								Já possui uma conta? Clique <span onClick={() => navigate('/login')}> aqui </span> para fazer login
 							</div>
 						</div>
 					</div>
