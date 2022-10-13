@@ -2,10 +2,11 @@ import con from "./connection.js";
 
 export async function adminLogin(admin) {
 	const command = `
-        select  id_admin id,
-        nm_admin nome,
-        ds_email email
-        from  tb_admin
+        select  
+			id_admin id,
+			nm_admin nome,
+			ds_email email
+		from  tb_admin
         where  ds_email = ? and ds_senha = ? `;
 	const [answer] = await con.query(command, [admin.email, admin.senha]);
 	return answer[0];

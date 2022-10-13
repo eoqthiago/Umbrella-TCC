@@ -22,6 +22,8 @@ server.post("/admin/login", async (req, res) => {
 
 		admin.senha = sha256(admin.senha);
 		const answer = await adminLogin(admin);
+		if (!answer) throw new Error("Não foi possível realizar o login");
+
 		const token = jwt.sign(
 			{
 				id: answer.id,
@@ -29,7 +31,7 @@ server.post("/admin/login", async (req, res) => {
 			},
 			process.env.JWT_KEY,
 			{
-				expiresIn: "10d",
+				expiresIn: "1h",
 			}
 		);
 		res.status(202).send({

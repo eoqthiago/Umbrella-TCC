@@ -14,25 +14,27 @@ import CommunitiesInfo from "./pages/communities-info";
 import ChatComunidade from "./pages/chats/comunidades";
 import ComunidadeConfig from "./pages/comunidade-config";
 import NotFound from "./pages/notFound";
+import LoginAdmin from "./pages/admin/login";
 
 export default function Index() {
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route path="/" exact element={<Home />} />
-				<Route path="/login" exact element={<Login />} />
-				<Route path="/cadastro" exact element={<Cadastro />} />
-				<Route path="/home" exact element={<Inicial />} />
-				<Route path="/pesquisa" exact element={<Pesquisa />} />
-				<Route path="/recuperar" exact element={<Recuperar />} />
-				<Route path="/code" exact element={<RecuperarCodigo />} />
-				<Route path="/alterar-senha" exact element={<Alterar />} />
-				<Route path="/settings" exact element={<Config />} />
-				<Route path="/amizades" exact element={<Amizades />} />
-				<Route path="/comunidade/:idParam/info" exact element={<CommunitiesInfo />} />
-				<Route path="/chat/comunidade/:id" exact element={<ChatComunidade />} />
-				<Route path="/comunidade/:id/settings" exact element={<ComunidadeConfig />} />
-				<Route path="*" element={<NotFound />} />
+				<Route path='/' exact element={<Home />} />
+				<Route path='/login' exact element={<Login />} />
+				<Route path='/cadastro' exact element={<Cadastro />} />
+				<Route path='/home' exact element={<Inicial />} />
+				<Route path='/pesquisa' exact element={<Pesquisa />} />
+				<Route path='/recuperar' exact element={<Recuperar />} />
+				<Route path='/code' exact element={<RecuperarCodigo />} />
+				<Route path='/alterar-senha' exact element={<Alterar />} />
+				<Route path='/settings' exact element={<Config />} />
+				<Route path='/amizades' exact element={<Amizades />} />
+				<Route path='/comunidade/:idParam/info' exact element={<CommunitiesInfo />} />
+				<Route path='/chat/comunidade/:id' exact element={<ChatComunidade />} />
+				<Route path='/comunidade/:id/settings' exact element={<ComunidadeConfig />} />
+				<Route path='/admin/login' exact element={<LoginAdmin />} />
+				<Route path='*' element={<NotFound />} />
 			</Routes>
 		</BrowserRouter>
 	);
