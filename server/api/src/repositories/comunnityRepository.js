@@ -1,4 +1,4 @@
-import con from "./connection.js";
+import con from './connection.js';
 
 // Criar comunidade
 export async function communityCreate(id, community) {
@@ -169,12 +169,12 @@ export async function communityAdmin(id, admin) {
 }
 
 // Criar canal
-export async function communityCanal(community, canal) {
+export async function communityCanalCreate(community, canal) {
 	const command = `
 		insert into tb_comunidade_canal(id_comunidade, nm_canal)
 		values (?,  ?) `;
 	const [r] = await con.query(command, [community.id, canal.name]);
-	return r;
+	return r.affectedRows;
 }
 
 // Listar canais

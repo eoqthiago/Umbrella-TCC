@@ -1,28 +1,24 @@
-import { Router } from "express";
-import jwt from "jsonwebtoken";
-import { sha256 } from "js-sha256";
-import { adminCadastro, adminDelete, adminLogin, adminSearch, rootVerificar } from "../repositories/adminRepository.js";
-import { cpfTest, emailTest, telefoneTest } from "../utils/expressionTest.js";
+import { Router } from 'express';
+import jwt from 'jsonwebtoken';
+import { sha256 } from 'js-sha256';
+import { adminCadastro, adminDelete, adminLogin, adminSearch, rootVerificar } from '../repositories/adminRepository.js';
+import { cpfTest, emailTest, telefoneTest } from '../utils/expressionTest.js';
 
 const server = Router();
 
-server.post("/admin/login", async (req, res) => {
+server.post('/admin/login', async (req, res) => {
 	try {
 		const admin = req.body;
-		switch (true) {
-			case !emailTest(admin.email.trim()):
-				throw new Error("O email inserido é inválido");
-			case !admin.senha || !admin.senha.trim():
-				throw new Error("A senha é obrigatória");
-			default:
-				break;
-		}
+
+		if (!emailTest(admin.email.trim())) throw new Error('O email inserido é inválido');
+		else if (!admin.senha || !admin.senha.trim()) throw new Error('A senha é obrigatória');
+
 		const search = await adminSearch(admin.email);
-		if (!search[0]) throw new Error("Um erro ocorreu");
+		if (!search[0]) throw new Error('Um erro ocorreu');
 
 		admin.senha = sha256(admin.senha);
 		const answer = await adminLogin(admin);
-		if (!answer) throw new Error("Não foi possível realizar o login");
+		if (!answer) throw new Error('Não foi possível realizar o login');
 
 		const token = jwt.sign(
 			{
@@ -31,7 +27,7 @@ server.post("/admin/login", async (req, res) => {
 			},
 			process.env.JWT_KEY,
 			{
-				expiresIn: "1h",
+				expiresIn: '1h',
 			}
 		);
 		res.status(202).send({
@@ -45,56 +41,60 @@ server.post("/admin/login", async (req, res) => {
 	}
 });
 
-server.post("/admin", async (req, res) => {
+server.post('/admin', async (req, res) => {
 	try {
 		const admin = req.body;
-		const header = req.header("x-access-token");
-		switch (true) {
-			case !rootVerificar(jwt.decode(header).email):
-				throw new Error("Falha na autenticação");
-			case !emailTest(admin.novoAdmin.email):
-				throw new Error("Email inválido");
-			case !admin.novoAdmin.senha || !admin.novoAdmin.senha.trim():
-				throw new Error("Senha inválida");
-			case !cpfTest(admin.novoAdmin.cpf):
-				throw new Error("CPF inválido");
-			case !telefoneTest(admin.novoAdmin.telefone):
-				throw new Error("Telefone inválido");
-			case !admin.novoAdmin.nascimento:
-				throw new Error("Data de nascimento inválida");
+		const token = req.header('x-access-token');
+		if (!token) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
 		}
-		const rep = await adminSearch(admin.novoAdmin.email);
-		if (rep[0]) throw new Error("Esse usuário já foi registrado anteriormente");
 
-		admin.novoAdmin.senha = sha256(admin.novoAdmin.senha);
-		const answer = await adminCadastro(admin.novoAdmin);
-		if (answer < 1) throw new Error("Não foi possível realizar o cadastro");
+		const decoded = verifyToken(token);
+		if (!decoded || !(await rootVerificar(decoded.id))) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		} else if (!emailTest(admin.email)) throw new Error('Email inválido');
+		else if (!admin.senha || !admin.senha.trim()) throw new Error('Senha inválida');
+		else if (!cpfTest(admin.cpf)) throw new Error('CPF inválido');
+		else if (!telefoneTest(admin.telefone)) throw new Error('Telefone inválido');
+		else if (!admin.nascimento) throw new Error('Data de nascimento inválida');
+
+		const rep = await adminSearch(admin.email);
+		if (rep[0]) throw new Error('Esse usuário já existe');
+
+		admin.senha = sha256(admin.senha);
+		const answer = await adminCadastro(admin);
+		if (answer < 1) throw new Error('Não foi possível realizar o cadastro');
 		res.status(201).send();
 	} catch (err) {
-		res.status(401).send({
+		res.status(400).send({
 			err: err.message,
 		});
 	}
 });
 
-server.delete("/admin", async (req, res) => {
+server.delete('/admin', async (req, res) => {
 	try {
 		const admin = req.body;
-		const header = req.header("x-access-token");
-		switch (true) {
-			case !adminVerificar(jwt.decode(header).email):
-				throw new Error("Falha na autenticação");
-			case !emailTest(admin.email):
-				throw new Error("Email inválido");
+		const token = req.header('x-access-token');
+		if (!token) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
 		}
-		const search = await adminSearch(admin.email);
-		if (!search[0]) throw new Error("Usuário não encontrado");
+
+		const decoded = verifyToken(token);
+		if (!decoded || !(await rootVerificar(decoded.id))) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		} else if (!emailTest(admin.email)) throw new Error('Email inválido');
+		else if (!(await adminSearch(admin.email)[0])) throw new Error('Usuário não encontrado');
 
 		const answer = adminDelete(admin.email);
-		if (answer < 1) throw new Error("Não foi possível deletar a conta");
+		if (answer < 1) throw new Error('Não foi possível deletar a conta');
 		res.status(204).send();
 	} catch (err) {
-		res.status(401).send({
+		res.status(400).send({
 			err: err.message,
 		});
 	}

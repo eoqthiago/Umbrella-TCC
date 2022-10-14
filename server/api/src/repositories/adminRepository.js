@@ -1,4 +1,4 @@
-import con from "./connection.js";
+import con from './connection.js';
 
 export async function adminLogin(admin) {
 	const command = `
@@ -20,7 +20,7 @@ export async function adminCadastro(admin) {
 	return answer.affectedRows;
 }
 
-export async function rootVerificar(email) {
+export async function rootVerificar(id) {
 	const command = `
         select
 			nm_admin nome,
@@ -29,8 +29,8 @@ export async function rootVerificar(email) {
 			dt_nascimento nacimento,
 			ds_telefone telefone,
 			ds_cpf cpf
-		from tb_admin where ds_email = ? and bt_root = 1 `;
-	const [answer] = await con.query(command, [email]);
+		from tb_admin where id_admin = ? and bt_root = 1 `;
+	const [answer] = await con.query(command, [id]);
 	return answer[0];
 }
 
