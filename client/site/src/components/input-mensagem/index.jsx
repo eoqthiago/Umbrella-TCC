@@ -13,6 +13,7 @@ export default function Index({ conteudo, setConteudo, send }) {
 				src='/assets/icons/send.svg'
 				alt=''
 				onClick={send}
+				title='Enviar'
 			/>
 		</nav>
 	);

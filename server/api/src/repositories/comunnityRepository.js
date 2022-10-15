@@ -26,16 +26,17 @@ export async function communityImage(id, image) {
 
 // Procurar por id de usúario na comunidade
 export async function communityUserID(id, comunidade) {
-	const command = `SELECT tb_usuario_comunidade.id_usuario_comunidade,
-						 	tb_usuario.nm_usuario
-				 	FROM 	tb_usuario_comunidade
-					INNER JOIN tb_usuario 
-					ON tb_usuario_comunidade.id_usuario = tb_usuario.id_usuario
-					WHERE 	tb_usuario_comunidade.id_usuario = ?
-					AND 	id_comunidade = ?`;
+	const command = `
+		SELECT tb_usuario_comunidade.id_usuario_comunidade id,
+				tb_usuario.nm_usuario nome
+		FROM 	tb_usuario_comunidade
+		INNER JOIN tb_usuario 
+		ON tb_usuario_comunidade.id_usuario = tb_usuario.id_usuario
+		WHERE 	tb_usuario_comunidade.id_usuario = ?
+		AND 	id_comunidade = ?`;
 
 	const [r] = await con.query(command, [id, comunidade]);
-	return r;
+	return r[0];
 }
 
 // Consultar todos usuarios da comunidade
@@ -43,8 +44,8 @@ export async function communityUsers(idCom) {
 	const command = `
 		SELECT
 			tb_usuario_comunidade.id_usuario_comunidade as id,
-			tb_usuario_comunidade.id_usuario as id_usuario,
-			tb_usuario_comunidade.id_comunidade as comunidade,
+			tb_usuario_comunidade.id_usuario as idUsuario,
+			tb_usuario_comunidade.id_comunidade as idComunidade,
 			tb_usuario_comunidade.bt_admin as admin,
 			tb_usuario.nm_usuario as nome,
 			tb_usuario.ds_usuario as descricao,
@@ -59,15 +60,15 @@ export async function communityUsers(idCom) {
 
 // Procurar por nome de usúario na comunidade
 export async function communityUsername(nome, comunidade) {
-	const command = `SELECT tb_usuario_comunidade.id_usuario_comunidade,
-						 	tb_usuario.nm_usuario
-				 	FROM 	tb_usuario_comunidade
-					INNER JOIN tb_usuario 
-					ON tb_usuario_comunidade.id_usuario_comunidade = tb_usuario.id_usuario
-					WHERE	tb_usuario.nm_usuario = ?
-					AND 	id_comunidade = ?`;
-
-	const [r] = await con.query(command, [nome, comunidade]);
+	const command = `
+		SELECT tb_usuario_comunidade.id_usuario_comunidade id,
+				tb_usuario.nm_usuario nome
+		FROM 	tb_usuario_comunidade
+		INNER JOIN tb_usuario 
+		ON tb_usuario_comunidade.id_usuario_comunidade = tb_usuario.id_usuario
+		WHERE	tb_usuario.nm_usuario like '%${nome}%'
+		AND 	id_comunidade = ?`;
+	const [r] = await con.query(command, [comunidade]);
 	return r;
 }
 

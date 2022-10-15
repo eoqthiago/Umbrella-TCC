@@ -1,12 +1,12 @@
-import axios from "axios";
-import { baseUrl, userToken } from "./services";
+import axios from 'axios';
+import { baseUrl, userToken } from './services';
 
 const api = axios.create({ baseURL: baseUrl });
 
 export async function communityCadastro(nome, descricao, publica) {
 	if (!userToken) return;
 	const r = await api.post(
-		"/comunidade",
+		'/comunidade',
 		{
 			nome,
 			descricao,
@@ -14,7 +14,7 @@ export async function communityCadastro(nome, descricao, publica) {
 		},
 		{
 			headers: {
-				"x-access-token": userToken,
+				'x-access-token': userToken,
 			},
 		}
 	);
@@ -24,12 +24,12 @@ export async function communityCadastro(nome, descricao, publica) {
 export async function communityImage(id, imagem) {
 	if (!imagem || !id || !userToken) return;
 	const formd = new FormData();
-	formd.append("imagem", imagem);
+	formd.append('imagem', imagem);
 
 	const r = await api.put(`/comunidade/imagem/${id}`, formd, {
 		headers: {
-			"Content-Type": "multipart/form-data",
-			"x-access-token": userToken,
+			'Content-Type': 'multipart/form-data',
+			'x-access-token': userToken,
 		},
 	});
 	return r.status;
@@ -39,26 +39,26 @@ export async function pesquisar(categoria, conteudo) {
 	if (!userToken || !categoria || !conteudo) return [];
 	let r;
 	switch (categoria) {
-		case "comunidades":
-			if (conteudo[0] !== "#" || isNaN(conteudo.substring(1, conteudo.length))) {
+		case 'comunidades':
+			if (conteudo[0] !== '#' || isNaN(conteudo.substring(1, conteudo.length))) {
 				r = await api.get(`/comunidade?name=${conteudo}`, {
 					headers: {
-						"x-access-token": userToken,
+						'x-access-token': userToken,
 					},
 				});
-				r.data.tipo = "array";
+				r.data.tipo = 'array';
 			} else {
 				r = await api.get(`/comunidade/${conteudo.substring(1, conteudo.length)}`, {
 					headers: {
-						"x-access-token": userToken,
+						'x-access-token': userToken,
 					},
 				});
 			}
 			break;
-		case "usuarios":
+		case 'usuarios':
 			r = await api.get(`/usuarios?nome=${conteudo}`, {
 				headers: {
-					"x-access-token": userToken,
+					'x-access-token': userToken,
 				},
 			});
 			break;
@@ -81,7 +81,7 @@ export async function communityReport(id, email, motivo) {
 		},
 		{
 			headers: {
-				"x-access-token": userToken,
+				'x-access-token': userToken,
 			},
 		}
 	);
@@ -92,7 +92,7 @@ export async function searchCommunityId(id) {
 	if (!userToken) return;
 	const r = await api.get(`/comunidade/${id}`, {
 		headers: {
-			"x-access-token": userToken,
+			'x-access-token': userToken,
 		},
 	});
 	return r.data;
@@ -102,36 +102,39 @@ export async function exitCommunity(idComunidade, idUsuario) {
 	if (!userToken || !idComunidade || !idUsuario) return;
 	const r = await api.delete(`/comunidade/${idComunidade}/usuario/${idUsuario}`, {
 		headers: {
-			"x-access-token": userToken,
+			'x-access-token': userToken,
 		},
 	});
 	return r.status;
 }
 
 export async function consultarCanais(id) {
-	const r = await api.get(`/comunidade/canal/${id}`);
+	if (!userToken || !id) return;
+	const r = await api.get(`/comunidade/canal/${id}`, {
+		headers: {
+			'x-access-token': userToken,
+		},
+	});
 	return r.data;
 }
 
 export async function excluirComunidade(comId) {
+	if (!userToken || !comId) return;
 	const r = await api.delete(`/comunidade/${comId}`, {
 		headers: {
-			"x-access-token": userToken,
+			'x-access-token': userToken,
 		},
 	});
 	return r.status;
 }
 
 export async function consultarUsuarios(comId) {
-	const r = await api.get(
-		`/comunidade/${comId}/usuarios`,
-		{
-			headers: {
-				"x-access-token": userToken,
-			},
+	if (!userToken || !comId) return;
+	const r = await api.get(`/comunidade/${comId}/usuarios`, {
+		headers: {
+			'x-access-token': userToken,
 		},
-		{}
-	);
+	});
 	return r.data;
 }
 
@@ -146,9 +149,19 @@ export async function communityEdit(nome, descricao, publica, id) {
 		},
 		{
 			headers: {
-				"x-access-token": userToken,
+				'x-access-token': userToken,
 			},
 		}
 	);
 	return r.status;
+}
+
+export async function consultarComunidadeUsuario(usuario, comunidade) {
+	if (!userToken || !usuario || !comunidade) return;
+	const r = await api.get(`/comunidade/${comunidade}/usuario/${usuario}`, {
+		headers: {
+			'x-access-token': userToken,
+		},
+	});
+	return r.data;
 }

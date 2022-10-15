@@ -178,7 +178,7 @@ server.get('/comunidade/:id', async (req, res) => {
 		if (!decoded || !(await userIdSearch(decoded.id))) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
-		} else if (!id) throw new Error('O ID inserido é inválido');
+		} else if (!community) throw new Error('O ID inserido é inválido');
 
 		const r = await communityId(community);
 		res.send(r);
@@ -218,9 +218,10 @@ server.put('/comunidade/admin/usuario', async (req, res) => {
 });
 
 // Procurar usúario na comunidade por id/nome
-server.get('/comunidade/usuario', async (req, res) => {
+server.get('/comunidade/:id/usuario/:user', async (req, res) => {
 	try {
-		const user = req.body;
+		const comunidade = Number(req.params.id);
+		const usuario = req.params.user;
 		const token = req.header('x-access-token');
 		if (!token) {
 			res.status(401).send({ err: 'Falha na autenticação' });
@@ -231,13 +232,13 @@ server.get('/comunidade/usuario', async (req, res) => {
 		if (!decoded || !(await userIdSearch(decoded.id))) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
-		} else if (!user.comunidade || !(await communityId(user.comunidade))) throw new Error('Comunidade não existe');
+		} else if (!comunidade || !(await communityId(comunidade))) throw new Error('Comunidade não existente');
 
-		if (isNaN(user.usuario)) {
-			const r = await communityUsername(user.usuario, user.comunidade);
+		if (isNaN(usuario)) {
+			const r = await communityUsername(usuario, comunidade);
 			res.send(r);
-		} else if (Number(user.usuario)) {
-			const r = await communityUserID(user.usuario, user.comunidade);
+		} else if (Number(usuario)) {
+			const r = await communityUserID(Number(usuario), comunidade);
 			res.send(r);
 		}
 	} catch (err) {
