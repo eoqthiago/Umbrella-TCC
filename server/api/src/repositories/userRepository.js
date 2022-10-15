@@ -240,3 +240,12 @@ export async function userAlterarPassword(senha, userId) {
 	const [answer] = await con.query(command, [senha, userId]);
 	return answer.affectedRows;
 }
+
+export async function userEditEmail(email, id) {
+	const command = `
+        update  tb_usuario
+        set ds_email = ?
+      where id_usuario = ? `;
+	const [answer] = await con.query(command, [email, id]);
+	return answer.affectedRows;
+}

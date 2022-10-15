@@ -23,6 +23,7 @@ import {
 	verificarAmizade,
 	userIDandEmailSearch,
 	userAlterarPassword,
+	userEditEmail,
 } from '../repositories/userRepository.js';
 import { emailTest, nameTest } from '../utils/expressionTest.js';
 import { verifyToken } from '../utils/authUtils.js';
@@ -641,6 +642,55 @@ server.put("/alterar-senha", async (req, res) => {
 	  });
 	}
 });
+
+// Alterar email
+server.put("/email-novo", async (req, res) => {
+	try {
+		const {email} = req.body;
+		const header = req.header("x-access-token");
+		const auth = jwt.decode(header);
+		if(!emailTest(email)) throw new Error ("Email incorreto");
+		switch (true) {
+			case !header || !auth:
+				throw new Error("Falha na autenticação");
+        	case !email || !email.trim() || email.length > 50:
+          		throw new Error("O email é obrigatório");
+			case !emailTest(email):
+				throw new Error("email invalido");
+			default:
+				break;
+
+		}
+		
+		const answer = await userEditEmail(email, auth.id);
+		if (!answer) throw new Error("Não foi possível alterar o email de usuário");
+		res.status(202).send();
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
+
+// Procurar email
+server.get("/alterar-email", async (req, res) => {
+	try {
+		const { email } = req.body;
+		const header = req.header("x-access-token");
+		const auth = jwt.decode(header);
+		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
+		const answer = email ? await userEmailSearch(email) : await userIdSearch(Number(id));
+
+		if (!answer) throw new Error("Usuário não encontrado");
+		res.send(answer);
+	} catch (err) {
+		res.status(404).send({
+			err: err.message,
+		});
+	}
+});
+
   
 
 export default server;

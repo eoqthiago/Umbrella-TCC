@@ -15,6 +15,8 @@ import LoginAdmin from "./pages/admin/login";
 import Recuperar from "./pages/recuperar-senha/page-inicial-recuperar";
 import RecuperarCodigo from "./pages/recuperar-senha/recuperar-senha-codigo";
 import Alterar from "./pages/recuperar-senha/senha-nova";
+import AlterarEmail from "./pages/alterar-email/page-alterar-email"
+import EmailConfirm from "./pages/alterar-email/alterar-email"
 
 export default function Index() {
 	return (
@@ -36,6 +38,8 @@ export default function Index() {
 				<Route path="/recuperar" exact element={<Recuperar />} />
 				<Route path="/code" exact element={<RecuperarCodigo />} />
 				<Route path="/alterar-senha" element={<Alterar />} />
+				<Route path="/alterar-email" exact element={<AlterarEmail />} />
+				<Route path="/email-novo" exact element={<EmailConfirm />} />
 				<Route path='*' element={<NotFound />} />
 			</Routes>
 		</BrowserRouter>

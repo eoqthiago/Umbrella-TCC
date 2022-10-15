@@ -140,3 +140,17 @@ export async function userAlterarPassword(senha) {
   
 	return r.data;
 }
+
+export async function userAlterarEmail(email) {
+	const r = await api.put(
+	  "/email-novo",
+	  { email: email },
+	  {
+		headers: {
+		  "x-access-token": userToken,
+		},
+	  }
+	);
+  
+	return r.data;
+}
