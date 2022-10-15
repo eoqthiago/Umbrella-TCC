@@ -220,3 +220,23 @@ export async function verificarAmizade(solicitante, solicitado) {
 	const [answer] = await con.query(command, [solicitante, solicitado, solicitado, solicitante]);
 	return answer[0];
 }
+
+export async function userIDandEmailSearch(email) {
+	const command = `
+        select ds_email email,
+			id_usuario id
+		  from tb_usuario
+		   where ds_email = ? `;
+	const [answer] = await con.query(command, [email]);
+	return answer[0];
+}
+
+export async function userAlterarPassword(senha, userId) {
+	const command = `
+		update  tb_usuario
+		set ds_senha = ?
+	where id_usuario = ?
+	`;
+	const [answer] = await con.query(command, [senha, userId]);
+	return answer.affectedRows;
+}
