@@ -9,6 +9,10 @@ import { toast } from 'react-toastify';
 import ListaLateral from '../../../components/listas/lateral';
 import './index.sass';
 import { SubTitulo } from '../../../styled';
+import io from 'socket.io-client';
+import { baseUrl } from '../../../api/services';
+
+const socket = io.connect(baseUrl);
 
 const Index = () => {
 	const [canais, setCanais] = useState([]);
@@ -21,8 +25,12 @@ const Index = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 
+	const send = async () => {
+		socket.emit('join', canalSelecionado);
+	};
+
 	useEffect(() => {
-		async function consultarComunidade() {
+		async function consultarDados() {
 			try {
 				const r = await searchCommunityId(Number(id));
 				if (!r) throw new Error('Essa comunidade não existe');
@@ -33,14 +41,21 @@ const Index = () => {
 				setUser(s);
 				setCanais(t);
 				if (t[0]) setCanalSelecionado(t[0].idCanal);
+				if (!user) throw new Error('Falha na autenticaçãos');
 			} catch (err) {
 				if (err.response) toast.error(err.response.data.err);
 				else toast.error(err.message);
 				navigate('/home');
 			}
 		}
-		consultarComunidade();
-	}, [id, navigate]);
+		consultarDados();
+	}, [id, navigate, user]);
+
+	useEffect(() => {
+		socket.on('receive', data => {
+			setMensagens([...mensagens, data.message]);
+		});
+	});
 
 	return (
 		<div className='comunidade page'>
@@ -84,6 +99,7 @@ const Index = () => {
 					<InputMensagem
 						conteudo={conteudo}
 						setConteudo={setConteudo}
+						send={send}
 					/>
 				</section>
 			</main>
