@@ -56,6 +56,7 @@ server.post("/usuario", async (req, res) => {
 server.post("/usuario/login", async (req, res) => {
 	try {
 		const user = req.body;
+		console.log(user)
 		switch (true) {
 			case !emailTest(user.email):
 				throw new Error("O email inserido é inválido");
@@ -199,14 +200,11 @@ server.get("/usuarios", async (req, res) => {
 server.get("/usuario/:id/amizades", async (req, res) => {
 	try {
 		const id = Number(req.params.id);
-		const header = req.header("x-access-token");
-		const auth = jwt.decode(header);
-		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
 		if (!(await userIdSearch(id))) throw new Error("Usuário não encontrado");
 		const answer = await amigosConsulta(id);
 		res.send(answer);
 	} catch (err) {
-		res.status(401).send({
+		res.status(404).send({
 			err: err.message,
 		});
 	}
