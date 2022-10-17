@@ -49,7 +49,7 @@ const Index = () => {
 			}
 		}
 		consultarDados();
-	}, [id, navigate, user]);
+	}, []);
 
 	useEffect(() => {
 		socket.on('receive', data => {

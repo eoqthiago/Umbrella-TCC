@@ -77,14 +77,9 @@ export default function Index({ ativo, alterar }) {
 			try {
 				const r = await userAmigosConsulta(localStorage('user').id);
 				setAmigos(r);
+				const s = await userComunidadesConsulta(localStorage('user').id);
+				setComunidades(s);
 			} catch (err) {}
-			try {
-				const r = await userComunidadesConsulta(localStorage('user').id);
-				setComunidades(r);
-			} catch (err) {}
-			setTimeout(() => {
-				consultasMenu();
-			}, 5000);
 		}
 		consultasMenu();
 	}, []);
