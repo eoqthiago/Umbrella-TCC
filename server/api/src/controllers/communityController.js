@@ -26,9 +26,9 @@ const server = Router();
 const communityImg = multer({ dest: 'storage/communities' });
 
 //Adicionar usuario na comunidade
-server.post('/comunidade/usuario', async (req, res) => {
+server.post('/comunidade/:id/usuario', async (req, res) => {
 	try {
-		const communityId = req.query.community;
+		const id = Number(req.params.id);
 		const token = req.header('x-access-token');
 		if (!token) {
 			res.status(401).send({ err: 'Falha na autenticação' });
@@ -39,9 +39,9 @@ server.post('/comunidade/usuario', async (req, res) => {
 		if (!decoded || !(await userIdSearch(decoded.id))) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
-		}
+		} else if (!id || !(await communityId(id))) throw new Error('Essa comunidade não existe');
 
-		const r = communityUserAdd(decoded.id, communityId.community);
+		const r = await communityUserAdd(decoded.id, id);
 		if (r < 1) throw new Error('Não foi possível entrar na comunidade');
 		res.status(204).send();
 	} catch (err) {

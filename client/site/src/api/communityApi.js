@@ -165,3 +165,17 @@ export async function consultarComunidadeUsuario(usuario, comunidade) {
 	});
 	return r.data;
 }
+
+export async function adicionarUsuarioComunidade(comunidade) {
+	if (!userToken) return;
+	const r = await api.post(
+		`/comunidade/${comunidade}/usuario`,
+		{},
+		{
+			headers: {
+				'x-access-token': userToken,
+			},
+		}
+	);
+	return r.status;
+}
