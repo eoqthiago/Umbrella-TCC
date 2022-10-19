@@ -1,0 +1,37 @@
+.comp-message
+    min-height: 65px
+    background: red
+    width: 100%
+    display: flex
+    flex-flow: column nowrap
+    padding: 10px
+    justify-content: center
+
+    > .comp-message-conteudo
+        display: flex
+        flex-flow: row nowrap
+        align-items: flex-start
+        gap: 10px
+        background: blue
+        width: fit-content
+        min-width: 250px
+        max-width: 500px
+        padding: 8px
+
+        > img
+            width: 40px
+            height: 40px
+            border-radius: 100%
+            user-select: none
+            -webkit-user-drag: none
+            cursor: pointer
+
+        > div
+            > h1
+                font-size: 15px
+                cursor: pointer
+                user-select: none
+
+            > span
+                background: green
+                word-break: break-all

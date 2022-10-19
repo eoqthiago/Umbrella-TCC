@@ -8,6 +8,7 @@
         width: 100%
         margin-top: 55px
         height: calc( 100vh - 55px )
+        overflow: hidden
 
         > aside
             width: 350px
@@ -30,12 +31,31 @@
             flex-flow: column nowrap
             justify-content: space-between
             align-items: center
-            height: calc( 97vh - 55px )
+            height: calc( 100vh - 55px )
+            padding-bottom: 1.5em
             gap: 15px
+            background: url(../../../../public/assets/images/umbrella.png) no-repeat
+            background-size: clamp(150px, calc(20vh + 15vw), 400px)
+            background-position: center
 
             > .comunidade-mensagens
-                // background: url(../../../../public/assets/images/umbrella.png) no-repeat
-                // background-size: clamp(150px, calc(20vh + 15vw), 400px)
-                // background-position: center
                 width: 100%
                 height: 100%
+                display: flex
+                flex-flow: column nowrap
+                justify-content: flex-end
+                overflow-y: scroll
+                overflow-x: hidden
+
+                &::-webkit-scrollbar
+                    width: 6px
+
+                &::-webkit-scrollbar-track
+                    background: #EEEFF0
+
+                &::-webkit-scrollbar-thumb
+                    background: #9e9e9e
+                    border-radius: 4px
+
+                &::-webkit-scrollbar-thumb:hover
+                    background: #919191

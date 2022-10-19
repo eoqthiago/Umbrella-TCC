@@ -7,9 +7,9 @@ import { consultarCanais, consultarComunidadeUsuario, searchCommunityId } from '
 import localStorage from 'local-storage';
 import { toast } from 'react-toastify';
 import ListaLateral from '../../../components/listas/lateral';
-import { SubTitulo } from '../../../styled';
 import io from 'socket.io-client';
 import { socketUrl } from '../../../api/services';
+import MensagemComp from '../../../components/message';
 import './index.sass';
 
 const socket = io.connect(socketUrl);
@@ -21,7 +21,6 @@ const Index = () => {
 	const [menu, setMenu] = useState(false);
 	const [conteudo, setConteudo] = useState('');
 	const [user, setUser] = useState({});
-	const [comunidade, setComunidade] = useState({});
 	const { id } = useParams();
 	const navigate = useNavigate();
 
@@ -33,6 +32,7 @@ const Index = () => {
 			comunidade: Number(id),
 			usuario: localStorage('user').id,
 		});
+		setMensagens([...mensagens, { conteudo, usuario: localStorage('user').id }]);
 		setConteudo('');
 	};
 
@@ -44,7 +44,6 @@ const Index = () => {
 				const s = await consultarComunidadeUsuario(localStorage('user').id, Number(id));
 				if (!s) throw new Error('Você não está nessa comunidade');
 				const t = await consultarCanais(Number(id));
-				setComunidade(r);
 				setUser(s);
 				setCanais(t);
 				if (t[0]) setCanalSelecionado(t[0].idCanal);
@@ -98,17 +97,11 @@ const Index = () => {
 					</div>
 				</aside>
 				<section>
-					<SubTitulo
-						className='textos-mensagens'
-						cor='#3A3A3A'
-						fonte='1.5vw'
-						style={{
-							marginTop: '10px',
-							userSelect: 'none',
-						}}>
-						{comunidade.nome}
-					</SubTitulo>
-					<div className='comunidade-mensagens'>{mensagens.map(item => null)}</div>
+					<div className='comunidade-mensagens'>
+						{mensagens.map(item => (
+							<MensagemComp item={item} />
+						))}
+					</div>
 					<InputMensagem
 						conteudo={conteudo}
 						setConteudo={setConteudo}

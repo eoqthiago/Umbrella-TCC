@@ -8,6 +8,7 @@ export default function Index({ conteudo, setConteudo, send }) {
 				placeholder='Escreva sua mensagem'
 				value={conteudo}
 				onChange={e => setConteudo(e.target.value)}
+				onKeyDown={e => e.key === 'Enter' && send()}
 			/>
 			<img
 				src='/assets/icons/send.svg'
