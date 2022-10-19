@@ -10,6 +10,7 @@ import communityController from './controllers/communityController.js';
 const app = express();
 const server = http.createServer(app);
 const port = process.env.PORT ?? 5050;
+const socketPort = process.env.SOCKET ?? 5051;
 const origin = process.env.ORIGIN ?? 'http://localhost:3000';
 
 const io = new Server(server, {
@@ -18,6 +19,8 @@ const io = new Server(server, {
 		methods: ['GET', 'POST'],
 	},
 });
+
+io.attach(socketPort);
 
 app.use(cors());
 app.use(express.json());
@@ -38,4 +41,5 @@ io.on('connection', socket => {
 	});
 });
 
-server.listen(port, () => console.log(`Server listening on ${port}`));
+app.listen(port, () => console.log(`Server listening on ${port}`));
+console.log(`Socket listening on ${socketPort}`);

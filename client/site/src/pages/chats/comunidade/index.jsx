@@ -9,10 +9,10 @@ import { toast } from 'react-toastify';
 import ListaLateral from '../../../components/listas/lateral';
 import { SubTitulo } from '../../../styled';
 import io from 'socket.io-client';
-import { baseUrl } from '../../../api/services';
+import { socketUrl } from '../../../api/services';
 import './index.sass';
 
-const socket = io.connect(baseUrl);
+const socket = io.connect(socketUrl);
 
 const Index = () => {
 	const [canais, setCanais] = useState([]);
