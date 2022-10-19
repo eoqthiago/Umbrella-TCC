@@ -12,6 +12,13 @@ const server = http.createServer(app);
 const port = process.env.PORT ?? 5050;
 const origin = process.env.ORIGIN ?? 'http://localhost:3000';
 
+const io = new Server(server, {
+	cors: {
+		origin: origin,
+		methods: ['GET', 'POST'],
+	},
+});
+
 app.use(cors());
 app.use(express.json());
 app.use('/storage/users', express.static('storage/users'));
@@ -20,15 +27,15 @@ app.use(userController);
 app.use(adminController);
 app.use(communityController);
 
-const io = new Server(server, {
-	cors: {
-		origin: origin,
-		methods: ['GET', 'POST'],
-	},
-});
-
 io.on('connection', socket => {
-	console.log(socket.id);
+	socket.on('comunidade-canal-join', data => {
+		socket.join(data);
+	});
+
+	socket.on('comunidade-canal-send', data => {
+		console.log(data);
+		socket.to(data.canal).emit('comunidade-canal-receive');
+	});
 });
 
-app.listen(port, () => console.log(`Server listening on ${port}`));
+server.listen(port, () => console.log(`Server listening on ${port}`));

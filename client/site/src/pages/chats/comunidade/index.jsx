@@ -7,10 +7,10 @@ import { consultarCanais, consultarComunidadeUsuario, searchCommunityId } from '
 import localStorage from 'local-storage';
 import { toast } from 'react-toastify';
 import ListaLateral from '../../../components/listas/lateral';
-import './index.sass';
 import { SubTitulo } from '../../../styled';
 import io from 'socket.io-client';
 import { baseUrl } from '../../../api/services';
+import './index.sass';
 
 const socket = io.connect(baseUrl);
 
@@ -25,8 +25,15 @@ const Index = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 
-	const send = async () => {
-		socket.emit('join', canalSelecionado);
+	const send = () => {
+		if (!conteudo || !conteudo.trim()) return;
+		socket.emit('comunidade-canal-send', {
+			conteudo,
+			canal: canalSelecionado,
+			comunidade: Number(id),
+			usuario: localStorage('user').id,
+		});
+		setConteudo('');
 	};
 
 	useEffect(() => {
@@ -41,7 +48,7 @@ const Index = () => {
 				setUser(s);
 				setCanais(t);
 				if (t[0]) setCanalSelecionado(t[0].idCanal);
-				if (!user) throw new Error('Falha na autenticaçãos');
+				if (!user) throw new Error('Falha na autenticação');
 			} catch (err) {
 				if (err.response) toast.error(err.response.data.err);
 				else toast.error(err.message);
@@ -49,13 +56,19 @@ const Index = () => {
 			}
 		}
 		consultarDados();
-	}, []);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [id]);
 
 	useEffect(() => {
-		socket.on('receive', data => {
-			setMensagens([...mensagens, data.message]);
+		socket.on('comunidade-canal-receive', data => {
+			setMensagens([...mensagens, { conteudo: data.conteudo, usuario: data.usuario }]);
 		});
+		console.log(mensagens);
 	});
+
+	useEffect(() => {
+		socket.emit('comunidade-canal-join', { usuario: localStorage('user').id, comunidade: Number(id), canal: canalSelecionado });
+	}, [canalSelecionado, id]);
 
 	return (
 		<div className='comunidade page'>
