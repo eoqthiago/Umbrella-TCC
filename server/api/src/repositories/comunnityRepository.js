@@ -226,3 +226,16 @@ export async function communityDelete(idCommunity) {
 	const [r] = await con.query(command, [idCommunity]);
 	return r.affectedRows;
 }
+
+// Inserir mensagem em canal
+export async function salvarMensagemComunidade(usuario, comunidade, canal, conteudo) {
+	const command = `
+		insert into tb_comunidade_mensagem (id_usuario_comunidade, id_comunidade_canal, ds_mensagem)
+					values (
+							(select id_usuario_comunidade
+							   from tb_usuario_comunidade
+							  where id_usuario = ? and id_comunidade = ?
+							), ?, ?) `;
+	const [r] = await con.query(command, [usuario, comunidade, canal, conteudo]);
+	return r.affectedRows;
+}

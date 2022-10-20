@@ -217,3 +217,12 @@ INSERT INTO
 -- Denunciar comunidade
 insert into tb_comunidade_report (id_usuario, ds_email, id_comunidade, ds_report)
 							     values (?, ?, ?, ?);
+
+-- Inserir mensagem
+insert into 
+	tb_comunidade_mensagem (id_usuario_comunidade, id_comunidade_canal, ds_mensagem)
+					values (
+							(select id_usuario_comunidade
+								from tb_usuario_comunidade
+								where id_usuario = ? and id_comunidade = ?
+							), ?, ?);

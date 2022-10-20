@@ -17,6 +17,7 @@ import {
 	communityDelete,
 	communityUsers,
 	communityCanalCreate,
+	salvarMensagemComunidade,
 } from '../repositories/comunnityRepository.js';
 import { userIdSearch } from '../repositories/userRepository.js';
 import { verifyToken } from '../utils/authUtils.js';
@@ -404,6 +405,35 @@ server.get('/comunidade/:id/usuarios', async (req, res) => {
 	} catch (err) {
 		res.status(400).send({
 			err: err.message,
+		});
+	}
+});
+
+// Inserir mensagem em canal
+server.post('/comunidade/:comunidade/canal/:canal', async (req, res) => {
+	try {
+		const comunidade = Number(req.params.comunidade);
+		const canal = Number(req.params.canal);
+		const community = req.body;
+		const token = req.header('x-access-token');
+		if (!token) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		}
+
+		const decoded = verifyToken(token);
+		if (!decoded || !(await userIdSearch(decoded.id)) || !(await communityUserID(decoded.id, comunidade))) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		} else if (!community.conteudo || !community.conteudo.trim() || community.conteudo.length > 2500) throw new Error();
+
+		const answer = await salvarMensagemComunidade(decoded.id, comunidade, canal, community.conteudo);
+		if (answer < 1) throw new Error();
+
+		res.status(204).send();
+	} catch (err) {
+		res.status(400).send({
+			err: 'Não foi possível inserir a mensagem',
 		});
 	}
 });
