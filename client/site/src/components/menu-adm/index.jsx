@@ -2,8 +2,8 @@ import './index.sass'
 
 function MenuAdm() {
     return (
-        <main className='admin-home'>
-            <section className='admin'>
+        <main className='comp-menu-admin'>
+            <section className='menu-admin'>
                 <div className='admin-funcoes'>
                     <hr className='linhas-menu'></hr>
                     <p className='admin-textos'>Home</p>
