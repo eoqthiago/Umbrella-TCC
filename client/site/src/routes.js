@@ -17,6 +17,7 @@ import RecuperarCodigo from "./pages/recuperar-senha/recuperar-senha-codigo";
 import Alterar from "./pages/recuperar-senha/senha-nova";
 import AlterarEmail from "./pages/alterar-email/page-alterar-email"
 import EmailConfirm from "./pages/alterar-email/alterar-email"
+import ChatPrivado from "./pages/chats/privado"
 
 export default function Index() {
 	return (
@@ -39,6 +40,7 @@ export default function Index() {
 				<Route path="/code" exact element={<RecuperarCodigo />} />
 				<Route path="/alterar-senha" element={<Alterar />} />
 				<Route path="/alterar-email" exact element={<AlterarEmail />} />
+				<Route path="/chat/conversa/:id" exact element={<ChatPrivado />} />
 				<Route path="/email-novo" exact element={<EmailConfirm />} />
 				<Route path='*' element={<NotFound />} />
 			</Routes>
