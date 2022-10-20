@@ -4,7 +4,7 @@ import Home from "./pages/home";
 import Login from "./pages/login";
 import Cadastro from "./pages/cadastro";
 import Inicial from "./pages/chats/home";
-import Pesquisa from "./pages/chats/pesquisa";
+import Pesquisa from "./pages/pesquisa";
 import Config from "./pages/config";
 import Amizades from "./pages/amizades";
 import CommunitiesInfo from "./pages/communities-info";
