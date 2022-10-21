@@ -1,37 +1,53 @@
 .comp-message
     min-height: 65px
-    background: red
     width: 100%
     display: flex
-    flex-flow: column nowrap
-    padding: 10px
-    justify-content: center
+    flex-flow: row nowrap
+    padding: 10px 1%
+    justify-content: flex-start
+    gap: 15px
+    flex-shrink: none
+
+    > img
+        width: 40px
+        height: 40px
+        border-radius: 100%
+        user-select: none
+        -webkit-user-drag: none
+        cursor: pointer
+        background: #fff
+
+        &:hover
+            box-shadow: 0 0 15px 1px #00000025
 
     > .comp-message-conteudo
         display: flex
         flex-flow: row nowrap
         align-items: flex-start
         gap: 10px
-        background: blue
+        background: #f3f6f7
         width: fit-content
         min-width: 250px
         max-width: 500px
-        padding: 8px
-
-        > img
-            width: 40px
-            height: 40px
-            border-radius: 100%
-            user-select: none
-            -webkit-user-drag: none
-            cursor: pointer
+        padding: 5px 10px 15px
+        border: 1px solid #d1d1d1
+        border-radius: 10px
 
         > div
             > h1
                 font-size: 15px
                 cursor: pointer
                 user-select: none
+                width: fit-content
+                margin-bottom: 10px
+                font-family: OpenSans-medium
+
+                &:hover
+                    text-decoration: underline
 
             > span
-                background: green
+                font-size: 16px
                 word-break: break-all
+
+    &:hover
+        background: #d8dadb27

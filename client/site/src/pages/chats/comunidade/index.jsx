@@ -17,7 +17,7 @@ const socket = io.connect(socketUrl);
 const Index = () => {
 	const [canais, setCanais] = useState([]);
 	const [canalSelecionado, setCanalSelecionado] = useState(null);
-	const [mensagens, setMensagens] = useState([]);
+	const [mensagens, setMensagens] = useState([{ conteudo: 'Sample', usuario: 1 }]);
 	const [menu, setMenu] = useState(false);
 	const [conteudo, setConteudo] = useState('');
 	const [user, setUser] = useState({});
