@@ -18,6 +18,7 @@ import {
 	communityUsers,
 	communityCanalCreate,
 	salvarMensagemComunidade,
+	consultarCanalMensagens,
 } from '../repositories/comunnityRepository.js';
 import { userIdSearch } from '../repositories/userRepository.js';
 import { verifyToken } from '../utils/authUtils.js';
@@ -434,6 +435,35 @@ server.post('/comunidade/:comunidade/canal/:canal', async (req, res) => {
 	} catch (err) {
 		res.status(400).send({
 			err: 'Não foi possível inserir a mensagem',
+		});
+	}
+});
+
+// Consultar mensagens de um canal
+server.get('/comunidade/:comunidade/canal/:canal/mensagens/:lastId', async (req, res) => {
+	try {
+		const comunidade = Number(req.params.comunidade);
+		const canal = Number(req.params.canal);
+		let lastId = Number(req.params.lastId);
+		const token = req.header('x-access-token');
+		if (!token) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		}
+
+		const decoded = verifyToken(token);
+		if (!decoded || !(await userIdSearch(decoded.id)) || !(await communityUserID(decoded.id, comunidade))) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		} else if (!lastId) lastId = null;
+
+		const answer = await consultarCanalMensagens(canal, lastId);
+		if (!answer) throw new Error('Não foi possível realizar as consultas');
+
+		res.status(200).send(answer);
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
 		});
 	}
 });

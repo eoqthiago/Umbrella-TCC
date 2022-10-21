@@ -226,3 +226,19 @@ insert into
 								from tb_usuario_comunidade
 								where id_usuario = ? and id_comunidade = ?
 							), ?, ?);
+
+-- Consultar mensagens* !Ainda não finalizado
+select
+	tb_usuario.img_usuario usuarioImagem,
+	tb_usuario.nm_usuario usuarioNome,
+	tb_usuario.id_usuario idUsuario,
+	tb_usuario_comunidade.id_usuario_comunidade idUsuarioComunidade,
+	tb_usuario_comunidade.id_comunidade idComunidade,
+	ds_mensagem conteudo,
+	dt_mensagem dataEnvio,
+	id_comunidade_canal canal,
+	id_mensagem idMensagem
+from tb_comunidade_mensagem
+inner join tb_usuario_comunidade on tb_comunidade_mensagem.id_usuario_comunidade
+inner join tb_usuario on tb_usuario.id_usuario = tb_usuario_comunidade.id_usuario
+where id_comunidade_canal = 2 limit 50;

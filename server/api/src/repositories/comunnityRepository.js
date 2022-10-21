@@ -239,3 +239,26 @@ export async function salvarMensagemComunidade(usuario, comunidade, canal, conte
 	const [r] = await con.query(command, [usuario, comunidade, canal, conteudo]);
 	return r.affectedRows;
 }
+
+// Consultar mensagens de um canal
+export async function consultarCanalMensagens(canal, lastId) {
+	const command = `
+		select
+			tb_usuario.img_usuario usuarioImagem,
+			tb_usuario.nm_usuario usuarioNome,
+			tb_usuario.id_usuario idUsuario,
+			tb_usuario_comunidade.id_usuario_comunidade idUsuarioComunidade,
+            tb_usuario_comunidade.id_comunidade idComunidade,
+			ds_mensagem conteudo,
+			dt_mensagem dataEnvio,
+			id_comunidade_canal canal,
+			id_mensagem idMensagem
+		from tb_comunidade_mensagem
+
+		inner join tb_usuario_comunidade on tb_comunidade_mensagem.id_usuario_comunidade
+		inner join tb_usuario on tb_usuario.id_usuario = tb_usuario_comunidade.id_usuario
+
+		where id_comunidade_canal = ? limit 50 `;
+	const [answer] = await con.query(command, [canal]);
+	return answer;
+}
