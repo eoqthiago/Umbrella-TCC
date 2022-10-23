@@ -1,12 +1,14 @@
 .comp-message
-    min-height: 65px
     width: 100%
+    min-height: 75px
+    height: auto !important
+    max-height: none
     display: flex
     flex-flow: row nowrap
     padding: 10px 1%
     justify-content: flex-start
     gap: 15px
-    flex-shrink: none
+    overflow: hidden
 
     > img
         width: 40px
@@ -29,9 +31,11 @@
         width: fit-content
         min-width: 250px
         max-width: 500px
+        height: fit-content
         padding: 5px 10px 15px
         border: 1px solid #d1d1d1
         border-radius: 10px
+        z-index: 2
 
         > div
             > h1

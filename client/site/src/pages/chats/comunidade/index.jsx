@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Header from '../../../components/header';
 import Menu from '../../../components/menu';
 import InputMensagem from '../../../components/input-mensagem';
@@ -23,6 +23,13 @@ const Index = () => {
 	const [user, setUser] = useState({});
 	const { id } = useParams();
 	const navigate = useNavigate();
+	const endMessage = useRef();
+
+	const scrollToBottom = () => {
+		endMessage.current.scrollIntoView({ behavior: 'smooth' });
+	};
+
+	useEffect(scrollToBottom, [mensagens]);
 
 	const send = () => {
 		if (!conteudo || !conteudo.trim()) return;
@@ -98,9 +105,13 @@ const Index = () => {
 				</aside>
 				<section>
 					<div className='comunidade-mensagens'>
-						{mensagens.map(item => (
-							<MensagemComp item={item} />
+						{mensagens.map((item, index) => (
+							<MensagemComp
+								item={item}
+								key={index}
+							/>
 						))}
+						<div ref={endMessage} />
 					</div>
 					<InputMensagem
 						conteudo={conteudo}

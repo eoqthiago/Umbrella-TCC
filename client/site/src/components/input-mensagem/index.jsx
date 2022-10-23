@@ -10,6 +10,7 @@ export default function Index({ conteudo, setConteudo, send }) {
 				onChange={e => setConteudo(e.target.value)}
 				onKeyDown={e => e.key === 'Enter' && send()}
 				autoFocus={true}
+				maxLength='2500'
 			/>
 			<img
 				src='/assets/icons/send.svg'
