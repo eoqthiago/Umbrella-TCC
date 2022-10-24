@@ -6,6 +6,7 @@ import { Server } from 'socket.io';
 import userController from './controllers/userController.js';
 import adminController from './controllers/adminController.js';
 import communityController from './controllers/communityController.js';
+import { salvarMensagemComunidade } from './repositories/comunnityRepository.js';
 
 const app = express();
 const server = http.createServer(app);
@@ -32,11 +33,11 @@ app.use(communityController);
 
 io.on('connection', socket => {
 	socket.on('comunidade-canal-join', data => {
-		socket.join(data);
+		socket.join(data.canal);
 	});
 
-	socket.on('comunidade-canal-send', data => {
-		socket.to(data.canal).emit('comunidade-canal-receive');
+	socket.on('comunidade-canal-send', async data => {
+		socket.to(data.canal).emit('comunidade-canal-receive', data);
 	});
 });
 

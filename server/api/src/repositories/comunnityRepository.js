@@ -263,7 +263,7 @@ export async function consultarCanalMensagens(canal, lastId) {
 		inner join tb_usuario_comunidade on tb_comunidade_mensagem.id_usuario_comunidade
 		inner join tb_usuario on tb_usuario.id_usuario = tb_usuario_comunidade.id_usuario
 
-		where id_comunidade_canal = ? limit 50 `;
+		where id_comunidade_canal = ?`; //limit 50
 
 	const [answer] = await con.query(command, [canal]);
 	const model = [];

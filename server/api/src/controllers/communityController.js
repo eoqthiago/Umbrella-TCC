@@ -460,6 +460,8 @@ server.get('/comunidade/:comunidade/canal/:canal/mensagens/:lastId', async (req,
 		const answer = await consultarCanalMensagens(canal, lastId);
 		if (!answer) throw new Error('Não foi possível realizar as consultas');
 
+		console.log(answer);
+
 		res.send(answer);
 	} catch (err) {
 		res.status(400).send({

@@ -83,9 +83,7 @@ const Index = () => {
 		async function join() {
 			try {
 				if (!canalSelecionado) throw new Error();
-
 				socket.emit('comunidade-canal-join', { usuario: { nome: user.nome, id: user.id }, comunidade: Number(id), canal: canalSelecionado });
-
 				const r = await listarMensagens(id, canalSelecionado, 0);
 				setMensagens(r);
 			} catch (err) {}
