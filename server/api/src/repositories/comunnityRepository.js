@@ -7,8 +7,9 @@ export async function communityCreate(id, community) {
                            VALUES (?, ?, ?, ?);
 		set @last = last_insert_id();
 		INSERT INTO tb_usuario_comunidade (id_usuario, id_comunidade) 
-									VALUES (?, @last)
-		`;
+									VALUES (?, @last);
+		insert into tb_comunidade_canal (id_comunidade, nm_canal)
+								 values (@last, 'Primeiro canal'); `;
 	const [r] = await con.query(command, [id, community.nome, community.descricao, community.publica, id]);
 	community.id = r[0].insertId;
 	return community;
