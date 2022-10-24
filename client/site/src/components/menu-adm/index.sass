@@ -1,39 +1,41 @@
 .comp-menu-admin
-   display: flex
-   flex-direction: column
-   justify-content: center
-   background-color: #3C3C3D
-   height: 100vh
-   width: 20%
-   min-width: 150px
 
-> .menu-admin
-   display: flex
-   justify-content: center
+   > main
+      display: flex
+      flex-direction: column
+      justify-content: center
+      background-color: #3C3C3D
+      height: 100vh
+      width: 20%
+      min-width: 150px
+      position: fixed
 
-.admin-funcoes
-   display: flex
-   flex-direction: column
+      > .menu-admin
+         display: flex
+         justify-content: center
 
-   > .linhas-menu
-      width: 70%
-      height: 2px
-      background-color: #fff
-      align-self: center
+         > .admin-funcoes
+            display: flex
+            flex-direction: column
 
-.linhas-menu:hover
-   width: 100%
-   transition: 0.3s
+            > .linhas-menu
+               width: 70%
+               height: 2px
+               background-color: #fff
+               align-self: center
 
-.admin-textos
-   color: #fff
-   padding: 25px 60px
-   font-family: "roboto-medium"
-   text-align: center
-   font-size: 17px
-   width: 100%
+            > .linhas-menu:hover
+               width: 100%
+               transition: 0.3s
 
-.admin-textos:hover
-   background-color: #606060
-   cursor: pointer
-   transition: 0.3s
+            > .admin-textos
+               color: #fff
+               padding: 20px 82px
+               font-family: "roboto-medium"
+               text-align: center
+               font-size: 13px
+
+            > .admin-textos:hover
+               background-color: #2CA75D
+               cursor: pointer
+               transition: 0.3s

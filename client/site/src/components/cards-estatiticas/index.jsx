@@ -2,7 +2,7 @@ import './index.sass'
 
 const Index = props => {
     return (
-        <main className='comp-cards-estatisticas'>
+        <main className={props.cards_estatisticas}>
             <section className='cards-estatisticas' >
                 <div className='icons-estatisticas'>
                     <img className='imagem-estatisticas' src='/assets/icons/olho.svg' />
