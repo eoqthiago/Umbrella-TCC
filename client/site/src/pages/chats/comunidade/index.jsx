@@ -3,7 +3,7 @@ import Header from '../../../components/header';
 import Menu from '../../../components/menu';
 import InputMensagem from '../../../components/input-mensagem';
 import { useParams, useNavigate } from 'react-router-dom';
-import { consultarCanais, consultarComunidadeUsuario, searchCommunityId } from '../../../api/communityApi';
+import { consultarCanais, consultarComunidadeUsuario, enviarMensagemCanal, listarMensagens, searchCommunityId } from '../../../api/communityApi';
 import localStorage from 'local-storage';
 import { toast } from 'react-toastify';
 import ListaLateral from '../../../components/listas/lateral';
@@ -17,7 +17,7 @@ const socket = io.connect(socketUrl);
 const Index = () => {
 	const [canais, setCanais] = useState([]);
 	const [canalSelecionado, setCanalSelecionado] = useState(null);
-	const [mensagens, setMensagens] = useState([{ conteudo: 'Sample', usuario: 1 }]);
+	const [mensagens, setMensagens] = useState([]);
 	const [menu, setMenu] = useState(false);
 	const [conteudo, setConteudo] = useState('');
 	const [user, setUser] = useState({});
@@ -29,18 +29,32 @@ const Index = () => {
 		endMessage.current.scrollIntoView({ behavior: 'smooth' });
 	};
 
-	useEffect(scrollToBottom, [mensagens]);
-
-	const send = () => {
+	const send = async () => {
 		if (!conteudo || !conteudo.trim()) return;
-		socket.emit('comunidade-canal-send', {
-			conteudo,
-			canal: canalSelecionado,
-			comunidade: Number(id),
-			usuario: localStorage('user').id,
-		});
-		setMensagens([...mensagens, { conteudo, usuario: localStorage('user').id }]);
-		setConteudo('');
+		try {
+			const r = await enviarMensagemCanal(conteudo, canalSelecionado, id);
+			const temp = {
+				usuario: {
+					id: user.id,
+					nome: user.nome,
+					descricao: user.descricao,
+					imagem: user.imagem,
+					idComunidade: user.idComunidade,
+				},
+				comunidade: Number(id),
+				canal: canalSelecionado,
+				mensagem: {
+					conteudo,
+					data: new Date().toISOString(),
+					id: r,
+				},
+			};
+
+			socket.emit('comunidade-canal-send', temp);
+			setMensagens([...mensagens, temp]);
+
+			setConteudo('');
+		} catch (err) {}
 	};
 
 	useEffect(() => {
@@ -66,15 +80,44 @@ const Index = () => {
 	}, [id]);
 
 	useEffect(() => {
-		socket.on('comunidade-canal-receive', data => {
-			setMensagens([...mensagens, { conteudo: data.conteudo, usuario: data.usuario }]);
-		});
-		console.log(mensagens);
-	});
+		async function join() {
+			try {
+				if (!canalSelecionado) throw new Error();
+
+				socket.emit('comunidade-canal-join', { usuario: { nome: user.nome, id: user.id }, comunidade: Number(id), canal: canalSelecionado });
+
+				const r = await listarMensagens(id, canalSelecionado, 0);
+				setMensagens(r);
+			} catch (err) {}
+		}
+		join();
+	}, [canalSelecionado, id, user]);
 
 	useEffect(() => {
-		socket.emit('comunidade-canal-join', { usuario: localStorage('user').id, comunidade: Number(id), canal: canalSelecionado });
-	}, [canalSelecionado, id]);
+		socket.on('comunidade-canal-receive', data => {
+			setMensagens([
+				...mensagens,
+				{
+					usuario: {
+						id: data.usuario.id,
+						nome: data.usuario.nome,
+						descricao: data.usuario.descricao,
+						imagem: data.usuario.imagem,
+						idComunidade: data.usuario.idComunidade,
+					},
+					comunidade: data.comunidade,
+					canal: canalSelecionado,
+					mensagem: {
+						conteudo: data.mensagem.conteudo,
+						data: data.mensagem.data,
+						id: data.mensagem.id,
+					},
+				},
+			]);
+		});
+	});
+
+	useEffect(scrollToBottom, [mensagens]);
 
 	return (
 		<div className='comunidade page'>
@@ -92,24 +135,27 @@ const Index = () => {
 				<aside>
 					<div>Canais</div>
 					<div className='comunidade-listagem-lateral'>
-						{canais.map(item => (
+						{canais.map((item, index) => (
 							<ListaLateral
 								item={item}
 								tipo='canal'
 								setCanal={setCanalSelecionado}
 								canalSelecionado={canalSelecionado}
-								key={item.idCanal}
+								key={index}
 							/>
 						))}
 					</div>
 				</aside>
 				<section>
 					<div className='comunidade-mensagens'>
-						{mensagens.map((item, index) => (
-							<MensagemComp
-								item={item}
-								key={index}
-							/>
+						<div className='comunidade-mensagem-inicio'>Este é o início da conversa 😃</div>
+						{mensagens.map(item => (
+							<div className='comunidade-mensagem'>
+								<MensagemComp
+									item={item}
+									key={item.mensagem.id}
+								/>
+							</div>
 						))}
 						<div ref={endMessage} />
 					</div>

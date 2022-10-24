@@ -179,3 +179,29 @@ export async function adicionarUsuarioComunidade(comunidade) {
 	);
 	return r.status;
 }
+
+export async function enviarMensagemCanal(conteudo, canal, comunidade) {
+	if (!userToken || !conteudo || !canal || !comunidade) return;
+	const r = await api.post(
+		`/comunidade/${comunidade}/canal/${canal}`,
+		{
+			conteudo,
+		},
+		{
+			headers: {
+				'x-access-token': userToken,
+			},
+		}
+	);
+	return r.data.id;
+}
+
+export async function listarMensagens(comunidade, canal, lastId) {
+	if (!userToken || !comunidade || !canal) return;
+	const r = await api.get(`/comunidade/${comunidade}/canal/${canal}/mensagens/${lastId}`, {
+		headers: {
+			'x-access-token': userToken,
+		},
+	});
+	return r.data;
+}

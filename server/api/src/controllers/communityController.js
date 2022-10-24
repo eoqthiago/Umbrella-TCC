@@ -429,9 +429,9 @@ server.post('/comunidade/:comunidade/canal/:canal', async (req, res) => {
 		} else if (!community.conteudo || !community.conteudo.trim() || community.conteudo.length > 2500) throw new Error();
 
 		const answer = await salvarMensagemComunidade(decoded.id, comunidade, canal, community.conteudo);
-		if (answer < 1) throw new Error();
+		if (!answer) throw new Error();
 
-		res.status(204).send();
+		res.send({ id: answer });
 	} catch (err) {
 		res.status(400).send({
 			err: 'Não foi possível inserir a mensagem',
@@ -460,7 +460,7 @@ server.get('/comunidade/:comunidade/canal/:canal/mensagens/:lastId', async (req,
 		const answer = await consultarCanalMensagens(canal, lastId);
 		if (!answer) throw new Error('Não foi possível realizar as consultas');
 
-		res.status(200).send(answer);
+		res.send(answer);
 	} catch (err) {
 		res.status(400).send({
 			err: err.message,

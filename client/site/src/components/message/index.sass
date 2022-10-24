@@ -1,14 +1,9 @@
 .comp-message
-    width: 100%
-    min-height: 75px
-    height: auto !important
-    max-height: none
+    width: fit-content
     display: flex
     flex-flow: row nowrap
-    padding: 10px 1%
     justify-content: flex-start
     gap: 15px
-    overflow: hidden
 
     > img
         width: 40px
@@ -44,7 +39,7 @@
                 user-select: none
                 width: fit-content
                 margin-bottom: 10px
-                font-family: OpenSans-medium
+                font-family: OpenSans-regular
 
                 &:hover
                     text-decoration: underline
@@ -52,6 +47,14 @@
             > span
                 font-size: 16px
                 word-break: break-all
+                font-family: Roboto-regular
 
-    &:hover
-        background: #d8dadb27
+    > .comp-message-data
+        font-family: OpenSans-regular
+        font-size: 14px
+        position: relative
+        right: 10px
+        bottom: 0
+        background: red
+        width: fit-content
+        height: fit-content

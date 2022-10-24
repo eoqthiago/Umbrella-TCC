@@ -27,8 +27,12 @@ export async function communityImage(id, image) {
 // Procurar por id de usúario na comunidade
 export async function communityUserID(id, comunidade) {
 	const command = `
-		SELECT tb_usuario_comunidade.id_usuario_comunidade id,
-				tb_usuario.nm_usuario nome
+		SELECT
+				tb_usuario_comunidade.id_usuario_comunidade id,
+				tb_usuario.nm_usuario nome,
+				tb_usuario.img_usuario imagem,
+				tb_usuario.ds_usuario descricao,
+				id_usuario_comunidade idComunidade
 		FROM 	tb_usuario_comunidade
 		INNER JOIN tb_usuario 
 		ON tb_usuario_comunidade.id_usuario = tb_usuario.id_usuario
@@ -237,7 +241,7 @@ export async function salvarMensagemComunidade(usuario, comunidade, canal, conte
 							  where id_usuario = ? and id_comunidade = ?
 							), ?, ?) `;
 	const [r] = await con.query(command, [usuario, comunidade, canal, conteudo]);
-	return r.affectedRows;
+	return r.insertId;
 }
 
 // Consultar mensagens de um canal
@@ -259,6 +263,25 @@ export async function consultarCanalMensagens(canal, lastId) {
 		inner join tb_usuario on tb_usuario.id_usuario = tb_usuario_comunidade.id_usuario
 
 		where id_comunidade_canal = ? limit 50 `;
+
 	const [answer] = await con.query(command, [canal]);
-	return answer;
+	const model = [];
+	answer.forEach(item =>
+		model.push({
+			usuario: {
+				nome: item.usuarioNome,
+				id: item.idUsuario,
+				imagem: item.usuarioImagem,
+				idComunidade: item.idUsuarioComunidade,
+			},
+			comunidade: item.idComunidade,
+			canal: item.canal,
+			mensagem: {
+				conteudo: item.conteudo,
+				data: item.dataEnvio,
+				id: item.idMensagem,
+			},
+		})
+	);
+	return model;
 }

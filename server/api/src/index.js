@@ -36,7 +36,6 @@ io.on('connection', socket => {
 	});
 
 	socket.on('comunidade-canal-send', data => {
-		console.log(data);
 		socket.to(data.canal).emit('comunidade-canal-receive');
 	});
 });
