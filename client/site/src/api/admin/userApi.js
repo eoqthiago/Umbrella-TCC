@@ -10,3 +10,11 @@ export async function adminLogin(email, senha) {
 	});
 	return r.data;
 }
+
+export async function adminCadastro(email, senha) {
+	const r = await api.post("/admin/login", {
+		email: email,
+		senha: senha,
+	});
+	return r.data;
+}
