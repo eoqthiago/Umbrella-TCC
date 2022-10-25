@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 import { sha256 } from 'js-sha256';
+import { verifyToken } from '../utils/authUtils.js';
 import { adminCadastro, adminDelete, adminLogin, adminSearch, rootVerificar } from '../repositories/adminRepository.js';
 import { cpfTest, emailTest, telefoneTest } from '../utils/expressionTest.js';
 
