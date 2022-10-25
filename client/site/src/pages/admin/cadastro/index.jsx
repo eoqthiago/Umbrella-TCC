@@ -24,8 +24,11 @@ export default function Index() {
 		setLoading(true);
 		try {
 			if (senha !== senhaconf) throw new Error('As senhas são coincidem');
-			await adminCadastro(nome, email, senha, nascimento, endereco, telefone, cpf);
-			toast.success('🚀 Conta criada com sucesso!');
+			const r = await adminCadastro(nome, email, senha, nascimento, endereco, telefone, cpf);
+
+			if(r) toast.success('🚀 Conta criada com sucesso!');
+			else toast.error('Não autorizado!');
+
 		} catch (err) {
 			if (err.response) toast.error(err.response.data.err);
 			else toast.warning(err.message);
