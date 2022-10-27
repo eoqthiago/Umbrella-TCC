@@ -227,18 +227,18 @@ insert into
 								where id_usuario = ? and id_comunidade = ?
 							), ?, ?);
 
--- Consultar mensagens* !Ainda não finalizado
+-- Consultar mensagens
 select
-	tb_usuario.img_usuario usuarioImagem,
-	tb_usuario.nm_usuario usuarioNome,
-	tb_usuario.id_usuario idUsuario,
-	tb_usuario_comunidade.id_usuario_comunidade idUsuarioComunidade,
-	tb_usuario_comunidade.id_comunidade idComunidade,
+	id_mensagem idMensagem,
 	ds_mensagem conteudo,
-	dt_mensagem dataEnvio,
-	id_comunidade_canal canal,
-	id_mensagem idMensagem
+	dt_mensagem data,
+	tb_usuario_comunidade.id_comunidade idComunidade,
+	tb_usuario_comunidade.id_usuario_comunidade idUsuarioComunidade,
+	tb_usuario.img_usuario usuarioImagem,
+	tb_usuario.id_usuario idUsuario,
+	tb_usuario.nm_usuario usuarioNome,
+	tb_usuario.ds_usuario usuarioDescricao
 from tb_comunidade_mensagem
-inner join tb_usuario_comunidade on tb_comunidade_mensagem.id_usuario_comunidade
-inner join tb_usuario on tb_usuario.id_usuario = tb_usuario_comunidade.id_usuario
-where id_comunidade_canal = 2 limit 50;
+inner join tb_usuario_comunidade on tb_usuario_comunidade.id_usuario_comunidade = tb_comunidade_mensagem.id_usuario_comunidade
+inner join tb_usuario on tb_usuario_comunidade.id_usuario = tb_usuario.id_usuario
+where id_comunidade_canal = 1;

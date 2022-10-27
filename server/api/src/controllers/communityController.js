@@ -428,7 +428,10 @@ server.post('/comunidade/:comunidade/canal/:canal', async (req, res) => {
 			return;
 		} else if (!community.conteudo || !community.conteudo.trim() || community.conteudo.length > 2500) throw new Error();
 
-		const answer = await salvarMensagemComunidade(decoded.id, comunidade, canal, community.conteudo);
+		const userId = await communityUserID(decoded.id, comunidade);
+		if (!userId) throw new Error('O usuário não está na comunidade');
+
+		const answer = await salvarMensagemComunidade(userId.id, canal, community.conteudo);
 		if (!answer) throw new Error();
 
 		res.send({ id: answer });
@@ -459,8 +462,6 @@ server.get('/comunidade/:comunidade/canal/:canal/mensagens/:lastId', async (req,
 
 		const answer = await consultarCanalMensagens(canal, lastId);
 		if (!answer) throw new Error('Não foi possível realizar as consultas');
-
-		console.log(answer);
 
 		res.send(answer);
 	} catch (err) {

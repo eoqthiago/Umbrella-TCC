@@ -233,15 +233,11 @@ export async function communityDelete(idCommunity) {
 }
 
 // Inserir mensagem em canal
-export async function salvarMensagemComunidade(usuario, comunidade, canal, conteudo) {
+export async function salvarMensagemComunidade(usuario, canal, conteudo) {
 	const command = `
 		insert into tb_comunidade_mensagem (id_usuario_comunidade, id_comunidade_canal, ds_mensagem)
-					values (
-							(select id_usuario_comunidade
-							   from tb_usuario_comunidade
-							  where id_usuario = ? and id_comunidade = ?
-							), ?, ?) `;
-	const [r] = await con.query(command, [usuario, comunidade, canal, conteudo]);
+					values (?, ?, ?) `;
+	const [r] = await con.query(command, [usuario, canal, conteudo]);
 	return r.insertId;
 }
 
@@ -249,21 +245,19 @@ export async function salvarMensagemComunidade(usuario, comunidade, canal, conte
 export async function consultarCanalMensagens(canal, lastId) {
 	const command = `
 		select
-			tb_usuario.img_usuario usuarioImagem,
-			tb_usuario.nm_usuario usuarioNome,
-			tb_usuario.id_usuario idUsuario,
-			tb_usuario_comunidade.id_usuario_comunidade idUsuarioComunidade,
-            tb_usuario_comunidade.id_comunidade idComunidade,
+			id_mensagem idMensagem,
 			ds_mensagem conteudo,
-			dt_mensagem dataEnvio,
-			id_comunidade_canal canal,
-			id_mensagem idMensagem
+			dt_mensagem data,
+			tb_usuario_comunidade.id_comunidade idComunidade,
+			tb_usuario_comunidade.id_usuario_comunidade idUsuarioComunidade,
+			tb_usuario.img_usuario usuarioImagem,
+			tb_usuario.id_usuario idUsuario,
+			tb_usuario.nm_usuario usuarioNome,
+            tb_usuario.ds_usuario usuarioDescricao
 		from tb_comunidade_mensagem
-
-		inner join tb_usuario_comunidade on tb_comunidade_mensagem.id_usuario_comunidade
-		inner join tb_usuario on tb_usuario.id_usuario = tb_usuario_comunidade.id_usuario
-
-		where id_comunidade_canal = ?`; //limit 50
+		inner join tb_usuario_comunidade on tb_usuario_comunidade.id_usuario_comunidade = tb_comunidade_mensagem.id_usuario_comunidade
+		inner join tb_usuario on tb_usuario_comunidade.id_usuario = tb_usuario.id_usuario
+		where id_comunidade_canal = ? `; //limit 50
 
 	const [answer] = await con.query(command, [canal]);
 	const model = [];
@@ -274,9 +268,10 @@ export async function consultarCanalMensagens(canal, lastId) {
 				id: item.idUsuario,
 				imagem: item.usuarioImagem,
 				idComunidade: item.idUsuarioComunidade,
+				descricao: item.usuarioDescricao,
 			},
 			comunidade: item.idComunidade,
-			canal: item.canal,
+			canal: canal,
 			mensagem: {
 				conteudo: item.conteudo,
 				data: item.dataEnvio,

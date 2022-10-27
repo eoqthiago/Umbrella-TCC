@@ -15,7 +15,7 @@ export default function Index({ conteudo, setConteudo, send }) {
 			<img
 				src='/assets/icons/send.svg'
 				alt=''
-				onClick={send}
+				onClick={() => send()}
 				title='Enviar'
 			/>
 		</nav>
