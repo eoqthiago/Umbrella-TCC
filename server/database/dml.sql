@@ -217,3 +217,28 @@ INSERT INTO
 -- Denunciar comunidade
 insert into tb_comunidade_report (id_usuario, ds_email, id_comunidade, ds_report)
 							     values (?, ?, ?, ?);
+
+-- Inserir mensagem
+insert into 
+	tb_comunidade_mensagem (id_usuario_comunidade, id_comunidade_canal, ds_mensagem)
+					values (
+							(select id_usuario_comunidade
+								from tb_usuario_comunidade
+								where id_usuario = ? and id_comunidade = ?
+							), ?, ?);
+
+-- Consultar mensagens
+select
+	id_mensagem idMensagem,
+	ds_mensagem conteudo,
+	dt_mensagem data,
+	tb_usuario_comunidade.id_comunidade idComunidade,
+	tb_usuario_comunidade.id_usuario_comunidade idUsuarioComunidade,
+	tb_usuario.img_usuario usuarioImagem,
+	tb_usuario.id_usuario idUsuario,
+	tb_usuario.nm_usuario usuarioNome,
+	tb_usuario.ds_usuario usuarioDescricao
+from tb_comunidade_mensagem
+inner join tb_usuario_comunidade on tb_usuario_comunidade.id_usuario_comunidade = tb_comunidade_mensagem.id_usuario_comunidade
+inner join tb_usuario on tb_usuario_comunidade.id_usuario = tb_usuario.id_usuario
+where id_comunidade_canal = 1;

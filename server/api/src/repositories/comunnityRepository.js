@@ -7,8 +7,9 @@ export async function communityCreate(id, community) {
                            VALUES (?, ?, ?, ?);
 		set @last = last_insert_id();
 		INSERT INTO tb_usuario_comunidade (id_usuario, id_comunidade) 
-									VALUES (?, @last)
-		`;
+									VALUES (?, @last);
+		insert into tb_comunidade_canal (id_comunidade, nm_canal)
+								 values (@last, 'Primeiro canal'); `;
 	const [r] = await con.query(command, [id, community.nome, community.descricao, community.publica, id]);
 	community.id = r[0].insertId;
 	return community;
@@ -26,16 +27,21 @@ export async function communityImage(id, image) {
 
 // Procurar por id de usúario na comunidade
 export async function communityUserID(id, comunidade) {
-	const command = `SELECT tb_usuario_comunidade.id_usuario_comunidade,
-						 	tb_usuario.nm_usuario
-				 	FROM 	tb_usuario_comunidade
-					INNER JOIN tb_usuario 
-					ON tb_usuario_comunidade.id_usuario = tb_usuario.id_usuario
-					WHERE 	tb_usuario_comunidade.id_usuario = ?
-					AND 	id_comunidade = ?`;
+	const command = `
+		SELECT
+				tb_usuario_comunidade.id_usuario_comunidade id,
+				tb_usuario.nm_usuario nome,
+				tb_usuario.img_usuario imagem,
+				tb_usuario.ds_usuario descricao,
+				id_usuario_comunidade idComunidade
+		FROM 	tb_usuario_comunidade
+		INNER JOIN tb_usuario 
+		ON tb_usuario_comunidade.id_usuario = tb_usuario.id_usuario
+		WHERE 	tb_usuario_comunidade.id_usuario = ?
+		AND 	id_comunidade = ?`;
 
 	const [r] = await con.query(command, [id, comunidade]);
-	return r;
+	return r[0];
 }
 
 // Consultar todos usuarios da comunidade
@@ -43,8 +49,8 @@ export async function communityUsers(idCom) {
 	const command = `
 		SELECT
 			tb_usuario_comunidade.id_usuario_comunidade as id,
-			tb_usuario_comunidade.id_usuario as id_usuario,
-			tb_usuario_comunidade.id_comunidade as comunidade,
+			tb_usuario_comunidade.id_usuario as idUsuario,
+			tb_usuario_comunidade.id_comunidade as idComunidade,
 			tb_usuario_comunidade.bt_admin as admin,
 			tb_usuario.nm_usuario as nome,
 			tb_usuario.ds_usuario as descricao,
@@ -59,15 +65,15 @@ export async function communityUsers(idCom) {
 
 // Procurar por nome de usúario na comunidade
 export async function communityUsername(nome, comunidade) {
-	const command = `SELECT tb_usuario_comunidade.id_usuario_comunidade,
-						 	tb_usuario.nm_usuario
-				 	FROM 	tb_usuario_comunidade
-					INNER JOIN tb_usuario 
-					ON tb_usuario_comunidade.id_usuario_comunidade = tb_usuario.id_usuario
-					WHERE	tb_usuario.nm_usuario = ?
-					AND 	id_comunidade = ?`;
-
-	const [r] = await con.query(command, [nome, comunidade]);
+	const command = `
+		SELECT tb_usuario_comunidade.id_usuario_comunidade id,
+				tb_usuario.nm_usuario nome
+		FROM 	tb_usuario_comunidade
+		INNER JOIN tb_usuario 
+		ON tb_usuario_comunidade.id_usuario_comunidade = tb_usuario.id_usuario
+		WHERE	tb_usuario.nm_usuario like '%${nome}%'
+		AND 	id_comunidade = ?`;
+	const [r] = await con.query(command, [comunidade]);
 	return r;
 }
 
@@ -224,4 +230,54 @@ export async function communityDelete(idCommunity) {
 
 	const [r] = await con.query(command, [idCommunity]);
 	return r.affectedRows;
+}
+
+// Inserir mensagem em canal
+export async function salvarMensagemComunidade(usuario, canal, conteudo) {
+	const command = `
+		insert into tb_comunidade_mensagem (id_usuario_comunidade, id_comunidade_canal, ds_mensagem)
+					values (?, ?, ?) `;
+	const [r] = await con.query(command, [usuario, canal, conteudo]);
+	return r.insertId;
+}
+
+// Consultar mensagens de um canal
+export async function consultarCanalMensagens(canal, lastId) {
+	const command = `
+		select
+			id_mensagem idMensagem,
+			ds_mensagem conteudo,
+			dt_mensagem data,
+			tb_usuario_comunidade.id_comunidade idComunidade,
+			tb_usuario_comunidade.id_usuario_comunidade idUsuarioComunidade,
+			tb_usuario.img_usuario usuarioImagem,
+			tb_usuario.id_usuario idUsuario,
+			tb_usuario.nm_usuario usuarioNome,
+            tb_usuario.ds_usuario usuarioDescricao
+		from tb_comunidade_mensagem
+		inner join tb_usuario_comunidade on tb_usuario_comunidade.id_usuario_comunidade = tb_comunidade_mensagem.id_usuario_comunidade
+		inner join tb_usuario on tb_usuario_comunidade.id_usuario = tb_usuario.id_usuario
+		where id_comunidade_canal = ? `; //limit 50
+
+	const [answer] = await con.query(command, [canal]);
+	const model = [];
+	answer.forEach(item =>
+		model.push({
+			usuario: {
+				nome: item.usuarioNome,
+				id: item.idUsuario,
+				imagem: item.usuarioImagem,
+				idComunidade: item.idUsuarioComunidade,
+				descricao: item.usuarioDescricao,
+			},
+			comunidade: item.idComunidade,
+			canal: canal,
+			mensagem: {
+				conteudo: item.conteudo,
+				data: item.dataEnvio,
+				id: item.idMensagem,
+			},
+		})
+	);
+	return model;
 }

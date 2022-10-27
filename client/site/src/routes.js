@@ -8,7 +8,7 @@ import Pesquisa from "./pages/pesquisa";
 import Config from "./pages/config";
 import Amizades from "./pages/amizades";
 import CommunitiesInfo from "./pages/communities-info";
-import ChatComunidade from "./pages/chats/comunidades";
+import ChatComunidade from "./pages/chats/comunidade";
 import ComunidadeConfig from "./pages/comunidade-config";
 import NotFound from "./pages/notFound";
 import LoginAdmin from "./pages/admin/login";
