@@ -1,12 +1,11 @@
-import React, { useState, useRef} from "react";
+import React, { useState, useRef, useEffect } from "react";
+// import axios from 'axios'
 import { useNavigate } from "react-router-dom";
 import { userEmailSearch } from "../../../api/userApi";
 import { BotaoSolido, Input, SubTitulo, Titulo } from "../../../styled";
 import { toast } from "react-toastify";
-import localstorage from "local-storage";
+import localStorage from "local-storage";
 import LoadingBar from "react-top-loading-bar";
-
-import "./index.sass";
 
 export default function Index() {
 	const [email, setEmail] = useState("");
@@ -14,33 +13,31 @@ export default function Index() {
 	const ref = useRef();
 	const [loading, setLoading] = useState(false);
 
+	// fazer a verifição do email
 
 	async function handleEmail() {
-		localstorage.remove("user");
 		setLoading(true);
 		ref.current.continuousStart();
-
+		
 		try {
+			const r = localStorage("user").email
 			// const r = await axios.post('')
-			const r = await userEmailSearch(email);
-			localstorage("user", r);
-			console.log(r)
-			if (r != email) {
-				toast.success("Email enviado");	
-				setTimeout(() => navigate("/code"), 2500);
+			if (r === email) {
+				setTimeout(() => navigate("/email-novo"), 2500);
+				toast.success("Altere seu email");	
 			} else  {
-				toast.warn("Email incorreto");	
 
+				toast.warn("Email incorreto");
+				
 			}
 			
 		} catch (err) {
 			if (err.response) toast.error(err.response.data.err);
 			setLoading(false);
-			ref.current.complete();
 		}
+		ref.current.complete();
+		setLoading(false)
 	}
-
-	
 
 	return (
 		<div className="email page">
@@ -48,7 +45,7 @@ export default function Index() {
 			<main>
 				<div className="email-titulos">
 					<Titulo cor="#02C17D" fonte="4vw">
-						Recuperar senha
+						Alterar email
 					</Titulo>
 					<SubTitulo cor="#3F3F3F" fonte="2.5vw">
 						Insira seu endereço email associado à sua conta
@@ -56,7 +53,7 @@ export default function Index() {
 				</div>
 				<div className="email-corpo">
 					<div className="email-inputs">
-						<Input placeholder="Email" disabled={loading} width="100%" type="text" value={email}  onChange={e => setEmail(e.target.value)} />
+						<Input placeholder="Email" width="100%" disabled={loading} type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
 					</div>
 					<div className="email-btn">
 						<BotaoSolido fonte="4vw" width="100%" onClick={handleEmail}>

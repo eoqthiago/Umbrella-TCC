@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import Header from "../../../components/header";
-import Menu from "../../../components/menu";
-import Card from "../../../components/card";
-import User from "../../../components/listas/usuario";
+import Header from "../../components/header";
+import Menu from "../../components/menu";
+import Card from "../../components/card";
+import User from "../../components/listas/usuario";
 import "./index.sass";
-import { pesquisar } from "../../../api/communityApi";
+import { pesquisar } from "../../api/communityApi";
 
 const Index = () => {
 	const [usuarios, setUsuarios] = useState([]);
@@ -38,13 +38,13 @@ const Index = () => {
 			<Menu ativo={menu} alterar={setMenu} />
 			<main>
 				<ul className="pesquisa-categorias">
-					<nav className={selecionado === "usuarios" ? "selecionado" : ""} onClick={() => setSelecionado("usuarios")}>
+					<nav className={selecionado === "usuarios" ? "selecionado" : ""} onClick={() => setSelecionado("usuarios") & setPesquisa("")}>
 						Usuários
 					</nav>
-					<nav className={selecionado === "comunidades" ? "selecionado" : ""} onClick={() => setSelecionado("comunidades")}>
+					<nav className={selecionado === "comunidades" ? "selecionado" : ""} onClick={() => setSelecionado("comunidades") & setPesquisa("")}>
 						Comunidades
 					</nav>
-					<nav className={selecionado === "mensagens" ? "selecionado" : ""} onClick={() => setSelecionado("mensagens")}>
+					<nav className={selecionado === "mensagens" ? "selecionado" : ""} onClick={() => setSelecionado("mensagens") & setPesquisa("")}>
 						Mensagens
 					</nav>
 				</ul>

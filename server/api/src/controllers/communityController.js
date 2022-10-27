@@ -175,7 +175,7 @@ server.get('/comunidade/:id', async (req, res) => {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
 		}
-
+		
 		const decoded = verifyToken(token);
 		if (!decoded || !(await userIdSearch(decoded.id))) {
 			res.status(401).send({ err: 'Falha na autenticação' });
@@ -183,6 +183,7 @@ server.get('/comunidade/:id', async (req, res) => {
 		} else if (!community) throw new Error('O ID inserido é inválido');
 
 		const r = await communityId(community);
+		if (!r) throw new Error('Não encontrado');
 		res.send(r);
 	} catch (err) {
 		res.status(400).send({

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { HashLoader } from 'react-spinners';
+import { PacmanLoader } from 'react-spinners';
 import localstorage from 'local-storage';
 import { userLogin } from '../../api/userApi';
 import { BotaoSolido, Input, SubTitulo, Titulo } from '../../styled';
@@ -32,7 +32,7 @@ const Index = () => {
 
 	return (
 		<div className='login page'>
-			<HashLoader
+			<PacmanLoader
 				color='#2d95b1'
 				loading={loading}
 				cssOverride={{

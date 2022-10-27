@@ -117,3 +117,40 @@ export async function pedirAmizade(idSolicitado) {
 	);
 	return r.status;
 }
+
+export async function userEmailSearch(email) {
+	const r = await api.post(`/usuario/recuperar?email=${email}`, {
+	  email: email,
+	});
+  
+	return r.data;
+}
+
+export async function userAlterarPassword(senha) {
+	console.log(senha, userToken);
+	const r = await api.put(
+	  "/alterar-senha",
+	  { senha: senha },
+	  {
+		headers: {
+		  "x-access-token": userToken,
+		},
+	  }
+	);
+  
+	return r.data;
+}
+
+export async function userAlterarEmail(email) {
+	const r = await api.put(
+	  "/email-novo",
+	  { email: email },
+	  {
+		headers: {
+		  "x-access-token": userToken,
+		},
+	  }
+	);
+  
+	return r.data;
+}

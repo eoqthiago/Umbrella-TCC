@@ -3,8 +3,18 @@ import Header from "../../components/header";
 import localStorage from "local-storage";
 import { BotaoSolido, Titulo } from "../../styled";
 import "./index.sass";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
+	const navigate = useNavigate();
+
+	
+	let str = localStorage("user").email;
+	let x = str[0];
+	let resp = `${x}******@gmail.com`;
+
+	
+
 	return (
 		<div className="config page">
 			<Header voltar />
@@ -15,7 +25,7 @@ const Index = () => {
 					</Titulo>
 					<div>
 						<li>ID de usuário: {localStorage("user").id ?? ""}</li>
-						<li>Email: {localStorage("user").email ?? ""}</li>
+						<li>Email: {resp ?? ""}</li>
 						<li>Senha: *********</li>
 					</div>
 					<div>
@@ -25,7 +35,7 @@ const Index = () => {
 						<BotaoSolido cor="#808384" fonte="1.2vw">
 							Alterar Senha
 						</BotaoSolido>
-						<BotaoSolido fonte="1.2vw">Alterar Email</BotaoSolido>
+						<BotaoSolido fonte="1.2vw" onClick={() => navigate('/alterar-email')}>Alterar Email</BotaoSolido>
 					</div>
 				</section>
 				<section>
@@ -94,3 +104,4 @@ const Index = () => {
 };
 
 export default Index;
+
