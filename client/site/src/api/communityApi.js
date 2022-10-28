@@ -35,6 +35,20 @@ export async function communityImage(id, imagem) {
 	return r.status;
 }
 
+export async function communityBanner(id, imagem) {
+	if (!imagem || !id || !userToken) return;
+	const formd = new FormData();
+	formd.append('imagem', imagem);
+
+	const r = await api.put(`/comunidade/banner/${id}`, formd, {
+		headers: {
+			'Content-Type': 'multipart/form-data',
+			'x-access-token': userToken,
+		},
+	});
+	return r.status;
+}
+
 export async function pesquisar(categoria, conteudo) {
 	if (!userToken || !categoria || !conteudo) return [];
 	let r;

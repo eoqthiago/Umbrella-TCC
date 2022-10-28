@@ -10,7 +10,7 @@ export async function communityCreate(id, community) {
 									VALUES (?, @last);
 		insert into tb_comunidade_canal (id_comunidade, nm_canal)
 								 values (@last, 'Primeiro canal'); `;
-	const [r] = await con.query(command, [id, community.nome, community.descricao, community.publica, id]);
+	const [r] = await con.query(command, [id, community.nome, community.descricao ? community.descricao.trim() : null, community.publica, id]);
 	community.id = r[0].insertId;
 	return community;
 }
@@ -20,6 +20,16 @@ export async function communityImage(id, image) {
 	const command = `
 		UPDATE tb_comunidade
 		   SET img_comunidade = ?
+		 WHERE id_comunidade = ? `;
+	const [r] = await con.query(command, [image, id]);
+	return r.affectedRows;
+}
+
+// Inserir banner da comunidade
+export async function communityBanner(id, image) {
+	const command = `
+		UPDATE tb_comunidade
+		   SET img_banner = ?
 		 WHERE id_comunidade = ? `;
 	const [r] = await con.query(command, [image, id]);
 	return r.affectedRows;

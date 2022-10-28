@@ -19,6 +19,7 @@ import {
 	communityCanalCreate,
 	salvarMensagemComunidade,
 	consultarCanalMensagens,
+	communityBanner,
 } from '../repositories/comunnityRepository.js';
 import { userIdSearch } from '../repositories/userRepository.js';
 import { verifyToken } from '../utils/authUtils.js';
@@ -110,6 +111,35 @@ server.put('/comunidade/imagem/:id', communityImg.single('imagem'), async (req, 
 	}
 });
 
+// Enviar banner
+server.put('/comunidade/banner/:id', communityImg.single('imagem'), async (req, res) => {
+	try {
+		const token = req.header('x-access-token');
+		const id = Number(req.params.id);
+		if (!token) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		}
+
+		const decoded = verifyToken(token);
+		if (!decoded || !(await userIdSearch(decoded.id))) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		} else if (!req.file) throw new Error('Arquivo não encontrado');
+		else if (!(await communityId(id))) throw new Error('Comunidade não encontrada');
+		else if (!(await communityOwner(decoded.id, id))) throw new Error('O usuário não possui permissão');
+
+		const img = req.file.path;
+		const answer = await communityBanner(id, img);
+		if (answer < 1) throw new Error('Não foi possível alterar a imagem');
+		res.status(204).send();
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
 // Alterar comunidade
 // Se o id do usuario logado for igual do criador deve deixar alterar, se não, lançar um erro
 server.put('/comunidade/:id', async (req, res) => {
@@ -175,7 +205,7 @@ server.get('/comunidade/:id', async (req, res) => {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
 		}
-		
+
 		const decoded = verifyToken(token);
 		if (!decoded || !(await userIdSearch(decoded.id))) {
 			res.status(401).send({ err: 'Falha na autenticação' });

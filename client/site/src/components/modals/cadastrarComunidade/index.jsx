@@ -117,9 +117,9 @@ const Index = ({ ativo, state }) => {
 						</FormControl>
 					</div>
 					<div className='comp-modal-imagem-input'>
-						Capa da comunidade
+						Imagem da comunidade
 						<img
-							src={!imagem ? '/assets/images/user.png' : showImage(imagem)}
+							src={!imagem ? '/assets/images/community.png' : showImage(imagem)}
 							alt=''
 							onClick={() => setarImagem()}
 							disabled={loading}

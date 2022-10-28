@@ -6,6 +6,7 @@
         margin-top: 55px
         width: 100vw
         align-items: center
+        overflow-anchor: none
 
         > .comunidade-conf-inicial
             width: 100vw
@@ -14,10 +15,14 @@
 
             > .comunidade-conf-banner
                 transition: ease-in-out .3s
+                width: 100vw
+                height: 300px
+                overflow: hidden
+                border-bottom: 1px solid #a0a0a0
 
                 > img
                     width: 100vw
-                    height: 300px
+                    height: auto
                     user-select: none
                     -webkit-user-drag: none
 
@@ -45,6 +50,7 @@
                         color: #199D3E
                         cursor: pointer
                         transition: ease-in-out .15s
+                        user-select: none
 
                         &:hover
                             background-color: #199D3E
@@ -89,6 +95,7 @@
                         cursor: pointer
                         transition: ease-in-out .15s
                         z-index: 3
+                        user-select: none
 
                         &:hover
                             background-color: #199D3E
