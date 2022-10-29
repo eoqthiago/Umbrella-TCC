@@ -47,14 +47,24 @@ export default function Index() {
 		}
 	}
 
-	function alterarBanner() {
-		document.getElementById('config-community-banner').click();
-		setEditando(true);
-	}
-
-	function alterarImagem() {
-		document.getElementById('config-community-imagem').click();
-		setEditando(true);
+	async function carregarPage() {
+		try {
+			const r = await searchCommunityId(id);
+			if (!r || r.criador !== localStorage('user').id) throw new Error('Um erro ocorreu');
+			setNome(r.nome);
+			setDescricao(r.descricao);
+			setPublica(r.publica);
+			setImg(r.imagem);
+			setBanner(r.banner);
+			const s = await consultarUsuarios(id);
+			setUsuarios(s);
+			const t = await consultarCanais(id);
+			setCanais(t);
+		} catch (err) {
+			if (err.response) toast.warning(err.response.data.err);
+			else toast.warning(err.message);
+			navigate('/');
+		}
 	}
 
 	// async function handleRemoveComunidade() {
@@ -69,28 +79,25 @@ export default function Index() {
 	// 	}
 	// }
 
+	async function handleCancelar() {
+		await carregarPage();
+		setEditando(false);
+	}
+
+	function alterarBanner() {
+		document.getElementById('config-community-banner').click();
+		setEditando(true);
+	}
+
+	function alterarImagem() {
+		document.getElementById('config-community-imagem').click();
+		setEditando(true);
+	}
+
 	useEffect(() => {
-		async function carregarPage() {
-			try {
-				const r = await searchCommunityId(id);
-				if (!r || r.criador !== localStorage('user').id) throw new Error('Um erro ocorreu');
-				setNome(r.nome);
-				setDescricao(r.descricao);
-				setPublica(r.publica);
-				setImg(r.imagem);
-				setBanner(r.banner);
-				const s = await consultarUsuarios(id);
-				setUsuarios(s);
-				const t = await consultarCanais(id);
-				setCanais(t);
-			} catch (err) {
-				if (err.response) toast.warning(err.response.data.err);
-				else toast.warning(err.message);
-				navigate('/');
-			}
-		}
-		carregarPage();
-	}, [id, navigate]);
+		const load = async () => await carregarPage();
+		load();
+	}, []);
 
 	return (
 		<div className='comunidade-conf page'>
@@ -187,15 +194,25 @@ export default function Index() {
 							/>
 						</RadioGroup>
 					</FormControl>
-					<BotaoSolido
-						fonte='1vw'
-						style={{ display: !editando && 'none' }}
-						onClick={() => handleAlteracao()}>
-						Salvar Alterações
-					</BotaoSolido>
+
+					<div className='cont-community-info-buttons'>
+						<BotaoSolido
+							fonte='1vw'
+							cor='#f84a4a'
+							style={{ display: !editando && 'none' }}
+							onClick={() => handleCancelar()}>
+							Cancelar
+						</BotaoSolido>
+						<BotaoSolido
+							fonte='1vw'
+							style={{ display: !editando && 'none' }}
+							onClick={() => handleAlteracao()}>
+							Salvar Alterações
+						</BotaoSolido>
+					</div>
 				</section>
 
-				<div className='cont-membrs'>
+				<section className='cont-membrs'>
 					<span>
 						<ul>
 							{canais.map(item => (
@@ -231,7 +248,7 @@ export default function Index() {
 							<button onClick={() => /*handleRemoveComunidade()*/ null}>Excluir comunidade</button>
 						</div>
 					</div>
-				</div>
+				</section>
 			</main>
 
 			<input
