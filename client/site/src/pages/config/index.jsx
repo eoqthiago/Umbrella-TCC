@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../../components/header";
 import localStorage from "local-storage";
 import { BotaoSolido, Titulo } from "../../styled";
 import "./index.sass";
 import { useNavigate } from "react-router-dom";
+import DeletarConta from '../../components/modals/deletarConta'
 
 const Index = () => {
 	const navigate = useNavigate();
 
-	
+	const [visivel, setVisivel] = useState(false);
 	let str = localStorage("user").email;
 	let x = str[0];
 	let resp = `${x}******@gmail.com`;
@@ -29,15 +30,21 @@ const Index = () => {
 						<li>Senha: *********</li>
 					</div>
 					<div>
-						<BotaoSolido cor="#E43636" fonte="1.2vw">
+						<BotaoSolido cor="#E43636" fonte="1.2vw" onClick={() => setVisivel(true) }>
 							Deletar Conta
 						</BotaoSolido>
+						{visivel ? (
+							<DeletarConta onClose={() => setVisivel(false)}>
+									
+							</DeletarConta> 
+						) : null}
 						<BotaoSolido cor="#808384" fonte="1.2vw">
 							Alterar Senha
 						</BotaoSolido>
 						<BotaoSolido fonte="1.2vw" onClick={() => navigate('/alterar-email')}>Alterar Email</BotaoSolido>
 					</div>
 				</section>
+
 				<section>
 					<Titulo fonte="1vw" cor="#131313">
 						Aplicação
