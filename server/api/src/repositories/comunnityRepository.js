@@ -35,8 +35,8 @@ export async function communityBanner(id, image) {
 	return r.affectedRows;
 }
 
-// Procurar por id de usúario na comunidade
-export async function communityUserID(id, comunidade) {
+// Procurar por usuário com id na comunidade
+export async function communityUserID(usuario, comunidade) {
 	const command = `
 		SELECT
 				tb_usuario_comunidade.id_usuario_comunidade id,
@@ -50,7 +50,7 @@ export async function communityUserID(id, comunidade) {
 		WHERE 	tb_usuario_comunidade.id_usuario = ?
 		AND 	id_comunidade = ?`;
 
-	const [r] = await con.query(command, [id, comunidade]);
+	const [r] = await con.query(command, [usuario, comunidade]);
 	return r[0];
 }
 
@@ -267,7 +267,8 @@ export async function consultarCanalMensagens(canal, lastId) {
 		from tb_comunidade_mensagem
 		inner join tb_usuario_comunidade on tb_usuario_comunidade.id_usuario_comunidade = tb_comunidade_mensagem.id_usuario_comunidade
 		inner join tb_usuario on tb_usuario_comunidade.id_usuario = tb_usuario.id_usuario
-		where id_comunidade_canal = ? `; //limit 50
+		where id_comunidade_canal = ?
+		order by data`; //limit 50
 
 	const [answer] = await con.query(command, [canal]);
 	const model = [];

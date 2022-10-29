@@ -45,8 +45,11 @@ server.post('/comunidade/:id/usuario', async (req, res) => {
 			return;
 		} else if (!id || !(await communityId(id))) throw new Error('Essa comunidade não existe');
 
-		const r = await communityUserAdd(decoded.id, id);
-		if (r < 1) throw new Error('Não foi possível entrar na comunidade');
+		const exists = await communityUserID(decoded.id, id);
+		if (exists) throw new Error('Você já está nessa comunidade');
+
+		const answer = await communityUserAdd(decoded.id, id);
+		if (answer < 1) throw new Error('Não foi possível entrar na comunidade');
 		res.status(204).send();
 	} catch (err) {
 		res.status(400).send({
