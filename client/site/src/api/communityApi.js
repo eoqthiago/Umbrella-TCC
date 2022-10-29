@@ -113,6 +113,12 @@ export async function consultarCanais(id) {
 	return r.data;
 }
 
+export async function consultarUsuariosesta() {
+	const r = await api.get("/admin/estatisticas/usuarios");
+	return r.data;
+}
+
+
 export async function excluirComunidade(comId) {
 	const r = await api.delete(`/comunidade/${comId}`, {
 		headers: {

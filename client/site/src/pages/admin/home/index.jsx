@@ -2,8 +2,9 @@ import "./index.sass";
 import Header from "../../../components/header";
 import MenuAdm from "../../../components/menu-adm";
 import CardsEstatisticas from "../../../components/cards-estatiticas";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, } from "chart.js";
 import { Pie } from "react-chartjs-2";
+
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -44,10 +45,12 @@ function Index() {
                                 numeroEstatistica="6874"
                                 nomeEstatistica="Comunidades criadas"
                             />
-                            <hr className="linhas-card" />
                         </div>
                     </div>
                 </section>
+                <div className="linhamds">
+                    <hr className="linha-divisoria" />
+                </div>
                 <section className="admin-pizza-grafico">
                     <div className="pizza-grafico">
                         <div className="faixa-etaria-titulo">
@@ -57,8 +60,11 @@ function Index() {
                             <Pie data={data} />
                         </div>
                         <div className="informacoes-graficos">
+                            <img className="dados-graficos" src="/assets/icons/bola-verde1.svg" />
                             <p className="informacoes">DOS 13 AOS 15 ANOS</p>
+                            <img className="dados-graficos" src="/assets/icons/bola-verde2.svg" />
                             <p className="informacoes">DOS 16 AOS 18 ANOS</p>
+                            <img className="dados-graficos" src="/assets/icons/bola-verde3.svg" />
                             <p className="informacoes">ACIMA DOS 18 ANOS</p>
                         </div>
                     </div>
