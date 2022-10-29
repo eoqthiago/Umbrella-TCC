@@ -3,7 +3,7 @@ import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { userDelete } from '../../../api/userApi';
-import { BotaoSolido } from '../../../styled';
+import { BotaoSolido, SubTitulo, Titulo } from '../../../styled';
 import "./index.sass";
 
 const Index = ({ id = 'modal', onClose = () => {}, children }) => {
@@ -38,9 +38,19 @@ const Index = ({ id = 'modal', onClose = () => {}, children }) => {
 		<div id={id} className="modal" onClick={handleClick} disabled={loading}>
 			<div className="container">
 				<button className="close" onClick={onClose}/>
+
+				<div className="items">
+					<Titulo fonte="1vw" cor="#131313">
+						Deseja deletar sua conta?
+					</Titulo>
+					<SubTitulo fonte="1vw" cor="#131313">essa ação é irreversível! </SubTitulo>
+					<div className="botoes-item">
+						<BotaoSolido className='botao1-item' fonte="1.2vw" onClick={ confirmarClick}>Confirmar</BotaoSolido>
+						<BotaoSolido  cor="#E43636" fonte="1.2vw" onClick={onClose} >Cancelar </BotaoSolido>
+
+					</div>
+				</div>
 				
-				<BotaoSolido onClick={ confirmarClick}>Confirmar</BotaoSolido>
-				<BotaoSolido onClick={onClose} >Cancelar</BotaoSolido>
 				<div className="content">{children}</div>
 			</div>
 			

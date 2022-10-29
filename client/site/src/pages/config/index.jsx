@@ -35,7 +35,7 @@ const Index = () => {
 						</BotaoSolido>
 						{visivel ? (
 							<DeletarConta onClose={() => setVisivel(false)}>
-								
+									
 							</DeletarConta> 
 						) : null}
 						<BotaoSolido cor="#808384" fonte="1.2vw">
