@@ -20,6 +20,7 @@ import {
 	salvarMensagemComunidade,
 	consultarCanalMensagens,
 	communityBanner,
+	inserirCanal,
 } from '../repositories/comunnityRepository.js';
 import { userIdSearch } from '../repositories/userRepository.js';
 import { verifyToken } from '../utils/authUtils.js';
@@ -495,6 +496,40 @@ server.get('/comunidade/:comunidade/canal/:canal/mensagens/:lastId', async (req,
 		if (!answer) throw new Error('Não foi possível realizar as consultas');
 
 		res.send(answer);
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
+// Criar um canal
+server.post('/comunidade/:id/canal', async (req, res) => {
+	try {
+		const comunidade = Number(req.params.id);
+		const { nome } = req.query;
+		const token = req.header('x-access-token');
+		if (!token) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		}
+
+		const decoded = verifyToken(token);
+		if (
+			!decoded ||
+			!(await communityId(comunidade))||
+			!(await userIdSearch(decoded.id)) ||
+			!(await communityUserID(decoded.id, comunidade)) ||
+			!(await communityOwner(decoded.id, comunidade))
+		) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		} else if (!nome || !nome.trim() || nome.length > 20) throw new Error('O nome do canal inserido é inválido');
+
+		const answer = await inserirCanal(comunidade, nome);
+		if (answer < 1) throw new Error('Não foi possível criar o canal');
+
+		res.status(204).send();
 	} catch (err) {
 		res.status(400).send({
 			err: err.message,

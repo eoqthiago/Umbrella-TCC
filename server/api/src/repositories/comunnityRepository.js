@@ -10,7 +10,7 @@ export async function communityCreate(id, community) {
 									VALUES (?, @last);
 		insert into tb_comunidade_canal (id_comunidade, nm_canal)
 								 values (@last, 'Primeiro canal'); `;
-	const [r] = await con.query(command, [id, community.nome, community.descricao ? community.descricao.trim() : null, community.publica, id]);
+	const [r] = await con.query(command, [id, community.nome, community.descricao ? community.descricao.trim() : '', community.publica, id]);
 	community.id = r[0].insertId;
 	return community;
 }
@@ -290,4 +290,12 @@ export async function consultarCanalMensagens(canal, lastId) {
 		})
 	);
 	return model;
+}
+
+export async function inserirCanal(idComunidade, nome) {
+	const command = `
+		insert into tb_comunidade_canal (id_comunidade, nm_canal)
+								 values (?, ?) `;
+	const answer = await con.query(command, [idComunidade, nome]);
+	return answer.affectedRows;
 }
