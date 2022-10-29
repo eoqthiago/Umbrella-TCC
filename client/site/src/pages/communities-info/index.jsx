@@ -45,7 +45,7 @@ export default function Index() {
 	return (
 		<div className='community-info page'>
 			<HashLoader
-				color='#36d7b7'
+				color='#24ad6d'
 				loading={loading}
 				cssOverride={{
 					position: 'absolute',

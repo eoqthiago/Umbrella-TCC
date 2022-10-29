@@ -74,7 +74,7 @@ const Index = () => {
 	return (
 		<div className='cadastro page'>
 			<HashLoader
-				color='#2d95b1'
+				color='#24ad6d'
 				loading={loading}
 				cssOverride={{
 					position: 'absolute',

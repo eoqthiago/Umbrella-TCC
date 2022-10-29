@@ -1,19 +1,18 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { BotaoSolido, Input, InputArea, Titulo } from '../../../styled';
 import { FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
-import './index.sass';
 import { toast } from 'react-toastify';
 import { communityCadastro, communityImage } from '../../../api/communityApi';
-import LoadingBar from 'react-top-loading-bar';
 import { useNavigate } from 'react-router-dom';
+import { HashLoader } from 'react-spinners';
+import './index.sass';
 
-const Index = ({ ativo, state }) => {
+const Index = ({ ativo, state, alterarMenu }) => {
 	const [nome, setNome] = useState('');
 	const [descricao, setDescricao] = useState('');
 	const [publica, setPublica] = useState(true);
 	const [imagem, setImagem] = useState('');
 	const [loading, setLoading] = useState(false);
-	const ref = useRef();
 	const navigate = useNavigate();
 
 	const setarImagem = () => document.getElementById('nova-comunidade-imagem-input').click();
@@ -29,7 +28,6 @@ const Index = ({ ativo, state }) => {
 
 	async function cadastrar() {
 		setLoading(true);
-		ref.current.continuousStart();
 		try {
 			if (!nome.trim()) throw new Error('Preencha o campo nome corretamente');
 			const r = await communityCadastro(nome, descricao, publica);
@@ -40,22 +38,36 @@ const Index = ({ ativo, state }) => {
 			}
 			toast.success('Comunidade criada com sucesso!\nEm instantes você será redirecionado 🚀');
 			setTimeout(() => {
+				alterarMenu(false);
 				navigate(`/chat/comunidade/${r.data.id}`);
+				setLoading(false);
 				exit();
 			}, 2000);
 		} catch (err) {
 			if (err.response) toast.error(err.response.data.err);
 			else toast.error(err.message);
 			setLoading(false);
-			ref.current.complete();
 		}
 	}
 
 	return (
 		<div className={(ativo && 'comp-modal-ativo') + ' comp-modal'}>
-			<LoadingBar
-				ref={ref}
-				color='#48d677'
+			<HashLoader
+				color='#24ad6d'
+				loading={loading}
+				cssOverride={{
+					position: 'absolute',
+					left: '50%',
+					top: '50%',
+					transform: 'translate(-50%, -50%)',
+					zIndex: '10',
+					background: '#0000002d',
+					width: '100vw',
+					height: '100vh',
+				}}
+				size={50}
+				aria-label='Loading Spinner'
+				data-testid='loader'
 			/>
 			<main>
 				<button

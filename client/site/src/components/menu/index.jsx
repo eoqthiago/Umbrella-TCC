@@ -100,6 +100,7 @@ export default function Index({ ativo, alterar }) {
 			<CadastrarComunidade
 				ativo={comunidadeModal}
 				state={setComunidadeModal}
+				alterarMenu={alterar}
 			/>
 			<MenuListaModal
 				modalRef={modalRef}
