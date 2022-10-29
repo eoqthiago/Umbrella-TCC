@@ -13,7 +13,7 @@ import ComunidadeDenuncia from '../modals/denunciarComunidade';
 import './index.sass';
 
 export default function Index({ ativo, alterar }) {
-	const { isExpired } = useJwt(localStorage('user').token ?? '');
+	const { isExpired } = useJwt(localStorage('user') ? localStorage('user').token : null);
 	const navigate = useNavigate();
 	const [user, setUser] = useState({});
 	const [comunidadeModal, setComunidadeModal] = useState(false);

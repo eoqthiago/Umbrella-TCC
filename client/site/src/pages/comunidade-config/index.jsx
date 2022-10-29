@@ -71,20 +71,23 @@ export default function Index() {
 
 	useEffect(() => {
 		async function carregarPage() {
-			const r = await searchCommunityId(id);
-			if (!r || r.criador !== localStorage('user').id) {
-				toast.warning('Um erro ocorreu');
+			try {
+				const r = await searchCommunityId(id);
+				if (!r || r.criador !== localStorage('user').id) throw new Error('Um erro ocorreu');
+				setNome(r.nome);
+				setDescricao(r.descricao);
+				setPublica(r.publica);
+				setImg(r.imagem);
+				setBanner(r.banner);
+				const s = await consultarUsuarios(id);
+				setUsuarios(s);
+				const t = await consultarCanais(id);
+				setCanais(t);
+			} catch (err) {
+				if (err.response) toast.warning(err.response.data.err);
+				else toast.warning(err.message);
 				navigate('/');
 			}
-			setNome(r.nome);
-			setDescricao(r.descricao);
-			setPublica(r.publica);
-			setImg(r.imagem);
-			setBanner(r.banner);
-			const s = await consultarUsuarios(id);
-			setUsuarios(s);
-			const t = await consultarCanais(id);
-			setCanais(t);
 		}
 		carregarPage();
 	}, [id, navigate]);
