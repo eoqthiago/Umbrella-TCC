@@ -13,10 +13,10 @@ import './index.sass';
 
 export default function Index() {
 	const [menu, setMenu] = useState(false);
-	const [banner, setBanner] = useState('');
 	const [canais, setCanais] = useState([]);
 	const [usuarios, setUsuarios] = useState([]);
-	const [img, setImg] = useState('');
+	const [imgAtivo, setImgAtivo] = useState('');
+	const [bannerAtivo, setBannerAtivo] = useState('');
 	const [editando, setEditando] = useState(false);
 	const [nome, setNome] = useState('');
 	const [descricao, setDescricao] = useState('');
@@ -56,8 +56,8 @@ export default function Index() {
 			setNome(r.nome);
 			setDescricao(r.descricao);
 			setPublica(r.publica);
-			setImg(r.imagem);
-			setBanner(r.banner);
+			setImgCom(r.imagem);
+			setImgBanner(r.banner);
 			const s = await consultarUsuarios(id);
 			setUsuarios(s);
 			const t = await consultarCanais(id);
@@ -132,9 +132,9 @@ export default function Index() {
 				<section className='comunidade-conf-inicial'>
 					<div
 						className='comunidade-conf-banner'
-						onMouseEnter={() => setBanner('ativo')}
-						onMouseLeave={() => setBanner('')}>
-						<div className={'comunidade-conf-banner-button ' + banner}>
+						onMouseEnter={() => setBannerAtivo('ativo')}
+						onMouseLeave={() => setBannerAtivo('')}>
+						<div className={'comunidade-conf-banner-button ' + bannerAtivo}>
 							<button onClick={alterarBanner}>Alterar capa</button>
 						</div>
 						<img
@@ -144,9 +144,9 @@ export default function Index() {
 					</div>
 					<div
 						className='comunidade-conf-banner-img'
-						onMouseEnter={() => setImg('ativo')}
-						onMouseLeave={() => setImg('')}>
-						<div className={'comunidade-conf-banner-img-button ' + img}>
+						onMouseEnter={() => setImgAtivo('ativo')}
+						onMouseLeave={() => setImgAtivo('')}>
+						<div className={'comunidade-conf-banner-img-button ' + imgAtivo}>
 							<button onClick={alterarImagem}>Alterar imagem</button>
 						</div>
 						<img
