@@ -2,14 +2,43 @@ import "./index.sass";
 import Header from "../../../components/header";
 import MenuAdm from "../../../components/menu-adm";
 import CardsEstatisticas from "../../../components/cards-estatiticas";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, } from "chart.js";
-import { Pie } from "react-chartjs-2";
+import { estatisticasUsuarios } from "../../../api/communityApi";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement } from "chart.js";
+import { Pie, Line } from "react-chartjs-2";
+import { useState, useEffect } from "react";
+import faker from 'faker';
 
-
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement);
 
 function Index() {
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top'
+            },
+            title: {
+                display: true,
+                text: 'Total de usuarios',
+            },
+        },
+    };
+
+    const labels = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Agt', 'Set', 'Out', 'Nov', 'Dez'];
+
     const data = {
+        labels,
+        datasets: [
+            {
+                label: 'Usuarios',
+                data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
+                borderColor: '#48DC83',
+                backgroundColor: '#48DC83',
+            },
+        ],
+    };
+
+    const data2 = {
         labels: [],
         datasets: [
             {
@@ -19,12 +48,29 @@ function Index() {
             },
         ],
     };
+    const [usuarios, setUsuarios] = useState([]);
+
+    async function coisa() {
+        const r = await estatisticasUsuarios();
+        console.log(r)
+        setUsuarios(r);
+    };
+
+    useEffect(() => {
+        coisa();
+    }, [])
+
+
     return (
-        <div className="admin page">
+        <div className="admin-page">
             <main>
                 <Header />
                 <MenuAdm />
-
+                <div className="grafico-usuarios">
+                    <div className="grafico-linha">
+                        <Line options={options} data={data} />;
+                    </div>
+                </div>
                 <section className="cards-estastisticas-admin">
                     <div className="cards-estatisticas">
                         <div className="cards-01">
@@ -48,16 +94,13 @@ function Index() {
                         </div>
                     </div>
                 </section>
-                <div className="linhamds">
-                    <hr className="linha-divisoria" />
-                </div>
                 <section className="admin-pizza-grafico">
                     <div className="pizza-grafico">
                         <div className="faixa-etaria-titulo">
                             <p>FAIXA ETARIA DO NOSSO PUBLICO ALVO</p>
                         </div>
                         <div className="grafico-pizza">
-                            <Pie data={data} />
+                            <Pie data={data2} />
                         </div>
                         <div className="informacoes-graficos">
                             <img className="dados-graficos" src="/assets/icons/bola-verde1.svg" />

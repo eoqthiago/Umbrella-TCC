@@ -113,8 +113,13 @@ export async function consultarCanais(id) {
 	return r.data;
 }
 
-export async function consultarUsuariosesta() {
-	const r = await api.get("/admin/estatisticas/usuarios");
+export async function estatisticasUsuarios() {
+	if (!userToken) return;
+	const r = await api.get('/admin/estatisticas/usuarios', {
+		headers: {
+			"x-access-token": userToken,
+		},
+	});
 	return r.data;
 }
 
