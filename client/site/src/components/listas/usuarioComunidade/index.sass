@@ -1,12 +1,46 @@
 .comp-conf-usuario
+    padding: 7px 10px
+    border: 1px solid #c0c0c0
+    border-radius: 8px
+    display: flex
+    flex-flow: row nowrap
+    align-items: center
+    justify-content: space-between
+    gap: 20px
+
     > .comp-conf-infos
+        display: flex
+        flex-flow: row nowrap
+        align-items: center
+        justify-content: flex-start
+        gap: 5px
+
         > img
             width: 40px
             height: 40px
+            user-select: none
+            -webkit-user-drag: none
+            cursor: pointer
 
         > span
             font-family: Roboto-medium
-            font-size: 17px
+            font-size: 16px
+            color: #2b2b2b
+            cursor: pointer
 
             &:hover
                 text-decoration: underline
+
+    > .comp-conf-acoes
+        display: flex
+        flex-flow: row nowrap
+        align-items: center
+        justify-content: center
+        gap: 4px
+
+        > img
+            width: 23px
+            height: 23px
+            cursor: pointer
+            user-select: none
+            -webkit-user-drag: none

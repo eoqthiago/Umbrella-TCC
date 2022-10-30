@@ -61,7 +61,7 @@ export default function Index() {
 			setImgCom(r.imagem);
 			setImgBanner(r.banner);
 			const s = await consultarUsuarios(id);
-			console.log(s)
+			console.log(s);
 			setUsuarios(s);
 			const t = await consultarCanais(id);
 			setCanais(t);
