@@ -243,3 +243,13 @@ export async function criarCanal(comunidade, nome) {
 	);
 	return r.status;
 }
+
+export async function pesquisarUsuarioComunidade(comunidade, nome) {
+	if (!userToken || !nome || !comunidade) return;
+	const r = await api.get(`/comunidade/${comunidade}/usuario?nome=${nome}`, {
+		headers: {
+			'x-access-token': userToken,
+		},
+	});
+	return r.data;
+}

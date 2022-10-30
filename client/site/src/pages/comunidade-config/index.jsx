@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../../components/header';
 import Menu from '../../components/menu';
 import { toast } from 'react-toastify';
-import { communityBanner, communityEdit, communityImage, consultarCanais, consultarUsuarios, criarCanal, searchCommunityId } from '../../api/communityApi';
+import { communityBanner, communityEdit, communityImage, consultarCanais, consultarUsuarios, criarCanal, pesquisarUsuarioComunidade, searchCommunityId } from '../../api/communityApi';
 import localStorage from 'local-storage';
 import { BotaoSolido, Input, InputArea, Titulo } from '../../styled';
 import { BuscarImg } from '../../api/services';
@@ -27,7 +27,7 @@ export default function Index() {
 	const [criarCanalNome, setCriarCanalNome] = useState('');
 	const [pesquisaNome, setPesquisaNome] = useState('');
 	const navigate = useNavigate();
-	const { id } = useParams();
+	const id = Number(useParams().id);
 
 	async function handleAlteracao() {
 		try {
@@ -61,7 +61,6 @@ export default function Index() {
 			setImgCom(r.imagem);
 			setImgBanner(r.banner);
 			const s = await consultarUsuarios(id);
-			console.log(s);
 			setUsuarios(s);
 			const t = await consultarCanais(id);
 			setCanais(t);
@@ -102,6 +101,11 @@ export default function Index() {
 			if (err.response) toast.warning(err.response.data.err);
 			else toast.warning(err.message);
 		}
+	}
+
+	async function handlePesquisar() {
+		const r = await pesquisarUsuarioComunidade(id, pesquisaNome);
+		setUsuarios(r);
 	}
 
 	function alterarBanner() {
@@ -293,11 +297,14 @@ export default function Index() {
 								}}
 								value={pesquisaNome}
 								onChange={e => setPesquisaNome(e.target.value)}
-								maxLength='20'
+								maxLength='50'
+								onKeyDown={e => e.key === 'Enter' && handlePesquisar()}
 							/>
 							<img
 								src='/assets/icons/search.svg'
-								alt='Criar'
+								alt='Pesquisar'
+								title='Pesquisar'
+								onClick={() => handlePesquisar()}
 							/>
 						</div>
 						<div className='comunidade-conf-usuarios-items'>
@@ -309,6 +316,14 @@ export default function Index() {
 							))}
 						</div>
 					</main>
+				</section>
+
+				<section className='comunidade-conf-excluir'>
+					<BotaoSolido
+						cor='#f84a4a'
+						fonte='1.2vw'>
+						Excluir comunidade
+					</BotaoSolido>
 				</section>
 			</main>
 

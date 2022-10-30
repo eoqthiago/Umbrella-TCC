@@ -6,8 +6,8 @@ export async function communityCreate(id, community) {
         INSERT INTO tb_comunidade (id_criador, nm_comunidade, ds_comunidade, bt_publica) 
                            VALUES (?, ?, ?, ?);
 		set @last = last_insert_id();
-		INSERT INTO tb_usuario_comunidade (id_usuario, id_comunidade) 
-									VALUES (?, @last);
+		INSERT INTO tb_usuario_comunidade (id_usuario, id_comunidade, bt_admin) 
+									VALUES (?, @last, true);
 		insert into tb_comunidade_canal (id_comunidade, nm_canal)
 								 values (@last, 'Primeiro canal'); `;
 	const [r] = await con.query(command, [id, community.nome, community.descricao ? community.descricao.trim() : '', community.publica, id]);
@@ -76,13 +76,18 @@ export async function communityUsers(idCom) {
 // Procurar por nome de usúario na comunidade
 export async function communityUsername(nome, comunidade) {
 	const command = `
-		SELECT tb_usuario_comunidade.id_usuario_comunidade id,
-				tb_usuario.nm_usuario nome
-		FROM 	tb_usuario_comunidade
-		INNER JOIN tb_usuario 
-		ON tb_usuario_comunidade.id_usuario_comunidade = tb_usuario.id_usuario
-		WHERE	tb_usuario.nm_usuario like '%${nome}%'
-		AND 	id_comunidade = ?`;
+		SELECT
+			tb_usuario_comunidade.id_usuario_comunidade as id,
+			tb_usuario_comunidade.id_usuario as idUsuario,
+			tb_usuario_comunidade.id_comunidade as idComunidade,
+			tb_usuario_comunidade.bt_admin as admin,
+			tb_usuario.nm_usuario as nome,
+			tb_usuario.ds_usuario as descricao,
+			tb_usuario.img_usuario as imagem,
+			tb_usuario.img_banner as banner
+		FROM tb_usuario_comunidade
+		INNER JOIN tb_usuario on tb_usuario_comunidade.id_usuario = tb_usuario.id_usuario
+		WHERE tb_usuario_comunidade.id_comunidade = ? and tb_usuario.nm_usuario like '%${nome}%'`;
 	const [r] = await con.query(command, [comunidade]);
 	return r;
 }

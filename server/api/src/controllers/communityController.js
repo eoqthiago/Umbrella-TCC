@@ -568,4 +568,30 @@ server.delete('/comunidade/:id/canal/:canal', async (req, res) => {
 	}
 });
 
+// Consultar usuarios da comunidade por nome
+server.get('/comunidade/:id/usuario', async (req, res) => {
+	try {
+		const id = Number(req.params.id);
+		const { nome } = req.query;
+		const token = req.header('x-access-token');
+		if (!token) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		}
+
+		const decoded = verifyToken(token);
+		if (!decoded || !(await userIdSearch(decoded.id))) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		} else if (!(await communityUserID(decoded.id, id)) || !(await communityOwner(decoded.id, id)) || !(await communityId(id))) throw new Error('Não autorizado');
+
+		const users = await communityUsername(nome, id);
+		res.send(users);
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
 export default server;

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import localStorage from 'local-storage';
 import { BuscarImg } from '../../../api/services';
-import './index.sass';
 import { toast } from 'react-toastify';
+import './index.sass';
 
 const Index = ({ item }) => {
 	const [excluido, setExcluido] = useState('');

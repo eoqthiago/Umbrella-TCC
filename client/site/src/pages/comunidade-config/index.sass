@@ -219,6 +219,15 @@
                             width: 25px
                             height: 25px
 
+                        @media (max-width: 400px)
+                            padding: 3px 5px
+                            font-size: 15px
+                            height: 30px
+
+                            & > img
+                                width: 20px
+                                height: 20px
+
                 > .comunidade-conf-canais-items
                     overflow-y: auto
                     max-height: 200px
@@ -273,8 +282,6 @@
                     max-height: 200px
                     display: flex
                     flex-flow: row wrap
-                    align-items: center
-                    justify-content: flex-start
                     gap: 10px 15px
 
                     &::-webkit-scrollbar
@@ -289,5 +296,14 @@
 
                     &::-webkit-scrollbar-thumb:hover
                         background: #919191
+
+        > .comunidade-conf-excluir
+            width: 75vw
+            max-width: 700px
+            margin-top: 2em
+
+            > button
+                margin-right: auto
+
         .ativo
             display: flex !important
