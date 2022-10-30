@@ -9,6 +9,7 @@ import { BotaoSolido, Input, InputArea, Titulo } from '../../styled';
 import { BuscarImg } from '../../api/services';
 import { FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import CanalComunidade from '../../components/listas/canalComunidade';
+import UsuarioComunidade from '../../components/listas/usuarioComunidade';
 import './index.sass';
 
 export default function Index() {
@@ -24,6 +25,7 @@ export default function Index() {
 	const [imgBanner, setImgBanner] = useState('');
 	const [imgCom, setImgCom] = useState('');
 	const [criarCanalNome, setCriarCanalNome] = useState('');
+	const [pesquisaNome, setPesquisaNome] = useState('');
 	const navigate = useNavigate();
 	const { id } = useParams();
 
@@ -59,6 +61,7 @@ export default function Index() {
 			setImgCom(r.imagem);
 			setImgBanner(r.banner);
 			const s = await consultarUsuarios(id);
+			console.log(s)
 			setUsuarios(s);
 			const t = await consultarCanais(id);
 			setCanais(t);
@@ -272,27 +275,40 @@ export default function Index() {
 					</main>
 				</section>
 
-				<section className='hidden'>
-					<h1>Membros</h1>
-					<div>
-						<span>
-							Filtrar por nome: <input />
-						</span>
-						<div className='cont-mebrs-dspl'>
-							{usuarios.map(item => (
-								<li
-									className='membersDisplay'
-									key={item.id}>
-									<img
-										src='/assets/images/user.png'
-										alt='Usuário'
-									/>
-									<div>{item.nome}</div>
-								</li>
+				<section className='comunidade-conf-usuarios'>
+					<Titulo
+						cor='#1f1f1f'
+						fonte='1vw'>
+						Usuários
+					</Titulo>
+
+					<main className='comunidade-conf-usuarios-list'>
+						<div className='comunidade-conf-usuarios-pesquisar'>
+							<Input
+								type='text'
+								placeholder='Pesquisar por nome'
+								width='100%'
+								style={{
+									margin: 0,
+								}}
+								value={pesquisaNome}
+								onChange={e => setPesquisaNome(e.target.value)}
+								maxLength='20'
+							/>
+							<img
+								src='/assets/icons/search.svg'
+								alt='Criar'
+							/>
+						</div>
+						<div className='comunidade-conf-usuarios-items'>
+							{usuarios.map((item, index) => (
+								<UsuarioComunidade
+									item={item}
+									key={index}
+								/>
 							))}
 						</div>
-					</div>
-					<button onClick={() => /*handleRemoveComunidade()*/ null}>Excluir comunidade</button>
+					</main>
 				</section>
 			</main>
 

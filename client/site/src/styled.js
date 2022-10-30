@@ -50,6 +50,9 @@ const Input = styled.input`
 	margin-top: 15px;
 	border: 1px solid #b8b8b8;
 	border-radius: 5px;
+	transition: 0.28s ease-in-out;
+	outline-color: #b8b8b8;
+	outline-width: 0.5px;
 
 	&:focus {
 		outline-color: #17ba76;
