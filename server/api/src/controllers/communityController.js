@@ -21,6 +21,7 @@ import {
 	consultarCanalMensagens,
 	communityBanner,
 	inserirCanal,
+	excluirCanal,
 } from '../repositories/comunnityRepository.js';
 import { userIdSearch } from '../repositories/userRepository.js';
 import { verifyToken } from '../utils/authUtils.js';
@@ -532,6 +533,33 @@ server.post('/comunidade/:id/canal', async (req, res) => {
 		const answer = await inserirCanal(comunidade, nome);
 		if (answer < 1) throw new Error('Não foi possível criar o canal');
 
+		res.status(204).send();
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
+// Excluir canal
+server.delete('/comunidade/:id/canal/:canal', async (req, res) => {
+	try {
+		const id = Number(req.params.id)
+		const canal = Number(req.params.canal);
+		const token = req.header('x-access-token');
+		if (!token) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		}
+		
+		const decoded = verifyToken(token);
+		if (!decoded || !(await userIdSearch(decoded.id))) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		} else if (!(await communityUserID(decoded.id, id)) || !(await communityOwner(decoded.id, id)) || !(await communityId(id))) throw new Error('Não autorizado');
+		
+		const del = await excluirCanal(canal);
+		if (del < 1) throw new Error('Não foi possível excluir esse canal');
 		res.status(204).send();
 	} catch (err) {
 		res.status(400).send({

@@ -242,3 +242,6 @@ from tb_comunidade_mensagem
 inner join tb_usuario_comunidade on tb_usuario_comunidade.id_usuario_comunidade = tb_comunidade_mensagem.id_usuario_comunidade
 inner join tb_usuario on tb_usuario_comunidade.id_usuario = tb_usuario.id_usuario
 where id_comunidade_canal = 1;
+
+-- Deletar canal
+delete from tb_comunidade_canal where id_comunidade_canal = 1;

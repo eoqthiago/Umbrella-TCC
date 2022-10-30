@@ -3,11 +3,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../../components/header';
 import Menu from '../../components/menu';
 import { toast } from 'react-toastify';
-import { communityBanner, communityEdit, communityImage, consultarCanais, consultarUsuarios, searchCommunityId } from '../../api/communityApi';
+import { communityBanner, communityEdit, communityImage, consultarCanais, consultarUsuarios, criarCanal, searchCommunityId } from '../../api/communityApi';
 import localStorage from 'local-storage';
-import { BotaoSolido, Input, InputArea } from '../../styled';
+import { BotaoSolido, Input, InputArea, Titulo } from '../../styled';
 import { BuscarImg } from '../../api/services';
 import { FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import CanalComunidade from '../../components/listas/canalComunidade';
 import './index.sass';
 
 export default function Index() {
@@ -22,6 +23,7 @@ export default function Index() {
 	const [publica, setPublica] = useState(true);
 	const [imgBanner, setImgBanner] = useState('');
 	const [imgCom, setImgCom] = useState('');
+	const [criarCanalNome, setCriarCanalNome] = useState('');
 	const navigate = useNavigate();
 	const { id } = useParams();
 
@@ -82,6 +84,21 @@ export default function Index() {
 	async function handleCancelar() {
 		await carregarPage();
 		setEditando(false);
+	}
+
+	async function handleCriarCanal() {
+		try {
+			if (!criarCanalNome || !criarCanalNome.trim()) return;
+
+			const r = await criarCanal(id, criarCanalNome);
+			if (r !== 204) throw new Error('Não foi possível criar o canal');
+			toast.success('Canal criado com sucesso!');
+			setCriarCanalNome('');
+			await carregarPage();
+		} catch (err) {
+			if (err.response) toast.warning(err.response.data.err);
+			else toast.warning(err.message);
+		}
 	}
 
 	function alterarBanner() {
@@ -172,6 +189,7 @@ export default function Index() {
 						width='100%'
 						resize='none'
 						height='120px'
+						minHeight='70px'
 						style={{ display: !editando && 'none' }}
 						value={descricao}
 						onChange={e => setDescricao(e.target.value)}
@@ -199,6 +217,7 @@ export default function Index() {
 						<BotaoSolido
 							fonte='1vw'
 							cor='#f84a4a'
+							padding='5px 10px'
 							style={{ display: !editando && 'none' }}
 							onClick={() => handleCancelar()}>
 							Cancelar
@@ -212,42 +231,68 @@ export default function Index() {
 					</div>
 				</section>
 
-				<section className='cont-membrs'>
-					<span>
-						<ul>
-							{canais.map(item => (
-								<li key={item.idCanal}>{item.nome}</li>
-							))}
-						</ul>
-						<button>+ Criar canal</button>
-					</span>
+				<section className='comunidade-conf-canais'>
+					<Titulo
+						cor='#1f1f1f'
+						fonte='1vw'>
+						Canais
+					</Titulo>
 
-					<div className='cont-insides'>
-						<span>
-							<h1>Membros</h1>
-						</span>
-						<section>
-							<span>
-								Filtrar por nome: <input />
-							</span>
-							<div className='cont-mebrs-dspl'>
-								{usuarios.map(item => (
-									<li
-										className='membersDisplay'
-										key={item.id}>
-										<img
-											src='/assets/images/user.png'
-											alt='Usuário'
-										/>
-										<div>{item.nome}</div>
-									</li>
-								))}
+					<main className='comunidade-conf-canais-list'>
+						<div className='comunidade-conf-canais-criar'>
+							<Input
+								type='text'
+								placeholder='Nome do canal'
+								width='100%'
+								style={{
+									margin: 0,
+								}}
+								value={criarCanalNome}
+								onChange={e => setCriarCanalNome(e.target.value)}
+								maxLength='20'
+							/>
+							<div
+								className='comunidade-conf-botao-criar'
+								onClick={() => handleCriarCanal()}>
+								Criar
+								<img
+									src='/assets/icons/create.svg'
+									alt='Criar'
+								/>
 							</div>
-						</section>
-						<div>
-							<button onClick={() => /*handleRemoveComunidade()*/ null}>Excluir comunidade</button>
+						</div>
+						<div className='comunidade-conf-canais-items'>
+							{canais.map((item, index) => (
+								<CanalComunidade
+									item={item}
+									key={index}
+								/>
+							))}
+						</div>
+					</main>
+				</section>
+
+				<section className='hidden'>
+					<h1>Membros</h1>
+					<div>
+						<span>
+							Filtrar por nome: <input />
+						</span>
+						<div className='cont-mebrs-dspl'>
+							{usuarios.map(item => (
+								<li
+									className='membersDisplay'
+									key={item.id}>
+									<img
+										src='/assets/images/user.png'
+										alt='Usuário'
+									/>
+									<div>{item.nome}</div>
+								</li>
+							))}
 						</div>
 					</div>
+					<button onClick={() => /*handleRemoveComunidade()*/ null}>Excluir comunidade</button>
 				</section>
 			</main>
 

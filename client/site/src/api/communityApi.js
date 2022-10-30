@@ -219,3 +219,27 @@ export async function listarMensagens(comunidade, canal, lastId) {
 	});
 	return r.data;
 }
+
+export async function excluirCanal(comunidade, canal) {
+	if (!userToken || !canal || !comunidade) return;
+	const r = await api.delete(`/comunidade/${comunidade}/canal/${canal}`, {
+		headers: {
+			'x-access-token': userToken,
+		},
+	});
+	return r.status;
+}
+
+export async function criarCanal(comunidade, nome) {
+	if (!userToken || !nome || !comunidade) return;
+	const r = await api.post(
+		`/comunidade/${comunidade}/canal?nome=${nome}`,
+		{},
+		{
+			headers: {
+				'x-access-token': userToken,
+			},
+		}
+	);
+	return r.status;
+}

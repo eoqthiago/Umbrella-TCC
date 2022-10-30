@@ -293,10 +293,19 @@ export async function consultarCanalMensagens(canal, lastId) {
 	return model;
 }
 
+// Criar um canal
 export async function inserirCanal(idComunidade, nome) {
 	const command = `
 		insert into tb_comunidade_canal (id_comunidade, nm_canal)
 								 values (?, ?) `;
 	const answer = await con.query(command, [idComunidade, nome]);
+	return answer.affectedRows;
+}
+
+// Excluir um canal
+export async function excluirCanal(idCanal) {
+	const command = `
+		delete from tb_comunidade_canal where id_comunidade_canal = ? `;
+	const answer = await con.query(command, [idCanal]);
 	return answer.affectedRows;
 }
