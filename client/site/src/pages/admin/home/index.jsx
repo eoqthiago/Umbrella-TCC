@@ -50,14 +50,13 @@ function Index() {
     };
     const [usuarios, setUsuarios] = useState([]);
 
-    async function coisa() {
+    async function listarUsers() {
         const r = await estatisticasUsuarios();
-        console.log(r)
         setUsuarios(r);
     };
 
     useEffect(() => {
-        coisa();
+        listarUsers();
     }, [])
 
 
