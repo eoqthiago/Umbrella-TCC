@@ -104,23 +104,34 @@ export async function userNameSearch(nome) {
 
 export async function amigosConsulta(id) {
 	const command = `
-	select 
-		id_usuario id,
-		nm_usuario nome,
-		ds_usuario descricao,
-		img_usuario imagem,
-		img_banner banner,
-		dt_criacao criacao
-	from tb_usuario where id_usuario in (
-		(select id_solicitante
-		from tb_usuario_amizade
-		where id_solicitado = ? and ds_situacao = 'A'),
-        (select id_solicitante
-		from tb_usuario_amizade
-		where id_solicitante = ? and ds_situacao = 'A')
-	)`;
-	const [answer] = await con.query(command, [id, id]);
-	return answer;
+		select 
+			id_usuario id,
+			nm_usuario nome,
+			ds_usuario descricao,
+			img_usuario imagem,
+			img_banner banner,
+			dt_criacao criacao
+		from tb_usuario_amizade amz
+		inner join tb_usuario usuario on amz.id_solicitante = usuario.id_usuario
+		where id_usuario <> ? `;
+
+	const commandT = `
+		select 
+			id_usuario id,
+			nm_usuario nome,
+			ds_usuario descricao,
+			img_usuario imagem,
+			img_banner banner,
+			dt_criacao criacao
+		from tb_usuario_amizade amz
+		inner join tb_usuario usuario on amz.id_solicitado = usuario.id_usuario
+		where id_usuario <> ?;
+	`;
+	const [answer] = await con.query(command, [id]);
+	const [answerT] = await con.query(commandT, [id]);
+	const model = [...answer, ...answerT];
+
+	return model;
 }
 
 export async function userComunidadesConsulta(id) {

@@ -14,6 +14,7 @@
             max-width: 900px
             min-width: 200px
             height: fit-content
+            min-height: 250px
             display: flex
             flex-flow: row nowrap
             box-shadow: 0px 1px 25px #0000001a
@@ -22,7 +23,8 @@
             overflow: hidden
 
             > img
-                width: clamp(200px, 40vw, 320px)
+                width: auto
+                max-width: clamp(200px, 40vw, 320px)
                 height: auto
                 -webkit-user-drag: none
                 user-select: none

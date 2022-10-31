@@ -34,17 +34,25 @@ select * from tb_usuario where ds_email = "othierry@daora";
 
 -- Consultar amigos
 select 
-	id_usuario id,
-	nm_usuario nome,
-	ds_usuario descricao,
-	img_usuario imagem,
-	img_banner banner,
-	dt_criacao criacao
-from tb_usuario where id_usuario in (
-	select id_solicitado
-	from tb_usuario_amizade
-	where (id_solicitado = ? or id_solicitante = ?) and ds_situacao = 'A'
-);
+		id_usuario id,
+		nm_usuario nome,
+		ds_usuario descricao,
+		img_usuario imagem,
+		img_banner banner,
+		dt_criacao criacao
+   from tb_usuario_amizade amz
+inner join tb_usuario usuario on amz.id_solicitante = usuario.id_usuario
+where id_usuario <> 2;
+select 
+		id_usuario id,
+		nm_usuario nome,
+		ds_usuario descricao,
+		img_usuario imagem,
+		img_banner banner,
+		dt_criacao criacao
+   from tb_usuario_amizade amz
+inner join tb_usuario usuario on amz.id_solicitado = usuario.id_usuario
+where id_usuario <> 2;
 
 -- Consultar comunidades do usuário
 select 

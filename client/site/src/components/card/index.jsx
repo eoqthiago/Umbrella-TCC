@@ -6,18 +6,26 @@ import './index.sass';
 export function Index({ comunidade }) {
 	const navigate = useNavigate();
 
+	if (!comunidade)
+		comunidade = {
+			banner: '',
+			imagem: '',
+			nome: '',
+			descricao: '',
+		};
+
 	return (
 		<div
 			className='comp-card'
 			onClick={() => navigate(`/comunidade/${comunidade.id}/info`)}>
 			<img
 				className='banner'
-				src={comunidade.banner ? BuscarImg(comunidade.banner) : '/assets/images/doodles.webp'}
+				src={!comunidade.banner || !comunidade.banner.trim() ? '/assets/images/doodles.webp' : BuscarImg(comunidade.banner)}
 				alt='Comunidade'
 			/>
 			<img
 				className='image'
-				src={comunidade.imagem ? BuscarImg(comunidade.imagem) : '/assets/images/community.png'}
+				src={!comunidade.imagem || !comunidade.imagem.trim() ? '/assets/images/community.png' : BuscarImg(comunidade.imagem)}
 				alt='Comunidade'
 			/>
 			<div className='info-cont'>

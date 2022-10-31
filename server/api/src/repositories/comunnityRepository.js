@@ -318,7 +318,7 @@ export async function excluirCanal(idCanal) {
 }
 
 // Consultar as maiores comunidades
-export async function topCommunities() {
+export async function topCommunities(nome, not) {
 	const command = `
 		select 
 			tb.id_comunidade id,
@@ -331,9 +331,10 @@ export async function topCommunities() {
 			count(tb.id_usuario_comunidade) qtdUsuarios
 		from tb_comunidade
 		inner join tb_usuario_comunidade tb on tb.id_comunidade = tb_comunidade.id_comunidade
+		where nm_comunidade like '%${nome}%' and tb.id_comunidade <> ?
 		group by nm_comunidade
 		order by count(tb.id_usuario_comunidade) desc
 		limit 25 `;
-	const [answer] = await con.query(command);
+	const [answer] = await con.query(command, [not]);
 	return answer;
 }

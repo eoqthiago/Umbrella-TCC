@@ -43,7 +43,7 @@ export default function Index() {
 			}
 			if (typeof imgBanner != 'string') {
 				const s = await communityBanner(id, imgBanner);
-				if (s !== 204) throw new Error('Não foi possível salvar a imagem');
+				if (s !== 204) throw new Error('Não foi possível salvar o banner');
 			}
 
 			toast.success('As alterações foram salvas com sucesso!');
@@ -112,6 +112,7 @@ export default function Index() {
 	useEffect(() => {
 		const load = async () => await carregarPage();
 		load();
+		// eslint-disable-next-line
 	}, []);
 
 	return (
@@ -138,7 +139,7 @@ export default function Index() {
 						onMouseEnter={() => setBannerAtivo('ativo')}
 						onMouseLeave={() => setBannerAtivo('')}>
 						<div className={'comunidade-conf-banner-button ' + bannerAtivo}>
-							<button onClick={alterarBanner}>Alterar capa</button>
+							<button onClick={alterarBanner}>Alterar banner</button>
 						</div>
 						<img
 							src={imgBanner ? BuscarImg(imgBanner) : '/assets/images/doodles.webp'}

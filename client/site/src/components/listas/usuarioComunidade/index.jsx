@@ -30,13 +30,13 @@ const Index = ({ item }) => {
 					src='/assets/icons/promote.svg'
 					alt='Promover à admin'
 					title='Promover à admin'
-					className={item.idUsuario === localStorage('user').id && 'hidden'}
+					className={item.idUsuario === localStorage('user').id ? 'hidden' : ''}
 				/>
 				<img
 					src='/assets/icons/ban.svg'
 					alt='Banir'
 					title='Banir'
-					className={item.idUsuario === localStorage('user').id && 'hidden'}
+					className={item.idUsuario === localStorage('user').id ? 'hidden' : ''}
 					onClick={() => handleBanUsuario()}
 				/>
 			</div>
