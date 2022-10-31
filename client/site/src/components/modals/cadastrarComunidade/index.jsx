@@ -14,6 +14,7 @@ const Index = ({ ativo, state, alterarMenu }) => {
 	const [imagem, setImagem] = useState('');
 	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
+	const id = 'modal-cadastrar-comunidade';
 
 	const setarImagem = () => document.getElementById('nova-comunidade-imagem-input').click();
 	const showImage = () => (typeof imagem == 'object' ? URL.createObjectURL(imagem) : undefined);
@@ -50,8 +51,15 @@ const Index = ({ ativo, state, alterarMenu }) => {
 		}
 	}
 
+	const closeModal = e => {
+		if (e.target.id === id) state(!ativo);
+	};
+
 	return (
-		<div className={(ativo && 'comp-modal-ativo') + ' comp-modal'}>
+		<div
+			className={(ativo && 'comp-modal-ativo') + ' comp-modal'}
+			id={id}
+			onClick={e => closeModal(e)}>
 			<HashLoader
 				color='#24ad6d'
 				loading={loading}

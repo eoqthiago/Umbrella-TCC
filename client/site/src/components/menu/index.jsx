@@ -25,6 +25,7 @@ export default function Index({ ativo, alterar }) {
 	const [modalTipo, setModalTipo] = useState('');
 	const [denunciaUser, setDenunciaUser] = useState(false);
 	const [denunciaComunidade, setDenunciaComunidade] = useState(false);
+	const id = 'modal-menu';
 	const modalRef = useRef();
 
 	function openModal() {
@@ -48,6 +49,10 @@ export default function Index({ ativo, alterar }) {
 		toast.success('Logout feito com sucesso!');
 		navigate('/');
 	}
+
+	const exit = e => {
+		if (e.target.id === id) alterar(!ativo);
+	};
 
 	useEffect(() => {
 		if (!localStorage('user') || isExpired) {
@@ -86,7 +91,10 @@ export default function Index({ ativo, alterar }) {
 	}, []);
 
 	return (
-		<div className={ativo ? 'comp-menu-bg' : undefined}>
+		<div
+			className={ativo ? 'comp-menu-bg' : undefined}
+			id={id}
+			onClick={e => exit(e)}>
 			<UserDenuncia
 				ativo={denunciaUser}
 				state={setDenunciaUser}
