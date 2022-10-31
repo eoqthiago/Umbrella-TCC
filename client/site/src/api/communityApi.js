@@ -254,7 +254,7 @@ export async function pesquisarUsuarioComunidade(comunidade, nome) {
 	return r.data;
 }
 
-export async function consultarTopComunidades() {
-	const r = await api.get('/comunidade/top');
+export async function consultarTopComunidades(nome, not) {
+	const r = await api.get(`/comunidade/top?nome=${nome ?? ''}&not=${not ?? '0'}`);
 	return r.data;
 }

@@ -91,7 +91,10 @@ server.post('/comunidade', async (req, res) => {
 // Consultar as maiores comunidade
 server.get('/comunidade/top', async (req, res) => {
 	try {
-		const comunidades = await topCommunities();
+		let { nome, not } = req.query;
+		if (!nome) nome = '';
+		if (!not) not = 0;
+		const comunidades = await topCommunities(nome, not);
 		res.send(comunidades);
 	} catch (err) {
 		res.status(400).send({
