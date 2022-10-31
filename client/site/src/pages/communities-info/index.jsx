@@ -75,7 +75,7 @@ export default function Index() {
 			<main>
 				<section className='community-info-card'>
 					<img
-						src={comunidade.imagem ? BuscarImg(comunidade.imagem) : '/assets/images/star-wars.webp'}
+						src={!comunidade.imagem || !comunidade.imagem.trim() ? '/assets/images/doodles.webp' : BuscarImg(comunidade.imagem)}
 						alt=''
 					/>
 					<div>
