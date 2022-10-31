@@ -10,6 +10,7 @@ import { BuscarImg } from '../../api/services';
 import { FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import CanalComunidade from '../../components/listas/canalComunidade';
 import UsuarioComunidade from '../../components/listas/usuarioComunidade';
+import DeleteComunidadeModal from '../../components/modals/deletarComunidade';
 import './index.sass';
 
 export default function Index() {
@@ -26,6 +27,7 @@ export default function Index() {
 	const [imgCom, setImgCom] = useState('');
 	const [criarCanalNome, setCriarCanalNome] = useState('');
 	const [pesquisaNome, setPesquisaNome] = useState('');
+	const [deleteModal, setDeleteModal] = useState(false);
 	const navigate = useNavigate();
 	const id = Number(useParams().id);
 
@@ -67,21 +69,10 @@ export default function Index() {
 		} catch (err) {
 			if (err.response) toast.warning(err.response.data.err);
 			else toast.warning(err.message);
-			navigate('/');
+			if (localStorage('user')) navigate('/home');
+			else navigate('/');
 		}
 	}
-
-	// async function handleRemoveComunidade() {
-	// 	try {
-	// 		const r = await excluirComunidade(id);
-	// 		if (r !== 204) throw new Error('Não foi possível excluir a comunidade');
-	// 		toast.success(`A comunidade ${comunidade.nome} foi excluída com sucesso! Você será redirecionado em instantes`);
-	// 		setTimeout(() => navigate('/home'), 3000);
-	// 	} catch (err) {
-	// 		if (err.response) toast.error(err.response.data.err);
-	// 		else toast.error(err.message);
-	// 	}
-	// }
 
 	async function handleCancelar() {
 		await carregarPage();
@@ -133,6 +124,11 @@ export default function Index() {
 			<Menu
 				ativo={menu}
 				alterar={setMenu}
+			/>
+			<DeleteComunidadeModal
+				ativo={deleteModal}
+				state={setDeleteModal}
+				comunidade={{ nome, id }}
 			/>
 
 			<main>
@@ -321,7 +317,8 @@ export default function Index() {
 				<section className='comunidade-conf-excluir'>
 					<BotaoSolido
 						cor='#f84a4a'
-						fonte='1.2vw'>
+						fonte='1.2vw'
+						onClick={() => setDeleteModal(!deleteModal)}>
 						Excluir comunidade
 					</BotaoSolido>
 				</section>

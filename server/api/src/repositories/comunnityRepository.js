@@ -240,10 +240,12 @@ export async function communityUserDelete(idUsuario, idComunidade) {
 // Excluir comunidade
 export async function communityDelete(idCommunity) {
 	const command = `
-		delete from tb_comunidade
-		   where id_comunidade = ?`;
+		delete from tb_comunidade_canal 
+			  where id_comunidade = ? ;
 
-	const [r] = await con.query(command, [idCommunity]);
+		delete from tb_comunidade
+			  where id_comunidade = ? `;
+	const [r] = await con.query(command, [idCommunity, idCommunity]);
 	return r.affectedRows;
 }
 
