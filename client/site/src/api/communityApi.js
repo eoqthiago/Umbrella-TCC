@@ -55,7 +55,7 @@ export async function pesquisar(categoria, conteudo) {
 	switch (categoria) {
 		case 'comunidades':
 			if (conteudo[0] !== '#' || isNaN(conteudo.substring(1, conteudo.length))) {
-				r = await api.get(`/comunidade?name=${conteudo}`, {
+				r = await api.get(`/comunidade?nome=${conteudo}`, {
 					headers: {
 						'x-access-token': userToken,
 					},
@@ -251,5 +251,10 @@ export async function pesquisarUsuarioComunidade(comunidade, nome) {
 			'x-access-token': userToken,
 		},
 	});
+	return r.data;
+}
+
+export async function consultarTopComunidades() {
+	const r = await api.get('/comunidade/top');
 	return r.data;
 }

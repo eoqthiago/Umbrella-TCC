@@ -130,23 +130,23 @@ export async function communityId(id) {
 	return answer[0];
 }
 
-// Consultar comunidade por nome //! Alterar
+// Consultar comunidade por nome
 export async function communityName(comunidade) {
 	const command = `
-			SELECT
-				id_comunidade id,
-				nm_comunidade nome,
-				ds_comunidade descricao,
-				img_comunidade imagem,
-				img_banner banner,
-				bt_publica publica,
-				dt_criacao dataCriacao,
-				(   select count(id_usuario)
-					from tb_usuario_comunidade
-					inner join tb_comunidade on tb_usuario_comunidade.id_comunidade = tb_comunidade.id_comunidade
-					where tb_comunidade.nm_comunidade like '%${comunidade}%' ) qtdUsuarios
-			FROM tb_comunidade
-		   WHERE 	nm_comunidade like '%${comunidade}%'`;
+		select 
+			tb.id_comunidade id,
+			nm_comunidade nome,
+			ds_comunidade descricao,
+			img_comunidade imagem,
+			img_banner banner,
+			bt_publica publica,
+			dt_criacao dataCriacao,
+			count(tb.id_usuario_comunidade) qtdUsuarios
+		from tb_comunidade
+		inner join tb_usuario_comunidade tb on tb.id_comunidade = tb_comunidade.id_comunidade
+        where nm_comunidade like '%${comunidade}%'
+		group by nm_comunidade
+		order by count(tb.id_usuario_comunidade) desc `;
 	const [answer] = await con.query(command);
 	return answer;
 }
@@ -315,4 +315,25 @@ export async function excluirCanal(idCanal) {
 		delete from tb_comunidade_canal where id_comunidade_canal = ? `;
 	const answer = await con.query(command, [idCanal]);
 	return answer.affectedRows;
+}
+
+// Consultar as maiores comunidades
+export async function topCommunities() {
+	const command = `
+		select 
+			tb.id_comunidade id,
+			nm_comunidade nome,
+			ds_comunidade descricao,
+			img_comunidade imagem,
+			img_banner banner,
+			bt_publica publica,
+			dt_criacao dataCriacao,
+			count(tb.id_usuario_comunidade) qtdUsuarios
+		from tb_comunidade
+		inner join tb_usuario_comunidade tb on tb.id_comunidade = tb_comunidade.id_comunidade
+		group by nm_comunidade
+		order by count(tb.id_usuario_comunidade) desc
+		limit 25 `;
+	const [answer] = await con.query(command);
+	return answer;
 }

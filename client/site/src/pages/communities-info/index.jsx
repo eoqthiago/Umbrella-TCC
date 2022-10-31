@@ -15,7 +15,7 @@ export default function Index() {
 	const [comunidade, setComunidade] = useState({});
 	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
-	const { idParam } = useParams();
+	const idParam = Number(useParams().idParam);
 
 	async function entrarComunidade() {
 		setLoading(true);
@@ -37,10 +37,11 @@ export default function Index() {
 		async function carregarPage() {
 			const r = await searchCommunityId(idParam);
 			if (!r) navigate('/not-found');
-			else setComunidade(r);
+			setComunidade(r);
 		}
 		carregarPage();
-	}, [idParam, navigate]);
+		// eslint-disable-next-line
+	}, []);
 
 	return (
 		<div className='community-info page'>

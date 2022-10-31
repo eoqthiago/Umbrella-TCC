@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { sha256 } from 'js-sha256';
 import jwt from 'jsonwebtoken';
-import nodemailer from "nodemailer";
+import nodemailer from 'nodemailer';
 import {
 	aceitarAmizade,
 	amigosConsulta,
@@ -437,56 +437,56 @@ server.get('/usuario/amizades/pedidos', async (req, res) => {
 });
 
 //recuperar senha
-server.post("/usuario/recuperar", async (req, res) => {
+server.post('/usuario/recuperar', async (req, res) => {
 	try {
-	  const { email } = req.query;
-	  const answer = await userIDandEmailSearch(email);
-	  if (!answer) throw new Error("Email incorreto");
-  
-	  const token = jwt.sign(
-		{
-		  id: answer.id,
-		  email: answer.email,
-		},
-		process.env.JWT_KEY,
-		{
-		  expiresIn: "10m",
+		const { email } = req.query;
+		const answer = await userIDandEmailSearch(email);
+		if (!answer) throw new Error('Email incorreto');
+
+		const token = jwt.sign(
+			{
+				id: answer.id,
+				email: answer.email,
+			},
+			process.env.JWT_KEY,
+			{
+				expiresIn: '10m',
+			}
+		);
+
+		const id = answer.id;
+
+		switch (true) {
+			case !emailTest(email):
+				throw new Error('O email inserido é inválido');
+			case !email || !email.trim():
+				throw new Error('O email inserida é inválida');
+			default:
+				break;
 		}
-	  );
-  
-	  const id = answer.id;
-  
-	  switch (true) {
-		case !emailTest(email):
-		  throw new Error("O email inserido é inválido");
-		case !email || !email.trim():
-		  throw new Error("O email inserida é inválida");
-		default:
-		  break;
-	  }
-  
-	  if (answer < 1) throw new Error("Email não foi encontrado");
-	  // if (search[0]) throw new Error("E-mail enviado");
-	  else {
-		var transport = nodemailer.createTransport({
-		  host: "smtp.gmail.com",
-		  port: 587,
-		  auth: {
-			user: process.env.EMAIL,
-			pass: process.env.PASS,
-			//   kspaeiiketaddqbt
-		  },
-		  tls: {
-			rejectUnauthorized: false,
-		  },
-		});
-		const link = `http://localhost:3000/alterar-senha?id=${id}&token=${token}`;
-  
-		let message = {
-		  from: "noreply.umbrellacontact@gmail.com",
-		  to: `${email}`,
-		  subject: "Seu codigo de recuperação de senha",
-		  text: `
+
+		if (answer < 1) throw new Error('Email não foi encontrado');
+		// if (search[0]) throw new Error("E-mail enviado");
+		else {
+			var transport = nodemailer.createTransport({
+				host: 'smtp.gmail.com',
+				port: 587,
+				auth: {
+					user: process.env.EMAIL,
+					pass: process.env.PASS,
+					//   kspaeiiketaddqbt
+				},
+				tls: {
+					rejectUnauthorized: false,
+				},
+			});
+			const link = `http://localhost:3000/alterar-senha?id=${id}&token=${token}`;
+
+			let message = {
+				from: 'noreply.umbrellacontact@gmail.com',
+				to: `${email}`,
+				subject: 'Seu codigo de recuperação de senha',
+				text: `
   <!doctype html>
   <html lang="en-US">
   <head>
@@ -541,7 +541,7 @@ server.post("/usuario/recuperar", async (req, res) => {
 	  <!--/100% body table-->
   </body>
   </html>`,
-			  html: `
+				html: `
   <!doctype html>
   <html lang="en-US">
   <head>
@@ -597,73 +597,40 @@ server.post("/usuario/recuperar", async (req, res) => {
 	  <!--/100% body table-->
   </body>
   </html>`,
-		};
-  
-		transport.sendMail(message, (err) => {
-		  if (err) {
-			console.log(err);
-			return;
-		  }
-		});
-		console.log("E-mail enviado");
-		res.send("link enviado para o email");
-	  }
-	} catch (err) {
-	  res.status(400).send({
-		err: err.message,
-	  });
-	}
-});
+			};
 
-
-server.put("/alterar-senha", async (req, res) => {
-	try {
-	  let { senha } = req.body;
-
-	  const token = req.header('x-access-token');
-	  if (!token) {
-		  res.status(401).send({ err: 'Falha na autenticação' });
-		  return;
-	  }
-	  const decoded = verifyToken(token);
-	  if (!decoded || !(await userIdSearch(decoded.id))) {
-		  res.status(401).send({ err: 'Falha na autenticação' });
-		  return;
-	  }
-  
-	  senha = sha256(senha);
-	  const answer = await userAlterarPassword(senha, decoded.id);
-	  if (answer < 1) throw new Error("Não foi possível alterar a senha");
-	  res.status(202).send();
-	} catch (err) {
-	  console.log(err);
-	  res.status(400).send({
-		err: err.message,
-	  });
-	}
-});
-
-// Alterar email
-server.put("/email-novo", async (req, res) => {
-	try {
-		const {email} = req.body;
-		const header = req.header("x-access-token");
-		const auth = jwt.decode(header);
-		if(!emailTest(email)) throw new Error ("Email incorreto");
-		switch (true) {
-			case !header || !auth:
-				throw new Error("Falha na autenticação");
-        	case !email || !email.trim() || email.length > 50:
-          		throw new Error("O email é obrigatório");
-			case !emailTest(email):
-				throw new Error("email invalido");
-			default:
-				break;
-
+			transport.sendMail(message, err => {
+				if (err) {
+					return;
+				}
+			});
+			res.send('link enviado para o email');
 		}
-		
-		const answer = await userEditEmail(email, auth.id);
-		if (!answer) throw new Error("Não foi possível alterar o email de usuário");
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
+server.put('/alterar-senha', async (req, res) => {
+	try {
+		let { senha } = req.body;
+
+		const token = req.header('x-access-token');
+		if (!token) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		}
+		const decoded = verifyToken(token);
+		if (!decoded || !(await userIdSearch(decoded.id))) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		}
+
+		senha = sha256(senha);
+		const answer = await userAlterarPassword(senha, decoded.id);
+		if (answer < 1) throw new Error('Não foi possível alterar a senha');
 		res.status(202).send();
 	} catch (err) {
 		res.status(400).send({
@@ -672,17 +639,44 @@ server.put("/email-novo", async (req, res) => {
 	}
 });
 
-
-// Procurar email
-server.get("/alterar-email", async (req, res) => {
+// Alterar email
+server.put('/email-novo', async (req, res) => {
 	try {
 		const { email } = req.body;
-		const header = req.header("x-access-token");
+		const header = req.header('x-access-token');
 		const auth = jwt.decode(header);
-		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
+		if (!emailTest(email)) throw new Error('Email incorreto');
+		switch (true) {
+			case !header || !auth:
+				throw new Error('Falha na autenticação');
+			case !email || !email.trim() || email.length > 50:
+				throw new Error('O email é obrigatório');
+			case !emailTest(email):
+				throw new Error('email invalido');
+			default:
+				break;
+		}
+
+		const answer = await userEditEmail(email, auth.id);
+		if (!answer) throw new Error('Não foi possível alterar o email de usuário');
+		res.status(202).send();
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
+// Procurar email
+server.get('/alterar-email', async (req, res) => {
+	try {
+		const { email } = req.body;
+		const header = req.header('x-access-token');
+		const auth = jwt.decode(header);
+		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error('Falha na autenticação');
 		const answer = email ? await userEmailSearch(email) : await userIdSearch(Number(id));
 
-		if (!answer) throw new Error("Usuário não encontrado");
+		if (!answer) throw new Error('Usuário não encontrado');
 		res.send(answer);
 	} catch (err) {
 		res.status(404).send({
@@ -690,8 +684,5 @@ server.get("/alterar-email", async (req, res) => {
 		});
 	}
 });
-
-
-  
 
 export default server;

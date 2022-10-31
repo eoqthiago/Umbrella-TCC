@@ -172,26 +172,21 @@ SELECT
 FROM tb_comunidade
 WHERE 	id_comunidade = 1;
 
-
-
 -- Pesquisar comunidades por nome --! Alterar
-SELECT
-	id_comunidade id,
+select 
+	tb.id_comunidade id,
 	nm_comunidade nome,
 	ds_comunidade descricao,
 	img_comunidade imagem,
 	img_banner banner,
 	bt_publica publica,
 	dt_criacao dataCriacao,
-	id_criador criador,
-	(select count(id_usuario) 
-		from tb_usuario_comunidade 
-		inner join tb_comunidade on tb_usuario_comunidade.id_usuario_comunidade = tb_comunidade.id_comunidade
-		where tb_comunidade.nm_comunidade like '%daora%') qtdUsuarios
-FROM tb_comunidade
-WHERE 	nm_comunidade like '%daora%';
-
-
+	count(tb.id_usuario_comunidade) qtdUsuarios
+from tb_comunidade
+inner join tb_usuario_comunidade tb on tb.id_comunidade = tb_comunidade.id_comunidade
+where nm_comunidade like '%Comunidade%'
+group by nm_comunidade
+order by count(tb.id_usuario_comunidade) desc;
 
 -- Atualizar campos da comunidade
 update 	tb_comunidade 
@@ -245,3 +240,19 @@ where id_comunidade_canal = 1;
 
 -- Deletar canal
 delete from tb_comunidade_canal where id_comunidade_canal = 1;
+
+-- Top comunidades
+select 
+	tb.id_comunidade id,
+	nm_comunidade nome,
+	ds_comunidade descricao,
+	img_comunidade imagem,
+	img_banner banner,
+	bt_publica publica,
+	dt_criacao dataCriacao,
+	count(tb.id_usuario_comunidade) qtdUsuarios
+from tb_comunidade
+inner join tb_usuario_comunidade tb on tb.id_comunidade = tb_comunidade.id_comunidade
+group by nm_comunidade
+order by count(tb.id_usuario_comunidade) desc
+limit 25;
