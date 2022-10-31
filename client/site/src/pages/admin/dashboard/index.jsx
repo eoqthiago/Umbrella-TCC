@@ -2,7 +2,7 @@ import "./index.sass";
 import Header from "../../../components/header";
 import MenuAdm from "../../../components/menu-adm";
 import CardsEstatisticas from "../../../components/cards-estatiticas";
-import { estatisticasUsuarios } from "../../../api/communityApi";
+import { estatisticasComunidades, estatisticasUsuarios } from "../../../api/communityApi";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement } from "chart.js";
 import { Pie, Line } from "react-chartjs-2";
 import { useState, useEffect } from "react";
@@ -49,6 +49,12 @@ function Index() {
         ],
     };
     const [usuarios, setUsuarios] = useState([]);
+    const [comunidades, setComunidades] = useState([]);
+
+    async function listarComunnity() {
+        const r = await estatisticasComunidades();
+        setComunidades(r)
+    }
 
     async function listarUsers() {
         const r = await estatisticasUsuarios();
@@ -56,6 +62,7 @@ function Index() {
     };
 
     useEffect(() => {
+        listarComunnity();
         listarUsers();
     }, [])
 
@@ -72,25 +79,28 @@ function Index() {
                 </div>
                 <section className="cards-estastisticas-admin">
                     <div className="cards-estatisticas">
-                        <div className="cards-01">
-                            <CardsEstatisticas
-                                cards_estatisticas="card_visitas_mensais"
-                                numeroEstatistica="23.156"
-                                nomeEstatistica="Total de usuários novos (mensal)"
-                            />
-                            <CardsEstatisticas
-                                cards_estatisticas="cards_visitas"
-                                numeroEstatistica="72.193"
-                                nomeEstatistica="Total de visitantes"
-                            />
-                        </div>
-                        <div className="cards-02">
-                            <CardsEstatisticas
-                                cards_estatisticas="cards_comunidades"
-                                numeroEstatistica="6874"
-                                nomeEstatistica="Comunidades criadas"
-                            />
-                        </div>
+                        {usuarios.map((item) => (
+                            <div className="cards-01">
+                                <CardsEstatisticas
+                                    cards_estatisticas="card_visitas_mensais"
+                                    numeroEstatistica={item.usuariosMensais}
+                                    nomeEstatistica="Total de usuários novos (mensal)"
+                                />
+                                <CardsEstatisticas
+                                    cards_estatisticas="cards_visitas"
+                                    numeroEstatistica="72.193"
+                                    nomeEstatistica="Total de visitantes"
+                                />
+                            </div>
+                        ))}
+                        {comunidades.map((item) => (
+                            <div className="cards-02">
+                                <CardsEstatisticas
+                                    cards_estatisticas="cards_comunidades"
+                                    numeroEstatistica={item.comunidadesCriadas}
+                                    nomeEstatistica="Comunidades criadas"
+                                />
+                            </div>))}
                     </div>
                 </section>
                 <section className="admin-pizza-grafico">

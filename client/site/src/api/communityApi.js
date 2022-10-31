@@ -123,6 +123,15 @@ export async function estatisticasUsuarios() {
 	return r.data;
 }
 
+export async function estatisticasComunidades() {
+	if (!userToken) return;
+	const r = await api.get('/admin/estatisticas/comunidades', {
+		headers: {
+			"x-access-token": userToken,
+		},
+	});
+	return r.data;
+}
 
 export async function excluirComunidade(comId) {
 	const r = await api.delete(`/comunidade/${comId}`, {

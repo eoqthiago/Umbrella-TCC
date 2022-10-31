@@ -65,7 +65,7 @@ export async function searchMonthlyUsers() {
 
 export async function searchCommunites() {
 	const command = `
-		select count(*) as comunidades Criadas from tb_comunidade`;
+		select count(*) as comunidadesCriadas from tb_comunidade`;
 	const [answer] = await con.query(command)
 	return answer;
 }

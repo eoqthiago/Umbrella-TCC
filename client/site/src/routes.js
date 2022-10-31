@@ -17,7 +17,7 @@ import RecuperarCodigo from "./pages/recuperar-senha/recuperar-senha-codigo";
 import Alterar from "./pages/recuperar-senha/senha-nova";
 import AlterarEmail from "./pages/alterar-email/page-alterar-email"
 import EmailConfirm from "./pages/alterar-email/alterar-email"
-import HomeAdm from "./pages/admin/home"
+import HomeAdm from "./pages/admin/dashboard"
 
 export default function Index() {
 	return (
@@ -41,7 +41,7 @@ export default function Index() {
 				<Route path="/alterar-senha" element={<Alterar />} />
 				<Route path="/alterar-email" exact element={<AlterarEmail />} />
 				<Route path="/email-novo" exact element={<EmailConfirm />} />
-				<Route path="/admin" exact element={<HomeAdm />} />
+				<Route path="/admin/dashboard" exact element={<HomeAdm />} />
 				<Route path='*' element={<NotFound />} />
 			</Routes>
 		</BrowserRouter>
