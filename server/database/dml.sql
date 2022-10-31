@@ -264,3 +264,23 @@ inner join tb_usuario_comunidade tb on tb.id_comunidade = tb_comunidade.id_comun
 group by nm_comunidade
 order by count(tb.id_usuario_comunidade) desc
 limit 25;
+
+-- Verificar se o usuário foi banido
+select 
+	id_usuario id,
+    ds_motivo motivo,
+    dt_banido dataBanimento
+from tb_comunidade_usuario_banido
+where id_usuario = 1 and id_comunidade = 1;
+
+-- Banir um usuário
+set @usuario = (
+	select id_usuario 
+    from tb_usuario_comunidade 
+    where id_usuario_comunidade = 20
+    );
+delete from tb_usuario_comunidade 
+where id_usuario_comunidade = 20;
+insert into tb_comunidade_usuario_banido (id_comunidade, id_usuario, ds_motivo)
+								  values (6, @usuario, 'quebrar as regras');
+
