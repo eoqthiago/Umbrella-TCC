@@ -8,12 +8,17 @@ import './index.sass';
 
 const Index = ({ ativo, state, comunidade }) => {
 	const [loading, setLoading] = useState(false);
+	const id = 'modal-deletar-comunidade';
 	const ref = useRef();
 	const navigate = useNavigate();
 
 	function exit() {
 		state(!ativo);
 	}
+
+	const closeModal = e => {
+		if (e.target.id === id) state(!ativo);
+	};
 
 	async function handleDelete() {
 		setLoading(true);
@@ -32,7 +37,10 @@ const Index = ({ ativo, state, comunidade }) => {
 	}
 
 	return (
-		<div className={(ativo && 'comp-modal-ativo') + ' comp-modal'}>
+		<div
+			className={(ativo && 'comp-modal-ativo') + ' comp-modal'}
+			id={id}
+			onClick={e => closeModal(e)}>
 			<LoadingBar
 				ref={ref}
 				color='#48d677'
