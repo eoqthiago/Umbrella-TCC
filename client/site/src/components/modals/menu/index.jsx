@@ -27,6 +27,7 @@ const Index = ({ ativo, position, selecionada, modalRef, tipo, user, comunidade,
 			const r = await exitCommunity(selecionada.id, localStorage('user').id);
 			if (r !== 204) throw new Error('Não foi possível sair da comunidade');
 			toast.warning('Você saiu da comunidade');
+			navigate('/home');
 			setAtivo(false);
 		} catch (err) {
 			if (err.response) toast.error(err.response.data.err);

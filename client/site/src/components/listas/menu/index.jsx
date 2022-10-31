@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { BuscarImg } from '../../../api/services';
 import './index.sass';
 
-const Index = ({ item, selecionado, convMenu, tipo, setTipo, alterar }) => {
+const Index = ({ item, convMenu, tipo, setTipo, alterar }) => {
 	const navigate = useNavigate();
 
 	return (
@@ -23,7 +23,7 @@ const Index = ({ item, selecionado, convMenu, tipo, setTipo, alterar }) => {
 				navigate(tipo === 'comunidade' ? `/chat/comunidade/${item.id}` : `/chat/conversa/${item.id}`);
 			}}>
 			<img
-				src={item.imagem ? BuscarImg(item.imagem) : '/assets/images/user.png'}
+				src={item.imagem ? BuscarImg(item.imagem) : tipo === 'comunidade' ? '/assets/images/community.png' : '/assets/images/user.png'}
 				alt='Imagem'
 			/>
 			<div>{item.nome}</div>

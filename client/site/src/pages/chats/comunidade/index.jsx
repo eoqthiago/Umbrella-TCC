@@ -61,7 +61,7 @@ const Index = () => {
 		async function consultarDados() {
 			try {
 				const r = await searchCommunityId(Number(id));
-				if (!r) throw new Error('Essa comunidade não existe');
+				if (!r) throw new Error('Não foi possível encontrar essa comunidade');
 				const s = await consultarComunidadeUsuario(localStorage('user').id, Number(id));
 				if (!s) throw new Error('Você não está nessa comunidade');
 				const t = await consultarCanais(Number(id));
@@ -72,7 +72,8 @@ const Index = () => {
 			} catch (err) {
 				if (err.response) toast.error(err.response.data.err);
 				else toast.error(err.message);
-				navigate('/home');
+				if (localStorage('user')) navigate('/home');
+				else navigate('/');
 			}
 		}
 		consultarDados();

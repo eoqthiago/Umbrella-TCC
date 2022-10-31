@@ -19,6 +19,9 @@ import {
 	communityCanalCreate,
 	salvarMensagemComunidade,
 	consultarCanalMensagens,
+	communityBanner,
+	inserirCanal,
+	excluirCanal,
 } from '../repositories/comunnityRepository.js';
 import { userIdSearch } from '../repositories/userRepository.js';
 import { verifyToken } from '../utils/authUtils.js';
@@ -43,8 +46,11 @@ server.post('/comunidade/:id/usuario', async (req, res) => {
 			return;
 		} else if (!id || !(await communityId(id))) throw new Error('Essa comunidade não existe');
 
-		const r = await communityUserAdd(decoded.id, id);
-		if (r < 1) throw new Error('Não foi possível entrar na comunidade');
+		const exists = await communityUserID(decoded.id, id);
+		if (exists) throw new Error('Você já está nessa comunidade');
+
+		const answer = await communityUserAdd(decoded.id, id);
+		if (answer < 1) throw new Error('Não foi possível entrar na comunidade');
 		res.status(204).send();
 	} catch (err) {
 		res.status(400).send({
@@ -101,6 +107,35 @@ server.put('/comunidade/imagem/:id', communityImg.single('imagem'), async (req, 
 
 		const img = req.file.path;
 		const answer = await communityImage(id, img);
+		if (answer < 1) throw new Error('Não foi possível alterar a imagem');
+		res.status(204).send();
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
+// Enviar banner
+server.put('/comunidade/banner/:id', communityImg.single('imagem'), async (req, res) => {
+	try {
+		const token = req.header('x-access-token');
+		const id = Number(req.params.id);
+		if (!token) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		}
+
+		const decoded = verifyToken(token);
+		if (!decoded || !(await userIdSearch(decoded.id))) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		} else if (!req.file) throw new Error('Arquivo não encontrado');
+		else if (!(await communityId(id))) throw new Error('Comunidade não encontrada');
+		else if (!(await communityOwner(decoded.id, id))) throw new Error('O usuário não possui permissão');
+
+		const img = req.file.path;
+		const answer = await communityBanner(id, img);
 		if (answer < 1) throw new Error('Não foi possível alterar a imagem');
 		res.status(204).send();
 	} catch (err) {
@@ -175,7 +210,7 @@ server.get('/comunidade/:id', async (req, res) => {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
 		}
-		
+
 		const decoded = verifyToken(token);
 		if (!decoded || !(await userIdSearch(decoded.id))) {
 			res.status(401).send({ err: 'Falha na autenticação' });
@@ -465,6 +500,93 @@ server.get('/comunidade/:comunidade/canal/:canal/mensagens/:lastId', async (req,
 		if (!answer) throw new Error('Não foi possível realizar as consultas');
 
 		res.send(answer);
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
+// Criar um canal
+server.post('/comunidade/:id/canal', async (req, res) => {
+	try {
+		const comunidade = Number(req.params.id);
+		const { nome } = req.query;
+		const token = req.header('x-access-token');
+		if (!token) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		}
+
+		const decoded = verifyToken(token);
+		if (
+			!decoded ||
+			!(await communityId(comunidade))||
+			!(await userIdSearch(decoded.id)) ||
+			!(await communityUserID(decoded.id, comunidade)) ||
+			!(await communityOwner(decoded.id, comunidade))
+		) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		} else if (!nome || !nome.trim() || nome.length > 20) throw new Error('O nome do canal inserido é inválido');
+
+		const answer = await inserirCanal(comunidade, nome);
+		if (answer < 1) throw new Error('Não foi possível criar o canal');
+
+		res.status(204).send();
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
+// Excluir canal
+server.delete('/comunidade/:id/canal/:canal', async (req, res) => {
+	try {
+		const id = Number(req.params.id)
+		const canal = Number(req.params.canal);
+		const token = req.header('x-access-token');
+		if (!token) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		}
+		
+		const decoded = verifyToken(token);
+		if (!decoded || !(await userIdSearch(decoded.id))) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		} else if (!(await communityUserID(decoded.id, id)) || !(await communityOwner(decoded.id, id)) || !(await communityId(id))) throw new Error('Não autorizado');
+		
+		const del = await excluirCanal(canal);
+		if (del < 1) throw new Error('Não foi possível excluir esse canal');
+		res.status(204).send();
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
+// Consultar usuarios da comunidade por nome
+server.get('/comunidade/:id/usuario', async (req, res) => {
+	try {
+		const id = Number(req.params.id);
+		const { nome } = req.query;
+		const token = req.header('x-access-token');
+		if (!token) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		}
+
+		const decoded = verifyToken(token);
+		if (!decoded || !(await userIdSearch(decoded.id))) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		} else if (!(await communityUserID(decoded.id, id)) || !(await communityOwner(decoded.id, id)) || !(await communityId(id))) throw new Error('Não autorizado');
+
+		const users = await communityUsername(nome, id);
+		res.send(users);
 	} catch (err) {
 		res.status(400).send({
 			err: err.message,

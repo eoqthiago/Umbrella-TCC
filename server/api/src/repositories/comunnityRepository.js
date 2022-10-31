@@ -6,11 +6,11 @@ export async function communityCreate(id, community) {
         INSERT INTO tb_comunidade (id_criador, nm_comunidade, ds_comunidade, bt_publica) 
                            VALUES (?, ?, ?, ?);
 		set @last = last_insert_id();
-		INSERT INTO tb_usuario_comunidade (id_usuario, id_comunidade) 
-									VALUES (?, @last);
+		INSERT INTO tb_usuario_comunidade (id_usuario, id_comunidade, bt_admin) 
+									VALUES (?, @last, true);
 		insert into tb_comunidade_canal (id_comunidade, nm_canal)
 								 values (@last, 'Primeiro canal'); `;
-	const [r] = await con.query(command, [id, community.nome, community.descricao, community.publica, id]);
+	const [r] = await con.query(command, [id, community.nome, community.descricao ? community.descricao.trim() : '', community.publica, id]);
 	community.id = r[0].insertId;
 	return community;
 }
@@ -25,8 +25,18 @@ export async function communityImage(id, image) {
 	return r.affectedRows;
 }
 
-// Procurar por id de usúario na comunidade
-export async function communityUserID(id, comunidade) {
+// Inserir banner da comunidade
+export async function communityBanner(id, image) {
+	const command = `
+		UPDATE tb_comunidade
+		   SET img_banner = ?
+		 WHERE id_comunidade = ? `;
+	const [r] = await con.query(command, [image, id]);
+	return r.affectedRows;
+}
+
+// Procurar por usuário com id na comunidade
+export async function communityUserID(usuario, comunidade) {
 	const command = `
 		SELECT
 				tb_usuario_comunidade.id_usuario_comunidade id,
@@ -40,7 +50,7 @@ export async function communityUserID(id, comunidade) {
 		WHERE 	tb_usuario_comunidade.id_usuario = ?
 		AND 	id_comunidade = ?`;
 
-	const [r] = await con.query(command, [id, comunidade]);
+	const [r] = await con.query(command, [usuario, comunidade]);
 	return r[0];
 }
 
@@ -66,13 +76,18 @@ export async function communityUsers(idCom) {
 // Procurar por nome de usúario na comunidade
 export async function communityUsername(nome, comunidade) {
 	const command = `
-		SELECT tb_usuario_comunidade.id_usuario_comunidade id,
-				tb_usuario.nm_usuario nome
-		FROM 	tb_usuario_comunidade
-		INNER JOIN tb_usuario 
-		ON tb_usuario_comunidade.id_usuario_comunidade = tb_usuario.id_usuario
-		WHERE	tb_usuario.nm_usuario like '%${nome}%'
-		AND 	id_comunidade = ?`;
+		SELECT
+			tb_usuario_comunidade.id_usuario_comunidade as id,
+			tb_usuario_comunidade.id_usuario as idUsuario,
+			tb_usuario_comunidade.id_comunidade as idComunidade,
+			tb_usuario_comunidade.bt_admin as admin,
+			tb_usuario.nm_usuario as nome,
+			tb_usuario.ds_usuario as descricao,
+			tb_usuario.img_usuario as imagem,
+			tb_usuario.img_banner as banner
+		FROM tb_usuario_comunidade
+		INNER JOIN tb_usuario on tb_usuario_comunidade.id_usuario = tb_usuario.id_usuario
+		WHERE tb_usuario_comunidade.id_comunidade = ? and tb_usuario.nm_usuario like '%${nome}%'`;
 	const [r] = await con.query(command, [comunidade]);
 	return r;
 }
@@ -225,10 +240,12 @@ export async function communityUserDelete(idUsuario, idComunidade) {
 // Excluir comunidade
 export async function communityDelete(idCommunity) {
 	const command = `
-		delete from tb_comunidade
-		   where id_comunidade = ?`;
+		delete from tb_comunidade_canal 
+			  where id_comunidade = ? ;
 
-	const [r] = await con.query(command, [idCommunity]);
+		delete from tb_comunidade
+			  where id_comunidade = ? `;
+	const [r] = await con.query(command, [idCommunity, idCommunity]);
 	return r.affectedRows;
 }
 
@@ -257,7 +274,8 @@ export async function consultarCanalMensagens(canal, lastId) {
 		from tb_comunidade_mensagem
 		inner join tb_usuario_comunidade on tb_usuario_comunidade.id_usuario_comunidade = tb_comunidade_mensagem.id_usuario_comunidade
 		inner join tb_usuario on tb_usuario_comunidade.id_usuario = tb_usuario.id_usuario
-		where id_comunidade_canal = ? `; //limit 50
+		where id_comunidade_canal = ?
+		order by data`; //limit 50
 
 	const [answer] = await con.query(command, [canal]);
 	const model = [];
@@ -280,4 +298,21 @@ export async function consultarCanalMensagens(canal, lastId) {
 		})
 	);
 	return model;
+}
+
+// Criar um canal
+export async function inserirCanal(idComunidade, nome) {
+	const command = `
+		insert into tb_comunidade_canal (id_comunidade, nm_canal)
+								 values (?, ?) `;
+	const answer = await con.query(command, [idComunidade, nome]);
+	return answer.affectedRows;
+}
+
+// Excluir um canal
+export async function excluirCanal(idCanal) {
+	const command = `
+		delete from tb_comunidade_canal where id_comunidade_canal = ? `;
+	const answer = await con.query(command, [idCanal]);
+	return answer.affectedRows;
 }

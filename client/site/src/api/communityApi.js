@@ -35,6 +35,20 @@ export async function communityImage(id, imagem) {
 	return r.status;
 }
 
+export async function communityBanner(id, imagem) {
+	if (!imagem || !id || !userToken) return;
+	const formd = new FormData();
+	formd.append('imagem', imagem);
+
+	const r = await api.put(`/comunidade/banner/${id}`, formd, {
+		headers: {
+			'Content-Type': 'multipart/form-data',
+			'x-access-token': userToken,
+		},
+	});
+	return r.status;
+}
+
 export async function pesquisar(categoria, conteudo) {
 	if (!userToken || !categoria || !conteudo) return [];
 	let r;
@@ -199,6 +213,40 @@ export async function enviarMensagemCanal(conteudo, canal, comunidade) {
 export async function listarMensagens(comunidade, canal, lastId) {
 	if (!userToken || !comunidade || !canal) return;
 	const r = await api.get(`/comunidade/${comunidade}/canal/${canal}/mensagens/${lastId}`, {
+		headers: {
+			'x-access-token': userToken,
+		},
+	});
+	return r.data;
+}
+
+export async function excluirCanal(comunidade, canal) {
+	if (!userToken || !canal || !comunidade) return;
+	const r = await api.delete(`/comunidade/${comunidade}/canal/${canal}`, {
+		headers: {
+			'x-access-token': userToken,
+		},
+	});
+	return r.status;
+}
+
+export async function criarCanal(comunidade, nome) {
+	if (!userToken || !nome || !comunidade) return;
+	const r = await api.post(
+		`/comunidade/${comunidade}/canal?nome=${nome}`,
+		{},
+		{
+			headers: {
+				'x-access-token': userToken,
+			},
+		}
+	);
+	return r.status;
+}
+
+export async function pesquisarUsuarioComunidade(comunidade, nome) {
+	if (!userToken || !nome || !comunidade) return;
+	const r = await api.get(`/comunidade/${comunidade}/usuario?nome=${nome}`, {
 		headers: {
 			'x-access-token': userToken,
 		},
