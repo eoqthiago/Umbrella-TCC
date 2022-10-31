@@ -1,70 +1,57 @@
-.modal 
-
-    width: 100%
+.comp-modal
+    position: fixed
+    top: 50
+    left: 50
+    z-index: 5
+    width: 100vw
     height: 100vh
-    position: absolute
-    top: 0
-    left: 0
-    z-index: 10
-    background-color: rgba(0,0 ,0 ,80 )
     display: flex
-    justify-content: center
     align-items: center
-    
-    .container 
-        color: #000
-        background-color: #fff
-        width: 60%
-        height: 60%
-        border-radius: 20px
-    
-    
-    .close 
-    
-        background-color: transparent
-        border: none
-        outline: none
-        width: 32px
-        height: 32px
-        right: calc( -100% + 30px  )
-        top: 16px
-        cursor: pointer
+    justify-content: center
+    visibility: hidden
+    background: #00000040
+    user-select: none
+
+    > main
+        background: #fff
+        width: 70vw
+        max-width: 600px
+        min-width: 200px
         position: relative
+        padding: 3em clamp(1.4em,5vw, 3em)
+        z-index: 4
         display: flex
-        align-items: center
-        &:before,
-        &:after
+        flex-flow: column wrap
+        box-shadow: 0 0 12px #0000002c
 
-            content: ''
+        > h1, h2
+            text-align: center
+
+        > .comp-modal-exit
             position: absolute
-            width: 3px
-            height: 10px
-            background-color: #000
-        &:before
-            transform: rotate(45deg)
-        &:after
-            transform: rotate(-45deg)
-    .items
-        display: flex
-        flex-direction: column
-        align-items: center
-        justify-content: center
+            top: 10px
+            left: 10px
+            width: 30px
+            height: 30px
+            background: url(../../../../public/assets/icons/x.svg) no-repeat center
+            background-size: 20px
+            border: none
+            cursor: pointer
 
-    .botoes-item
-        margin-top: 2em
-        display: flex
-        flex-direction: column
-        .botao1-item
-            margin-bottom: 1em
-        
-        
+        > section
+            margin-top: 2em
+            display: flex
+            flex-flow: row nowrap
+            justify-content: center
+            gap: 20px
+            width: 100%
 
-            
-        
-    
+        > .comp-modal-botoes
+            width: 100%
+            display: flex
+            flex-direction: row
+            justify-content: flex-end
+            gap: 20px
 
-    
-
-
-    
-
+.comp-modal-ativo
+    visibility: visible !important

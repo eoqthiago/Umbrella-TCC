@@ -155,11 +155,12 @@ export async function userAlterarEmail(email) {
 }
 
 export async function userDelete() {
+	if (!userToken) return;
 	const r = await api.delete('/usuario', {
 		headers: {
 			'x-access-token': userToken,
 		},
 	});
 
-	return r.data;
+	return r.status;
 }

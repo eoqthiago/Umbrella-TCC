@@ -1,4 +1,4 @@
-import con from "./connection.js";
+import con from './connection.js';
 
 export async function userCadastro(user) {
 	const command = `
@@ -40,10 +40,16 @@ export async function userImg(image, id) {
 	return answer.affectedRows;
 }
 
-export async function userDelete(email) {
+export async function userDelete(id) {
 	const command = `
-        delete from tb_usuario where ds_email = ? `;
-	const [answer] = await con.query(command, [email]);
+		delete from tb_comunidade_canal 
+		where id_comunidade in 
+			(select id_comunidade from tb_comunidade where id_criador = ?);
+
+		delete from tb_comunidade where id_criador = ?;
+
+        delete from tb_usuario where id_usuario = ? `;
+	const [answer] = await con.query(command, [id, id, id]);
 	return answer.affectedRows;
 }
 

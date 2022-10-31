@@ -188,7 +188,7 @@ server.delete('/usuario', async (req, res) => {
 			return;
 		}
 
-		const answer = await userDelete(decoded.email);
+		const answer = await userDelete(decoded.id);
 		if (answer < 1) throw new Error('Um erro ocorreu');
 		res.status(204).send();
 	} catch (err) {
