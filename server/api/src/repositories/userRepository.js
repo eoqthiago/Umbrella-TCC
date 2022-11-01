@@ -6,7 +6,7 @@ export async function userCadastro(user) {
         values (?, ?, ?, ?) `;
 	const [answer] = await con.query(command, [user.nome, user.email, user.senha, user.nascimento]);
 	return answer.affectedRows;
-}
+};
 
 export async function userLogin(user) {
 	const command = `
@@ -17,7 +17,7 @@ export async function userLogin(user) {
         where  ds_email = ? and ds_senha = ? `;
 	const [answer] = await con.query(command, [user.email, user.senha]);
 	return answer[0];
-}
+};
 
 export async function userEdit(user) {
 	const command = `
@@ -29,7 +29,7 @@ export async function userEdit(user) {
       where id_usuario = ? `;
 	const [answer] = await con.query(command, [user.nome, user.descricao, user.imagem, user.banner, user.id]);
 	return answer.affectedRows;
-}
+};
 
 export async function userImg(image, id) {
 	const command = `
@@ -38,14 +38,14 @@ export async function userImg(image, id) {
 	where id_usuario = ? `;
 	const [answer] = await con.query(command, [image, id]);
 	return answer.affectedRows;
-}
+};
 
 export async function userDelete(email) {
 	const command = `
         delete from tb_usuario where ds_email = ? `;
 	const [answer] = await con.query(command, [email]);
 	return answer.affectedRows;
-}
+};
 
 export async function userEmailSearch(email) {
 	const command = `
@@ -54,7 +54,7 @@ export async function userEmailSearch(email) {
 		   where ds_email = ? `;
 	const [answer] = await con.query(command, [email]);
 	return answer[0];
-}
+};
 
 // esqueci senha
 export async function userForgotPassword(code) {
@@ -66,7 +66,7 @@ export async function userForgotPassword(code) {
 	where num_code = ? `;
 	const [answer] = await con.query(command, [code]);
 	return answer;
-}
+};
 
 export async function userIdSearch(id) {
 	const command = `
@@ -80,7 +80,7 @@ export async function userIdSearch(id) {
 		  where id_usuario = ? `;
 	const [answer] = await con.query(command, [id]);
 	return answer[0];
-}
+};
 
 export async function userNameSearch(nome) {
 	const command = `
@@ -94,7 +94,7 @@ export async function userNameSearch(nome) {
 		  where nm_usuario like '%${nome}%' `;
 	const [answer] = await con.query(command);
 	return answer;
-}
+};
 
 export async function amigosConsulta(id) {
 	const command = `
@@ -115,7 +115,7 @@ export async function amigosConsulta(id) {
 	)`;
 	const [answer] = await con.query(command, [id, id]);
 	return answer;
-}
+};
 
 export async function userComunidadesConsulta(id) {
 	const command = `
@@ -132,7 +132,7 @@ export async function userComunidadesConsulta(id) {
 	where id_usuario = ? `;
 	const [answer] = await con.query(command, [id]);
 	return answer;
-}
+};
 
 export async function solicitarAmizade(solicitante, solicitado) {
 	const command = `
@@ -140,7 +140,7 @@ export async function solicitarAmizade(solicitante, solicitado) {
 			        values (?, ?) `;
 	const [answer] = await con.query(command, [solicitante, solicitado]);
 	return answer.affectedRows;
-}
+};
 
 export async function aceitarAmizade(idAmizade, idSolicitado) {
 	const command = `
@@ -149,14 +149,14 @@ export async function aceitarAmizade(idAmizade, idSolicitado) {
 		where id_usuario_amizade = ? and id_solicitado = ?`;
 	const [answer] = await con.query(command, [idAmizade, idSolicitado]);
 	return answer.affectedRows;
-}
+};
 
 export async function removerAmizade(idAmizade) {
 	const command = `
         delete from tb_usuario_amizade where id_usuario_amizade = ?`;
 	const [answer] = await con.query(command, [idAmizade]);
 	return answer.affectedRows;
-}
+};
 
 export async function userDenuncia(idUsuario, email, idReportado, motivo) {
 	const command = `
@@ -164,7 +164,7 @@ export async function userDenuncia(idUsuario, email, idReportado, motivo) {
 							     values (?, ?, ?, ?) `;
 	const [answer] = await con.query(command, [idUsuario, email, idReportado, motivo]);
 	return answer.affectedRows;
-}
+};
 
 export async function consultarIdAmizade(idUsuario, idUsuarioB) {
 	const command = `
@@ -173,7 +173,7 @@ export async function consultarIdAmizade(idUsuario, idUsuarioB) {
 		where (id_solicitante = ? and id_solicitado = ?) or (id_solicitado = ? and id_solicitante = ?) `;
 	const [answer] = await con.query(command, [idUsuario, idUsuarioB, idUsuario, idUsuarioB]);
 	return answer[0].id_usuario_amizade;
-}
+};
 
 export async function pedidosAmizadeConsulta(id) {
 	const command = `
@@ -199,7 +199,7 @@ export async function pedidosAmizadeConsulta(id) {
 		solicitados: [...answer[1]],
 	};
 	return answer;
-}
+};
 
 export async function verificarPedidoFeito(solicitante, solicitado) {
 	const command = `
@@ -209,7 +209,7 @@ export async function verificarPedidoFeito(solicitante, solicitado) {
 	`;
 	const [answer] = await con.query(command, [solicitante, solicitado, solicitado, solicitante]);
 	return answer[0];
-}
+};
 
 export async function verificarAmizade(solicitante, solicitado) {
 	const command = `
@@ -219,7 +219,7 @@ export async function verificarAmizade(solicitante, solicitado) {
 	`;
 	const [answer] = await con.query(command, [solicitante, solicitado, solicitado, solicitante]);
 	return answer[0];
-}
+};
 
 export async function userIDandEmailSearch(email) {
 	const command = `
@@ -229,7 +229,7 @@ export async function userIDandEmailSearch(email) {
 		   where ds_email = ? `;
 	const [answer] = await con.query(command, [email]);
 	return answer[0];
-}
+};
 
 export async function userAlterarPassword(senha, userId) {
 	const command = `
@@ -239,7 +239,7 @@ export async function userAlterarPassword(senha, userId) {
 	`;
 	const [answer] = await con.query(command, [senha, userId]);
 	return answer.affectedRows;
-}
+};
 
 export async function userEditEmail(email, id) {
 	const command = `
@@ -248,4 +248,66 @@ export async function userEditEmail(email, id) {
       where id_usuario = ? `;
 	const [answer] = await con.query(command, [email, id]);
 	return answer.affectedRows;
+};
+
+export async function iniciarConversa(usuario, idAmizade) {
+	const command = `
+		INSERT INTO tb_conversa(dt_criacao)
+		VALUES(curdate());
+
+		INSERT INTO tb_usuario_conversa(id_usuario, id_conversa)
+		VALUES(?, (SELECT 	id_conversa FROM tb_conversa INNER JOIN 
+							tb_usuario_amizade ON tb_conversa.id_conversa = tb_usuario_amizade.id_usuario_amizade
+					WHERE 	id_usuario_amizade = ?));`;
+	
+	const [answer] = await con.query(command, [usuario, idAmizade]);
+	return answer.affectedRows;
+};
+
+export async function enviarMensagem(mensagem, id_conversa) {
+	const command =
+		`insert into tb_mensagem(ds_mensagem, id_usuario_conversa)
+				values(?, ?)`;
+	
+	const [answer] = await con.query(command, [mensagem, id_conversa]);
+	return r.affectedRows;
+};
+
+// Consultar conversa de um chat privado
+export async function consultarConversa(idAmizade) {
+	const command = `
+		SELECT 	id_usuario_conversa			conversa,
+				id_mensagem					idMensagem,
+				ds_mensagem					mensagem,
+				dt_mensagem					dataMensagem,
+				tb_usuario.id_usuario       idUsuario,
+				tb_usuario.img_usuario 		usuarioImagem,
+				tb_usuario.id_usuario 		idUsuario,
+				tb_usuario.nm_usuario 		usuarioNome,
+				tb_usuario.ds_usuario 		usuarioDescricao
+		FROM 	tb_mensagem
+		INNER JOIN tb_usuario_amizade ON tb_mensagem.id_usuario_conversa = tb_usuario_amizade.id_usuario_amizade
+		INNER JOIN tb_usuario ON tb_mensagem.id_usuario_conversa = tb_usuario.id_usuario
+		WHERE tb_mensagem.id_usuario_conversa = ?`;
+
+	const answer = await con.query(command, [idAmizade]);
+	const model = [];
+	answer.forEach(item =>
+		model.push({
+			usuario: {
+				nome: item.usuarioNome,
+				id: item.idUsuario,
+				imagem: item.usuarioImagem,
+				idComunidade: item.idUsuarioComunidade,
+				descricao: item.usuarioDescricao,
+			},
+			conversa: conversa,
+			mensagem: {
+				conteudo: item.mensagem,
+				data: item.dataMensagem,
+				id: item.idMensagem,
+			},
+		})
+	);
+	return model;
 }

@@ -1,25 +1,18 @@
-import React, { useEffect, useState } from "react";
-import Header from "../../../components/header";
-import Menu from "../../../components/menu";
-import InputMensagem from "../../../components/input-mensagem";
-import { useNavigate, useParams } from "react-router-dom";
-import "./index.sass";
+import React, { useEffect, useRef, useState } from 'react';
+import Header from '../../../components/header';
+import Menu from '../../../components/menu';
+import InputMensagem from '../../../components/input-mensagem';
+import { useParams, useNavigate } from 'react-router-dom';
+import localStorage from 'local-storage';
+import { toast } from 'react-toastify';
+import io from 'socket.io-client';
+import { socketUrl } from '../../../api/services';
+import MensagemComp from '../../../components/message';
+import './index.sass';
+
+const socket = io.connect(socketUrl);
 
 const Index = () => {
-    const [menu, setMenu] = useState(false);
-    const navigate = useNavigate();
-    const { id } = useParams();
-
-    return (
-        <div>
-            <div className="chat-privado">
-                <Header menu alterarMenu={setMenu} estadoMenu={menu} />
-                <Menu ativo={menu} alterar={setMenu} />
-            </div>
-
-            <InputMensagem/>
-        </div>
-    );
 };
 
 export default Index;
