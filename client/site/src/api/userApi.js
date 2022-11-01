@@ -41,6 +41,7 @@ export async function userAmigosConsulta(id) {
 	return r.data;
 }
 
+
 export async function userComunidadesConsulta(id) {
 	if (!userToken) return;
 	const r = await api.get(`/usuario/${id}/comunidades`, {
@@ -162,5 +163,37 @@ export async function userDelete() {
 		},
 	});
 
+	return r.status;
+}
+
+export async function userEdit(nome, descricao, publica, id) {
+	if (!userToken) return;
+	const r = await api.put(
+		`/usuario/${id}`,
+		{
+			nome,
+			descricao,
+			publica: publica === true,
+		},
+		{
+			headers: {
+				'x-access-token': userToken,
+			},
+		}
+	);
+	return r.status;
+}
+
+export async function userImg(id, imagem) {
+	if (!imagem || !id || !userToken) return;
+	const formd = new FormData();
+	formd.append('imagem', imagem);
+
+	const r = await api.put(`/usuario/imagem/${id}`, formd, {
+		headers: {
+			'Content-Type': 'multipart/form-data',
+			'x-access-token': userToken,
+		},
+	});
 	return r.status;
 }

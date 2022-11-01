@@ -10,6 +10,7 @@ import Amizades from "./pages/amizades";
 import CommunitiesInfo from "./pages/communities-info";
 import ChatComunidade from "./pages/chats/comunidade";
 import ComunidadeConfig from "./pages/comunidade-config";
+import UsuarioConfig from "./pages/usuario-config";
 import NotFound from "./pages/notFound";
 import LoginAdmin from "./pages/admin/login";
 import Recuperar from "./pages/recuperar-senha/page-inicial-recuperar";
@@ -36,6 +37,7 @@ export default function Index() {
 				<Route path='/comunidade/:idParam/info' exact element={<CommunitiesInfo />} />
 				<Route path='/chat/comunidade/:id' exact element={<ChatComunidade />} />
 				<Route path='/comunidade/:id/settings' exact element={<ComunidadeConfig />} />
+				<Route path='/usuario/:id/settings' exact element={<UsuarioConfig />} />
 				<Route path='/admin/login' exact element={<LoginAdmin />} />
 				<Route path="/recuperar" exact element={<Recuperar />} />
 				<Route path="/code" exact element={<RecuperarCodigo />} />
