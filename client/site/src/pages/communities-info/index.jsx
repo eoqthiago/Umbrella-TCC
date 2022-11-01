@@ -3,7 +3,7 @@ import { BuscarImg } from '../../api/services';
 import Header from '../../components/header';
 import Menu from '../../components/menu';
 import Card from '../../components/card';
-import { adicionarUsuarioComunidade, searchCommunityId } from '../../api/communityApi';
+import { adicionarUsuarioComunidade, consultarTopComunidades, searchCommunityId } from '../../api/communityApi';
 import { BotaoSolido, Titulo } from '../../styled';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -14,17 +14,18 @@ export default function Index() {
 	const [menu, setMenu] = useState(false);
 	const [comunidade, setComunidade] = useState({});
 	const [loading, setLoading] = useState(false);
+	const [recomendados, setRecomendados] = useState([]);
 	const navigate = useNavigate();
-	const { idParam } = useParams();
+	const id = Number(useParams().idParam);
 
 	async function entrarComunidade() {
 		setLoading(true);
 		try {
-			const r = await adicionarUsuarioComunidade(idParam);
+			const r = await adicionarUsuarioComunidade(id);
 			if (r !== 204) throw new Error('Não foi possível entrar na comunidade');
 			setTimeout(() => {
 				toast.success('Você entrou na comunidade', comunidade.nome, '!');
-				navigate(`/chat/comunidade/${idParam}`);
+				navigate(`/chat/comunidade/${id}`);
 			}, 3000);
 		} catch (err) {
 			if (err.response) toast.error(err.response.data.err);
@@ -34,18 +35,21 @@ export default function Index() {
 	}
 
 	useEffect(() => {
-		async function carregarPage() {
-			const r = await searchCommunityId(idParam);
+		async function carregarComunidade() {
+			const r = await searchCommunityId(id);
 			if (!r) navigate('/not-found');
-			else setComunidade(r);
+			setComunidade(r);
+			const s = await consultarTopComunidades(r.nome, id);
+			setRecomendados(s);
 		}
-		carregarPage();
-	}, [idParam, navigate]);
+		carregarComunidade();
+		// eslint-disable-next-line
+	}, []);
 
 	return (
 		<div className='community-info page'>
 			<HashLoader
-				color='#36d7b7'
+				color='#24ad6d'
 				loading={loading}
 				cssOverride={{
 					position: 'absolute',
@@ -74,7 +78,7 @@ export default function Index() {
 			<main>
 				<section className='community-info-card'>
 					<img
-						src={comunidade.imagem ? BuscarImg(comunidade.imagem) : '/assets/images/star-wars.webp'}
+						src={!comunidade.imagem || !comunidade.imagem.trim() ? '/assets/images/doodles.webp' : BuscarImg(comunidade.imagem)}
 						alt=''
 					/>
 					<div>
@@ -95,17 +99,9 @@ export default function Index() {
 					</div>
 				</section>
 				<section className='community-info-others'>
-					<Card />
-					<Card />
-					<Card />
-					<Card />
-					<Card />
-					<Card />
-					<Card />
-					<Card />
-					<Card />
-					<Card />
-					<Card />
+					{recomendados.map(item => (
+						<Card comunidade={item} />
+					))}
 				</section>
 			</main>
 		</div>

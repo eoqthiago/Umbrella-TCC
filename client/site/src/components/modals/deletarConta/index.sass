@@ -1,0 +1,57 @@
+.comp-modal
+    position: fixed
+    top: 50
+    left: 50
+    z-index: 5
+    width: 100vw
+    height: 100vh
+    display: flex
+    align-items: center
+    justify-content: center
+    visibility: hidden
+    background: #00000040
+    user-select: none
+
+    > main
+        background: #fff
+        width: 70vw
+        max-width: 600px
+        min-width: 200px
+        position: relative
+        padding: 3em clamp(1.4em,5vw, 3em)
+        z-index: 4
+        display: flex
+        flex-flow: column wrap
+        box-shadow: 0 0 12px #0000002c
+
+        > h1, h2
+            text-align: center
+
+        > .comp-modal-exit
+            position: absolute
+            top: 10px
+            left: 10px
+            width: 30px
+            height: 30px
+            background: url(../../../../public/assets/icons/x.svg) no-repeat center
+            background-size: 20px
+            border: none
+            cursor: pointer
+
+        > section
+            margin-top: 2em
+            display: flex
+            flex-flow: row nowrap
+            justify-content: center
+            gap: 20px
+            width: 100%
+
+        > .comp-modal-botoes
+            width: 100%
+            display: flex
+            flex-direction: row
+            justify-content: flex-end
+            gap: 20px
+
+.comp-modal-ativo
+    visibility: visible !important

@@ -35,13 +35,27 @@ export async function communityImage(id, imagem) {
 	return r.status;
 }
 
+export async function communityBanner(id, imagem) {
+	if (!imagem || !id || !userToken) return;
+	const formd = new FormData();
+	formd.append('imagem', imagem);
+
+	const r = await api.put(`/comunidade/banner/${id}`, formd, {
+		headers: {
+			'Content-Type': 'multipart/form-data',
+			'x-access-token': userToken,
+		},
+	});
+	return r.status;
+}
+
 export async function pesquisar(categoria, conteudo) {
 	if (!userToken || !categoria || !conteudo) return [];
 	let r;
 	switch (categoria) {
 		case 'comunidades':
 			if (conteudo[0] !== '#' || isNaN(conteudo.substring(1, conteudo.length))) {
-				r = await api.get(`/comunidade?name=${conteudo}`, {
+				r = await api.get(`/comunidade?nome=${conteudo}`, {
 					headers: {
 						'x-access-token': userToken,
 					},
@@ -203,5 +217,44 @@ export async function listarMensagens(comunidade, canal, lastId) {
 			'x-access-token': userToken,
 		},
 	});
+	return r.data;
+}
+
+export async function excluirCanal(comunidade, canal) {
+	if (!userToken || !canal || !comunidade) return;
+	const r = await api.delete(`/comunidade/${comunidade}/canal/${canal}`, {
+		headers: {
+			'x-access-token': userToken,
+		},
+	});
+	return r.status;
+}
+
+export async function criarCanal(comunidade, nome) {
+	if (!userToken || !nome || !comunidade) return;
+	const r = await api.post(
+		`/comunidade/${comunidade}/canal?nome=${nome}`,
+		{},
+		{
+			headers: {
+				'x-access-token': userToken,
+			},
+		}
+	);
+	return r.status;
+}
+
+export async function pesquisarUsuarioComunidade(comunidade, nome) {
+	if (!userToken || !nome || !comunidade) return;
+	const r = await api.get(`/comunidade/${comunidade}/usuario?nome=${nome}`, {
+		headers: {
+			'x-access-token': userToken,
+		},
+	});
+	return r.data;
+}
+
+export async function consultarTopComunidades(nome, not) {
+	const r = await api.get(`/comunidade/top?nome=${nome ?? ''}&not=${not ?? '0'}`);
 	return r.data;
 }

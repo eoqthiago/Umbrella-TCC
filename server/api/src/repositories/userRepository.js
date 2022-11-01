@@ -1,4 +1,4 @@
-import con from "./connection.js";
+import con from './connection.js';
 
 export async function userCadastro(user) {
 	const command = `
@@ -40,10 +40,16 @@ export async function userImg(image, id) {
 	return answer.affectedRows;
 };
 
-export async function userDelete(email) {
+export async function userDelete(id) {
 	const command = `
-        delete from tb_usuario where ds_email = ? `;
-	const [answer] = await con.query(command, [email]);
+		delete from tb_comunidade_canal 
+		where id_comunidade in 
+			(select id_comunidade from tb_comunidade where id_criador = ?);
+
+		delete from tb_comunidade where id_criador = ?;
+
+        delete from tb_usuario where id_usuario = ? `;
+	const [answer] = await con.query(command, [id, id, id]);
 	return answer.affectedRows;
 };
 
@@ -98,23 +104,34 @@ export async function userNameSearch(nome) {
 
 export async function amigosConsulta(id) {
 	const command = `
-	select 
-		id_usuario id,
-		nm_usuario nome,
-		ds_usuario descricao,
-		img_usuario imagem,
-		img_banner banner,
-		dt_criacao criacao
-	from tb_usuario where id_usuario in (
-		(select id_solicitante
-		from tb_usuario_amizade
-		where id_solicitado = ? and ds_situacao = 'A'),
-        (select id_solicitante
-		from tb_usuario_amizade
-		where id_solicitante = ? and ds_situacao = 'A')
-	)`;
-	const [answer] = await con.query(command, [id, id]);
-	return answer;
+		select 
+			id_usuario id,
+			nm_usuario nome,
+			ds_usuario descricao,
+			img_usuario imagem,
+			img_banner banner,
+			dt_criacao criacao
+		from tb_usuario_amizade amz
+		inner join tb_usuario usuario on amz.id_solicitante = usuario.id_usuario
+		where id_usuario <> ? `;
+
+	const commandT = `
+		select 
+			id_usuario id,
+			nm_usuario nome,
+			ds_usuario descricao,
+			img_usuario imagem,
+			img_banner banner,
+			dt_criacao criacao
+		from tb_usuario_amizade amz
+		inner join tb_usuario usuario on amz.id_solicitado = usuario.id_usuario
+		where id_usuario <> ?;
+	`;
+	const [answer] = await con.query(command, [id]);
+	const [answerT] = await con.query(commandT, [id]);
+	const model = [...answer, ...answerT];
+
+	return model;
 };
 
 export async function userComunidadesConsulta(id) {
