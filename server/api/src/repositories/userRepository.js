@@ -270,7 +270,7 @@ export async function enviarMensagem(mensagem, id_conversa) {
 				values(?, ?)`;
 	
 	const [answer] = await con.query(command, [mensagem, id_conversa]);
-	return r.affectedRows;
+	return answer.affectedRows;
 };
 
 // Consultar conversa de um chat privado
