@@ -24,6 +24,7 @@ import {
 	userIDandEmailSearch,
 	userAlterarPassword,
 	userEditEmail,
+	iniciarConversa,
 } from '../repositories/userRepository.js';
 import { emailTest, nameTest } from '../utils/expressionTest.js';
 import { verifyToken } from '../utils/authUtils.js';
@@ -316,10 +317,9 @@ server.put('/usuario/amizade', async (req, res) => {
 		if (!token) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
-		}
+		};
 
 		const decoded = verifyToken(token);
-
 		if (!decoded || !(await userIdSearch(decoded.id))) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
@@ -329,6 +329,7 @@ server.put('/usuario/amizade', async (req, res) => {
 		switch (situacao) {
 			case 'A':
 				answer = await aceitarAmizade(Number(id), decoded.id);
+				const iniciarChat = await iniciarConversa(decoded.id, Number(id));
 				break;
 			case 'N':
 				answer = await removerAmizade(Number(id));
@@ -677,6 +678,21 @@ server.get('/alterar-email', async (req, res) => {
 		const answer = email ? await userEmailSearch(email) : await userIdSearch(Number(id));
 
 		if (!answer) throw new Error('Usuário não encontrado');
+		res.send(answer);
+	} catch (err) {
+		res.status(404).send({
+			err: err.message,
+		});
+	}
+});
+
+server.post("/usuario/mensagem", async (req, res) => {
+	try {
+		const { mensagem } = req.body;
+		const header = req.header("x-access-token");
+		const auth = jwt.decode(header);
+		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
+		const enviarMsg = await enviarMensagem(mensagem, auth.id);
 		res.send(answer);
 	} catch (err) {
 		res.status(404).send({

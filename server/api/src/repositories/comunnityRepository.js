@@ -194,6 +194,7 @@ export async function communityCanalCreate(community, canal) {
 	const command = `
 		insert into tb_comunidade_canal(id_comunidade, nm_canal)
 		values (?,  ?) `;
+
 	const [r] = await con.query(command, [community.id, canal.name]);
 	return r.affectedRows;
 }
