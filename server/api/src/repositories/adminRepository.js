@@ -58,7 +58,7 @@ export async function adminDelete(email) {
 export async function searchMonthlyUsers() {
 	const command = `
 		select count(*) as usuariosMensais from tb_usuario
-             where dt_criacao like "%-10-%"`;
+             where dt_criacao like "%-11-%"`;
 	const [answer] = await con.query(command)
 	return answer;
 }
