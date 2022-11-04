@@ -31,7 +31,7 @@ function Index() {
         datasets: [
             {
                 label: 'Usuarios',
-                data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
+                data: labels.map(() => faker.datatype.number({ min: 0, max: 3000 })),
                 borderColor: '#48DC83',
                 backgroundColor: '#48DC83',
             },
@@ -74,50 +74,52 @@ function Index() {
                 <MenuAdm />
                 <div className="grafico-usuarios">
                     <div className="grafico-linha">
-                        <Line options={options} data={data} />;
+                        <Line options={options} data={data} />
                     </div>
                 </div>
-                <section className="cards-estastisticas-admin">
-                    <div className="cards-estatisticas">
-                        {usuarios.map((item) => (
-                            <div className="cards-01">
-                                <CardsEstatisticas
-                                    cards_estatisticas="card_visitas_mensais"
-                                    numeroEstatistica={item.usuariosMensais}
-                                    nomeEstatistica="Total de usuários novos (mensal)"
-                                />
-                                <CardsEstatisticas
-                                    cards_estatisticas="cards_visitas"
-                                    numeroEstatistica="72.193"
-                                    nomeEstatistica="Total de visitantes"
-                                />
-                            </div>
-                        ))}
-                        {comunidades.map((item) => (
-                            <div className="cards-02">
-                                <CardsEstatisticas
-                                    cards_estatisticas="cards_comunidades"
-                                    numeroEstatistica={item.comunidadesCriadas}
-                                    nomeEstatistica="Comunidades criadas"
-                                />
-                            </div>))}
+                <section className="items-baixo">
+                    <div className="cards-estastisticas-admin">
+                        <div className="cards-estatisticas">
+                                <div className="cards-01">
+                                {usuarios.map((item) => (
+                                    <CardsEstatisticas
+                                        cards_estatisticas="card_visitas_mensais"
+                                        numeroEstatistica={item.usuariosMensais}
+                                        nomeEstatistica="Total de usuários novos (mensal)"
+                                    />))}
+                                    <CardsEstatisticas
+                                        cards_estatisticas="cards_visitas"
+                                        numeroEstatistica="72.193"
+                                        nomeEstatistica="Total de visitantes"
+                                    />
+                                </div>
+                            
+                                <div className="cards-02">
+                                {comunidades.map((item) => (
+                                    <CardsEstatisticas
+                                        cards_estatisticas="cards_comunidades"
+                                        numeroEstatistica={item.comunidadesCriadas}
+                                        nomeEstatistica="Comunidades criadas"
+                                    />))}
+                                </div>
+                        </div>
                     </div>
-                </section>
-                <section className="admin-pizza-grafico">
-                    <div className="pizza-grafico">
-                        <div className="faixa-etaria-titulo">
-                            <p>FAIXA ETARIA DO NOSSO PUBLICO ALVO</p>
-                        </div>
-                        <div className="grafico-pizza">
-                            <Pie data={data2} />
-                        </div>
-                        <div className="informacoes-graficos">
-                            <img className="dados-graficos" src="/assets/icons/bola-verde1.svg" />
-                            <p className="informacoes">DOS 13 AOS 15 ANOS</p>
-                            <img className="dados-graficos" src="/assets/icons/bola-verde2.svg" />
-                            <p className="informacoes">DOS 16 AOS 18 ANOS</p>
-                            <img className="dados-graficos" src="/assets/icons/bola-verde3.svg" />
-                            <p className="informacoes">ACIMA DOS 18 ANOS</p>
+                    <div className="admin-pizza-grafico">
+                        <div className="pizza-grafico">
+                            <div className="faixa-etaria-titulo">
+                                <p>FAIXA ETARIA DO NOSSO PUBLICO ALVO</p>
+                            </div>
+                            <div className="grafico-pizza">
+                                <Pie data={data2} />
+                            </div>
+                            <div className="informacoes-graficos">
+                                <img className="dados-graficos" src="/assets/icons/bola-verde1.svg" />
+                                <p className="informacoes">DOS 13 AOS 15 ANOS</p>
+                                <img className="dados-graficos" src="/assets/icons/bola-verde2.svg" />
+                                <p className="informacoes">DOS 16 AOS 18 ANOS</p>
+                                <img className="dados-graficos" src="/assets/icons/bola-verde3.svg" />
+                                <p className="informacoes">ACIMA DOS 18 ANOS</p>
+                            </div>
                         </div>
                     </div>
                 </section>
