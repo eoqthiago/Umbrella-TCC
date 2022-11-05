@@ -235,10 +235,11 @@ server.get('/usuario/:id/amizades', async (req, res) => {
 		const decoded = verifyToken(token);
 		if (!decoded || !(await userIdSearch(decoded.id))) throw new Error('Falha na autenticação');
 		if (!(await userIdSearch(id))) throw new Error('Usuário não encontrado');
+		
 		const answer = await amigosConsulta(id);
 		res.send(answer);
 	} catch (err) {
-		res.status(401).send({
+		res.status(400).send({
 			err: err.message,
 		});
 	}
