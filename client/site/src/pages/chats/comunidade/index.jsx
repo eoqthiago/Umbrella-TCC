@@ -148,11 +148,11 @@ const Index = () => {
 				<section>
 					<div className='comunidade-mensagens'>
 						<div className='comunidade-mensagem-inicio'>Este é o início do canal 😃</div>
-						{mensagens.map(item => (
+						{mensagens.map((item, index) => (
 							<div className='comunidade-mensagem'>
 								<MensagemComp
 									item={item}
-									key={item.mensagem.id}
+									key={index}
 								/>
 							</div>
 						))}

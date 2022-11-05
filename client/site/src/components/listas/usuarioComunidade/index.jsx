@@ -2,20 +2,26 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import localStorage from 'local-storage';
 import { BuscarImg } from '../../../api/services';
-import { toast } from 'react-toastify';
+import ModalBanUser from '../../../components/modals/banirUser';
 import './index.sass';
 
 const Index = ({ item }) => {
 	const [excluido, setExcluido] = useState('');
+	const [banModal, setBanModal] = useState(false);
 	const navigate = useNavigate();
 
-	async function handleBanUsuario() {
-		setExcluido('hidden');
-		toast.success('Usuário banido com sucesso!');
+	function handleOpenModal() {
+		setBanModal(true);
 	}
 
 	return (
 		<div className={'comp-conf-usuario ' + excluido}>
+			<ModalBanUser
+				item={item}
+				ativo={banModal}
+				state={setBanModal}
+				setExcluido={setExcluido}
+			/>
 			<div className='comp-conf-infos'>
 				<img
 					src={item.imagem ? BuscarImg(item.imagem) : '/assets/images/user.png'}
@@ -37,7 +43,7 @@ const Index = ({ item }) => {
 					alt='Banir'
 					title='Banir'
 					className={item.idUsuario === localStorage('user').id ? 'hidden' : ''}
-					onClick={() => handleBanUsuario()}
+					onClick={() => handleOpenModal()}
 				/>
 			</div>
 		</div>

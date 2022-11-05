@@ -339,3 +339,34 @@ export async function topCommunities(nome, not) {
 	const [answer] = await con.query(command, [not]);
 	return answer;
 }
+
+// Consultar banimento de usuário
+export async function communityUserBanned(user, comunidade) {
+	const command = `
+		select 
+			id_usuario id,
+			ds_motivo motivo,
+			dt_banido dataBanimento
+		from tb_comunidade_usuario_banido
+		where id_usuario = ? and id_comunidade = ? `;
+	const [answer] = await con.query(command, [user, comunidade]);
+	return answer[0];
+}
+
+// Banir um usuário
+export async function communityUserBan(userCom, comunidade, motivo) {
+	const command = `	
+		set @usuario = (
+			select id_usuario 
+			from tb_usuario_comunidade 
+			where id_usuario_comunidade = ?
+		);
+			
+		delete from tb_usuario_comunidade 
+		where id_usuario_comunidade = ?;
+
+		insert into tb_comunidade_usuario_banido (id_comunidade, id_usuario, ds_motivo)
+										values (?, @usuario, ?) `;
+	const [answer] = await con.query(command, [userCom, userCom, comunidade, motivo]);
+	return answer.affectedRows;
+}

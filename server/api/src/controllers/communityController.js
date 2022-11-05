@@ -23,6 +23,8 @@ import {
 	inserirCanal,
 	excluirCanal,
 	topCommunities,
+	communityUserBanned,
+	communityUserBan,
 } from '../repositories/comunnityRepository.js';
 import { userIdSearch } from '../repositories/userRepository.js';
 import { verifyToken } from '../utils/authUtils.js';
@@ -46,6 +48,13 @@ server.post('/comunidade/:id/usuario', async (req, res) => {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
 		} else if (!id || !(await communityId(id))) throw new Error('Essa comunidade não existe');
+
+		const ban = await communityUserBanned(decoded.id, id);
+		if (ban) {
+			const data = new Date(ban.dataBanimento);
+			const formatado = data.getDate() + '/' + (data.getMonth() + 1) + '/' + data.getFullYear();
+			throw new Error(`Você foi banido dessa comunidade em ${formatado}. \nMotivo: ${ban.motivo}.`);
+		}
 
 		const exists = await communityUserID(decoded.id, id);
 		if (exists) throw new Error('Você já está nessa comunidade');
@@ -597,6 +606,35 @@ server.get('/comunidade/:id/usuario', async (req, res) => {
 
 		const users = await communityUsername(nome, id);
 		res.send(users);
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
+server.post('/comunidade/:comunidade/usuario/:usuario/banimento', async (req, res) => {
+	try {
+		const comunidade = Number(req.params.comunidade);
+		const usuarioCom = Number(req.params.usuario);
+		let { motivo } = req.body;
+		const token = req.header('x-access-token');
+		if (!token) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		}
+
+		const decoded = verifyToken(token);
+		if (!decoded || !(await communityId(comunidade)) || !(await userIdSearch(decoded.id)) || !(await communityUserID(decoded.id, comunidade)) || !(await communityOwner(decoded.id, comunidade))) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		} else if (!comunidade || !usuarioCom) throw new Error('Não foi possível concluir a operação');
+
+		if (!motivo || !motivo.trim()) motivo = '';
+		const answer = await communityUserBan(usuarioCom, comunidade, motivo);
+		if (answer < 1) throw new Error('Não foi possível banir o usuário');
+
+		res.status(204).send();
 	} catch (err) {
 		res.status(400).send({
 			err: err.message,
