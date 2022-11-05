@@ -54,7 +54,7 @@ create table tb_usuario_banido (
     id_usuario int,
     ds_motivo varchar(900) not null,
     dt_banido date default(curdate()),
-    foreign key (id_usuario) references tb_usuario(id_usuario)
+    foreign key (id_usuario) references tb_usuario (id_usuario)
 );
 
 -- Conversa
@@ -74,8 +74,10 @@ create table tb_usuario_conversa (
 create table tb_mensagem (
     id_mensagem int primary key auto_increment,
     id_usuario_conversa int,
+    id_usuario_mensagem int not null,
     ds_mensagem varchar(2500) not null,
     dt_mensagem datetime default(now()),
+    foreign key (id_usuario_mensagem) references tb_usuario (id_usuario),
     foreign key (id_usuario_conversa) references tb_usuario_conversa (id_usuario_conversa) on delete cascade
 );
 
