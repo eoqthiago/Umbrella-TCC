@@ -200,13 +200,13 @@ export async function userImg(id, imagem) {
 
 export async function consultarIdConversa(idUsuario) {
 	if (!idUsuario || !userToken) return;
-	const r = await api.put(`/usuario/amizade/${idUsuario}}`, {
+	const r = await api.get(`/usuario/amizade/${idUsuario}}`, {
 		headers: {
-			'Content-Type': 'multipart/form-data',
 			'x-access-token': userToken,
 		},
 	});
-	return r.status;
+	return r.data;
 };
+// enviarMensagemPrivada
 
 // /usuario/amizade/:id

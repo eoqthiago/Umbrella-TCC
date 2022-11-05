@@ -296,13 +296,13 @@ export async function procurarIdConversa(usuario, idAmigo) {
 };
 
 // Enviar mensagem para outro usúario
-export async function enviarMensagem(mensagem, id_conversa) {
+export async function enviarMensagem(usuario, id_conversa, conteudo) {
 	const command =
-		`insert into tb_mensagem(ds_mensagem, id_usuario_conversa)
-				values(?, ?)`;
+		`INSERT INTO tb_mensagem(id_usuario_conversa, id_usuario_mensagem, ds_mensagem)
+				VALUES (?, ?, ?);`;
 	
-	const [answer] = await con.query(command, [mensagem, id_conversa]);
-	return answer.affectedRows;
+	const [answer] = await con.query(command, [id_conversa, usuario, conteudo]);
+	return answer.insertId;
 };
 
 // Consultar conversa de um chat privado

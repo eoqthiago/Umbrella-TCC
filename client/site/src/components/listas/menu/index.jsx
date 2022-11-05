@@ -1,10 +1,18 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BuscarImg } from '../../../api/services';
+import { consultarIdConversa } from '../../../api/userApi';
 import './index.sass';
 
 const Index = ({ item, convMenu, tipo, setTipo, alterar }) => {
 	const navigate = useNavigate();
+
+	async function navegarConversa(id) {
+		try {
+			const answer = await consultarIdConversa(id);
+			navigate(`/chat/conversa/${answer.id_conversa}`);
+		} catch(err) {};
+	};
 
 	return (
 		<div
@@ -20,7 +28,8 @@ const Index = ({ item, convMenu, tipo, setTipo, alterar }) => {
 			}}
 			onClick={() => {
 				alterar();
-				navigate(tipo === 'comunidade' ? `/chat/comunidade/${item.id}` : `/chat/conversa/${item.id}`);
+				if (tipo === 'comunidade') navigate(`/chat/comunidade/${item.id}`)
+				else navegarConversa(item.id);
 			}}>
 			<img
 				src={item.imagem ? BuscarImg(item.imagem) : tipo === 'comunidade' ? '/assets/images/community.png' : '/assets/images/user.png'}

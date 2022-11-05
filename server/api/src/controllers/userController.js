@@ -701,13 +701,14 @@ server.get("/usuario/amizade/:id", async (req, res) => {
 	};
 });
 
-server.post("/usuario/mensagem", async (req, res) => {
+server.post("/usuario/chat/:id", async (req, res) => {
 	try {
-		const { mensagem } = req.body;
+		const { conteudo } = req.body;
+		const chat = req.params.id;
 		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
-		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Falha na autenticação");
-		const enviarMsg = await enviarMensagem(mensagem, auth.id);
+		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Não autorizado!");
+		const answer = await enviarMensagem(auth.id, chat, conteudo);
 		res.send(answer);
 	} catch (err) {
 		res.status(404).send({

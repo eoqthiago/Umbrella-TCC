@@ -3,7 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { exitCommunity } from '../../../api/communityApi';
-import { removerAmizade } from '../../../api/userApi';
+import { consultarIdConversa, removerAmizade } from '../../../api/userApi';
 import './index.sass';
 
 const Index = ({ ativo, position, selecionada, modalRef, tipo, user, comunidade, setAtivo }) => {
