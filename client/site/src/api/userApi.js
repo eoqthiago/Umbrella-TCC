@@ -77,7 +77,7 @@ export async function removerAmizade(id) {
 		},
 	});
 	return r.status;
-}
+};
 
 export async function consultarPedidosAmizade() {
 	if (!userToken) return;
@@ -196,4 +196,17 @@ export async function userImg(id, imagem) {
 		},
 	});
 	return r.status;
-}
+};
+
+export async function consultarIdConversa(idUsuario) {
+	if (!idUsuario || !userToken) return;
+	const r = await api.put(`/usuario/amizade/${idUsuario}}`, {
+		headers: {
+			'Content-Type': 'multipart/form-data',
+			'x-access-token': userToken,
+		},
+	});
+	return r.status;
+};
+
+// /usuario/amizade/:id

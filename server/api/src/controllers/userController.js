@@ -369,7 +369,7 @@ server.delete('/usuario/amizade', async (req, res) => {
 
 		if (query.type === 'user') {
 			try {
-				id = await consultarIdAmizade(id, decoded.id);
+				id = await  IdAmizade(id, decoded.id);
 			} catch (err) {
 				throw new Error('Essa amizade não existe');
 			}
@@ -687,11 +687,13 @@ server.get('/alterar-email', async (req, res) => {
 	};
 });
 
-server.get("/usuario/mensagem/:id", async (req, res) => {
+server.get("/usuario/amizade/:id", async (req, res) => {
 	try {
-		const id = req.params.id;
-		const consulta = await procurarIdConversa(id);
-		res.send(consulta);
+		const header = req.header('x-access-token');
+		const auth = jwt.decode(header);
+		const idAmigo = req.params.id;
+		const consulta = await procurarIdConversa(auth.id, idAmigo);
+		consulta == undefined ? res.status(404).send("Conversa não encontrada!") : res.status(200).send(consulta);
 	} catch (err) {
 		res.status(404).send({
 			err: err.message,

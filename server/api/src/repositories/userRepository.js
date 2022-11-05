@@ -113,8 +113,7 @@ export async function  amigosConsulta(id) {
 			dt_criacao criacao
 		from tb_usuario_amizade amz
 		inner join tb_usuario usuario on amz.id_solicitante = usuario.id_usuario
-		where id_usuario <> ? 
-		and ds_situacao = "A"`;
+		where id_usuario <> ?;`;
 
 	const commandT = `
 		select 
@@ -126,8 +125,7 @@ export async function  amigosConsulta(id) {
 			dt_criacao criacao
 		from tb_usuario_amizade amz
 		inner join tb_usuario usuario on amz.id_solicitado = usuario.id_usuario
-		where id_usuario <> ?
-		and ds_situacao = "A";
+		where id_usuario <> ?;
 	`;
 	const [answer] = await con.query(command, [id]);
 	const [answerT] = await con.query(commandT, [id]);
@@ -286,14 +284,15 @@ export async function iniciarConversa(usuario, idAmizade) {
 };
 
 
-export async function procurarIdConversa(usuario) {
+export async function procurarIdConversa(usuario, idAmigo) {
 	const command = `
 		SELECT id_conversa FROM tb_usuario_conversa
 		INNER JOIN tb_usuario_amizade ON tb_usuario_conversa.id_conversa = tb_usuario_amizade.id_usuario_amizade
-		WHERE tb_usuario_amizade.id_solicitante = ? OR id_solicitado = ?`;
+		WHERE (tb_usuario_amizade.id_solicitante = ? and id_solicitado = ?) 
+		OR (tb_usuario_amizade.id_solicitado = ? and id_solicitante = ?)`;
 	
-	const [answer] = await con.query(command, [usuario, usuario]);
-	return answer;
+	const [answer] = await con.query(command, [usuario, idAmigo, usuario, idAmigo]);
+	return answer[0];
 };
 
 // Enviar mensagem para outro usúario
