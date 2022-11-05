@@ -30,7 +30,7 @@ const Index = () => {
 	};
 
 	const send = async () => {
-		if (!conteudo || !conteudo.trim()) return;
+		if (!conteudo || !conteudo.trim()) return; 
 		try {
 			const r = await enviarMensagemCanal(conteudo, canalSelecionado, id);
 			const temp = {

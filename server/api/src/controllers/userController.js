@@ -25,6 +25,7 @@ import {
 	userAlterarPassword,
 	userEditEmail,
 	iniciarConversa,
+	procurarIdConversa,
 } from '../repositories/userRepository.js';
 import { emailTest, nameTest } from '../utils/expressionTest.js';
 import { verifyToken } from '../utils/authUtils.js';
@@ -275,7 +276,7 @@ server.get('/usuario/:id/comunidades', async (req, res) => {
 	}
 });
 
-// Pedir em amizade
+// Solicitar amizade
 server.post('/usuario/amizade', async (req, res) => {
 	try {
 		const user = req.body;
@@ -329,7 +330,7 @@ server.put('/usuario/amizade', async (req, res) => {
 		switch (situacao) {
 			case 'A':
 				answer = await aceitarAmizade(Number(id), decoded.id);
-				const iniciarChat = await iniciarConversa(decoded.id, Number(id));
+				await iniciarConversa(decoded.id, Number(id));
 				break;
 			case 'N':
 				answer = await removerAmizade(Number(id));
@@ -611,7 +612,7 @@ server.post('/usuario/recuperar', async (req, res) => {
 		res.status(400).send({
 			err: err.message,
 		});
-	}
+	};
 });
 
 server.put('/alterar-senha', async (req, res) => {
@@ -637,7 +638,7 @@ server.put('/alterar-senha', async (req, res) => {
 		res.status(400).send({
 			err: err.message,
 		});
-	}
+	};
 });
 
 // Alterar email
@@ -665,7 +666,7 @@ server.put('/email-novo', async (req, res) => {
 		res.status(400).send({
 			err: err.message,
 		});
-	}
+	};
 });
 
 // Procurar email
@@ -683,7 +684,19 @@ server.get('/alterar-email', async (req, res) => {
 		res.status(404).send({
 			err: err.message,
 		});
-	}
+	};
+});
+
+server.get("/usuario/mensagem/:id", async (req, res) => {
+	try {
+		const id = req.params.id;
+		const consulta = await procurarIdConversa(id);
+		res.send(consulta);
+	} catch (err) {
+		res.status(404).send({
+			err: err.message,
+		});
+	};
 });
 
 server.post("/usuario/mensagem", async (req, res) => {
@@ -698,7 +711,7 @@ server.post("/usuario/mensagem", async (req, res) => {
 		res.status(404).send({
 			err: err.message,
 		});
-	}
+	};
 });
 
 export default server;
