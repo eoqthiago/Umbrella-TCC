@@ -258,3 +258,20 @@ export async function consultarTopComunidades(nome, not) {
 	const r = await api.get(`/comunidade/top?nome=${nome ?? ''}&not=${not ?? '0'}`);
 	return r.data;
 }
+
+export async function banirUsuarioComunidade(comunidade, usuario, motivo) {
+	if (!userToken || !comunidade || !usuario) return;
+	const r = await api.post(
+		`/comunidade/${comunidade}/usuario/${usuario}/banimento`,
+		{
+			motivo: motivo,
+		},
+		{
+			headers: {
+				'x-access-token': userToken,
+			},
+		}
+	);
+	console.log(r);
+	return r.status;
+}

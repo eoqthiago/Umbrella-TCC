@@ -359,7 +359,7 @@ export async function communityUserBan(userCom, comunidade, motivo) {
 			select id_usuario 
 			from tb_usuario_comunidade 
 			where id_usuario_comunidade = ?
-			);
+		);
 			
 		delete from tb_usuario_comunidade 
 		where id_usuario_comunidade = ?;

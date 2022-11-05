@@ -113,6 +113,7 @@ const BotaoSolido = styled.button`
 	cursor: pointer;
 	user-select: none;
 	transition: 0.05s linear;
+	z-index: inherit;
 
 	&:active {
 		transform: scale(1.02);

@@ -613,10 +613,10 @@ server.get('/comunidade/:id/usuario', async (req, res) => {
 	}
 });
 
-server.post('/comunidade/:id/usuario/:usuario/banimento', async (req, res) => {
+server.post('/comunidade/:comunidade/usuario/:usuario/banimento', async (req, res) => {
 	try {
-		const comunidade = Number(req.params.id);
-		const usuario = Number(req.params.usuario);
+		const comunidade = Number(req.params.comunidade);
+		const usuarioCom = Number(req.params.usuario);
 		let { motivo } = req.body;
 		const token = req.header('x-access-token');
 		if (!token) {
@@ -628,10 +628,10 @@ server.post('/comunidade/:id/usuario/:usuario/banimento', async (req, res) => {
 		if (!decoded || !(await communityId(comunidade)) || !(await userIdSearch(decoded.id)) || !(await communityUserID(decoded.id, comunidade)) || !(await communityOwner(decoded.id, comunidade))) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
-		} else if (!comunidade || !usuario) throw new Error('Não foi possível concluir a operação');
+		} else if (!comunidade || !usuarioCom) throw new Error('Não foi possível concluir a operação');
 
 		if (!motivo || !motivo.trim()) motivo = '';
-		const answer = await communityUserBan(usuario, comunidade, motivo);
+		const answer = await communityUserBan(usuarioCom, comunidade, motivo);
 		if (answer < 1) throw new Error('Não foi possível banir o usuário');
 
 		res.status(204).send();
