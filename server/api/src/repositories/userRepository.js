@@ -270,17 +270,17 @@ export async function userEditEmail(email, id) {
 
 // Inserção inicial de conversa entre usuarios
 export async function iniciarConversa(usuario, idAmizade) {
+	let idConversa;
 	const command = `
 		INSERT INTO tb_conversa(dt_criacao)
 		VALUES(curdate());
-
+		set @last = last_insert_id();
 		INSERT INTO tb_usuario_conversa(id_usuario, id_conversa)
-		VALUES(?, (SELECT 	id_conversa FROM tb_conversa INNER JOIN 
-							tb_usuario_amizade ON tb_conversa.id_conversa = tb_usuario_amizade.id_usuario_amizade
-					WHERE 	id_usuario_amizade = ?));`;
+		VALUES(?, @last);`;
 
 	const [answer] = await con.query(command, [usuario, idAmizade]);
-	return answer.affectedRows;
+	idConversa = answer[0].insertId;
+	return idConversa;
 }
 
 export async function procurarIdConversa(usuario, idAmigo) {

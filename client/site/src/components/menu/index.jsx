@@ -171,7 +171,7 @@ export default function Index({ ativo, alterar }) {
 							className='comp-menu-img-user'
 							onClick={() => {
 								document.body.style.overflow = 'unset';
-								navigate(`/usuario/${user.id}`);
+								navigate(`/usuario/${user.id}/settings`);
 							}}
 						/>
 					</div>
