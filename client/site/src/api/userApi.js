@@ -198,9 +198,9 @@ export async function userImg(id, imagem) {
 	return r.status;
 };
 
-export async function consultarIdConversa(idUsuario) {
-	if (!idUsuario || !userToken) return;
-	const r = await api.get(`/usuario/amizade/${idUsuario}}`, {
+export async function consultarIdConversa(id) {
+	if (!id || !userToken) return;
+	const r = await api.get(`/usuario/amizade/${id}`, {
 		headers: {
 			'x-access-token': userToken,
 		},
