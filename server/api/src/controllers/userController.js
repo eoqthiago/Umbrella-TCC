@@ -26,6 +26,8 @@ import {
 	userEditEmail,
 	iniciarConversa,
 	procurarIdConversa,
+	enviarMensagem,
+	consultarConversa,
 } from '../repositories/userRepository.js';
 import { emailTest, nameTest } from '../utils/expressionTest.js';
 import { verifyToken } from '../utils/authUtils.js';
@@ -320,7 +322,6 @@ server.put('/usuario/amizade', async (req, res) => {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
 		};
-
 		const decoded = verifyToken(token);
 		if (!decoded || !(await userIdSearch(decoded.id))) {
 			res.status(401).send({ err: 'Falha na autenticação' });
@@ -688,13 +689,15 @@ server.get('/alterar-email', async (req, res) => {
 	};
 });
 
+// Encontrar id da conversa
 server.get("/usuario/amizade/:id", async (req, res) => {
 	try {
 		const header = req.header('x-access-token');
 		const auth = jwt.decode(header);
 		const idAmigo = req.params.id;
 		const consulta = await procurarIdConversa(auth.id, idAmigo);
-		consulta == undefined ? res.status(404).send("Conversa não encontrada!") : res.status(200).send(consulta);
+		consulta == undefined ? res.status(404).send("Conversa não encontrada!") : 
+		res.status(200).send(consulta);
 	} catch (err) {
 		res.status(404).send({
 			err: err.message,
@@ -702,15 +705,17 @@ server.get("/usuario/amizade/:id", async (req, res) => {
 	};
 });
 
+// Inserir mensagem em conversa privada
 server.post("/usuario/chat/:id", async (req, res) => {
 	try {
 		const { conteudo } = req.body;
 		const chat = req.params.id;
 		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
-		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Não autorizado!");
-		const answer = await enviarMensagem(auth.id, chat, conteudo);
-		res.send(answer);
+
+		if (!header || !auth || !(await userIdSearch(auth.id)) || !conteudo.trim()) throw new Error("Não autorizado!");
+		const answer = await enviarMensagem(auth.id, chat, conteudo.trim());
+		res.send({id: answer});
 	} catch (err) {
 		res.status(404).send({
 			err: err.message,
@@ -718,4 +723,20 @@ server.post("/usuario/chat/:id", async (req, res) => {
 	};
 });
 
+
+server.get("/usuario/chat/:id", async (req, res) => {
+	try {
+		const chat = req.params.id;
+		const header = req.header("x-access-token");
+		const auth = jwt.decode(header);
+
+		if (!header || !auth || !(await userIdSearch(auth.id)) || !conteudo.trim()) throw new Error("Não autorizado!");
+		const answer = await consultarConversa(auth.id);
+		res.send({id: answer});
+	} catch (err) {
+		res.status(404).send({
+			err: err.message,
+		});
+	};
+});
 export default server;
