@@ -23,18 +23,24 @@ export async function userEdit(user) {
 	const command = `
         update  tb_usuario
         set nm_usuario = ?,
-            ds_usuario = ?,
-            img_usuario = ?,
-            img_banner = ?
+            ds_usuario = ?
       where id_usuario = ? `;
-	const [answer] = await con.query(command, [user.nome, user.descricao, user.imagem, user.banner, user.id]);
+	const [answer] = await con.query(command, [user.nome, user.descricao,  user.id]);
 	return answer.affectedRows;
 }
 
-export async function userImg(image, id) {
+export async function userImg(id, image) {
 	const command = `
 	update tb_usuario
 	set img_usuario = ?
+	where id_usuario = ? `;
+	const [answer] = await con.query(command, [image, id]);
+	return answer.affectedRows;
+}
+export async function userBanner(id, image) {
+	const command = `
+	update tb_usuario
+	set img_banner = ?
 	where id_usuario = ? `;
 	const [answer] = await con.query(command, [image, id]);
 	return answer.affectedRows;

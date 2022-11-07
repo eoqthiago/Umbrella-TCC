@@ -11,29 +11,27 @@ import { FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material'
 
 import Amizade from '../../components/listas/amizade';
 import './index.sass';
-import { consultarPedidosAmizade, userAmigosConsulta, userConsulta, userEdit, userImg } from '../../api/userApi';
+import { consultarPedidosAmizade, userAmigosConsulta, userBanner, userConsulta, userEdit, userImg } from '../../api/userApi';
 
 export default function Index() {
 	const [menu, setMenu] = useState(false);
-	const [canais, setCanais] = useState([]);
 	const [usuarios, setUsuarios] = useState([]);
 	const [imgAtivo, setImgAtivo] = useState('');
 	const [bannerAtivo, setBannerAtivo] = useState('');
 	const [editando, setEditando] = useState(false);
 	const [nome, setNome] = useState('');
 	const [descricao, setDescricao] = useState('');
-	const [publica, setPublica] = useState(true);
 	const [imgBanner, setImgBanner] = useState('');
 	const [imgCom, setImgCom] = useState('');
 	const [pesquisaNome, setPesquisaNome] = useState('');
-	const [deleteModal, setDeleteModal] = useState(false);
+
 	const navigate = useNavigate();
 	const id = Number(useParams().id);
 
 	async function handleAlteracao() {
 		try {
-			const r = await userEdit(nome, descricao, publica, id);
-			if (r !== 204) throw new Error('Não foi possível salvar as alterações');
+			const r = await userEdit(nome, descricao,  id);
+			if (r !== 202) throw new Error('Não foi possível salvar as alterações');
 			setEditando(false);
 
 			if (typeof imgCom != 'string') {
@@ -41,7 +39,7 @@ export default function Index() {
 				if (s !== 204) throw new Error('Não foi possível salvar a imagem');
 			}
 			if (typeof imgBanner != 'string') {
-				const s = await communityBanner(id, imgBanner);
+				const s = await userBanner(id, imgBanner);
 				if (s !== 204) throw new Error('Não foi possível salvar o banner');
 			}
 
@@ -160,7 +158,7 @@ export default function Index() {
 
 					<Input
 						type='text'
-						placeholder='Nome da comunidade*'
+						placeholder='Nome de usuario'
 						width='100%'
 						style={{ display: !editando && 'none' }}
 						value={nome}
@@ -177,24 +175,7 @@ export default function Index() {
 						value={descricao}
 						onChange={e => setDescricao(e.target.value)}
 					/>
-					<FormControl sx={{ display: !editando && 'none' }}>
-						<RadioGroup
-							defaultValue={'publica'}
-							name='tipo-comunidade'
-							value={publica}
-							onChange={e => setPublica(e.target.value)}>
-							<FormControlLabel
-								value={true}
-								control={<Radio color='success' />}
-								label='Pública'
-							/>
-							<FormControlLabel
-								value={false}
-								control={<Radio color='success' />}
-								label='Privada'
-							/>
-						</RadioGroup>
-					</FormControl>
+
 
 					<div className='cont-community-info-buttons'>
 						<BotaoSolido

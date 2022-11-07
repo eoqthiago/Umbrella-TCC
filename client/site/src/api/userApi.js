@@ -166,14 +166,13 @@ export async function userDelete() {
 	return r.status;
 }
 
-export async function userEdit(nome, descricao, publica, id) {
+export async function userEdit(nome, descricao, id) {
 	if (!userToken) return;
 	const r = await api.put(
 		`/usuario/${id}`,
 		{
 			nome,
 			descricao,
-			publica: publica === true,
 		},
 		{
 			headers: {
@@ -190,6 +189,20 @@ export async function userImg(id, imagem) {
 	formd.append('imagem', imagem);
 
 	const r = await api.put(`/usuario/imagem/${id}`, formd, {
+		headers: {
+			'Content-Type': 'multipart/form-data',
+			'x-access-token': userToken,
+		},
+	});
+	return r.status;
+};
+
+export async function userBanner(id, imagem) {
+	if (!imagem || !id || !userToken) return;
+	const formd = new FormData();
+	formd.append('imagem', imagem);
+
+	const r = await api.put(`/usuario/banner/${id}`, formd, {
 		headers: {
 			'Content-Type': 'multipart/form-data',
 			'x-access-token': userToken,
