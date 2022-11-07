@@ -6,7 +6,6 @@ import { Server } from 'socket.io';
 import userController from './controllers/userController.js';
 import adminController from './controllers/adminController.js';
 import communityController from './controllers/communityController.js';
-import { salvarMensagemComunidade } from './repositories/comunnityRepository.js';
 
 const app = express();
 const server = http.createServer(app);
@@ -14,9 +13,14 @@ const port = process.env.PORT ?? 5050;
 const socketPort = process.env.SOCKET ?? 5051;
 const origin = process.env.ORIGIN ?? 'http://localhost:3000';
 
+const split = string => {
+	string = string.split(/\,/);
+	return string;
+};
+
 const io = new Server(server, {
 	cors: {
-		origin: origin,
+		origin: split(origin),
 		methods: ['GET', 'POST'],
 	},
 });
