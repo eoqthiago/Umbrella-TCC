@@ -166,7 +166,7 @@ export default function Index() {
 					/>
 					<InputArea
 						type='text'
-						placeholder='Descrição da comunidade'
+						placeholder='Descrição'
 						width='100%'
 						resize='none'
 						height='120px'
