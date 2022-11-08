@@ -11,16 +11,10 @@ const app = express();
 const server = http.createServer(app);
 const port = process.env.PORT ?? 5050;
 const socketPort = process.env.SOCKET ?? 5051;
-const origin = process.env.ORIGIN ?? 'http://localhost:3000';
-
-const split = string => {
-	string = string.split(/\,/);
-	return string;
-};
 
 const io = new Server(server, {
 	cors: {
-		origin: split(origin),
+		origin: '*',
 		methods: ['GET', 'POST'],
 	},
 });
