@@ -3,7 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import localStorage from 'local-storage';
 import { toast } from 'react-toastify';
 import { useJwt } from 'react-jwt';
-import { userAmigosConsulta, userComunidadesConsulta, userConsulta } from '../../api/userApi';
+import {
+	userAmigosConsulta,
+	userComunidadesConsulta,
+	userConsulta,
+} from '../../api/userApi';
 import { BuscarImg } from '../../api/services';
 import CadastrarComunidade from '../modals/cadastrarComunidade';
 import MenuListaModal from '../modals/menu';
@@ -13,7 +17,9 @@ import ComunidadeDenuncia from '../modals/denunciarComunidade';
 import './index.sass';
 
 export default function Index({ ativo, alterar }) {
-	const { isExpired } = useJwt(localStorage('user') ? localStorage('user').token : null);
+	const { isExpired } = useJwt(
+		localStorage('user') ? localStorage('user').token : null
+	);
 	const navigate = useNavigate();
 	const [user, setUser] = useState({});
 	const [comunidadeModal, setComunidadeModal] = useState(false);
@@ -118,7 +124,10 @@ export default function Index({ ativo, alterar }) {
 				selecionada={coSelec}
 				tipo={modalTipo}
 				user={{ userDenuncia: denunciaUser, setUserDenuncia: setDenunciaUser }}
-				comunidade={{ comDenuncia: denunciaComunidade, setComDenuncia: setDenunciaComunidade }}
+				comunidade={{
+					comDenuncia: denunciaComunidade,
+					setComDenuncia: setDenunciaComunidade,
+				}}
 			/>
 
 			<main className={(ativo && 'comp-menu-ativo') + ' comp-menu'}>
@@ -134,12 +143,6 @@ export default function Index({ ativo, alterar }) {
 							}}
 						/>
 						<img
-							src='/assets/icons/create.svg'
-							alt='Criar comunidade'
-							title='Criar comunidade'
-							onClick={() => setComunidadeModal(!comunidadeModal)}
-						/>
-						<img
 							src='/assets/icons/friend.svg'
 							alt='Amizades'
 							title='Amizades'
@@ -147,6 +150,12 @@ export default function Index({ ativo, alterar }) {
 								document.body.style.overflow = 'unset';
 								navigate('/amizades');
 							}}
+						/>
+						<img
+							src='/assets/icons/create.svg'
+							alt='Criar comunidade'
+							title='Criar comunidade'
+							onClick={() => setComunidadeModal(!comunidadeModal)}
 						/>
 						<img
 							src='/assets/icons/config.svg'
@@ -165,7 +174,11 @@ export default function Index({ ativo, alterar }) {
 						/>
 						<hr />
 						<img
-							src={user.imagem ? BuscarImg(user.imagem) : '/assets/images/user.png'}
+							src={
+								user.imagem
+									? BuscarImg(user.imagem)
+									: '/assets/images/user.png'
+							}
 							alt='Usuário'
 							title={user.nome ?? 'Usuário'}
 							className='comp-menu-img-user'
@@ -189,7 +202,14 @@ export default function Index({ ativo, alterar }) {
 								tipo='comunidade'
 								setTipo={setModalTipo}
 								item={item}
-								convMenu={{ ativo: convModal, open: openModal, pos: pos, setPos: setPos, selecionada: coSelec, setSelecionada: setCoSelec }}
+								convMenu={{
+									ativo: convModal,
+									open: openModal,
+									pos: pos,
+									setPos: setPos,
+									selecionada: coSelec,
+									setSelecionada: setCoSelec,
+								}}
 								key={item.id}
 								selecionado={coSelec}
 								alterar={alterar}
@@ -204,7 +224,14 @@ export default function Index({ ativo, alterar }) {
 								tipo='usuario'
 								setTipo={setModalTipo}
 								item={item}
-								convMenu={{ ativo: convModal, open: openModal, pos: pos, setPos: setPos, selecionada: coSelec, setSelecionada: setCoSelec }}
+								convMenu={{
+									ativo: convModal,
+									open: openModal,
+									pos: pos,
+									setPos: setPos,
+									selecionada: coSelec,
+									setSelecionada: setCoSelec,
+								}}
 								key={item.id}
 								alterar={alterar}
 							/>

@@ -27,6 +27,7 @@ const Index = () => {
 	const [menu, setMenu] = useState(false);
 	const [conteudo, setConteudo] = useState('');
 	const [user, setUser] = useState({});
+	const [canaisMenu, setCanaisMenu] = useState(true);
 	const comunidade = Number(useParams().id);
 	const navigate = useNavigate();
 	const endMessage = useRef();
@@ -147,8 +148,16 @@ const Index = () => {
 			/>
 
 			<main>
-				<aside>
-					<div>Canais</div>
+				<aside
+					className={
+						canaisMenu ? 'comunidade-canais-ativo ' : 'comunidade-canais'
+					}>
+					<div onClick={() => setCanaisMenu(!canaisMenu)}>Canais</div>
+					<img
+						src='/assets/icons/expandArrow.svg'
+						alt='Expandir'
+						title='Expandir'
+					/>
 					<div className='comunidade-listagem-lateral'>
 						{canais.map((item, index) => (
 							<ListaLateral
