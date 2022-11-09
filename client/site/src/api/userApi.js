@@ -41,7 +41,6 @@ export async function userAmigosConsulta(id) {
 	return r.data;
 }
 
-
 export async function userComunidadesConsulta(id) {
 	if (!userToken) return;
 	const r = await api.get(`/usuario/${id}/comunidades`, {
@@ -77,7 +76,7 @@ export async function removerAmizade(id) {
 		},
 	});
 	return r.status;
-};
+}
 
 export async function consultarPedidosAmizade() {
 	if (!userToken) return;
@@ -117,7 +116,7 @@ export async function pedirAmizade(idSolicitado) {
 		}
 	);
 	return r.status;
-};
+}
 
 export async function userEmailSearch(email) {
 	const r = await api.post(`/usuario/recuperar?email=${email}`, {
@@ -125,7 +124,7 @@ export async function userEmailSearch(email) {
 	});
 
 	return r.data;
-};
+}
 
 export async function userAlterarPassword(senha) {
 	const r = await api.put(
@@ -139,7 +138,7 @@ export async function userAlterarPassword(senha) {
 	);
 
 	return r.data;
-};
+}
 
 export async function userAlterarEmail(email) {
 	const r = await api.put(
@@ -153,7 +152,7 @@ export async function userAlterarEmail(email) {
 	);
 
 	return r.data;
-};
+}
 
 export async function userDelete() {
 	if (!userToken) return;
@@ -164,7 +163,7 @@ export async function userDelete() {
 	});
 
 	return r.status;
-};
+}
 
 export async function userEdit(nome, descricao, id) {
 	if (!userToken) return;
@@ -181,7 +180,7 @@ export async function userEdit(nome, descricao, id) {
 		}
 	);
 	return r.status;
-};
+}
 
 export async function userImg(id, imagem) {
 	if (!imagem || !id || !userToken) return;
@@ -195,7 +194,7 @@ export async function userImg(id, imagem) {
 		},
 	});
 	return r.status;
-};
+}
 
 export async function userBanner(id, imagem) {
 	if (!imagem || !id || !userToken) return;
@@ -209,7 +208,7 @@ export async function userBanner(id, imagem) {
 		},
 	});
 	return r.status;
-};
+}
 
 // Consultar id conversa
 export async function consultarIdConversa(id) {
@@ -220,22 +219,24 @@ export async function consultarIdConversa(id) {
 		},
 	});
 	return r.data;
-};
+}
 
 // Enviar mensagem em chat privado
 export async function enviarMensagemPrivada(conversa, conteudo) {
 	if (!conversa || !userToken || !conteudo) return;
-	const r = await api.post(`/usuario/chat/${conversa}`,
-	{
-		conteudo,
-	},
-	{
-		headers: {
-			'x-access-token': userToken,
+	const r = await api.post(
+		`/usuario/chat/${conversa}`,
+		{
+			conteudo,
 		},
-	});
+		{
+			headers: {
+				'x-access-token': userToken,
+			},
+		}
+	);
 	return r.data.id;
-};
+}
 
 // Consultar mensagem de chat privado
 export async function consultarMensagens(conversa) {
@@ -245,5 +246,5 @@ export async function consultarMensagens(conversa) {
 			'x-access-token': userToken,
 		},
 	});
-	return r.data;
-};
+	return r;
+}

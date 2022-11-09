@@ -1,0 +1,6 @@
+This favicon was generated using the following font:
+
+- Font Title: Amiko
+- Font Author: Copyright (c) 2014, Impallari Type (www.impallari.com).
+- Font Source: http://fonts.gstatic.com/s/amiko/v12/WwkdxPq1DFK04uJ9XXrEGoQAUco5.ttf
+- Font License: SIL Open Font License, 1.1 (http://scripts.sil.org/OFL))

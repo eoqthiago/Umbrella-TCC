@@ -7,13 +7,12 @@ import { BuscarImg } from '../../api/services';
 const Index = ({ item }) => {
 	const navigate = useNavigate();
 	const data = new Date(item.mensagem.data);
-	console.log(item);
 
 	return (
 		<div className='comp-message'>
 			<img
 				src={
-					item.usuario.imagem !== undefined
+					item.usuario.imagem !== null && item.usuario.imagem !== undefined
 						? BuscarImg(item.usuario.imagem)
 						: '/assets/images/user.png'
 				}

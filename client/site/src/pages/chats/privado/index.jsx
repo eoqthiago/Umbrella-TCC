@@ -32,6 +32,7 @@ export default function Index() {
 
 	async function send() {
 		if (!conteudo || !conteudo.trim()) return;
+		console.log(user);
 		try {
 			const answer = await enviarMensagemPrivada(conversa, conteudo);
 			const info = {
@@ -41,7 +42,7 @@ export default function Index() {
 					imagem: user.imagem,
 					idComunidade: user.idComunidade,
 				},
-				id: conversa,
+				conversa,
 				mensagem: {
 					conteudo,
 					data: new Date().toISOString(),
@@ -58,17 +59,15 @@ export default function Index() {
 	useEffect(() => {
 		async function consultarDados() {
 			try {
-				const r = await consultarIdConversa(conversa);
-				if (!r) throw new Error('Conversa não encontrada');
-				const userInfo = await userConsulta(Number(localStorage('user').id));
-				if (!userInfo) throw new Error('Não autorizado');
-				setUser(userInfo);
-				if (!user) throw new Error('Não autorizado');
+				const r = await userConsulta(Number(localStorage('user').id));
+				if (!r) throw new Error('Não autorizado');
+				setUser(r);
+				const s = await consultarIdConversa(conversa);
 			} catch (err) {
-				if (err.response) toast.error(err.response.ata.err);
-				else toast.error(err.message);
-				if (localStorage('user')) navigate('/home');
-				else navigate('/');
+				// if (err.response) toast.error(err.response.data.err);
+				// else toast.error(err.message);
+				// if (localStorage('user')) navigate('/home');
+				// else navigate('/');
 			}
 		}
 		consultarDados();
@@ -80,11 +79,15 @@ export default function Index() {
 				if (!conversa) throw new Error('Conversa não encontrada');
 				socket.emit('conversa-join', {
 					usuario: { nome: user.nome, id: user.id },
-					conversa: conversa,
+					conversa,
 				});
 				const r = await consultarMensagens(conversa);
-				setMensagens(r);
-			} catch (err) {}
+				if (r.status !== 200) throw new Error();
+				setMensagens(r.data);
+			} catch (err) {
+				if (err.response) toast.warn(err.response.data.err);
+				else toast.warn(err.message);
+			}
 		}
 		join();
 	}, [conversa, user]);

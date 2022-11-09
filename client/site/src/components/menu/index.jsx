@@ -60,18 +60,13 @@ export default function Index({ ativo, alterar }) {
 		if (e.target.id === id) alterar(!ativo);
 	};
 
-	const image = () => {
-		if (user.imagem !== undefined) {
-			console.log('sadsad');
-			return BuscarImg(user.imagem);
-		} else return '/assets/images/user.png';
-	};
-
 	useEffect(() => {
-		if (!localStorage('user') || isExpired) {
-			localStorage.remove('user');
+		if (!localStorage('user')) {
 			toast.warn('Você precisa estar logado para acessar essa página');
 			navigate('/');
+		} else if (isExpired) {
+			localStorage.remove('user');
+			toast.warn('Você precisa fazer login novamente');
 		}
 	});
 
@@ -182,7 +177,11 @@ export default function Index({ ativo, alterar }) {
 						/>
 						<hr />
 						<img
-							src={() => image()}
+							src={
+								user.imagem !== null
+									? BuscarImg(user.imagem)
+									: '/assets/images/user.png'
+							}
 							alt='Usuário'
 							title={user ? user.nome : 'Usuário'}
 							className='comp-menu-img-user'

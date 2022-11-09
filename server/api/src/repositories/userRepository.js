@@ -4,7 +4,12 @@ export async function userCadastro(user) {
 	const command = `
         insert into tb_usuario (nm_usuario, ds_email, ds_senha, dt_nascimento)
         values (?, ?, ?, ?) `;
-	const [answer] = await con.query(command, [user.nome, user.email, user.senha, user.nascimento]);
+	const [answer] = await con.query(command, [
+		user.nome,
+		user.email,
+		user.senha,
+		user.nascimento,
+	]);
 	return answer.affectedRows;
 }
 
@@ -25,7 +30,7 @@ export async function userEdit(user) {
         set nm_usuario = ?,
             ds_usuario = ?
       where id_usuario = ? `;
-	const [answer] = await con.query(command, [user.nome, user.descricao,  user.id]);
+	const [answer] = await con.query(command, [user.nome, user.descricao, user.id]);
 	return answer.affectedRows;
 }
 
@@ -195,7 +200,12 @@ export async function consultarIdAmizade(idUsuario, idUsuarioB) {
 		select id_usuario_amizade 
 		from tb_usuario_amizade
 		where (id_solicitante = ? and id_solicitado = ?) or (id_solicitado = ? and id_solicitante = ?) `;
-	const [answer] = await con.query(command, [idUsuario, idUsuarioB, idUsuario, idUsuarioB]);
+	const [answer] = await con.query(command, [
+		idUsuario,
+		idUsuarioB,
+		idUsuario,
+		idUsuarioB,
+	]);
 	return answer[0].id_usuario_amizade;
 }
 
@@ -231,7 +241,12 @@ export async function verificarPedidoFeito(solicitante, solicitado) {
 		where (id_solicitante = ? and id_solicitado = ? and ds_situacao = 'P')
 		or (id_solicitado = ? and id_solicitante = ? and ds_situacao = 'P')
 	`;
-	const [answer] = await con.query(command, [solicitante, solicitado, solicitado, solicitante]);
+	const [answer] = await con.query(command, [
+		solicitante,
+		solicitado,
+		solicitado,
+		solicitante,
+	]);
 	return answer[0];
 }
 
@@ -241,7 +256,12 @@ export async function verificarAmizade(solicitante, solicitado) {
 		where (id_solicitante = ? and id_solicitado = ? and ds_situacao = 'A')
 		or (id_solicitado = ? and id_solicitante = ? and ds_situacao = 'A')
 	`;
-	const [answer] = await con.query(command, [solicitante, solicitado, solicitado, solicitante]);
+	const [answer] = await con.query(command, [
+		solicitante,
+		solicitado,
+		solicitado,
+		solicitante,
+	]);
 	return answer[0];
 }
 
