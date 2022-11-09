@@ -37,7 +37,7 @@ export default function Index() {
 				<Route path='/comunidade/:idParam/info' exact element={<CommunitiesInfo />} />
 				<Route path='/chat/comunidade/:id' exact element={<ChatComunidade />} />
 				<Route path='/comunidade/:id/settings' exact element={<ComunidadeConfig />} />
-				<Route path='/usuario/:id/settings' exact element={<UsuarioConfig />} />
+				<Route path='/usuario/:id' exact element={<UsuarioConfig />} />
 				<Route path='/admin/login' exact element={<LoginAdmin />} />
 				<Route path="/recuperar" exact element={<Recuperar />} />
 				<Route path="/code" exact element={<RecuperarCodigo />} />

@@ -24,11 +24,13 @@ export default function Index() {
 	const [imgBanner, setImgBanner] = useState('');
 	const [imgCom, setImgCom] = useState('');
 	const [pesquisaNome, setPesquisaNome] = useState('');
+	const [checkEdit, setCheckEdit] = useState(false)
 
 	const navigate = useNavigate();
 	const id = Number(useParams().id);
 
 	async function handleAlteracao() {
+		if (!checkEdit) return
 		try {
 			const r = await userEdit(nome, descricao,  id);
 			if (r !== 202) throw new Error('Não foi possível salvar as alterações');
@@ -53,7 +55,7 @@ export default function Index() {
 	async function carregarPage() {
 		try {
 			const r = await userConsulta(id);
-			if (id !== localStorage('user').id) throw new Error('Um erro ocorreu');
+			if (id === localStorage('user').id) setCheckEdit(true);
 			setNome(r.nome);
 			setDescricao(r.descricao);
 			setImgCom(r.imagem);
@@ -81,13 +83,26 @@ export default function Index() {
 	}
 
 	function alterarBanner() {
-		document.getElementById('config-community-banner').click();
-		setEditando(true);
+		if(checkEdit === true) {
+
+			document.getElementById('config-community-banner').click();
+			setEditando(true);
+		} else {
+
+			toast.error("Você não tem permissão")
+		}
+		
 	}
 
 	function alterarImagem() {
-		document.getElementById('config-community-imagem').click();
-		setEditando(true);
+		if(checkEdit === true) {
+
+			document.getElementById('config-community-imagem').click();
+			setEditando(true);
+		} else {
+
+			toast.error("Você não tem permissão")
+		}
 	}
 
 	useEffect(() => {
@@ -113,8 +128,8 @@ export default function Index() {
 				<section className='comunidade-conf-inicial'>
 					<div
 						className='comunidade-conf-banner'
-						onMouseEnter={() => setBannerAtivo('ativo')}
-						onMouseLeave={() => setBannerAtivo('')}>
+						onMouseEnter={() => checkEdit && setBannerAtivo('ativo')}
+						onMouseLeave={() => checkEdit && setBannerAtivo('')}>
 						<div className={'comunidade-conf-banner-button ' + bannerAtivo}>
 							<button onClick={alterarBanner}>Alterar banner</button>
 						</div>
@@ -125,8 +140,8 @@ export default function Index() {
 					</div>
 					<div
 						className='comunidade-conf-banner-img'
-						onMouseEnter={() => setImgAtivo('ativo')}
-						onMouseLeave={() => setImgAtivo('')}>
+						onMouseEnter={() => checkEdit && setImgAtivo('ativo')}
+						onMouseLeave={() => checkEdit && setImgAtivo('')}>
 						<div className={'comunidade-conf-banner-img-button ' + imgAtivo}>
 							<button onClick={alterarImagem}>Alterar imagem</button>
 						</div>
@@ -139,20 +154,20 @@ export default function Index() {
 
 				<section className='cont-community-info'>
 					<div
-						className='cont-community-edit'
-						onClick={() => setEditando(true)}
-						style={{ display: editando && 'none' }}
+						className={'cont-community-edit ' + (!checkEdit ? 'hidden' : '')}
+						onClick={() => setEditando(checkEdit && true)}
+						style={{ display: editando && 'none', cursor: !checkEdit && 'default' }}
 					/>
 
 					<h1
-						onClick={() => setEditando(true)}
-						style={{ display: editando && 'none' }}>
+						onClick={() => setEditando(checkEdit && true)}
+						style={{ display: editando && 'none', cursor: !checkEdit && 'default' }}>
 						{nome + ` #${id}` ?? 'Comunidade'}
 					</h1>
 
 					<p
-						onClick={() => setEditando(true)}
-						style={{ display: editando && 'none' }}>
+						onClick={() => setEditando(checkEdit && true)}
+						style={{ display: editando && 'none', cursor: !checkEdit && 'default' }}>
 						{descricao ?? 'Descrição'}
 					</p>
 
@@ -204,26 +219,6 @@ export default function Index() {
 					</Titulo>
 
 					<main className='comunidade-conf-usuarios-list'>
-						<div className='comunidade-conf-usuarios-pesquisar'>
-							<Input
-								type='text'
-								placeholder='Pesquisar por nome'
-								width='100%'
-								style={{
-									margin: 0,
-								}}
-								value={pesquisaNome}
-								onChange={e => setPesquisaNome(e.target.value)}
-								maxLength='50'
-								onKeyDown={e => e.key === 'Enter' && handlePesquisar()}
-							/>
-							<img
-								src='/assets/icons/search.svg'
-								alt='Pesquisar'
-								title='Pesquisar'
-								onClick={() => handlePesquisar()}
-							/>
-						</div>
 						<div className='comunidade-conf-usuarios-items'>
 							{usuarios.map((item, index) => (
 								<Amizade
