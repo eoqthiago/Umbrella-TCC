@@ -260,23 +260,6 @@
                 border-radius: 10px
                 padding: 25px 15px
 
-                > .comunidade-conf-usuarios-pesquisar
-                    display: flex
-                    flex-flow: row nowrap
-                    align-items: center
-                    justify-content: space-between
-                    width: 100%
-                    margin-bottom: 20px
-                    gap: 10px
-
-                    > input
-                        max-width: 97%
-
-                    > img
-                        width: 25px
-                        height: 25px
-                        cursor: pointer
-
                 > .comunidade-conf-usuarios-items
                     overflow-y: auto
                     max-height: 200px
@@ -296,6 +279,9 @@
 
                     &::-webkit-scrollbar-thumb:hover
                         background: #919191
+                    
+                    > li
+                        max-width: 320px
 
         > .comunidade-conf-excluir
             width: 75vw

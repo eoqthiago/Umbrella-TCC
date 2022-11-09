@@ -3,15 +3,18 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../../components/header';
 import Menu from '../../components/menu';
 import { toast } from 'react-toastify';
-import { communityBanner, communityEdit, communityImage, consultarCanais, consultarUsuarios, criarCanal, pesquisarUsuarioComunidade, searchCommunityId } from '../../api/communityApi';
 import localStorage from 'local-storage';
 import { BotaoSolido, Input, InputArea, Titulo } from '../../styled';
 import { BuscarImg } from '../../api/services';
-import { FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
-
 import Amizade from '../../components/listas/amizade';
+import {
+	userAmigosConsulta,
+	userBanner,
+	userConsulta,
+	userEdit,
+	userImg,
+} from '../../api/userApi';
 import './index.sass';
-import { consultarPedidosAmizade, userAmigosConsulta, userBanner, userConsulta, userEdit, userImg } from '../../api/userApi';
 
 export default function Index() {
 	const [menu, setMenu] = useState(false);
@@ -23,16 +26,15 @@ export default function Index() {
 	const [descricao, setDescricao] = useState('');
 	const [imgBanner, setImgBanner] = useState('');
 	const [imgCom, setImgCom] = useState('');
-	const [pesquisaNome, setPesquisaNome] = useState('');
-	const [checkEdit, setCheckEdit] = useState(false)
+	const [checkEdit, setCheckEdit] = useState(false);
 
 	const navigate = useNavigate();
 	const id = Number(useParams().id);
 
 	async function handleAlteracao() {
-		if (!checkEdit) return
+		if (!checkEdit) return;
 		try {
-			const r = await userEdit(nome, descricao,  id);
+			const r = await userEdit(nome, descricao, id);
 			if (r !== 202) throw new Error('Não foi possível salvar as alterações');
 			setEditando(false);
 
@@ -75,34 +77,14 @@ export default function Index() {
 		setEditando(false);
 	}
 
-
-
-	async function handlePesquisar() {
-		const r = await pesquisarUsuarioComunidade(id, pesquisaNome);
-		setUsuarios(r);
-	}
-
 	function alterarBanner() {
-		if(checkEdit === true) {
-
-			document.getElementById('config-community-banner').click();
-			setEditando(true);
-		} else {
-
-			toast.error("Você não tem permissão")
-		}
-		
+		document.getElementById('config-usuario-banner').click();
+		setEditando(true);
 	}
 
 	function alterarImagem() {
-		if(checkEdit === true) {
-
-			document.getElementById('config-community-imagem').click();
-			setEditando(true);
-		} else {
-
-			toast.error("Você não tem permissão")
-		}
+		document.getElementById('config-usuario-imagem').click();
+		setEditando(true);
 	}
 
 	useEffect(() => {
@@ -123,7 +105,6 @@ export default function Index() {
 				alterar={setMenu}
 			/>
 
-
 			<main>
 				<section className='comunidade-conf-inicial'>
 					<div
@@ -134,7 +115,11 @@ export default function Index() {
 							<button onClick={alterarBanner}>Alterar banner</button>
 						</div>
 						<img
-							src={imgBanner ? BuscarImg(imgBanner) : '/assets/images/doodles.webp'}
+							src={
+								imgBanner
+									? BuscarImg(imgBanner)
+									: '/assets/images/doodles.webp'
+							}
 							alt='Imagem Banner'
 						/>
 					</div>
@@ -146,7 +131,11 @@ export default function Index() {
 							<button onClick={alterarImagem}>Alterar imagem</button>
 						</div>
 						<img
-							src={imgCom ? BuscarImg(imgCom) : '/assets/images/community.png'}
+							src={
+								imgCom
+									? BuscarImg(imgCom)
+									: '/assets/images/community.png'
+							}
 							alt='Imagem Comunidade'
 						/>
 					</div>
@@ -156,18 +145,27 @@ export default function Index() {
 					<div
 						className={'cont-community-edit ' + (!checkEdit ? 'hidden' : '')}
 						onClick={() => setEditando(checkEdit && true)}
-						style={{ display: editando && 'none', cursor: !checkEdit && 'default' }}
+						style={{
+							display: editando && 'none',
+							cursor: !checkEdit && 'default',
+						}}
 					/>
 
 					<h1
 						onClick={() => setEditando(checkEdit && true)}
-						style={{ display: editando && 'none', cursor: !checkEdit && 'default' }}>
+						style={{
+							display: editando && 'none',
+							cursor: !checkEdit && 'default',
+						}}>
 						{nome + ` #${id}` ?? 'Comunidade'}
 					</h1>
 
 					<p
 						onClick={() => setEditando(checkEdit && true)}
-						style={{ display: editando && 'none', cursor: !checkEdit && 'default' }}>
+						style={{
+							display: editando && 'none',
+							cursor: !checkEdit && 'default',
+						}}>
 						{descricao ?? 'Descrição'}
 					</p>
 
@@ -191,7 +189,6 @@ export default function Index() {
 						onChange={e => setDescricao(e.target.value)}
 					/>
 
-
 					<div className='cont-community-info-buttons'>
 						<BotaoSolido
 							fonte='1vw'
@@ -210,7 +207,6 @@ export default function Index() {
 					</div>
 				</section>
 
-
 				<section className='comunidade-conf-usuarios'>
 					<Titulo
 						cor='#1f1f1f'
@@ -224,24 +220,23 @@ export default function Index() {
 								<Amizade
 									item={item}
 									key={index}
+									tipo={checkEdit ? 'amigo' : ''}
 								/>
 							))}
 						</div>
 					</main>
 				</section>
-
-
 			</main>
 
 			<input
 				type='file'
-				id='config-community-banner'
+				id='config-usuario-banner'
 				className='hidden'
 				onChange={e => setImgBanner(e.target.files[0])}
 			/>
 			<input
 				type='file'
-				id='config-community-imagem'
+				id='config-usuario-imagem'
 				className='hidden'
 				onChange={e => setImgCom(e.target.files[0])}
 			/>
