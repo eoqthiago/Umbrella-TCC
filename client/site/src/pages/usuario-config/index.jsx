@@ -91,7 +91,7 @@ export default function Index() {
 		const load = async () => await carregarPage();
 		load();
 		// eslint-disable-next-line
-	}, []);
+	}, [id]);
 
 	return (
 		<div className='comunidade-conf page'>
