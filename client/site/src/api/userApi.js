@@ -117,7 +117,7 @@ export async function pedirAmizade(idSolicitado) {
 		}
 	);
 	return r.status;
-}
+};
 
 export async function userEmailSearch(email) {
 	const r = await api.post(`/usuario/recuperar?email=${email}`, {
@@ -125,7 +125,7 @@ export async function userEmailSearch(email) {
 	});
 
 	return r.data;
-}
+};
 
 export async function userAlterarPassword(senha) {
 	const r = await api.put(
@@ -139,7 +139,7 @@ export async function userAlterarPassword(senha) {
 	);
 
 	return r.data;
-}
+};
 
 export async function userAlterarEmail(email) {
 	const r = await api.put(
@@ -153,7 +153,7 @@ export async function userAlterarEmail(email) {
 	);
 
 	return r.data;
-}
+};
 
 export async function userDelete() {
 	if (!userToken) return;
@@ -164,7 +164,7 @@ export async function userDelete() {
 	});
 
 	return r.status;
-}
+};
 
 export async function userEdit(nome, descricao, publica, id) {
 	if (!userToken) return;
@@ -182,7 +182,7 @@ export async function userEdit(nome, descricao, publica, id) {
 		}
 	);
 	return r.status;
-}
+};
 
 export async function userImg(id, imagem) {
 	if (!imagem || !id || !userToken) return;
@@ -198,6 +198,7 @@ export async function userImg(id, imagem) {
 	return r.status;
 };
 
+// Consultar id conversa
 export async function consultarIdConversa(id) {
 	if (!id || !userToken) return;
 	const r = await api.get(`/usuario/amizade/${id}`, {
@@ -207,6 +208,29 @@ export async function consultarIdConversa(id) {
 	});
 	return r.data;
 };
-// enviarMensagemPrivada
 
-// /usuario/amizade/:id
+// Enviar mensagem em chat privado
+export async function enviarMensagemPrivada(conversa, conteudo) {
+	if (!conversa || !userToken || !conteudo) return;
+	const r = await api.post(`/usuario/chat/${conversa}`,
+	{
+		conteudo,
+	},
+	{
+		headers: {
+			'x-access-token': userToken,
+		},
+	});
+	return r.data.id;
+};
+
+// Consultar mensagem de chat privado
+export async function consultarMensagens(conversa) {
+	if (!conversa || !userToken || !conversa) return;
+	const r = await api.get(`/usuario/chat/${conversa}`, {
+		headers: {
+			'x-access-token': userToken,
+		},
+	});
+	return r.data;
+};
