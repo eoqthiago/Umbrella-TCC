@@ -47,13 +47,17 @@ server.post('/comunidade/:id/usuario', async (req, res) => {
 		if (!decoded || !(await userIdSearch(decoded.id))) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
-		} else if (!id || !(await communityId(id))) throw new Error('Essa comunidade não existe');
+		} else if (!id || !(await communityId(id)))
+			throw new Error('Essa comunidade não existe');
 
 		const ban = await communityUserBanned(decoded.id, id);
 		if (ban) {
 			const data = new Date(ban.dataBanimento);
-			const formatado = data.getDate() + '/' + (data.getMonth() + 1) + '/' + data.getFullYear();
-			throw new Error(`Você foi banido dessa comunidade em ${formatado}. \nMotivo: ${ban.motivo}.`);
+			const formatado =
+				data.getDate() + '/' + (data.getMonth() + 1) + '/' + data.getFullYear();
+			throw new Error(
+				`Você foi banido dessa comunidade em ${formatado}. \nMotivo: ${ban.motivo}.`
+			);
 		}
 
 		const exists = await communityUserID(decoded.id, id);
@@ -83,8 +87,14 @@ server.post('/comunidade', async (req, res) => {
 		if (!decoded || !(await userIdSearch(decoded.id))) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
-		} else if (!community.nome || !community.nome.trim() || community.nome.length > 50) throw new Error('O nome inserido é inválido');
-		else if (community.descricao.length > 700) throw new Error('A descrição inserida é inválida');
+		} else if (
+			!community.nome ||
+			!community.nome.trim() ||
+			community.nome.length > 50
+		)
+			throw new Error('O nome inserido é inválido');
+		else if (community.descricao.length > 700)
+			throw new Error('A descrição inserida é inválida');
 
 		const answer = await communityCreate(decoded.id, community);
 		if (!answer) throw new Error('Não foi possível criar a comunidade');
@@ -128,7 +138,8 @@ server.put('/comunidade/imagem/:id', communityImg.single('imagem'), async (req, 
 			return;
 		} else if (!req.file) throw new Error('Arquivo não encontrado');
 		else if (!(await communityId(id))) throw new Error('Comunidade não encontrada');
-		else if (!(await communityOwner(decoded.id, id))) throw new Error('O usuário não possui permissão');
+		else if (!(await communityOwner(decoded.id, id)))
+			throw new Error('O usuário não possui permissão');
 
 		const img = req.file.path;
 		const answer = await communityImage(id, img);
@@ -157,7 +168,8 @@ server.put('/comunidade/banner/:id', communityImg.single('imagem'), async (req, 
 			return;
 		} else if (!req.file) throw new Error('Arquivo não encontrado');
 		else if (!(await communityId(id))) throw new Error('Comunidade não encontrada');
-		else if (!(await communityOwner(decoded.id, id))) throw new Error('O usuário não possui permissão');
+		else if (!(await communityOwner(decoded.id, id)))
+			throw new Error('O usuário não possui permissão');
 
 		const img = req.file.path;
 		const answer = await communityBanner(id, img);
@@ -183,12 +195,19 @@ server.put('/comunidade/:id', async (req, res) => {
 		}
 
 		const decoded = verifyToken(token);
-		if (!decoded || !(await userIdSearch(decoded.id)) || !(await communityOwner(decoded.id, community.id))) {
+		if (
+			!decoded ||
+			!(await userIdSearch(decoded.id)) ||
+			!(await communityOwner(decoded.id, community.id))
+		) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
-		} else if (!id || !(await communityId(id))) throw new Error('Comunidade não encontrada');
-		else if (!community.nome || !community.nome.trim()) throw new Error('O nome inserido é inválido');
-		else if (community.publica == undefined) throw new Error('Insira a visibilidade da comunidade');
+		} else if (!id || !(await communityId(id)))
+			throw new Error('Comunidade não encontrada');
+		else if (!community.nome || !community.nome.trim())
+			throw new Error('O nome inserido é inválido');
+		else if (community.publica == undefined)
+			throw new Error('Insira a visibilidade da comunidade');
 
 		community.id = id;
 		const r = await communityEdit(community, decoded.id);
@@ -263,15 +282,27 @@ server.put('/comunidade/admin/usuario', async (req, res) => {
 		}
 
 		const decoded = verifyToken(token);
-		if (!decoded || !((await userIdSearch(decoded.id)) || !(await communityOwner(decoded.id, community.id)))) {
+		if (
+			!decoded ||
+			!(
+				(await userIdSearch(decoded.id)) ||
+				!(await communityOwner(decoded.id, community.id))
+			)
+		) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
-		} else if (!(await communityId(comunidade))) throw new Error('Comunidade não encontrada');
-		else if (!id || !situacao || !comunidade || !['A', 'N'].includes(situacao)) throw new Error('Campos inválidos');
-		else if (!(await communityUserID(id, comunidade))) throw new Error('Usuário não encontrado');
+		} else if (!(await communityId(comunidade)))
+			throw new Error('Comunidade não encontrada');
+		else if (!id || !situacao || !comunidade || !['A', 'N'].includes(situacao))
+			throw new Error('Campos inválidos');
+		else if (!(await communityUserID(id, comunidade)))
+			throw new Error('Usuário não encontrado');
 
 		const answer = await communityAdmin(id, situacao[0] === 'A');
-		if (answer < 1) throw new Error('Não foi possível alterar as permissões do usuário administrador');
+		if (answer < 1)
+			throw new Error(
+				'Não foi possível alterar as permissões do usuário administrador'
+			);
 		res.status(204).send();
 	} catch (err) {
 		res.status(400).send({
@@ -295,7 +326,8 @@ server.get('/comunidade/:id/usuario/:user', async (req, res) => {
 		if (!decoded || !(await userIdSearch(decoded.id))) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
-		} else if (!comunidade || !(await communityId(comunidade))) throw new Error('Comunidade não existente');
+		} else if (!comunidade || !(await communityId(comunidade)))
+			throw new Error('Comunidade não existente');
 
 		if (isNaN(usuario)) {
 			const r = await communityUsername(usuario, comunidade);
@@ -378,10 +410,13 @@ server.post('/comunidade/:id/denuncia', async (req, res) => {
 		if (!decoded || !(await userIdSearch(decoded.id))) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
-		} else if (!id || isNaN(id) || !(await communityId(id))) throw new Error('Comunidade não encontrada');
+		} else if (!id || isNaN(id) || !(await communityId(id)))
+			throw new Error('Comunidade não encontrada');
 		else if (!emailTest(user.email)) throw new Error('o email inserido é inválido');
-		else if (user.motivo == undefined || !user.motivo.trim()) throw new Error('O motivo inserido é inválido');
-		else if (user.motivo.length > 500) throw new Error('Motivo excede a quantidade de caracteres permitida');
+		else if (user.motivo == undefined || !user.motivo.trim())
+			throw new Error('O motivo inserido é inválido');
+		else if (user.motivo.length > 500)
+			throw new Error('Motivo excede a quantidade de caracteres permitida');
 
 		const answer = await communityDenuncia(decoded.id, user.email, id, user.motivo);
 		if (answer < 1) throw new Error('Não foi possível fazer a denúncia');
@@ -408,7 +443,8 @@ server.delete('/comunidade/:comunidade/usuario/:id', async (req, res) => {
 		if (!decoded || !(await userIdSearch(decoded.id))) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
-		} else if (!id || !comunidade || !(await communityUserID(id, comunidade))) throw new Error('Você não está nessa comunidade');
+		} else if (!id || !comunidade || !(await communityUserID(id, comunidade)))
+			throw new Error('Você não está nessa comunidade');
 
 		const answer = await communityUserDelete(id, comunidade);
 		if (answer < 1) throw new Error('Não foi possível sair da comunidade');
@@ -434,7 +470,12 @@ server.delete('/comunidade/:id', async (req, res) => {
 		if (!decoded || !(await userIdSearch(decoded.id))) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
-		} else if (!(await communityUserID(decoded.id, id)) || !(await communityOwner(decoded.id, id)) || !(await communityId(id))) throw new Error('Não autorizado');
+		} else if (
+			!(await communityUserID(decoded.id, id)) ||
+			!(await communityOwner(decoded.id, id)) ||
+			!(await communityId(id))
+		)
+			throw new Error('Não autorizado');
 
 		const del = await communityDelete(id);
 		if (del < 1) throw new Error('Não foi possível excluir a comunidade');
@@ -460,7 +501,12 @@ server.get('/comunidade/:id/usuarios', async (req, res) => {
 		if (!decoded || !(await userIdSearch(decoded.id))) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
-		} else if (!(await communityUserID(decoded.id, id)) || !(await communityOwner(decoded.id, id)) || !(await communityId(id))) throw new Error('Não autorizado');
+		} else if (
+			!(await communityUserID(decoded.id, id)) ||
+			!(await communityOwner(decoded.id, id)) ||
+			!(await communityId(id))
+		)
+			throw new Error('Não autorizado');
 
 		const users = await communityUsers(id);
 		res.send(users);
@@ -484,15 +530,28 @@ server.post('/comunidade/:comunidade/canal/:canal', async (req, res) => {
 		}
 
 		const decoded = verifyToken(token);
-		if (!decoded || !(await userIdSearch(decoded.id)) || !(await communityUserID(decoded.id, comunidade))) {
+		if (
+			!decoded ||
+			!(await userIdSearch(decoded.id)) ||
+			!(await communityUserID(decoded.id, comunidade))
+		) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
-		} else if (!community.conteudo || !community.conteudo.trim() || community.conteudo.length > 2500) throw new Error();
+		} else if (
+			!community.conteudo ||
+			!community.conteudo.trim() ||
+			community.conteudo.length > 2500
+		)
+			throw new Error();
 
 		const userId = await communityUserID(decoded.id, comunidade);
 		if (!userId) throw new Error('O usuário não está na comunidade');
 
-		const answer = await salvarMensagemComunidade(userId.id, canal, community.conteudo);
+		const answer = await salvarMensagemComunidade(
+			userId.id,
+			canal,
+			community.conteudo
+		);
 		if (!answer) throw new Error();
 
 		res.send({ id: answer });
@@ -516,7 +575,11 @@ server.get('/comunidade/:comunidade/canal/:canal/mensagens/:lastId', async (req,
 		}
 
 		const decoded = verifyToken(token);
-		if (!decoded || !(await userIdSearch(decoded.id)) || !(await communityUserID(decoded.id, comunidade))) {
+		if (
+			!decoded ||
+			!(await userIdSearch(decoded.id)) ||
+			!(await communityUserID(decoded.id, comunidade))
+		) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
 		} else if (!lastId) lastId = null;
@@ -544,10 +607,17 @@ server.post('/comunidade/:id/canal', async (req, res) => {
 		}
 
 		const decoded = verifyToken(token);
-		if (!decoded || !(await communityId(comunidade)) || !(await userIdSearch(decoded.id)) || !(await communityUserID(decoded.id, comunidade)) || !(await communityOwner(decoded.id, comunidade))) {
+		if (
+			!decoded ||
+			!(await communityId(comunidade)) ||
+			!(await userIdSearch(decoded.id)) ||
+			!(await communityUserID(decoded.id, comunidade)) ||
+			!(await communityOwner(decoded.id, comunidade))
+		) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
-		} else if (!nome || !nome.trim() || nome.length > 20) throw new Error('O nome do canal inserido é inválido');
+		} else if (!nome || !nome.trim() || nome.length > 20)
+			throw new Error('O nome do canal inserido é inválido');
 
 		const answer = await inserirCanal(comunidade, nome);
 		if (answer < 1) throw new Error('Não foi possível criar o canal');
@@ -575,7 +645,12 @@ server.delete('/comunidade/:id/canal/:canal', async (req, res) => {
 		if (!decoded || !(await userIdSearch(decoded.id))) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
-		} else if (!(await communityUserID(decoded.id, id)) || !(await communityOwner(decoded.id, id)) || !(await communityId(id))) throw new Error('Não autorizado');
+		} else if (
+			!(await communityUserID(decoded.id, id)) ||
+			!(await communityOwner(decoded.id, id)) ||
+			!(await communityId(id))
+		)
+			throw new Error('Não autorizado');
 
 		const del = await excluirCanal(canal);
 		if (del < 1) throw new Error('Não foi possível excluir esse canal');
@@ -602,7 +677,12 @@ server.get('/comunidade/:id/usuario', async (req, res) => {
 		if (!decoded || !(await userIdSearch(decoded.id))) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
-		} else if (!(await communityUserID(decoded.id, id)) || !(await communityOwner(decoded.id, id)) || !(await communityId(id))) throw new Error('Não autorizado');
+		} else if (
+			!(await communityUserID(decoded.id, id)) ||
+			!(await communityOwner(decoded.id, id)) ||
+			!(await communityId(id))
+		)
+			throw new Error('Não autorizado');
 
 		const users = await communityUsername(nome, id);
 		res.send(users);
@@ -625,10 +705,17 @@ server.post('/comunidade/:comunidade/usuario/:usuario/banimento', async (req, re
 		}
 
 		const decoded = verifyToken(token);
-		if (!decoded || !(await communityId(comunidade)) || !(await userIdSearch(decoded.id)) || !(await communityUserID(decoded.id, comunidade)) || !(await communityOwner(decoded.id, comunidade))) {
+		if (
+			!decoded ||
+			!(await communityId(comunidade)) ||
+			!(await userIdSearch(decoded.id)) ||
+			!(await communityUserID(decoded.id, comunidade)) ||
+			!(await communityOwner(decoded.id, comunidade))
+		) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
-		} else if (!comunidade || !usuarioCom) throw new Error('Não foi possível concluir a operação');
+		} else if (!comunidade || !usuarioCom)
+			throw new Error('Não foi possível concluir a operação');
 
 		if (!motivo || !motivo.trim()) motivo = '';
 		const answer = await communityUserBan(usuarioCom, comunidade, motivo);

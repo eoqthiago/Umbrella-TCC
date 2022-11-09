@@ -281,8 +281,14 @@ export async function iniciarConversa(usuario, idAmizade) {
 		INSERT INTO tb_conversa(dt_criacao)
 		VALUES(curdate());
 		set @last = last_insert_id();
+
 		INSERT INTO tb_usuario_conversa(id_usuario, id_conversa)
-		VALUES(?, @last);`;
+		VALUES(?, @last);
+
+		INSERT INTO tb_usuario_conversa(id_usuario, id_conversa)
+		VALUES((SELECT id_solicitante
+				FROM tb_usuario_amizade
+				WHERE id_usuario_amizade = ?), @last);`;
 
 	const [answer] = await con.query(command, [usuario, idAmizade]);
 	idConversa = answer[0].insertId;
@@ -302,46 +308,47 @@ export async function procurarIdConversa(usuario, idAmigo) {
 
 // Enviar mensagem para outro usúario
 export async function enviarMensagem(usuario, id_conversa, conteudo) {
-	const command = `INSERT INTO tb_mensagem(id_usuario_conversa, id_usuario_mensagem, ds_mensagem)
-				VALUES (?, ?, ?);`;
+	const command = `
+		INSERT 	INTO tb_mensagem(id_usuario_conversa, ds_mensagem)
+				VALUES((SELECT id_usuario_conversa
+							FROM tb_usuario_conversa
+							WHERE id_usuario = ? 
+							AND id_conversa = ?), ?);`;
 
-	const [answer] = await con.query(command, [id_conversa, usuario, conteudo]);
+	const [answer] = await con.query(command, [usuario, id_conversa, conteudo]);
 	return answer.insertId;
 }
 
 // Consultar conversa de um chat privado
-export async function consultarConversa(idAmizade) {
+export async function consultarConversa(conversa) {
 	const command = `
-		SELECT 	id_usuario_conversa			conversa,
-				id_mensagem					idMensagem,
-				ds_mensagem					mensagem,
-				dt_mensagem					dataMensagem,
-				tb_usuario.id_usuario       idUsuario,
-				tb_usuario.img_usuario 		usuarioImagem,
-				tb_usuario.id_usuario 		idUsuario,
-				tb_usuario.nm_usuario 		usuarioNome,
-				tb_usuario.ds_usuario 		usuarioDescricao
-		FROM 	tb_mensagem
-		INNER JOIN tb_usuario_amizade ON tb_mensagem.id_usuario_conversa = tb_usuario_amizade.id_usuario_amizade
-		INNER JOIN tb_usuario ON tb_mensagem.id_usuario_conversa = tb_usuario.id_usuario
-		WHERE tb_mensagem.id_usuario_conversa = ?`;
+		SELECT 	id_mensagem									mensagemId,
+				tb_usuario_conversa.id_usuario				usuarioId,
+				tb_usuario.nm_usuario                      	nome,
+				tb_usuario.img_usuario                      imagem,
+				ds_mensagem     							mensagem,
+				dt_mensagem 								data
+		FROM tb_mensagem
+		INNER JOIN tb_usuario_conversa ON tb_mensagem.id_usuario_conversa = tb_usuario_conversa.id_usuario_conversa
+		INNER JOIN tb_conversa ON tb_usuario_conversa.id_conversa = tb_conversa.id_conversa
+		INNER JOIN tb_usuario ON tb_usuario_conversa.id_usuario = tb_usuario.id_usuario
+		WHERE tb_conversa.id_conversa = ?
+		order by data;`;
 
-	const answer = await con.query(command, [idAmizade]);
+	const [answer] = await con.query(command, [conversa]);
 	const model = [];
 	answer.forEach(item =>
 		model.push({
 			usuario: {
-				nome: item.usuarioNome,
-				id: item.idUsuario,
-				imagem: item.usuarioImagem,
-				idComunidade: item.idUsuarioComunidade,
-				descricao: item.usuarioDescricao,
+				id: item.usuarioId,
+				nome: item.nome,
+				imagem: item.imagem,
 			},
 			conversa: conversa,
 			mensagem: {
+				id: item.mensagemId,
 				conteudo: item.mensagem,
-				data: item.dataMensagem,
-				id: item.idMensagem,
+				data: item.data,
 			},
 		})
 	);

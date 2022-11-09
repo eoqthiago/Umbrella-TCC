@@ -120,7 +120,7 @@ const BotaoSolido = styled.button`
 	}
 
 	&:disabled {
-		background: ${props => props.disBg || '#51bb8f'};
+		background: ${props => props.disBg || '#c7c7c7'};
 		cursor: not-allowed;
 
 		&:active {

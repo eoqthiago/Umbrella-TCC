@@ -3,7 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import localStorage from 'local-storage';
 import { toast } from 'react-toastify';
 import { useJwt } from 'react-jwt';
-import { userAmigosConsulta, userComunidadesConsulta, userConsulta } from '../../api/userApi';
+import {
+	userAmigosConsulta,
+	userComunidadesConsulta,
+	userConsulta,
+} from '../../api/userApi';
 import { BuscarImg } from '../../api/services';
 import CadastrarComunidade from '../modals/cadastrarComunidade';
 import MenuListaModal from '../modals/menu';
@@ -13,7 +17,9 @@ import ComunidadeDenuncia from '../modals/denunciarComunidade';
 import './index.sass';
 
 export default function Index({ ativo, alterar }) {
-	const { isExpired } = useJwt(localStorage('user') ? localStorage('user').token : null);
+	const { isExpired } = useJwt(
+		localStorage('user') ? localStorage('user').token : null
+	);
 	const navigate = useNavigate();
 	const [user, setUser] = useState({});
 	const [comunidadeModal, setComunidadeModal] = useState(false);
@@ -54,6 +60,13 @@ export default function Index({ ativo, alterar }) {
 		if (e.target.id === id) alterar(!ativo);
 	};
 
+	const image = () => {
+		if (user.imagem !== undefined) {
+			console.log('sadsad');
+			return BuscarImg(user.imagem);
+		} else return '/assets/images/user.png';
+	};
+
 	useEffect(() => {
 		if (!localStorage('user') || isExpired) {
 			localStorage.remove('user');
@@ -84,6 +97,7 @@ export default function Index({ ativo, alterar }) {
 				setAmigos(r);
 				const s = await userComunidadesConsulta(localStorage('user').id);
 				setComunidades(s);
+				if (r === undefined || s === undefined) window.location.reload();
 			} catch (err) {}
 			setTimeout(() => consultasMenu(), 15000);
 		}
@@ -118,7 +132,10 @@ export default function Index({ ativo, alterar }) {
 				selecionada={coSelec}
 				tipo={modalTipo}
 				user={{ userDenuncia: denunciaUser, setUserDenuncia: setDenunciaUser }}
-				comunidade={{ comDenuncia: denunciaComunidade, setComDenuncia: setDenunciaComunidade }}
+				comunidade={{
+					comDenuncia: denunciaComunidade,
+					setComDenuncia: setDenunciaComunidade,
+				}}
 			/>
 
 			<main className={(ativo && 'comp-menu-ativo') + ' comp-menu'}>
@@ -165,9 +182,9 @@ export default function Index({ ativo, alterar }) {
 						/>
 						<hr />
 						<img
-							src={user.imagem ? BuscarImg(user.imagem) : '/assets/images/user.png'}
+							src={() => image()}
 							alt='Usuário'
-							title={user.nome ?? 'Usuário'}
+							title={user ? user.nome : 'Usuário'}
 							className='comp-menu-img-user'
 							onClick={() => {
 								document.body.style.overflow = 'unset';
@@ -184,31 +201,49 @@ export default function Index({ ativo, alterar }) {
 
 					<div>Comunidades</div>
 					<section>
-						{comunidades.map(item => (
-							<ListaMenu
-								tipo='comunidade'
-								setTipo={setModalTipo}
-								item={item}
-								convMenu={{ ativo: convModal, open: openModal, pos: pos, setPos: setPos, selecionada: coSelec, setSelecionada: setCoSelec }}
-								key={item.id}
-								selecionado={coSelec}
-								alterar={alterar}
-							/>
-						))}
+						{comunidades
+							? comunidades.map(item => (
+									<ListaMenu
+										tipo='comunidade'
+										setTipo={setModalTipo}
+										item={item}
+										convMenu={{
+											ativo: convModal,
+											open: openModal,
+											pos: pos,
+											setPos: setPos,
+											selecionada: coSelec,
+											setSelecionada: setCoSelec,
+										}}
+										key={item.id}
+										selecionado={coSelec}
+										alterar={alterar}
+									/>
+							  ))
+							: null}
 					</section>
 
 					<div>Amizades</div>
 					<section>
-						{amigos.map(item => (
-							<ListaMenu
-								tipo='usuario'
-								setTipo={setModalTipo}
-								item={item}
-								convMenu={{ ativo: convModal, open: openModal, pos: pos, setPos: setPos, selecionada: coSelec, setSelecionada: setCoSelec }}
-								key={item.id}
-								alterar={alterar}
-							/>
-						))}
+						{amigos
+							? amigos.map(item => (
+									<ListaMenu
+										tipo='usuario'
+										setTipo={setModalTipo}
+										item={item}
+										convMenu={{
+											ativo: convModal,
+											open: openModal,
+											pos: pos,
+											setPos: setPos,
+											selecionada: coSelec,
+											setSelecionada: setCoSelec,
+										}}
+										key={item.id}
+										alterar={alterar}
+									/>
+							  ))
+							: null}
 					</section>
 				</section>
 			</main>

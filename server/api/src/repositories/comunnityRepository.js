@@ -293,7 +293,7 @@ export async function consultarCanalMensagens(canal, lastId) {
 			canal: canal,
 			mensagem: {
 				conteudo: item.conteudo,
-				data: item.dataEnvio,
+				data: item.data,
 				id: item.idMensagem,
 			},
 		})

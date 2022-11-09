@@ -748,7 +748,6 @@ server.post("/usuario/chat/:id", async (req, res) => {
 		const chat = req.params.id;
 		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
-
 		if (!header || !auth || !(await userIdSearch(auth.id)) || !conteudo.trim()) throw new Error("Não autorizado!");
 		const answer = await enviarMensagem(auth.id, chat, conteudo.trim());
 		res.send({id: answer});
@@ -759,20 +758,23 @@ server.post("/usuario/chat/:id", async (req, res) => {
 	};
 });
 
-
+// Consultar conversa privada
 server.get("/usuario/chat/:id", async (req, res) => {
 	try {
 		const chat = req.params.id;
 		const header = req.header("x-access-token");
 		const auth = jwt.decode(header);
 
-		if (!header || !auth || !(await userIdSearch(auth.id)) || !conteudo.trim()) throw new Error("Não autorizado!");
-		const answer = await consultarConversa(auth.id);
-		res.send({id: answer});
+		if (!header || !auth || !(await userIdSearch(auth.id))) throw new Error("Não autorizado!");
+		const answer = await consultarConversa(chat);
+		res.send(answer);
 	} catch (err) {
 		res.status(404).send({
 			err: err.message,
 		});
 	};
 });
+
+
+
 export default server;
