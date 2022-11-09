@@ -147,12 +147,6 @@ export default function Index({ ativo, alterar }) {
 							}}
 						/>
 						<img
-							src='/assets/icons/create.svg'
-							alt='Criar comunidade'
-							title='Criar comunidade'
-							onClick={() => setComunidadeModal(!comunidadeModal)}
-						/>
-						<img
 							src='/assets/icons/friend.svg'
 							alt='Amizades'
 							title='Amizades'
@@ -160,6 +154,12 @@ export default function Index({ ativo, alterar }) {
 								document.body.style.overflow = 'unset';
 								navigate('/amizades');
 							}}
+						/>
+						<img
+							src='/assets/icons/create.svg'
+							alt='Criar comunidade'
+							title='Criar comunidade'
+							onClick={() => setComunidadeModal(!comunidadeModal)}
 						/>
 						<img
 							src='/assets/icons/config.svg'

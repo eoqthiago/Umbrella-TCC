@@ -1,3 +1,5 @@
+$trans-menu: 1s ease-in-out
+
 .comunidade
     display: flex
     flex-flow: column nowrap
@@ -12,7 +14,17 @@
 
         > aside
             width: 350px
+            transition: $trans-menu
             background: #eff0f3
+            height: calc( 100vh - 55px )
+
+            > img
+                width: 20px
+                height: 20px
+                position: absolute
+                top: 0
+                right: 0
+                z-index: 100
 
             > div:nth-child(1)
                 font-size: 18px
@@ -27,6 +39,9 @@
 
         > section
             width: 100%
+            margin-top: 10px
+            transition: $trans-menu
+            margin-left: auto
             display: flex
             flex-flow: column nowrap
             justify-content: flex-end
@@ -69,3 +84,7 @@
                     margin: 30px 0 50px
                     font-size: 17px
                     user-select: none
+
+    .comunidade-canais-ativo
+        width: 75px
+        transition: $trans-menu
