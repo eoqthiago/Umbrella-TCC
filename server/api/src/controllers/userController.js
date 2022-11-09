@@ -28,6 +28,7 @@ import {
 	procurarIdConversa,
 	enviarMensagem,
 	consultarConversa,
+	userBanner,
 } from '../repositories/userRepository.js';
 import { emailTest, nameTest } from '../utils/expressionTest.js';
 import { verifyToken } from '../utils/authUtils.js';
@@ -122,8 +123,9 @@ server.get('/usuario', async (req, res) => {
 });
 
 // Alterar perfil
-server.put('/usuario', async (req, res) => {
+server.put('/usuario/:id', async (req, res) => {
 	try {
+		const id = Number(req.params.id);
 		const user = req.body;
 		const token = req.header('x-access-token');
 		if (!token) {
@@ -135,15 +137,16 @@ server.put('/usuario', async (req, res) => {
 		if (!decoded || !(await userIdSearch(decoded.id))) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
-		} else if (!nameTest(user.nome)) {
+		} else if (!nameTest(user.nome) || !user.nome.trim()) {
 			throw new Error('O nome de usuário inserido é inválido');
 		}
 
 		user.id = decoded.id;
-		const answer = await userEdit(user);
+		const answer = await userEdit(user, decoded.id);
 		if (answer < 1) throw new Error('Não foi possível alterar o perfil de usuário');
 		res.status(202).send();
 	} catch (err) {
+		console.log(err.message)
 		res.status(400).send({
 			err: 'Um erro ocorreu',
 		});
@@ -151,9 +154,10 @@ server.put('/usuario', async (req, res) => {
 });
 
 // Enviar imagem
-server.put('/usuario/imagem', usuarioImg.single('imagem'), async (req, res) => {
+server.put('/usuario/imagem/:id', usuarioImg.single('imagem'), async (req, res) => {
 	try {
 		const token = req.header('x-access-token');
+		const id = Number(req.params.id);
 		if (!token) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
@@ -164,13 +168,45 @@ server.put('/usuario/imagem', usuarioImg.single('imagem'), async (req, res) => {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
 		} else if (!req.file) throw new Error('Arquivo não encontrado');
+		else if (!(await userIdSearch(id))) throw new Error('Usuario não encontrada');
+		
 
 		const img = req.file.path;
-		const answer = await userImg(img, decoded.id);
+		const answer = await userImg(id, img);
 		if (answer < 1) throw new Error('Não foi possível alterar a imagem');
-
 		res.status(204).send();
 	} catch (err) {
+		console.log(err.message)
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
+// Enviar imagem
+server.put('/usuario/banner/:id', usuarioImg.single('imagem'), async (req, res) => {
+	try {
+		const token = req.header('x-access-token');
+		const id = Number(req.params.id);
+		if (!token) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		}
+
+		const decoded = verifyToken(token);
+		if (!decoded || !(await userIdSearch(decoded.id))) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		} else if (!req.file) throw new Error('Arquivo não encontrado');
+		else if (!(await userIdSearch(id))) throw new Error('Usuario não encontrada');
+		
+
+		const img = req.file.path;
+		const answer = await userBanner(id, img);
+		if (answer < 1) throw new Error('Não foi possível alterar a imagem');
+		res.status(204).send();
+	} catch (err) {
+		console.log(err.message)
 		res.status(400).send({
 			err: err.message,
 		});

@@ -3,37 +3,39 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../../components/header';
 import Menu from '../../components/menu';
 import { toast } from 'react-toastify';
-import { communityBanner, communityEdit, communityImage, consultarCanais, consultarUsuarios, criarCanal, pesquisarUsuarioComunidade, searchCommunityId } from '../../api/communityApi';
 import localStorage from 'local-storage';
 import { BotaoSolido, Input, InputArea, Titulo } from '../../styled';
 import { BuscarImg } from '../../api/services';
-import { FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
-
 import Amizade from '../../components/listas/amizade';
+import {
+	userAmigosConsulta,
+	userBanner,
+	userConsulta,
+	userEdit,
+	userImg,
+} from '../../api/userApi';
 import './index.sass';
-import { consultarPedidosAmizade, userAmigosConsulta, userConsulta, userEdit, userImg } from '../../api/userApi';
 
 export default function Index() {
 	const [menu, setMenu] = useState(false);
-	const [canais, setCanais] = useState([]);
 	const [usuarios, setUsuarios] = useState([]);
 	const [imgAtivo, setImgAtivo] = useState('');
 	const [bannerAtivo, setBannerAtivo] = useState('');
 	const [editando, setEditando] = useState(false);
 	const [nome, setNome] = useState('');
 	const [descricao, setDescricao] = useState('');
-	const [publica, setPublica] = useState(true);
 	const [imgBanner, setImgBanner] = useState('');
 	const [imgCom, setImgCom] = useState('');
-	const [pesquisaNome, setPesquisaNome] = useState('');
-	const [deleteModal, setDeleteModal] = useState(false);
+	const [checkEdit, setCheckEdit] = useState(false);
+
 	const navigate = useNavigate();
 	const id = Number(useParams().id);
 
 	async function handleAlteracao() {
+		if (!checkEdit) return;
 		try {
-			const r = await userEdit(nome, descricao, publica, id);
-			if (r !== 204) throw new Error('Não foi possível salvar as alterações');
+			const r = await userEdit(nome, descricao, id);
+			if (r !== 202) throw new Error('Não foi possível salvar as alterações');
 			setEditando(false);
 
 			if (typeof imgCom != 'string') {
@@ -41,7 +43,7 @@ export default function Index() {
 				if (s !== 204) throw new Error('Não foi possível salvar a imagem');
 			}
 			if (typeof imgBanner != 'string') {
-				const s = await communityBanner(id, imgBanner);
+				const s = await userBanner(id, imgBanner);
 				if (s !== 204) throw new Error('Não foi possível salvar o banner');
 			}
 
@@ -55,7 +57,7 @@ export default function Index() {
 	async function carregarPage() {
 		try {
 			const r = await userConsulta(id);
-			if (id !== localStorage('user').id) throw new Error('Um erro ocorreu');
+			if (id === localStorage('user').id) setCheckEdit(true);
 			setNome(r.nome);
 			setDescricao(r.descricao);
 			setImgCom(r.imagem);
@@ -75,20 +77,13 @@ export default function Index() {
 		setEditando(false);
 	}
 
-
-
-	async function handlePesquisar() {
-		const r = await pesquisarUsuarioComunidade(id, pesquisaNome);
-		setUsuarios(r);
-	}
-
 	function alterarBanner() {
-		document.getElementById('config-community-banner').click();
+		document.getElementById('config-usuario-banner').click();
 		setEditando(true);
 	}
 
 	function alterarImagem() {
-		document.getElementById('config-community-imagem').click();
+		document.getElementById('config-usuario-imagem').click();
 		setEditando(true);
 	}
 
@@ -110,30 +105,37 @@ export default function Index() {
 				alterar={setMenu}
 			/>
 
-
 			<main>
 				<section className='comunidade-conf-inicial'>
 					<div
 						className='comunidade-conf-banner'
-						onMouseEnter={() => setBannerAtivo('ativo')}
-						onMouseLeave={() => setBannerAtivo('')}>
+						onMouseEnter={() => checkEdit && setBannerAtivo('ativo')}
+						onMouseLeave={() => checkEdit && setBannerAtivo('')}>
 						<div className={'comunidade-conf-banner-button ' + bannerAtivo}>
 							<button onClick={alterarBanner}>Alterar banner</button>
 						</div>
 						<img
-							src={imgBanner ? BuscarImg(imgBanner) : '/assets/images/doodles.webp'}
+							src={
+								imgBanner
+									? BuscarImg(imgBanner)
+									: '/assets/images/doodles.webp'
+							}
 							alt='Imagem Banner'
 						/>
 					</div>
 					<div
 						className='comunidade-conf-banner-img'
-						onMouseEnter={() => setImgAtivo('ativo')}
-						onMouseLeave={() => setImgAtivo('')}>
+						onMouseEnter={() => checkEdit && setImgAtivo('ativo')}
+						onMouseLeave={() => checkEdit && setImgAtivo('')}>
 						<div className={'comunidade-conf-banner-img-button ' + imgAtivo}>
 							<button onClick={alterarImagem}>Alterar imagem</button>
 						</div>
 						<img
-							src={imgCom ? BuscarImg(imgCom) : '/assets/images/community.png'}
+							src={
+								imgCom
+									? BuscarImg(imgCom)
+									: '/assets/images/community.png'
+							}
 							alt='Imagem Comunidade'
 						/>
 					</div>
@@ -141,26 +143,35 @@ export default function Index() {
 
 				<section className='cont-community-info'>
 					<div
-						className='cont-community-edit'
-						onClick={() => setEditando(true)}
-						style={{ display: editando && 'none' }}
+						className={'cont-community-edit ' + (!checkEdit ? 'hidden' : '')}
+						onClick={() => setEditando(checkEdit && true)}
+						style={{
+							display: editando && 'none',
+							cursor: !checkEdit && 'default',
+						}}
 					/>
 
 					<h1
-						onClick={() => setEditando(true)}
-						style={{ display: editando && 'none' }}>
+						onClick={() => setEditando(checkEdit && true)}
+						style={{
+							display: editando && 'none',
+							cursor: !checkEdit && 'default',
+						}}>
 						{nome + ` #${id}` ?? 'Comunidade'}
 					</h1>
 
 					<p
-						onClick={() => setEditando(true)}
-						style={{ display: editando && 'none' }}>
+						onClick={() => setEditando(checkEdit && true)}
+						style={{
+							display: editando && 'none',
+							cursor: !checkEdit && 'default',
+						}}>
 						{descricao ?? 'Descrição'}
 					</p>
 
 					<Input
 						type='text'
-						placeholder='Nome da comunidade*'
+						placeholder='Nome de usuario'
 						width='100%'
 						style={{ display: !editando && 'none' }}
 						value={nome}
@@ -168,7 +179,7 @@ export default function Index() {
 					/>
 					<InputArea
 						type='text'
-						placeholder='Descrição da comunidade'
+						placeholder='Descrição'
 						width='100%'
 						resize='none'
 						height='120px'
@@ -177,24 +188,6 @@ export default function Index() {
 						value={descricao}
 						onChange={e => setDescricao(e.target.value)}
 					/>
-					<FormControl sx={{ display: !editando && 'none' }}>
-						<RadioGroup
-							defaultValue={'publica'}
-							name='tipo-comunidade'
-							value={publica}
-							onChange={e => setPublica(e.target.value)}>
-							<FormControlLabel
-								value={true}
-								control={<Radio color='success' />}
-								label='Pública'
-							/>
-							<FormControlLabel
-								value={false}
-								control={<Radio color='success' />}
-								label='Privada'
-							/>
-						</RadioGroup>
-					</FormControl>
 
 					<div className='cont-community-info-buttons'>
 						<BotaoSolido
@@ -214,7 +207,6 @@ export default function Index() {
 					</div>
 				</section>
 
-
 				<section className='comunidade-conf-usuarios'>
 					<Titulo
 						cor='#1f1f1f'
@@ -223,49 +215,28 @@ export default function Index() {
 					</Titulo>
 
 					<main className='comunidade-conf-usuarios-list'>
-						<div className='comunidade-conf-usuarios-pesquisar'>
-							<Input
-								type='text'
-								placeholder='Pesquisar por nome'
-								width='100%'
-								style={{
-									margin: 0,
-								}}
-								value={pesquisaNome}
-								onChange={e => setPesquisaNome(e.target.value)}
-								maxLength='50'
-								onKeyDown={e => e.key === 'Enter' && handlePesquisar()}
-							/>
-							<img
-								src='/assets/icons/search.svg'
-								alt='Pesquisar'
-								title='Pesquisar'
-								onClick={() => handlePesquisar()}
-							/>
-						</div>
 						<div className='comunidade-conf-usuarios-items'>
 							{usuarios.map((item, index) => (
 								<Amizade
 									item={item}
 									key={index}
+									tipo={checkEdit ? 'amigo' : ''}
 								/>
 							))}
 						</div>
 					</main>
 				</section>
-
-
 			</main>
 
 			<input
 				type='file'
-				id='config-community-banner'
+				id='config-usuario-banner'
 				className='hidden'
 				onChange={e => setImgBanner(e.target.files[0])}
 			/>
 			<input
 				type='file'
-				id='config-community-imagem'
+				id='config-usuario-imagem'
 				className='hidden'
 				onChange={e => setImgCom(e.target.files[0])}
 			/>
