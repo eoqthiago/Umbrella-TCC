@@ -3,6 +3,7 @@
     display: flex
     flex-flow: row nowrap
     justify-content: flex-start
+    width: 100%
     gap: 15px
 
     > img
@@ -27,12 +28,15 @@
         min-width: 250px
         max-width: 500px
         height: fit-content
-        padding: 5px 10px 15px
+        padding: 10px 10px
         border: 1px solid #d1d1d1
         border-radius: 10px
         z-index: 2
+        position: static
 
         > div
+            width: 100%
+
             > h1
                 font-size: 15px
                 cursor: pointer
@@ -45,16 +49,15 @@
                     text-decoration: underline
 
             > span
-                font-size: 16px
+                font-size: 15px
                 word-break: break-all
-                font-family: Roboto-regular
+                font-family: OpenSans-regular
 
-    > .comp-message-data
-        font-family: OpenSans-regular
-        font-size: 14px
-        position: relative
-        right: 10px
-        bottom: 0
-        background: red
-        width: fit-content
-        height: fit-content
+            > .comp-message-data
+                margin-top: 5px
+                font-family: Roboto-regular
+                font-size: 14px
+                width: fit-content
+                height: fit-content
+                align-self: flex-end
+                margin-left: auto

@@ -3,7 +3,13 @@ import Header from '../../../components/header';
 import Menu from '../../../components/menu';
 import InputMensagem from '../../../components/input-mensagem';
 import { useParams, useNavigate } from 'react-router-dom';
-import { consultarCanais, consultarComunidadeUsuario, enviarMensagemCanal, listarMensagens, searchCommunityId } from '../../../api/communityApi';
+import {
+	consultarCanais,
+	consultarComunidadeUsuario,
+	enviarMensagemCanal,
+	listarMensagens,
+	searchCommunityId,
+} from '../../../api/communityApi';
 import localStorage from 'local-storage';
 import { toast } from 'react-toastify';
 import ListaLateral from '../../../components/listas/lateral';
@@ -21,7 +27,7 @@ const Index = () => {
 	const [menu, setMenu] = useState(false);
 	const [conteudo, setConteudo] = useState('');
 	const [user, setUser] = useState({});
-	const { id } = useParams();
+	const comunidade = Number(useParams().id);
 	const navigate = useNavigate();
 	const endMessage = useRef();
 
@@ -30,18 +36,18 @@ const Index = () => {
 	};
 
 	const send = async () => {
-		if (!conteudo || !conteudo.trim()) return; 
+		if (!conteudo || !conteudo.trim()) return;
 		try {
-			const r = await enviarMensagemCanal(conteudo, canalSelecionado, id);
+			const r = await enviarMensagemCanal(conteudo, canalSelecionado, comunidade);
 			const temp = {
 				usuario: {
-					id: user.id,
+					id: localStorage('user').id,
 					nome: user.nome,
 					descricao: user.descricao,
 					imagem: user.imagem,
 					idComunidade: user.idComunidade,
 				},
-				comunidade: Number(id),
+				comunidade,
 				canal: canalSelecionado,
 				mensagem: {
 					conteudo,
@@ -60,37 +66,47 @@ const Index = () => {
 	useEffect(() => {
 		async function consultarDados() {
 			try {
-				const r = await searchCommunityId(Number(id));
+				const r = await searchCommunityId(comunidade);
 				if (!r) throw new Error('Não foi possível encontrar essa comunidade');
-				const s = await consultarComunidadeUsuario(localStorage('user').id, Number(id));
+				const s = await consultarComunidadeUsuario(
+					localStorage('user').id,
+					comunidade
+				);
 				if (!s) throw new Error('Você não está nessa comunidade');
-				const t = await consultarCanais(Number(id));
+
+				const t = await consultarCanais(comunidade);
 				setUser(s);
 				setCanais(t);
+
 				if (t[0]) setCanalSelecionado(t[0].idCanal);
 				if (!user) throw new Error('Falha na autenticação');
 			} catch (err) {
 				if (err.response) toast.error(err.response.data.err);
 				else toast.error(err.message);
+
 				if (localStorage('user')) navigate('/home');
 				else navigate('/');
 			}
 		}
 		consultarDados();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [id]);
+	}, [comunidade]);
 
 	useEffect(() => {
 		async function join() {
 			try {
 				if (!canalSelecionado) throw new Error();
-				socket.emit('comunidade-canal-join', { usuario: { nome: user.nome, id: user.id }, comunidade: Number(id), canal: canalSelecionado });
-				const r = await listarMensagens(id, canalSelecionado, 0);
+				socket.emit('comunidade-canal-join', {
+					usuario: { nome: user.nome, id: user.id },
+					comunidade: comunidade,
+					canal: canalSelecionado,
+				});
+				const r = await listarMensagens(comunidade, canalSelecionado, 0);
 				setMensagens(r);
 			} catch (err) {}
 		}
 		join();
-	}, [canalSelecionado, id, user]);
+	}, [canalSelecionado, comunidade, user]);
 
 	useEffect(() => {
 		socket.on('comunidade-canal-receive', data => {
@@ -147,7 +163,9 @@ const Index = () => {
 				</aside>
 				<section>
 					<div className='comunidade-mensagens'>
-						<div className='comunidade-mensagem-inicio'>Este é o início do canal 😃</div>
+						<div className='comunidade-mensagem-inicio'>
+							Este é o início do canal 😃
+						</div>
 						{mensagens.map((item, index) => (
 							<div className='comunidade-mensagem'>
 								<MensagemComp
