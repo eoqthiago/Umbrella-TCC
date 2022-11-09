@@ -67,6 +67,7 @@ export default function Index({ ativo, alterar }) {
 		} else if (isExpired) {
 			localStorage.remove('user');
 			toast.warn('Você precisa fazer login novamente');
+			navigate('/login');
 		}
 	});
 
