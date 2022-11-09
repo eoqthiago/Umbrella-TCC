@@ -28,6 +28,7 @@ import {
 	procurarIdConversa,
 	enviarMensagem,
 	consultarConversa,
+	userBanner,
 } from '../repositories/userRepository.js';
 import { emailTest, nameTest } from '../utils/expressionTest.js';
 import { verifyToken } from '../utils/authUtils.js';
@@ -201,7 +202,7 @@ server.put('/usuario/banner/:id', usuarioImg.single('imagem'), async (req, res) 
 		
 
 		const img = req.file.path;
-		const answer = await userImg(id, img);
+		const answer = await userBanner(id, img);
 		if (answer < 1) throw new Error('Não foi possível alterar a imagem');
 		res.status(204).send();
 	} catch (err) {
