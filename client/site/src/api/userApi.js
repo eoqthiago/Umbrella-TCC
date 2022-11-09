@@ -41,7 +41,6 @@ export async function userAmigosConsulta(id) {
 	return r.data;
 }
 
-
 export async function userComunidadesConsulta(id) {
 	if (!userToken) return;
 	const r = await api.get(`/usuario/${id}/comunidades`, {
@@ -77,7 +76,7 @@ export async function removerAmizade(id) {
 		},
 	});
 	return r.status;
-};
+}
 
 export async function consultarPedidosAmizade() {
 	if (!userToken) return;
@@ -166,14 +165,13 @@ export async function userDelete() {
 	return r.status;
 }
 
-export async function userEdit(nome, descricao, publica, id) {
+export async function userEdit(nome, descricao, id) {
 	if (!userToken) return;
 	const r = await api.put(
 		`/usuario/${id}`,
 		{
 			nome,
 			descricao,
-			publica: publica === true,
 		},
 		{
 			headers: {
@@ -196,8 +194,23 @@ export async function userImg(id, imagem) {
 		},
 	});
 	return r.status;
-};
+}
 
+export async function userBanner(id, imagem) {
+	if (!imagem || !id || !userToken) return;
+	const formd = new FormData();
+	formd.append('imagem', imagem);
+
+	const r = await api.put(`/usuario/banner/${id}`, formd, {
+		headers: {
+			'Content-Type': 'multipart/form-data',
+			'x-access-token': userToken,
+		},
+	});
+	return r.status;
+}
+
+// Consultar id conversa
 export async function consultarIdConversa(id) {
 	if (!id || !userToken) return;
 	const r = await api.get(`/usuario/amizade/${id}`, {
@@ -206,7 +219,32 @@ export async function consultarIdConversa(id) {
 		},
 	});
 	return r.data;
-};
-// enviarMensagemPrivada
+}
 
-// /usuario/amizade/:id
+// Enviar mensagem em chat privado
+export async function enviarMensagemPrivada(conversa, conteudo) {
+	if (!conversa || !userToken || !conteudo) return;
+	const r = await api.post(
+		`/usuario/chat/${conversa}`,
+		{
+			conteudo,
+		},
+		{
+			headers: {
+				'x-access-token': userToken,
+			},
+		}
+	);
+	return r.data.id;
+}
+
+// Consultar mensagem de chat privado
+export async function consultarMensagens(conversa) {
+	if (!conversa || !userToken || !conversa) return;
+	const r = await api.get(`/usuario/chat/${conversa}`, {
+		headers: {
+			'x-access-token': userToken,
+		},
+	});
+	return r;
+}

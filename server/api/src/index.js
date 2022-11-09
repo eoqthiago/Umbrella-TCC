@@ -37,6 +37,14 @@ io.on('connection', socket => {
 	socket.on('comunidade-canal-send', async data => {
 		socket.to(data.canal).emit('comunidade-canal-receive', data);
 	});
+
+	socket.on('conversa-join', data => {
+		socket.join(data.conversa);
+	});
+
+	socket.on('conversa-send', async data => {
+		socket.to(data.conversa).emit('conversa-receive', data);
+	});
 });
 
 app.listen(port, () => console.log(`Server listening on ${port}`));

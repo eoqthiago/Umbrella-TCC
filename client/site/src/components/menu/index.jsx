@@ -61,10 +61,13 @@ export default function Index({ ativo, alterar }) {
 	};
 
 	useEffect(() => {
-		if (!localStorage('user') || isExpired) {
-			localStorage.remove('user');
+		if (!localStorage('user')) {
 			toast.warn('Você precisa estar logado para acessar essa página');
 			navigate('/');
+		} else if (isExpired) {
+			localStorage.remove('user');
+			toast.warn('Você precisa fazer login novamente');
+			navigate('/login');
 		}
 	});
 
@@ -90,6 +93,7 @@ export default function Index({ ativo, alterar }) {
 				setAmigos(r);
 				const s = await userComunidadesConsulta(localStorage('user').id);
 				setComunidades(s);
+				if (r === undefined || s === undefined) window.location.reload();
 			} catch (err) {}
 			setTimeout(() => consultasMenu(), 15000);
 		}
@@ -175,16 +179,16 @@ export default function Index({ ativo, alterar }) {
 						<hr />
 						<img
 							src={
-								user.imagem
+								user.imagem !== null
 									? BuscarImg(user.imagem)
 									: '/assets/images/user.png'
 							}
 							alt='Usuário'
-							title={user.nome ?? 'Usuário'}
+							title={user ? user.nome : 'Usuário'}
 							className='comp-menu-img-user'
 							onClick={() => {
 								document.body.style.overflow = 'unset';
-								navigate(`/usuario/${user.id}/settings`);
+								navigate(`/usuario/${user.id}`);
 							}}
 						/>
 					</div>
@@ -197,45 +201,49 @@ export default function Index({ ativo, alterar }) {
 
 					<div>Comunidades</div>
 					<section>
-						{comunidades.map(item => (
-							<ListaMenu
-								tipo='comunidade'
-								setTipo={setModalTipo}
-								item={item}
-								convMenu={{
-									ativo: convModal,
-									open: openModal,
-									pos: pos,
-									setPos: setPos,
-									selecionada: coSelec,
-									setSelecionada: setCoSelec,
-								}}
-								key={item.id}
-								selecionado={coSelec}
-								alterar={alterar}
-							/>
-						))}
+						{comunidades
+							? comunidades.map(item => (
+									<ListaMenu
+										tipo='comunidade'
+										setTipo={setModalTipo}
+										item={item}
+										convMenu={{
+											ativo: convModal,
+											open: openModal,
+											pos: pos,
+											setPos: setPos,
+											selecionada: coSelec,
+											setSelecionada: setCoSelec,
+										}}
+										key={item.id}
+										selecionado={coSelec}
+										alterar={alterar}
+									/>
+							  ))
+							: null}
 					</section>
 
 					<div>Amizades</div>
 					<section>
-						{amigos.map(item => (
-							<ListaMenu
-								tipo='usuario'
-								setTipo={setModalTipo}
-								item={item}
-								convMenu={{
-									ativo: convModal,
-									open: openModal,
-									pos: pos,
-									setPos: setPos,
-									selecionada: coSelec,
-									setSelecionada: setCoSelec,
-								}}
-								key={item.id}
-								alterar={alterar}
-							/>
-						))}
+						{amigos
+							? amigos.map(item => (
+									<ListaMenu
+										tipo='usuario'
+										setTipo={setModalTipo}
+										item={item}
+										convMenu={{
+											ativo: convModal,
+											open: openModal,
+											pos: pos,
+											setPos: setPos,
+											selecionada: coSelec,
+											setSelecionada: setCoSelec,
+										}}
+										key={item.id}
+										alterar={alterar}
+									/>
+							  ))
+							: null}
 					</section>
 				</section>
 			</main>

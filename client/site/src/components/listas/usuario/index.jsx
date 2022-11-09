@@ -10,9 +10,9 @@ const Index = ({ item }) => {
 	const navigate = useNavigate();
 	const [block, setBlock] = useState(false);
 
-	async function handleAmizade() {
+	async function handleAmizade(id) {
 		try {
-			const r = await pedirAmizade(item.id);
+			const r = await pedirAmizade(id);
 			if (r !== 204) throw new Error("Não foi possível pedir em amizade");
 			toast.success("Pedido de amizade feito com sucesso");
 			setBlock(true);
@@ -28,7 +28,7 @@ const Index = ({ item }) => {
 			<div>
 				<span onClick={() => navigate(`/usuario/${item.id}`)}>{item.nome}</span>
 				<div>
-					<img onClick={() => handleAmizade()} src="/assets/icons/addFriend.svg" alt="Adicionar amigo" disabled={block} />
+					<img onClick={() => handleAmizade(item.id)} src="/assets/icons/addFriend.svg" alt="Adicionar amigo" disabled={block} />
 				</div>
 			</div>
 		</li>
