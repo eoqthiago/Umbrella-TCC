@@ -9,7 +9,12 @@ import io from 'socket.io-client';
 import { socketUrl } from '../../../api/services';
 import MensagemComp from '../../../components/message';
 import './index.sass';
-import { consultarIdConversa, consultarMensagens, enviarMensagemPrivada, userConsulta } from '../../../api/userApi';
+import {
+	consultarIdConversa,
+	consultarMensagens,
+	enviarMensagemPrivada,
+	userConsulta,
+} from '../../../api/userApi';
 
 const socket = io.connect(socketUrl);
 
@@ -18,7 +23,7 @@ export default function Index() {
 	const [menu, setMenu] = useState(false);
 	const [conteudo, setConteudo] = useState('');
 	const [user, setUser] = useState({});
-	const { id } = useParams();
+	const conversa = Number(useParams().id);
 	const navigate = useNavigate();
 	const endMessage = useRef();
 	const scrollToBottom = () => {
@@ -26,9 +31,9 @@ export default function Index() {
 	};
 
 	async function send() {
-		if (!conteudo || !conteudo.trim()) return; 
+		if (!conteudo || !conteudo.trim()) return;
 		try {
-			const answer = await enviarMensagemPrivada(id, conteudo);
+			const answer = await enviarMensagemPrivada(conversa, conteudo);
 			const info = {
 				usuario: {
 					id: user.id,
@@ -36,7 +41,7 @@ export default function Index() {
 					imagem: user.imagem,
 					idComunidade: user.idComunidade,
 				},
-				id: Number(id),
+				id: conversa,
 				mensagem: {
 					conteudo,
 					data: new Date().toISOString(),
@@ -48,17 +53,17 @@ export default function Index() {
 			setMensagens([...mensagens, info]);
 			setConteudo('');
 		} catch (err) {}
-	};
+	}
 
 	useEffect(() => {
 		async function consultarDados() {
 			try {
-				const r = await consultarIdConversa(Number(id));
-                if(!r) throw new Error("Conversa não encontrada")
-                const userInfo = await userConsulta(Number(localStorage('user').id));
-                if (!userInfo) throw new Error('Não autorizado');
+				const r = await consultarIdConversa(conversa);
+				if (!r) throw new Error('Conversa não encontrada');
+				const userInfo = await userConsulta(Number(localStorage('user').id));
+				if (!userInfo) throw new Error('Não autorizado');
 				setUser(userInfo);
-                if(!user) throw new Error("Não autorizado");
+				if (!user) throw new Error('Não autorizado');
 			} catch (err) {
 				if (err.response) toast.error(err.response.ata.err);
 				else toast.error(err.message);
@@ -67,19 +72,22 @@ export default function Index() {
 			}
 		}
 		consultarDados();
-	}, [id]);
+	}, [conversa]);
 
 	useEffect(() => {
 		async function join() {
 			try {
-				if (!id) throw new Error("Conversa não encontrada");
-				socket.emit('conversa-join', { usuario: { nome: user.nome, id: user.id }, conversa: id });
-				const r = await consultarMensagens(id);
+				if (!conversa) throw new Error('Conversa não encontrada');
+				socket.emit('conversa-join', {
+					usuario: { nome: user.nome, id: user.id },
+					conversa: conversa,
+				});
+				const r = await consultarMensagens(conversa);
 				setMensagens(r);
 			} catch (err) {}
 		}
 		join();
-	}, [id, user]);
+	}, [conversa, user]);
 
 	useEffect(() => {
 		socket.on('conversa-receive', data => {
@@ -119,7 +127,9 @@ export default function Index() {
 			<main>
 				<section>
 					<div className='comunidade-mensagens'>
-						<div className='comunidade-mensagem-inicio'>Este é o início de suas conversas privadas</div>
+						<div className='comunidade-mensagem-inicio'>
+							Este é o início de suas conversas privadas
+						</div>
 						{mensagens.map((item, index) => (
 							<div className='comunidade-mensagem'>
 								<MensagemComp
@@ -139,4 +149,4 @@ export default function Index() {
 			</main>
 		</div>
 	);
-};
+}
