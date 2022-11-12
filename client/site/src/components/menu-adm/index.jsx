@@ -11,8 +11,8 @@ function MenuAdm() {
                 <section className='menu-admin'>
                     <div className='admin-funcoes'>
                         <p>Home</p>
-                        <p>Estaticiacas</p>
                         <p>Banimento de contas</p>
+                        <p>Banimento de grupos</p>
                         <p>Cadastrar Administrador</p>
                         <p>Sair</p>
                     </div>
