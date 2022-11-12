@@ -1,0 +1,90 @@
+$trans-menu: 1s ease-in-out
+
+.comunidade
+    display: flex
+    flex-flow: column nowrap
+
+    > main
+        display: flex
+        flex-flow: row nowrap
+        width: 100%
+        margin-top: 55px
+        height: calc( 100vh - 55px )
+        overflow: hidden
+
+        > aside
+            width: 350px
+            transition: $trans-menu
+            background: #eff0f3
+            height: calc( 100vh - 55px )
+
+            > img
+                width: 20px
+                height: 20px
+                position: absolute
+                top: 0
+                right: 0
+                z-index: 100
+
+            > div:nth-child(1)
+                font-size: 18px
+                text-align: center
+                width: 100%
+                padding: 10px 5px
+                user-select: none
+
+            > .comunidade-listagem-lateral
+                height: calc( 100% - 42px )
+                overflow-y: auto
+
+        > section
+            width: 100%
+            margin-top: 10px
+            transition: $trans-menu
+            margin-left: auto
+            display: flex
+            flex-flow: column nowrap
+            justify-content: flex-end
+            align-items: center
+            height: calc( 100vh - 55px )
+            background: url(../../../../public/assets/images/umbrella.png) no-repeat
+            background-size: clamp(150px, calc(20vh + 15vw), 400px)
+            background-position: center
+
+            > .comunidade-mensagens
+                width: 100%
+                height: calc( 100vh - 150px )
+                overflow-y: scroll
+                overflow-x: hidden
+                display: flex
+                flex-flow: column nowrap
+
+                &::-webkit-scrollbar
+                    width: 6px
+
+                &::-webkit-scrollbar-track
+                    background: #EEEFF0
+
+                &::-webkit-scrollbar-thumb
+                    background: #9e9e9e
+                    border-radius: 4px
+
+                &::-webkit-scrollbar-thumb:hover
+                    background: #919191
+
+                > .comunidade-mensagem
+                    padding: 10px 20px
+
+                    &:hover
+                        background: #d8dadb27
+
+                > .comunidade-mensagem-inicio
+                    align-self: center
+                    justify-self: center
+                    margin: 30px 0 50px
+                    font-size: 17px
+                    user-select: none
+
+    .comunidade-canais-ativo
+        width: 75px
+        transition: $trans-menu

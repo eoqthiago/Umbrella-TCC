@@ -1,15 +1,23 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { BuscarImg } from "../../../api/services";
-import "./index.sass";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { BuscarImg } from '../../../api/services';
+import { consultarIdConversa } from '../../../api/userApi';
+import './index.sass';
 
-const Index = ({ item, selecionado, convMenu, tipo, setTipo }) => {
+const Index = ({ item, convMenu, tipo, setTipo, alterar }) => {
 	const navigate = useNavigate();
+
+	async function navegarConversa(id) {
+		try {
+			const answer = await consultarIdConversa(id);
+			navigate(`/chat/conversa/${answer.id_conversa}`);
+		} catch(err) {};
+	};
 
 	return (
 		<div
-			className={"comp-lista-menu " /* + ((selecionado ? selecionado.id : "") === (item ? item.id : 0) && "comp-lista-menu-selecionado") */}
-			onMouseDownCapture={(e) => {
+			className={'comp-lista-menu '}
+			onMouseDownCapture={e => {
 				if (e.button === 2) {
 					setTipo(tipo);
 					convMenu.setSelecionada(item);
@@ -18,8 +26,15 @@ const Index = ({ item, selecionado, convMenu, tipo, setTipo }) => {
 					document.oncontextmenu = document.body.oncontextmenu = () => false;
 				}
 			}}
-			onClick={() => navigate(tipo === "comunidade" ? `/chat/comunidade/${item.id}` : `/chat/conversa/${item.id}`)}>
-			<img src={item.imagem ? BuscarImg(item.imagem) : "/assets/images/user.png"} alt="Imagem" />
+			onClick={() => {
+				alterar();
+				if (tipo === 'comunidade') navigate(`/chat/comunidade/${item.id}`)
+				else navegarConversa(item.id);
+			}}>
+			<img
+				src={item.imagem ? BuscarImg(item.imagem) : tipo === 'comunidade' ? '/assets/images/community.png' : '/assets/images/user.png'}
+				alt='Imagem'
+			/>
 			<div>{item.nome}</div>
 		</div>
 	);

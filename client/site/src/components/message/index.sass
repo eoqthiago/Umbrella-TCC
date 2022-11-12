@@ -1,0 +1,63 @@
+.comp-message
+    width: fit-content
+    display: flex
+    flex-flow: row nowrap
+    justify-content: flex-start
+    width: 100%
+    gap: 15px
+
+    > img
+        width: 40px
+        height: 40px
+        border-radius: 100%
+        user-select: none
+        -webkit-user-drag: none
+        cursor: pointer
+        background: #fff
+
+        &:hover
+            box-shadow: 0 0 15px 1px #00000025
+
+    > .comp-message-conteudo
+        display: flex
+        flex-flow: row nowrap
+        align-items: flex-start
+        gap: 10px
+        background: #f3f6f7
+        width: fit-content
+        min-width: 250px
+        max-width: 500px
+        height: fit-content
+        padding: 10px 10px
+        border: 1px solid #d1d1d1
+        border-radius: 10px
+        z-index: 2
+        position: static
+
+        > div
+            width: 100%
+
+            > h1
+                font-size: 15px
+                cursor: pointer
+                user-select: none
+                width: fit-content
+                margin-bottom: 10px
+                font-family: OpenSans-regular
+
+                &:hover
+                    text-decoration: underline
+
+            > span
+                font-size: 15px
+                word-break: break-all
+                font-family: OpenSans-regular
+
+            > .comp-message-data
+                margin-top: 5px
+                font-family: Roboto-regular
+                font-size: 14px
+                width: fit-content
+                height: fit-content
+                align-self: flex-end
+                margin-left: auto

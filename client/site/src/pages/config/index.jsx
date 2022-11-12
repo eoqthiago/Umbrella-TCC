@@ -1,51 +1,67 @@
-import React from "react";
-import Header from "../../components/header";
-import localStorage from "local-storage";
-import { BotaoSolido, Titulo } from "../../styled";
-import "./index.sass";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import Header from '../../components/header';
+import localStorage from 'local-storage';
+import { BotaoSolido, Titulo } from '../../styled';
+import './index.sass';
+import { useNavigate } from 'react-router-dom';
+import DeletarConta from '../../components/modals/deletarConta';
 
 const Index = () => {
 	const navigate = useNavigate();
-
-	
-	let str = localStorage("user").email;
-	let x = str[0];
-	let resp = `${x}******@gmail.com`;
-
-	
+	const [visivel, setVisivel] = useState(false);
 
 	return (
-		<div className="config page">
+		<div className='config page'>
 			<Header voltar />
+			<DeletarConta
+				ativo={visivel}
+				state={setVisivel}
+			/>
 			<main>
 				<section>
-					<Titulo fonte="1vw" cor="#131313">
+					<Titulo
+						fonte='1vw'
+						cor='#131313'>
 						Minha conta
 					</Titulo>
 					<div>
-						<li>ID de usuário: {localStorage("user").id ?? ""}</li>
-						<li>Email: {resp ?? ""}</li>
+						<li>ID de usuário: {localStorage('user').id ?? ''}</li>
+						<li>Email: {`${localStorage('user').email[0]}******@gmail.com` ?? ''}</li>
 						<li>Senha: *********</li>
 					</div>
 					<div>
-						<BotaoSolido cor="#E43636" fonte="1.2vw">
+						<BotaoSolido
+							cor='#E43636'
+							fonte='1.2vw'
+							onClick={() => setVisivel(true)}>
 							Deletar Conta
 						</BotaoSolido>
-						<BotaoSolido cor="#808384" fonte="1.2vw">
+						<BotaoSolido
+							cor='#808384'
+							fonte='1.2vw'>
 							Alterar Senha
 						</BotaoSolido>
-						<BotaoSolido fonte="1.2vw" onClick={() => navigate('/alterar-email')}>Alterar Email</BotaoSolido>
+						<BotaoSolido
+							fonte='1.2vw'
+							onClick={() => navigate('/alterar-email')}>
+							Alterar Email
+						</BotaoSolido>
 					</div>
 				</section>
+
 				<section>
-					<Titulo fonte="1vw" cor="#131313">
+					<Titulo
+						fonte='1vw'
+						cor='#131313'>
 						Aplicação
 					</Titulo>
 					!!!!AINDA NÃO DECIDIDO!!!!
 				</section>
-				<section className="config-termos">
-					<Titulo fonte="1vw" cor="#131313">
+
+				<section className='config-termos'>
+					<Titulo
+						fonte='1vw'
+						cor='#131313'>
 						Termos e Condições
 					</Titulo>
 					<div>
@@ -98,10 +114,9 @@ const Index = () => {
 					</div>
 				</section>
 			</main>
-			<div className="config-umbrella-logo" />
+			<div className='config-umbrella-logo' />
 		</div>
 	);
 };
 
 export default Index;
-

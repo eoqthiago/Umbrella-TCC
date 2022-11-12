@@ -11,7 +11,7 @@
     text-align: center
     transition: .5s
     max-width: 100%
-    
+
 .comp-menu
     display: flex
     flex-flow: row nowrap
@@ -39,18 +39,18 @@
         padding-top: 5em
         overflow-y: auto
 
-        &::-webkit-scrollbar 
+        &::-webkit-scrollbar
             width: 6px
 
-        &::-webkit-scrollbar-track 
+        &::-webkit-scrollbar-track
             background: #EEEFF0
-        
-        &::-webkit-scrollbar-thumb 
-            background: #9e9e9e
+
+        &::-webkit-scrollbar-thumb
+            background: #a9abac
             border-radius: 4px
 
         &::-webkit-scrollbar-thumb:hover
-            background: #919191
+            background: #a09e9e
 
         > div
             align-self: flex-start
@@ -69,7 +69,7 @@
         > .comp-menu-exit
             justify-items: flex-start
             width: 30px
-            height: 30px 
+            height: 30px
             background: url(../../../public/assets/icons/x.svg) no-repeat center
             background-size: clamp(15px, 3.5vw, 20px)
             border: none
@@ -79,7 +79,7 @@
             right: 20px
             top: 20px
             cursor: pointer
-            
+
             &:active
                 transition: .1s linear
                 transform: scale(.9)
@@ -94,7 +94,7 @@
         user-select: none
         justify-content: flex-end
         height: 100vh
-        
+
         > div
             display: flex
             flex-flow: column nowrap
@@ -105,9 +105,6 @@
             img
                 width: clamp(25px, 5vw, 30px)
                 height: clamp(25px, 5vw, 30px)
-
-                &:hover
-                    transform: scale(1.05)    
 
             > hr
                 width: 90%

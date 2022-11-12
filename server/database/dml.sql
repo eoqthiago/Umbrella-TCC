@@ -34,17 +34,25 @@ select * from tb_usuario where ds_email = "othierry@daora";
 
 -- Consultar amigos
 select 
-	id_usuario id,
-	nm_usuario nome,
-	ds_usuario descricao,
-	img_usuario imagem,
-	img_banner banner,
-	dt_criacao criacao
-from tb_usuario where id_usuario in (
-	select id_solicitado
-	from tb_usuario_amizade
-	where (id_solicitado = ? or id_solicitante = ?) and ds_situacao = 'A'
-);
+		id_usuario id,
+		nm_usuario nome,
+		ds_usuario descricao,
+		img_usuario imagem,
+		img_banner banner,
+		dt_criacao criacao
+   from tb_usuario_amizade amz
+inner join tb_usuario usuario on amz.id_solicitante = usuario.id_usuario
+where id_usuario <> 2;
+select 
+		id_usuario id,
+		nm_usuario nome,
+		ds_usuario descricao,
+		img_usuario imagem,
+		img_banner banner,
+		dt_criacao criacao
+   from tb_usuario_amizade amz
+inner join tb_usuario usuario on amz.id_solicitado = usuario.id_usuario
+where id_usuario <> 2;
 
 -- Consultar comunidades do usuário
 select 
@@ -172,26 +180,21 @@ SELECT
 FROM tb_comunidade
 WHERE 	id_comunidade = 1;
 
-
-
 -- Pesquisar comunidades por nome --! Alterar
-SELECT
-	id_comunidade id,
+select 
+	tb.id_comunidade id,
 	nm_comunidade nome,
 	ds_comunidade descricao,
 	img_comunidade imagem,
 	img_banner banner,
 	bt_publica publica,
 	dt_criacao dataCriacao,
-	id_criador criador,
-	(select count(id_usuario) 
-		from tb_usuario_comunidade 
-		inner join tb_comunidade on tb_usuario_comunidade.id_usuario_comunidade = tb_comunidade.id_comunidade
-		where tb_comunidade.nm_comunidade like '%daora%') qtdUsuarios
-FROM tb_comunidade
-WHERE 	nm_comunidade like '%daora%';
-
-
+	count(tb.id_usuario_comunidade) qtdUsuarios
+from tb_comunidade
+inner join tb_usuario_comunidade tb on tb.id_comunidade = tb_comunidade.id_comunidade
+where nm_comunidade like '%Comunidade%'
+group by nm_comunidade
+order by count(tb.id_usuario_comunidade) desc;
 
 -- Atualizar campos da comunidade
 update 	tb_comunidade 
@@ -217,3 +220,67 @@ INSERT INTO
 -- Denunciar comunidade
 insert into tb_comunidade_report (id_usuario, ds_email, id_comunidade, ds_report)
 							     values (?, ?, ?, ?);
+
+-- Inserir mensagem
+insert into 
+	tb_comunidade_mensagem (id_usuario_comunidade, id_comunidade_canal, ds_mensagem)
+					values (
+							(select id_usuario_comunidade
+								from tb_usuario_comunidade
+								where id_usuario = ? and id_comunidade = ?
+							), ?, ?);
+
+-- Consultar mensagens
+select
+	id_mensagem idMensagem,
+	ds_mensagem conteudo,
+	dt_mensagem data,
+	tb_usuario_comunidade.id_comunidade idComunidade,
+	tb_usuario_comunidade.id_usuario_comunidade idUsuarioComunidade,
+	tb_usuario.img_usuario usuarioImagem,
+	tb_usuario.id_usuario idUsuario,
+	tb_usuario.nm_usuario usuarioNome,
+	tb_usuario.ds_usuario usuarioDescricao
+from tb_comunidade_mensagem
+inner join tb_usuario_comunidade on tb_usuario_comunidade.id_usuario_comunidade = tb_comunidade_mensagem.id_usuario_comunidade
+inner join tb_usuario on tb_usuario_comunidade.id_usuario = tb_usuario.id_usuario
+where id_comunidade_canal = 1;
+
+-- Deletar canal
+delete from tb_comunidade_canal where id_comunidade_canal = 1;
+
+-- Top comunidades
+select 
+	tb.id_comunidade id,
+	nm_comunidade nome,
+	ds_comunidade descricao,
+	img_comunidade imagem,
+	img_banner banner,
+	bt_publica publica,
+	dt_criacao dataCriacao,
+	count(tb.id_usuario_comunidade) qtdUsuarios
+from tb_comunidade
+inner join tb_usuario_comunidade tb on tb.id_comunidade = tb_comunidade.id_comunidade
+group by nm_comunidade
+order by count(tb.id_usuario_comunidade) desc
+limit 25;
+
+-- Verificar se o usuário foi banido
+select 
+	id_usuario id,
+    ds_motivo motivo,
+    dt_banido dataBanimento
+from tb_comunidade_usuario_banido
+where id_usuario = 1 and id_comunidade = 1;
+
+-- Banir um usuário
+set @usuario = (
+	select id_usuario 
+    from tb_usuario_comunidade 
+    where id_usuario_comunidade = 20
+    );
+delete from tb_usuario_comunidade 
+where id_usuario_comunidade = 20;
+insert into tb_comunidade_usuario_banido (id_comunidade, id_usuario, ds_motivo)
+								  values (6, @usuario, 'quebrar as regras');
+

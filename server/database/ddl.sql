@@ -54,7 +54,7 @@ create table tb_usuario_banido (
     id_usuario int,
     ds_motivo varchar(900) not null,
     dt_banido date default(curdate()),
-    foreign key (id_usuario) references tb_usuario(id_usuario)
+    foreign key (id_usuario) references tb_usuario (id_usuario)
 );
 
 -- Conversa

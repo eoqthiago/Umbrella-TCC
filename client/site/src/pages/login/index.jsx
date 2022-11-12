@@ -33,7 +33,7 @@ const Index = () => {
 	return (
 		<div className='login page'>
 			<HashLoader
-				color='#2d95b1'
+				color='#24ad6d'
 				loading={loading}
 				cssOverride={{
 					position: 'absolute',
