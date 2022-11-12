@@ -16,7 +16,7 @@ export async function adminCadastro(admin) {
 	const command = `
         insert into tb_admin (nm_admin, ds_email, ds_senha, dt_nascimento, ds_endereco, ds_telefone, ds_cpf, bt_root)
         values (?, ?, ?, ?, ?, ?, ?, ?) `;
-	const [answer] = await con.query(command, [admin.nome, admin.email, admin.senha, admin.nascimento, admin.endereco, admin.telefone, admin.cpf, admin.root]);
+	const [answer] = await con.query(command, [admin.nome, admin.email, admin.senha, admin.nascimento, admin.endereco, admin.telefone, admin.cpf, 1]);
 	return answer.affectedRows;
 }
 
@@ -73,5 +73,31 @@ export async function searchReports() {
 	const command = `
 		select count(*) as usuariosReportados from tb_usuario_report`;
 	const [answer] = await con.query(command)
+
+};
+
+export async function listReportedComunnities() {
+	const command = `
+	SELECT id_comunidade_report     idReport,
+			id_usuario				denunciante,
+			id_comunidade			idComunidade,
+			ds_report				motivo,
+			ds_email				emailDenunciante,
+			dt_report				data
+	FROM tb_comunidade_report;`;
+	const [answer] = await con.query(command);
+	return answer;
+};
+
+export async function listReportedUsers() {
+	const command = `
+	SELECT 	id_report     			idReport,
+			id_usuario				idDenunciante,
+			id_usuario_reportado	idDenunciado,
+			ds_report				motivo,
+			ds_email				emailDenunciante,
+			dt_report				data
+	FROM tb_usuario_report;`;
+	const [answer] = await con.query(command);
 	return answer;
 }

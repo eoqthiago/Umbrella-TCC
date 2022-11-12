@@ -15,6 +15,8 @@ function MenuAdm() {
                         <hr />
                         <p>Banimento de contas</p>
                         <hr />
+                        <p>Banimento de grupos</p>
+                        <hr />
                         <p>Cadastrar Administrador</p>
                         <hr />
                         <p>Sair</p>
