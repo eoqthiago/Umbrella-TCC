@@ -54,3 +54,18 @@ export async function adminDelete(email) {
 	const [answer] = await con.query(command, [email]);
 	return answer.affectedRows;
 }
+
+export async function searchMonthlyUsers() {
+	const command = `
+		select count(*) as usuariosMensais from tb_usuario
+             where dt_criacao like "%-11-%"`;
+	const [answer] = await con.query(command)
+	return answer;
+}
+
+export async function searchCommunites() {
+	const command = `
+		select count(*) as comunidadesCriadas from tb_comunidade`;
+	const [answer] = await con.query(command)
+	return answer;
+}

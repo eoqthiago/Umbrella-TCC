@@ -18,6 +18,7 @@ import RecuperarCodigo from "./pages/recuperar-senha/recuperar-senha-codigo";
 import Alterar from "./pages/recuperar-senha/senha-nova";
 import AlterarEmail from "./pages/alterar-email/page-alterar-email"
 import EmailConfirm from "./pages/alterar-email/alterar-email"
+import HomeAdm from "./pages/admin/dashboard"
 import ChatPrivado from "./pages/chats/privado"
 import AdminCadastro  from "./pages/admin/cadastro"
 
@@ -45,6 +46,7 @@ export default function Index() {
 				<Route path="/alterar-email" exact element={<AlterarEmail />} />
 				<Route path="/chat/conversa/:id" exact element={<ChatPrivado />} />
 				<Route path="/email-novo" exact element={<EmailConfirm />} />
+				<Route path="/admin/dashboard" exact element={<HomeAdm />} /
 				<Route path="/admin/cadastro" exact element={<AdminCadastro />} />
 				<Route path='*' element={<NotFound />} />
 			</Routes>
