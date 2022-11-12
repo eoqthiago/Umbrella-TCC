@@ -50,7 +50,7 @@ function Index() {
     };
     const [usuarios, setUsuarios] = useState([]);
     const [comunidades, setComunidades] = useState([]);
-    const [denuncias, setDenuncias] =useState([])
+    const [denuncias, setDenuncias] = useState([])
 
     async function listarComunnity() {
         const r = await estatisticasComunidades();
@@ -106,12 +106,12 @@ function Index() {
                                         numeroEstatistica={item.comunidadesCriadas}
                                         nomeEstatistica="Comunidades criadas"
                                     />))}
-                                {denuncias.map((item)=>(
-                                <CardsEstatisticas
-                                    cards_estatisticas="cards_denuncias"
-                                    numeroEstatistica={item.usuariosReportados}
-                                    nomeEstatistica="Denuncias de usuarios" />
-                                    ))}
+                                {denuncias.map((item) => (
+                                    <CardsEstatisticas
+                                        cards_estatisticas="cards_denuncias"
+                                        numeroEstatistica={item.usuariosReportados}
+                                        nomeEstatistica="Denuncias de usuarios" />
+                                ))}
                             </div>
                         </div>
                     </div>
