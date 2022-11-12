@@ -1,92 +1,147 @@
 .admin-page
 
-> main
-        display: flex
-        flex-direction: column
+ > main
+         display: flex
+         flex-direction: column
+         width: 100%
+         height: 100vh
 
-.grafico-usuarios
-        display: flex
-        justify-content: center
-        align-items: center
-        height: 16vh
-        margin-left: 10em
+         > .grafico-usuarios
+            display: flex
+            justify-content: center
+            align-items: center
+            height: 16vh
+            margin-left: 10em
 
-.grafico-linha
-        width: 35em
-        height: 0
-        width: 650px
+            > .grafico-linha
+             width: 35em
+             height: 0
+             width: 650px
 
-.items-baixo
-        display: flex
-        flex-direction: row
-        align-items: flex-end
-        height: 80vh
+         > .items-baixo
+            display: flex
+            flex-direction: row
+            justify-content: space-around
+            align-items: flex-end
+            height: 80%
+            z-index: -1
 
-.cards-estastisticas-admin
-        display: flex
-        flex-direction: column
-        align-items: center
-        height: 13.5em
-        width: 100%
-        padding-left: 8em
 
-.cards-estatisticas
-        display: flex
-        flex-direction: row
-        gap: 10px
+            > .cards-estastisticas-admin
+                display: flex
+                flex-direction: column
+                align-items: center
+                height: 33vh
+                width: 50vw
 
-.cards-01
-        display: flex
-        flex-direction: row
-        gap: 10px
+                > .cards-estatisticas
+                    display: flex
+                    flex-direction: column
+                    gap: 10px
 
-.cards-02
-        display: flex
-        flex-direction: column
-        gap: 10px
+                .cards-01
+                     display: flex
+                     flex-direction: row
+                     gap: 10px
 
-.admin-pizza-grafico
-        display: flex
-        flex-direction: column
-        justify-content: flex-end
-        align-items: flex-end
-        width: 100%
-        padding-right: 4em
+                .cards-02
+                    display: flex
+                    flex-direction: row
+                    gap: 10px
 
-.pizza-grafico
-        display: flex
-        flex-direction: column
-        align-items: center
-        background-color: #E9E9E9
-        box-shadow: 5px 5px 5px #2626264d
-        height: 15em
-        width: 25em
+            .admin-pizza-grafico
+                display: flex
+                flex-direction: column
+                height: 40%
+                width: fit-content
+                
+                > .pizza-grafico
+                    display: flex
+                    flex-direction: column
+                    align-items: center
+                    background-color: #E9E9E9
+                    box-shadow: 5px 5px 5px #2626264d
+                    height: 15em
+                    width: 25em
+                    
 
-.grafico-pizza
-        width: 9em
-        margin-top: 2em
-        margin-left: 1em
+                    > .grafico-pizza
+                        width: 9em
+                        margin-top: 2em
+                        margin-left: 1em
+                        
 
-.faixa-etaria-titulo
-        margin-top: -3em
-        width: 70%
-        text-align: center
-        font-family: 'opensans-extrabold'
-        color: #343435
-        font-size: 20px
+                    > .faixa-etaria-titulo
+                        margin-top: -3em
+                        width: 70%
+                        text-align: center
+                        font-family: 'opensans-extrabold'
+                        color: #343435
+                        font-size: 20px
 
-.informacoes-graficos
-        display: flex
-        flex-direction: row
-        margin-left: 2em
-        padding-top: 1em
+                    > .informacoes-graficos
+                        display: flex
+                        flex-direction: row
+                        margin-left: 2em
+                        padding-top: 1em
 
-.informacoes
-        font-size: 13px
-        margin-right: 1em
-        width: 7em
-        color: #343435
-        font-family: 'opensans-extrabold'
+                    .informacoes
+                        font-size: 13px
+                        margin-right: 1em
+                        width: 7em
+                        color: #343435
+                        font-family: 'opensans-extrabold'
 
-.dados-graficos
-        margin-right: 1em
+                    .dados-graficos
+                        margin-right: 1em
+
+@media (max-width: 1050px) 
+  .admin-page > main
+
+        > .grafico-usuarios
+            margin-top: 5em
+
+        .items-baixo
+            display: flex
+            flex-direction: column
+            align-items: center
+            justify-content: flex-end
+            margin-top: 22em
+
+            > .admin-pizza-grafico
+                margin-top: 2em
+                margin-left: 4em
+                 
+                
+                > .pizza-grafico
+                    height: 10em
+                    width: 15em
+                    
+                    > .grafico-pizza
+                        width: 6em
+                        margin-top: 0
+                        
+                    > .faixa-etaria-titulo
+                        width: 80%
+                        font-size: 15px
+
+                    .informacoes
+                        font-size: 6px
+
+
+@media (max-width: 600px) 
+ .admin-page > main
+
+        > .grafico-usuarios
+             margin-top: 2em
+
+             > .grafico-linha
+                margin-right: 5em
+
+        .items-baixo
+            margin: 2em
+            margin-top: 9em
+
+            > .admin-pizza-grafico
+                width: 60%
+                margin-left: 1em

@@ -49,7 +49,7 @@ export default function Index() {
 				<Route path="/email-novo" exact element={<EmailConfirm />} />
 				<Route path="/admin/dashboard" exact element={<HomeAdm />} />
 				<Route path="/admin/cadastro" exact element={<AdminCadastro />} />
-				<Route path="/admin/login" exact element={<AdminCadastro />} />
+				<Route path="/admin/login" exact element={<AdminLogin/>} />
 				<Route path='*' element={<NotFound />} />
 			</Routes>
 		</BrowserRouter>

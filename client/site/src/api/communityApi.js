@@ -151,6 +151,15 @@ export async function estatisticasComunidades() {
 	});
 	return r.data;
 }
+export async function estatisticasDenuncias() {
+	if (!userToken) return;
+	const r = await api.get('/admin/estatisticas/reports', {
+		headers: {
+			"x-access-token": userToken,
+		},
+	});
+	return r.data;
+}
 
 export async function excluirComunidade(comId) {
 	if (!userToken || !comId) return;
