@@ -25,6 +25,7 @@ import {
 	topCommunities,
 	communityUserBanned,
 	communityUserBan,
+	communitySearchMessages,
 } from '../repositories/comunnityRepository.js';
 import { userIdSearch } from '../repositories/userRepository.js';
 import { verifyToken } from '../utils/authUtils.js';
@@ -728,5 +729,28 @@ server.post('/comunidade/:comunidade/usuario/:usuario/banimento', async (req, re
 		});
 	}
 });
+
+
+// procurar mensagem
+server.get('/comunidade/:comunidade/mensagens', async (req, res) => {
+	try {
+		const comunidade = Number(req.params.comunidade);
+		const { msg } = req.query;
+		const token = req.header('x-access-token');
+		if (!token) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		}
+
+		const users = await communitySearchMessages(comunidade, msg);
+		res.send(users);
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
+
 
 export default server;
