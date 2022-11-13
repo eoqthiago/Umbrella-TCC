@@ -71,7 +71,6 @@ server.post('/usuario', async (req, res) => {
 server.put('/usuario/amizade', async (req, res) => {
 	try {
 		const { situacao, id } = req.query;
-		console.log(situacao, id);
 		const token = req.header('x-access-token');
 		if (!token) {
 			res.status(401).send({ err: 'Falha na autenticação' });

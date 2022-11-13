@@ -10,19 +10,21 @@
 
     .denuncias-cont
         height: fit-content
-        width: clamp(300px, 15em, 25em)
+        justify-content: center
+        align-items: center
+        width: clamp(19em, 50vw, 60vw)
+        margin-left: 2em 
 
         > .input-denuncias
             display: inline-flex
             align-items: center
-            width: clamp(200px, 80vw, 400px)
+            width: clamp(10em, 18em, 25em)
             background-color: #f4f5f5
             overflow: hidden
             padding: 5px 7px
             border-radius: 10px
             box-shadow: 0 0 10px 1px #49494911
             z-index: 0
-            margin-top: 1em
             user-select: none
 
             > img
@@ -39,3 +41,11 @@
                 width: 100%
                 background-color: #f4f5f5
                 padding: 0 15px  
+
+        >.adjust-cont
+            height: fit-content
+            margin-top: clamp(16px, 1.5em, 2em)
+
+        >.adjust-reports
+            height: fit-content
+            width: clamp(10em, 25em, 28em)

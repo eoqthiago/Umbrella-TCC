@@ -51,20 +51,6 @@ server.post('/admin', async (req, res) => {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
 		}
-
-		const decoded = verifyToken(token);
-		if (!decoded || !(await rootVerificar(decoded.id))) {
-			res.status(401).send({ err: 'Falha na autenticação' });
-			return;
-		} else if (!emailTest(admin.email)) throw new Error('Email inválido');
-		else if (!admin.senha || !admin.senha.trim()) throw new Error('Senha inválida');
-		else if (!cpfTest(admin.cpf)) throw new Error('CPF inválido');
-		else if (!telefoneTest(admin.telefone)) throw new Error('Telefone inválido');
-		else if (!admin.nascimento) throw new Error('Data de nascimento inválida');
-
-		const rep = await adminSearch(admin.email);
-		if (rep[0]) throw new Error('Esse usuário já existe');
-
 		admin.senha = sha256(admin.senha);
 		const answer = await adminCadastro(admin);
 		if (answer < 1) throw new Error('Não foi possível realizar o cadastro');
