@@ -22,6 +22,7 @@ import HomeAdm from "./pages/admin/dashboard"
 import ChatPrivado from "./pages/chats/privado"
 import AdminCadastro  from "./pages/admin/cadastro"
 import AdminLogin from "./pages/admin/login";
+import DenunciasUsuarios from "./pages/admin/denuncias/usuarios"
 
 export default function Index() {
 	return (
@@ -49,8 +50,9 @@ export default function Index() {
 				<Route path="/email-novo" exact element={<EmailConfirm />} />
 				<Route path="/admin/dashboard" exact element={<HomeAdm />} />
 				<Route path="/admin/cadastro" exact element={<AdminCadastro />} />
-				<Route path="/admin/login" exact element={<AdminCadastro />} />
+				<Route path="/admin/login" exact element={<AdminLogin />} />
 				<Route path='*' element={<NotFound />} />
+				<Route path='/admin/denuncias/usuarios' element={<DenunciasUsuarios />} />
 			</Routes>
 		</BrowserRouter>
 	);

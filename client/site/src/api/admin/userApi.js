@@ -9,11 +9,11 @@ export async function adminLogin(email, senha) {
 		senha: senha,
 	});
 	return r.data;
-}
+};
 
 export async function adminCadastro(nome, email, senha, nascimento, endereco, telefone, cpf) {
 	if (!adminToken) return;
-
+	
 	const r = await api.post("/admin", {
 		nome: nome,
 		email: email,
@@ -30,4 +30,24 @@ export async function adminCadastro(nome, email, senha, nascimento, endereco, te
 		},
 	});
 	return r.data;
-}
+};
+
+export async function usuariosDenunciados() {
+	const r = await api.get("/admin/denuncias/usuarios", {
+		headers: {
+			"x-access-token": adminToken,
+		},
+	});
+	return r.data;
+};
+
+// Deletar usuario
+export async function deletarUsuario(id) {
+	if (!id || !adminToken ) return;
+	const r = await api.delete(`/admin/denuncias/usuarios/${id}`, {
+		headers: {
+			'x-access-token': adminToken,
+		},
+	});
+	return r.data;
+};

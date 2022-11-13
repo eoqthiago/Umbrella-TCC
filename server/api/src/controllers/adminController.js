@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 import { sha256 } from 'js-sha256';
-import { adminCadastro, adminDelete, adminLogin, adminSearch, rootVerificar, searchMonthlyUsers, searchCommunites, listReportedComunnities } from '../repositories/adminRepository.js';
+import { adminCadastro, adminDelete, adminLogin, adminSearch, rootVerificar, searchMonthlyUsers, searchCommunites, listReportedComunnities, listReportedUsers, deleteUser } from '../repositories/adminRepository.js';
 import { cpfTest, emailTest, telefoneTest } from '../utils/expressionTest.js';
 import { verifyToken } from '../utils/authUtils.js';
 import { userIdSearch } from '../repositories/userRepository.js';
@@ -168,8 +168,26 @@ server.get('/admin/denuncias/usuarios', async (req, res) => {
 		if (!token) throw new Error('Não autorizado!')
 		const decoded = verifyToken(token);
 		if (!decoded || !(await rootVerificar(decoded.id))) throw new Error('Não autorizado');
-		const r = await listReportedComunnities();
+		const r = await listReportedUsers();
 		res.send(r);
+	}
+	catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
+server.delete('/admin/denuncias/usuarios/:id', async (req, res) => {
+	try {
+		const id = req.params.id;
+		const token = req.header('x-access-token');
+		if (!token) throw new Error('Não autorizado!')
+		const decoded = verifyToken(token);
+		if (!decoded || !(await rootVerificar(decoded.id))) throw new Error('Não autorizado');
+		const r = await deleteUser(id);
+		if(r < 1) res.status(401).send("Não foi possível deletar a conta");
+		else res.send("Conta deletada com sucesso");
 	}
 	catch (err) {
 		res.status(400).send({

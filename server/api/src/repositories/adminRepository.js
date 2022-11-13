@@ -85,13 +85,24 @@ export async function listReportedComunnities() {
 
 export async function listReportedUsers() {
 	const command = `
-	SELECT 	id_report     			idReport,
-			id_usuario				idDenunciante,
-			id_usuario_reportado	idDenunciado,
-			ds_report				motivo,
-			ds_email				emailDenunciante,
-			dt_report				data
-	FROM tb_usuario_report;`;
+	SELECT id_report     				idReport,
+	   tb_usuario_report.id_usuario		denunciante,
+       tb_usuario.nm_usuario    		nome,
+       tb_usuario.img_usuario			imagem,
+       id_usuario_reportado				denunciado,
+       ds_report						motivo,
+       tb_usuario_report.ds_email		emailDenunciante,
+       dt_report						data
+	FROM tb_usuario_report
+    INNER JOIN tb_usuario ON tb_usuario_report.id_usuario_reportado = tb_usuario.id_usuario;`;
 	const [answer] = await con.query(command);
 	return answer;
-}
+};
+
+export async function deleteUser(id) {
+	const command = `
+	DELETE FROM tb_usuario
+	WHERE id_usuario = ?;`;
+	const [answer] = await con.query(command, [id]);
+	return answer.affectedRows;
+};
