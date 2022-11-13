@@ -67,6 +67,45 @@ server.post('/usuario', async (req, res) => {
 	}
 });
 
+// Aceitar / recusar pedido de amizade
+server.put('/usuario/amizade', async (req, res) => {
+	try {
+		const { situacao, id } = req.query;
+		console.log(situacao, id);
+		const token = req.header('x-access-token');
+		if (!token) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		};
+
+		const decoded = verifyToken(token);
+		if (!decoded || !(await userIdSearch(decoded.id))) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		} else if (!id || !situacao || !['A', 'N'].includes(situacao)) throw new Error('Campos inválidos');
+
+		let answer;
+		switch (situacao) {
+			case 'A':
+				answer = await aceitarAmizade(Number(id), decoded.id);
+				await iniciarConversa(decoded.id, Number(id));
+				break;
+			case 'N':
+				answer = await removerAmizade(Number(id));
+				break;
+			default:
+				break;
+		}
+
+		if (answer < 1) throw new Error(`Não foi possível ${situacao == 'N' ? 'rejeitar' : 'aceitar'} a amizade`);
+		res.status(204).send();
+	} catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
 // Login
 server.post('/usuario/login', async (req, res) => {
 	try {
@@ -351,47 +390,6 @@ server.post('/usuario/amizade', async (req, res) => {
 
 		const answer = await solicitarAmizade(user.id, user.usuarioSolicitado);
 		if (answer < 1) throw new Error('Um erro ocorreu');
-		res.status(204).send();
-	} catch (err) {
-		res.status(400).send({
-			err: err.message,
-		});
-	}
-});
-
-// Aceitar / recusar pedido de amizade
-server.put('/usuario/amizade', async (req, res) => {
-	try {
-		const { situacao, id } = req.query;
-		const token = req.header('x-access-token');
-		if (!token) {
-			res.status(401).send({ err: 'Falha na autenticação' });
-			return;
-		}
-		const decoded = verifyToken(token);
-		if (!decoded || !(await userIdSearch(decoded.id))) {
-			res.status(401).send({ err: 'Falha na autenticação' });
-			return;
-		} else if (!id || !situacao || !['A', 'N'].includes(situacao))
-			throw new Error('Campos inválidos');
-
-		let answer;
-		switch (situacao) {
-			case 'A':
-				answer = await aceitarAmizade(Number(id), decoded.id);
-				await iniciarConversa(decoded.id, Number(id));
-				break;
-			case 'N':
-				answer = await removerAmizade(Number(id));
-				break;
-			default:
-				break;
-		}
-
-		if (answer < 1)
-			throw new Error(
-				`Não foi possível ${situacao == 'N' ? 'rejeitar' : 'aceitar'} a amizade`
-			);
 		res.status(204).send();
 	} catch (err) {
 		res.status(400).send({
