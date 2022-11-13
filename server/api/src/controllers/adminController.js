@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 import { sha256 } from 'js-sha256';
-import { adminCadastro, adminDelete, adminLogin, adminSearch, rootVerificar, searchMonthlyUsers, searchCommunites, listReportedComunnities, listReportedUsers, deleteUser } from '../repositories/adminRepository.js';
+import { adminCadastro, adminDelete, adminLogin, adminSearch, rootVerificar, searchMonthlyUsers, searchCommunites, listReportedComunnities, listReportedUsers, searchReports, deleteUser } from '../repositories/adminRepository.js';
 import { cpfTest, emailTest, telefoneTest } from '../utils/expressionTest.js';
 import { verifyToken } from '../utils/authUtils.js';
 import { userIdSearch } from '../repositories/userRepository.js';
@@ -111,7 +111,7 @@ server.get('/admin/estatisticas/usuarios', async (req, res) => {
 		}
 
 		const decoded = verifyToken(token);
-		if (!decoded || !(await rootVerificar(decoded.id))) {
+		if (!decoded || !(await userIdSearch(decoded.id))) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
 		} const r = await searchMonthlyUsers();
@@ -133,10 +133,31 @@ server.get('/admin/estatisticas/comunidades', async (req, res) => {
 		}
 
 		const decoded = verifyToken(token);
-		if (!decoded || !(await rootVerificar(decoded.id))) {
+		if (!decoded || !(await userIdSearch(decoded.id))) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
 		} const r = await searchCommunites();
+		res.send(r);
+	}
+	catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+server.get('/admin/estatisticas/reports', async (req, res) => {
+	try {
+		const token = req.header('x-access-token');
+		if (!token) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		}
+
+		const decoded = verifyToken(token);
+		if (!decoded || !(await userIdSearch(decoded.id))) {
+			res.status(401).send({ err: 'Falha na autenticação' });
+			return;
+		} const r = await searchReports();
 		res.send(r);
 	}
 	catch (err) {

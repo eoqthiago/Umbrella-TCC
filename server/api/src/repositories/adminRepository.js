@@ -68,6 +68,12 @@ export async function searchCommunites() {
 		select count(*) as comunidadesCriadas from tb_comunidade`;
 	const [answer] = await con.query(command)
 	return answer;
+}
+export async function searchReports() {
+	const command = `
+		select count(*) as usuariosReportados from tb_usuario_report`;
+	const [answer] = await con.query(command)
+	return answer;
 };
 
 export async function listReportedComunnities() {
