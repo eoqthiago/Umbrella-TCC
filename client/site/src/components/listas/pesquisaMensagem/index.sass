@@ -1,0 +1,54 @@
+@mixin DisplayUser($width, $height,$radius: 0)
+    list-style: none
+    background-color: #fff
+    width: clamp(200px, $width, 60vw)
+    max-width: 550px
+    height: $height
+    border: 1px solid #c0c0c0
+    border-radius: $radius
+    display: flex
+    flex-flow: row nowrap
+    align-items: center
+    padding: 0 15px
+    gap: 10px
+    z-index: 0
+
+    > img
+        width: 45px
+        height: 45px
+        cursor: pointer
+        -webkit-user-drag: none
+        border-radius: 100%
+
+    > div
+        display: flex
+        flex-flow: row nowrap
+        justify-content: space-between
+        align-items: center
+        width: 100%
+
+        > span
+            font-size: 17px
+            color: #222222
+            text-overflow: ellipsis
+            word-break: break-all
+            word-wrap: break-word
+            cursor: pointer
+            max-width: 85%
+
+        > div
+            display: flex
+            flex-flow: row nowrap
+            align-items: center
+            gap: 10px
+
+            > img
+                width: 30px
+                height: 30px
+                cursor: pointer
+
+.membersDisplay
+    @include DisplayUser(15vw, 55px, $radius: 20px)
+
+.comp-lista-usuario
+    @include DisplayUser(90vw, 65px, $radius: 10px)

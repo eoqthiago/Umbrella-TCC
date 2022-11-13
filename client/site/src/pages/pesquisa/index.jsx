@@ -3,6 +3,7 @@ import Header from '../../components/header';
 import Menu from '../../components/menu';
 import Card from '../../components/card';
 import User from '../../components/listas/usuario';
+import Mensagem from '../../components/listas/pesquisaMensagem';
 import { pesquisar } from '../../api/communityApi';
 import './index.sass';
 
@@ -91,7 +92,13 @@ const Index = () => {
 								key={item.id}
 							/>
 						))}
-					{selecionado === 'mensagens' && mensagens.map(() => <>Mensagens</>)}
+					{selecionado === 'mensagens' &&
+						 mensagens.map(item => (
+							<Mensagem
+								item={item}
+								key={item.id}
+							/>
+						 ))}
 				</section>
 			</main>
 		</div>
