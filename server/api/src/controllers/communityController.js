@@ -742,7 +742,7 @@ server.get('/comunidade/:comunidade/mensagens', async (req, res) => {
 			return;
 		}
 
-		const users = await communitySearchMessages(comunidade, msg);
+		const users = await communitySearchMessages(msg, comunidade);
 		res.send(users);
 	} catch (err) {
 		res.status(400).send({

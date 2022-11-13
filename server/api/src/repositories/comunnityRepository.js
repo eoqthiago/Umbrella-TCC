@@ -371,7 +371,7 @@ export async function communityUserBan(userCom, comunidade, motivo) {
 	return answer.affectedRows;
 }
 
-export async function communitySearchMessages(msg, comunidade) {
+export async function communitySearchMessages( msg, comunidade) {
 	const command = `
 	select
 	id_mensagem idMensagem,
@@ -386,7 +386,7 @@ export async function communitySearchMessages(msg, comunidade) {
 		from tb_comunidade_mensagem
 		inner join tb_usuario_comunidade on tb_usuario_comunidade.id_usuario_comunidade = tb_comunidade_mensagem.id_usuario_comunidade
 		inner join tb_usuario on tb_usuario_comunidade.id_usuario = tb_usuario.id_usuario
-		where tb_usuario_comunidade.id_comunidade = 9 and tb_comunidade_mensagem.ds_mensagem like '%${msg}%'
+		where tb_usuario_comunidade.id_comunidade = ? and tb_comunidade_mensagem.ds_mensagem like '%${msg}%'
 	
 	`;
 	const [answer] = await con.query(command, [comunidade]);
