@@ -41,10 +41,30 @@ export async function usuariosDenunciados() {
 	return r.data;
 };
 
+export async function comunidadesDenunciadas() {
+	const r = await api.get("/admin/denuncias/comunidades", {
+		headers: {
+			"x-access-token": adminToken,
+		},
+	});
+	return r.data;
+};
+
 // Deletar usuario
 export async function deletarUsuario(id) {
 	if (!id || !adminToken ) return;
 	const r = await api.delete(`/admin/denuncias/usuarios/${id}`, {
+		headers: {
+			'x-access-token': adminToken,
+		},
+	});
+	return r.data;
+};
+
+// Deletar comunidade
+export async function deletarComunidade(id) {
+	if (!id || !adminToken ) return;
+	const r = await api.delete(`/admin/denuncias/comunidades/${id}`, {
 		headers: {
 			'x-access-token': adminToken,
 		},

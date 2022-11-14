@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 import { sha256 } from 'js-sha256';
-import { adminCadastro, adminDelete, adminLogin, adminSearch, rootVerificar, searchMonthlyUsers, searchCommunites, listReportedComunnities, listReportedUsers, searchReports, deleteUser } from '../repositories/adminRepository.js';
+import { adminCadastro, adminDelete, adminLogin, adminSearch, rootVerificar, searchMonthlyUsers, searchCommunites, listReportedComunnities, listReportedUsers, searchReports, deleteUser, deleteComunnity, searchReportedComunnities, searchReportedUsers } from '../repositories/adminRepository.js';
 import { cpfTest, emailTest, telefoneTest } from '../utils/expressionTest.js';
 import { verifyToken } from '../utils/authUtils.js';
 import { userIdSearch } from '../repositories/userRepository.js';
@@ -131,6 +131,8 @@ server.get('/admin/estatisticas/comunidades', async (req, res) => {
 		});
 	}
 });
+
+
 server.get('/admin/estatisticas/reports', async (req, res) => {
 	try {
 		const token = req.header('x-access-token');
@@ -202,4 +204,23 @@ server.delete('/admin/denuncias/usuarios/:id', async (req, res) => {
 		});
 	}
 });
+
+server.delete('/admin/denuncias/comunidades/:id', async (req, res) => {
+	try {
+		const id = req.params.id;
+		const token = req.header('x-access-token');
+		if (!token) throw new Error('Não autorizado!')
+		const decoded = verifyToken(token);
+		if (!decoded || !(await rootVerificar(decoded.id))) throw new Error('Não autorizado');
+		const r = await deleteComunnity(id);
+		if(r < 1) res.status(401).send("Não foi possível deletar a conta");
+		else res.send("Conta deletada com sucesso");
+	}
+	catch (err) {
+		res.status(400).send({
+			err: err.message,
+		});
+	}
+});
+
 export default server;

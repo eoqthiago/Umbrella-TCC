@@ -3,12 +3,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import LoadingBar from 'react-top-loading-bar';
-import { deletarUsuario } from '../../../api/admin/userApi';
-import { userDelete } from '../../../api/userApi';
+import { deletarComunidade, deletarUsuario } from '../../../api/admin/userApi';
 import { BotaoSolido, SubTitulo, Titulo } from '../../../styled';
 import './index.sass';
 
-const Index = ({ ativo, state, item }) => {
+const Index = ({ ativo, state, item, tipo }) => {
 	const navigate = useNavigate();
 	const id = 'modal-deletar-conta';
 	const ref = useRef();
@@ -20,11 +19,21 @@ const Index = ({ ativo, state, item }) => {
 
 	async function handleDelete(id) {
 		try {
-			const r = await deletarUsuario(id);
-			if (r !== 204) throw new Error('Não foi possível alterar a conta');
-			toast.warning('Conta excluída com sucesso!');
-			localStorage.remove('user');
-			navigate('/');
+				let r;
+				switch(tipo) {
+					case "usuario":
+						r = await deletarUsuario(id)
+						if (r !== 204) throw new Error('Não foi possível alterar a conta')
+						toast.warning('Conta excluída com sucesso!')
+						break;
+					
+					case "comunidade":
+						r = await deletarComunidade(id)
+						toast.warning('Comunidade excluída com sucesso!')
+						break;
+
+					default: break;
+			}
 		} catch (err) {
 			if (err.response) toast.error(err.response.data.err);
 			else toast.error(err.message);
@@ -55,16 +64,17 @@ const Index = ({ ativo, state, item }) => {
 				<Titulo
 					cor='#000'
 					fonte='1vw'>
-					Deseja deletar essa conta?
+					Deseja prosseguir com a deleção?
 				</Titulo>
 				<SubTitulo
 					cor='#000'
 					fonte='16px'>
-					A conta {item.nome} foi denunciada pelo usúario de email {item.emailDenunciante}
+					"{item.nome}" foi denunciado pelo usúario de email "{item.emailDenunciante}""
 				</SubTitulo>
 				<SubTitulo
 					cor='#000'
-					fonte='16px'>
+					fonte='16px'
+					>
 					Motivo: "{item.motivo}"
 				</SubTitulo>
 
@@ -80,7 +90,7 @@ const Index = ({ ativo, state, item }) => {
 						disabled={loading}
 						cor='#929292'
 						fonte='1vw'
-						onClick={() => handleDelete(item.denunciado)}>
+						onClick={() => tipo === "comunidade" ?  handleDelete(item.idComunidade) : handleDelete(item.denunciado)}>
 						Deletar
 					</BotaoSolido>
 				</section>

@@ -1,98 +1,64 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { HashLoader } from 'react-spinners';
+import User from '../../../../components/listas/usuario';
+import Header from '../../../../components/header';
+import Menu from '../../../../components/menu-adm';
+import Denuncia from '../../../../components/admin/denuncias';
 import localStorage from 'local-storage';
-import { BotaoSolido, Input, Titulo } from '../../../styled';
-import { adminLogin } from '../../../api/admin/userApi';
+import Modal from '../../../../components/modals/denuncias';
 import './index.sass';
+import { comunidadesDenunciadas } from '../../../../api/admin/userApi';
 
-const Index = () => {
+export default function Index(props) {
 	const [email, setEmail] = useState('');
 	const [senha, setSenha] = useState('');
 	const [loading, setLoading] = useState(false);
+	const [menu, setMenu] = useState(false);
+	const [visibility, setVisibility] = useState(false);
+	const [denuncias, setDenuncias] = useState([]);
+	const [user, setUser] = useState([]);
 	const navigate = useNavigate();
 
-	async function handleLogin() {
-		try {
-			setLoading(true);
-			if (!email || !email.trim() || !senha || !senha.trim()) throw new Error('Preencha os campos corretamente');
-			const r = await adminLogin(email, senha);
-			localStorage('admin', r);
-			setTimeout(() => navigate('/admin/dashboard'), 3000);
-		} catch (err) {
-			if (err.response) toast.warn(err.response.data.err);
-			else toast.warn(err.message);
-			setLoading(false);
-		}
-	}
-
 	useEffect(() => {
-		if (localStorage('user')) localStorage.remove('user');
-		if (localStorage('admin') && localStorage('admin').id) navigate('/admin/dashboard');
-	});
+		try {
+			async function consultarDenuncias() {
+				const r = await comunidadesDenunciadas();
+				setDenuncias(r);
+			}
+			consultarDenuncias();
+		} catch (err) {}
+	}, []);
 
 	return (
-		<div className='adm-login page'>
-			<HashLoader
-				color='#2d95b1'
-				loading={loading}
-				cssOverride={{
-					position: 'absolute',
-					left: '50%',
-					top: '50%',
-					transform: 'translate(-50%, -50%)',
-					zIndex: '10',
-					background: '#0000002d',
-					width: '100vw',
-					height: '100vh',
-				}}
-				size={50}
-				aria-label='Loading Spinner'
-				data-testid='loader'
+		<div className='adm-denuncias page'>
+			<Header
+				alterarMenu={setMenu}
+				estadoMenu={menu}
+			/>
+			<Menu />
+			<Modal
+				ativo={visibility}
+				state={setVisibility}
+				item={user}
+				tipo="comunidade"
 			/>
 			<main>
-				<div className='adm-login-titulos'>
-					<Titulo
-						cor='#02C17D'
-						fonte='4vw'>
-						Login
-					</Titulo>
-				</div>
-				<div className='adm-login-corpo'>
-					<div className='adm-login-inputs'>
-						<Input
-							placeholder='Email'
-							width='100%'
-							type='email'
-							value={email}
-							onChange={e => setEmail(e.target.value)}
-							disabled={loading}
-							onKeyDown={e => e.key === 'Enter' && handleLogin()}
-						/>
-						<Input
-							placeholder='Senha'
-							width='100%'
-							type='password'
-							value={senha}
-							onChange={e => setSenha(e.target.value)}
-							disabled={loading}
-							onKeyDown={e => e.key === 'Enter' && handleLogin()}
-						/>
-					</div>
-					<div className='adm-login-btn'>
-						<BotaoSolido
-							fonte='4vw'
-							width='100%'
-							onClick={handleLogin}
-							disabled={loading}>
-							Confirmar
-						</BotaoSolido>
+				<div className='denuncias-cont'>
+					<div className='adjust-cont'>
+						<h1 style={{ fontSize: '18px' }}>Comunidades denunciadas</h1>
+						<div className='adjust-reports'>
+							{denuncias.map(item => (
+								<span style={{margin: "1em"}} onClick={() => setUser(item) & setVisibility(true)}>
+									<Denuncia
+										tipo='comunidade'
+										item={item}
+									/>
+								</span>
+							))}
+						</div>
 					</div>
 				</div>
 			</main>
 		</div>
 	);
 };
-
-export default Index;

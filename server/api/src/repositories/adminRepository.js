@@ -78,13 +78,16 @@ export async function searchReports() {
 
 export async function listReportedComunnities() {
 	const command = `
-	SELECT id_comunidade_report     idReport,
-			id_usuario				denunciante,
-			id_comunidade			idComunidade,
-			ds_report				motivo,
-			ds_email				emailDenunciante,
-			dt_report				data
-	FROM tb_comunidade_report;`;
+		SELECT 	id_comunidade_report     				idReport,
+				id_usuario								denunciante,
+				tb_comunidade_report.id_comunidade		idComunidade,
+				tb_comunidade.nm_comunidade				nome,
+				tb_comunidade.img_comunidade			imagem,
+				ds_report								motivo,
+				ds_email								emailDenunciante,
+				dt_report								data
+		FROM tb_comunidade_report
+		INNER JOIN tb_comunidade on tb_comunidade_report.id_comunidade = tb_comunidade.id_comunidade;`;
 	const [answer] = await con.query(command);
 	return answer;
 };
@@ -111,4 +114,52 @@ export async function deleteUser(id) {
 	WHERE id_usuario = ?;`;
 	const [answer] = await con.query(command, [id]);
 	return answer.affectedRows;
+};
+
+export async function deleteComunnity(id) {
+	const command = `
+		delete from tb_comunidade_canal 
+		where id_comunidade = ? ;
+
+		delete from tb_comunidade
+		where id_comunidade = ? `;
+	const [answer] = await con.query(command, [id, id]);
+	return answer.affectedRows;
+};
+
+export async function searchReportedUsers(nome) {
+	const command = `
+		SELECT id_report     					idReport,
+			tb_usuario_report.id_usuario		denunciante,
+			tb_usuario.nm_usuario   			nome,
+			tb_usuario.img_usuario				imagem,
+			tb_usuario.img_usuario				imagem,
+			id_usuario_reportado				denunciado,
+			ds_report							motivo,
+			tb_usuario_report.ds_email			emailDenunciante,
+			dt_report							data
+		FROM tb_usuario_report
+		INNER JOIN tb_usuario ON tb_usuario_report.id_usuario_reportado = tb_usuario.id_usuario
+		WHERE tb_usuario.nm_usuario like '%${nome}%';`;
+
+	const [answer] = await con.query(command);
+	return answer;
+};
+
+export async function searchReportedComunnities(nome) {
+	const command = `
+	SELECT 	id_comunidade_report     			idReport,
+		id_usuario								denunciante,
+		tb_comunidade_report.id_comunidade		idComunidade,
+		tb_comunidade.nm_comunidade				nome,
+		tb_comunidade.img_comunidade			imagem,
+		ds_report								motivo,
+		ds_email								emailDenunciante,
+		dt_report								data
+	FROM tb_comunidade_report
+	INNER JOIN tb_comunidade ON tb_comunidade_report.id_comunidade = tb_comunidade.id_comunidade
+	WHERE tb_comunidade.nm_comunidade like '%${nome}%';`;
+
+	const [answer] = await con.query(command);
+	return answer;
 };

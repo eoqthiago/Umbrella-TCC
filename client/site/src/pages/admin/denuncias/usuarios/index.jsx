@@ -4,7 +4,6 @@ import User from '../../../../components/listas/usuario';
 import Header from '../../../../components/header';
 import Menu from '../../../../components/menu-adm';
 import Denuncia from '../../../../components/admin/denuncias';
-import localStorage from 'local-storage';
 import Modal from '../../../../components/modals/denuncias';
 import './index.sass';
 import { usuariosDenunciados } from '../../../../api/admin/userApi';
@@ -43,18 +42,13 @@ export default function Index(props) {
 			/>
 			<main>
 				<div className='denuncias-cont'>
-					<div className='input-denuncias'>
-						<input placeholder='Procurar usúario' />
-						<img
-							src='/assets/icons/search.svg'
-							alt='Pesquisar'
-						/>
-					</div>
 					<div className='adjust-cont'>
 						<h1 style={{ fontSize: '18px' }}>Usuarios denunciados</h1>
 						<div className='adjust-reports'>
 							{denuncias.map(item => (
-								<span style={{margin: "1em"}} onClick={() => setUser(item) & setVisibility(true)}>
+								<span
+									style={{ margin: '1em' }}
+									onClick={() => setUser(item) & setVisibility(true)}>
 									<Denuncia
 										tipo='usuario'
 										item={item}
