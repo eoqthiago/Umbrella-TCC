@@ -76,6 +76,13 @@ export async function pesquisar(categoria, conteudo) {
 				},
 			});
 			break;
+		case 'mensagens':
+			r =  await api.get(`/usuarios/mensagens?msg=${conteudo}`, {
+				headers: {
+					'x-access-token': userToken,
+				},
+			});
+			return r.data;
 		// case "chats":
 		// 	r = await api.get("");
 		// 	break;
@@ -84,6 +91,9 @@ export async function pesquisar(categoria, conteudo) {
 	}
 	return r.data;
 }
+
+
+
 
 export async function communityReport(id, email, motivo) {
 	if (!userToken) return;
@@ -304,3 +314,4 @@ export async function banirUsuarioComunidade(comunidade, usuario, motivo) {
 	console.log(r);
 	return r.status;
 }
+

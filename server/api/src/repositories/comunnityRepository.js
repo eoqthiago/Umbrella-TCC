@@ -371,24 +371,25 @@ export async function communityUserBan(userCom, comunidade, motivo) {
 	return answer.affectedRows;
 }
 
-export async function communitySearchMessages( msg, comunidade) {
+export async function communitySearchMessages( msg) {
 	const command = `
-	select
-	id_mensagem idMensagem,
-	ds_mensagem conteudo,
-	dt_mensagem data,
-	tb_usuario_comunidade.id_comunidade idComunidade,
-	tb_usuario_comunidade.id_usuario_comunidade idUsuarioComunidade,
-	tb_usuario.img_usuario usuarioImagem,
-	tb_usuario.id_usuario idUsuario,
-	tb_usuario.nm_usuario usuarioNome,
-	tb_usuario.ds_usuario usuarioDescricao
-		from tb_comunidade_mensagem
-		inner join tb_usuario_comunidade on tb_usuario_comunidade.id_usuario_comunidade = tb_comunidade_mensagem.id_usuario_comunidade
-		inner join tb_usuario on tb_usuario_comunidade.id_usuario = tb_usuario.id_usuario
-		where tb_usuario_comunidade.id_comunidade = ? and tb_comunidade_mensagem.ds_mensagem like '%${msg}%'
+	select    
+    id_mensagem idMensagem,
+    ds_mensagem conteudo,
+    dt_mensagem data,
+    tb_usuario_comunidade.id_comunidade idComunidade,  
+    tb_usuario_comunidade.id_usuario_comunidade idUsuarioComunidade,
+    tb_usuario.img_usuario usuarioImagem,
+    tb_usuario.id_usuario idUsuario, 
+    tb_usuario.nm_usuario usuarioNome,
+    tb_usuario.ds_usuario usuarioDescricao  
+    from tb_comunidade_mensagem     
+    inner join tb_usuario_comunidade
+    on tb_usuario_comunidade.id_usuario_comunidade = tb_comunidade_mensagem.id_usuario_comunidade 
+    inner join tb_usuario on tb_usuario_comunidade.id_usuario = tb_usuario.id_usuario
+    where tb_comunidade_mensagem.ds_mensagem like '%${msg}%'
 	
 	`;
-	const [answer] = await con.query(command, [comunidade]);
+	const [answer] = await con.query(command);
 	return answer
 }
