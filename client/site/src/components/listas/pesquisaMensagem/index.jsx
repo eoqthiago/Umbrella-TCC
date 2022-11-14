@@ -27,9 +27,9 @@ const Index = ({ item }) => {
 		<li className="comp-lista-usuario" style={{ display: localStorage("user").id === item.id ? "none" : "flex" }}>
 			<img src={item.imagem ? BuscarImg(item.imagem) : "/assets/images/user.png"} alt="Usuário" onClick={() => navigate(`/usuario/${item.id}`)} />
 			<div>
-				<span onClick={() => navigate(`/usuario/${item.id}`)}>{item.nome}</span>
+				<span onClick={() => navigate(`/comunidade/${item.id}/mensagens`)}>{item.nome}</span>
 				<div>
-					<img onClick={() => handleMensagem(item.id)} src="/assets/icons/addFriend.svg" alt="Adicionar amigo" disabled={block} />
+					{item.conteudo}
 				</div>
 			</div>
 		</li>
