@@ -95,7 +95,7 @@ const Index = () => {
 					{selecionado === 'mensagens' &&
 						 mensagens.map(item => (
 							<Mensagem
-								item={item}
+								mensagem={item}
 								key={item.id}
 							/>
 						 ))}
