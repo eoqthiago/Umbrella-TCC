@@ -304,3 +304,13 @@ export async function banirUsuarioComunidade(comunidade, usuario, motivo) {
 	console.log(r);
 	return r.status;
 }
+
+export async function pesquisarMensagem(comunidade, msg) {
+	if (!userToken || !msg || !comunidade) return;
+	const r = await api.get(`/comunidade/${comunidade}/mensagens?msg=${msg}`, {
+		headers: {
+			'x-access-token': userToken,
+		},
+	});
+	return r.data;
+}

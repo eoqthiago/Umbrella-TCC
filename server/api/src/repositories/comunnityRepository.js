@@ -370,3 +370,22 @@ export async function communityUserBan(userCom, comunidade, motivo) {
 	const [answer] = await con.query(command, [userCom, userCom, comunidade, motivo]);
 	return answer.affectedRows;
 }
+
+export async function communitySearchMessages( msg, comunidade) {
+	const command = `
+	SELECT id_mensagem,
+    tb_comunidade_mensagem.id_usuario_comunidade,
+    tb_comunidade_mensagem.id_comunidade_canal,
+    ds_mensagem,
+    dt_mensagem,
+    tb_comunidade_canal.id_comunidade_canal
+    from tb_comunidade_mensagem
+    inner join tb_comunidade_canal on tb_comunidade_mensagem.id_comunidade_canal = tb_comunidade_canal.id_comunidade_canal
+    inner join tb_usuario_comunidade on tb_comunidade_canal.id_comunidade = tb_usuario_comunidade.id_comunidade
+    where tb_usuario_comunidade.id_usuario = ?
+    and tb_comunidade_mensagem.ds_mensagem like '%${msg}%'
+	
+	`;
+	const [answer] = await con.query(command, [comunidade]);
+	return answer
+}
