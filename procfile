@@ -1,0 +1,1 @@
+web: cd ./server/api && npm start
