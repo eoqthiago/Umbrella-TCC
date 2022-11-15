@@ -55,6 +55,7 @@ const Index = () => {
 					data: new Date().toISOString(),
 					id: r,
 				},
+				
 			};
 
 			socket.emit('comunidade-canal-send', temp);
