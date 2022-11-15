@@ -1,8 +1,10 @@
 import "./index.sass";
 import Header from "../../../components/header";
 import MenuAdm from "../../../components/menu-adm";
+import { useNavigate } from 'react-router-dom';
+import localStorage from 'local-storage';
 import CardsEstatisticas from "../../../components/cards-estatisticas";
-import { estatisticasComunidades, estatisticasDenuncias, estatisticasUsuarios } from "../../../api/communityApi";
+import { estatisticasComunidades, estatisticasDenuncias, estatisticasUsuarios } from "../../../api/admin/userApi";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement } from "chart.js";
 import { Pie, Line } from "react-chartjs-2";
 import { useState, useEffect } from "react";
@@ -48,9 +50,11 @@ function Index() {
             },
         ],
     };
-    const [usuarios, setUsuarios] = useState([]);
+    const navigate = useNavigate();
+    const [mensal, setMensal] = useState([]);
     const [comunidades, setComunidades] = useState([]);
     const [denuncias, setDenuncias] = useState([])
+    const [usuario, setUsuario] = useState('-')
 
     async function listarComunnity() {
         const r = await estatisticasComunidades();
@@ -59,7 +63,7 @@ function Index() {
 
     async function listarUsers() {
         const r = await estatisticasUsuarios();
-        setUsuarios(r);
+        setMensal(r);
     };
     async function listarReports() {
         const r = await estatisticasDenuncias();
@@ -67,11 +71,17 @@ function Index() {
     };
 
     useEffect(() => {
+        if (!localStorage('admin')) {
+            navigate('/admin/login')
+        } else {
+            const usuarioLogado = localStorage('admin');
+            setUsuario(usuarioLogado.login);
+        }
+        
         listarComunnity();
         listarUsers();
         listarReports();
     }, [])
-
 
     return (
         <div className="admin-page">
@@ -87,7 +97,7 @@ function Index() {
                     <div className="cards-estastisticas-admin">
                         <div className="cards-estatisticas">
                             <div className="cards-01">
-                                {usuarios.map((item) => (
+                                {mensal.map((item) => (
                                     <CardsEstatisticas
                                         cards_estatisticas="card_visitas_mensais"
                                         numeroEstatistica={item.usuariosMensais}

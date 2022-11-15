@@ -97,7 +97,7 @@ server.get('/admin/estatisticas/usuarios', async (req, res) => {
 		}
 
 		const decoded = verifyToken(token);
-		if (!decoded || !(await userIdSearch(decoded.id))) {
+		if (!decoded || !(await rootVerificar(decoded.id))) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
 		} const r = await searchMonthlyUsers();
@@ -119,7 +119,7 @@ server.get('/admin/estatisticas/comunidades', async (req, res) => {
 		}
 
 		const decoded = verifyToken(token);
-		if (!decoded || !(await userIdSearch(decoded.id))) {
+		if (!decoded || !(await rootVerificar(decoded.id))) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
 		} const r = await searchCommunites();
@@ -142,7 +142,7 @@ server.get('/admin/estatisticas/reports', async (req, res) => {
 		}
 
 		const decoded = verifyToken(token);
-		if (!decoded || !(await userIdSearch(decoded.id))) {
+		if (!decoded || !(await rootVerificar(decoded.id))) {
 			res.status(401).send({ err: 'Falha na autenticação' });
 			return;
 		} const r = await searchReports();

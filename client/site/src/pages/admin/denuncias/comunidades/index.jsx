@@ -17,6 +17,7 @@ export default function Index(props) {
 	const [visibility, setVisibility] = useState(false);
 	const [denuncias, setDenuncias] = useState([]);
 	const [user, setUser] = useState([]);
+	const [usuario, setUsuario] = useState('-')
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -26,7 +27,14 @@ export default function Index(props) {
 				setDenuncias(r);
 			}
 			consultarDenuncias();
-		} catch (err) {}
+		} catch (err) { }
+
+		if (!localStorage('admin')) {
+			navigate('/admin/login')
+		} else {
+			const usuarioLogado = localStorage('admin');
+			setUsuario(usuarioLogado.login);
+		}
 	}, []);
 
 	return (
@@ -48,7 +56,7 @@ export default function Index(props) {
 						<h1 style={{ fontSize: '18px' }}>Comunidades denunciadas</h1>
 						<div className='adjust-reports'>
 							{denuncias.map(item => (
-								<span style={{margin: "1em"}} onClick={() => setUser(item) & setVisibility(true)}>
+								<span style={{ margin: "1em" }} onClick={() => setUser(item) & setVisibility(true)}>
 									<Denuncia
 										tipo='comunidade'
 										item={item}

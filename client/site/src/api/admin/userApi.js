@@ -71,3 +71,29 @@ export async function deletarComunidade(id) {
 	});
 	return r.data;
 };
+
+export async function estatisticasUsuarios() {
+	const r = await api.get('/admin/estatisticas/usuarios', {
+		headers: {
+			"x-access-token": adminToken,
+		},
+	});
+	return r.data;
+}
+
+export async function estatisticasComunidades() {
+	const r = await api.get('/admin/estatisticas/comunidades', {
+		headers: {
+			"x-access-token": adminToken,
+		},
+	});
+	return r.data;
+}
+export async function estatisticasDenuncias() {
+	const r = await api.get('/admin/estatisticas/reports', {
+		headers: {
+			"x-access-token": adminToken,
+		},
+	});
+	return r.data;
+}

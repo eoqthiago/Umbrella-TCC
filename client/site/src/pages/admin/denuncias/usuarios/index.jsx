@@ -4,6 +4,7 @@ import User from '../../../../components/listas/usuario';
 import Header from '../../../../components/header';
 import Menu from '../../../../components/menu-adm';
 import Denuncia from '../../../../components/admin/denuncias';
+import localStorage from 'local-storage';
 import Modal from '../../../../components/modals/denuncias';
 import './index.sass';
 import { usuariosDenunciados } from '../../../../api/admin/userApi';
@@ -16,6 +17,7 @@ export default function Index(props) {
 	const [visibility, setVisibility] = useState(false);
 	const [denuncias, setDenuncias] = useState([]);
 	const [user, setUser] = useState([]);
+	const [usuario, setUsuario] = useState('-')
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -25,7 +27,14 @@ export default function Index(props) {
 				setDenuncias(r);
 			}
 			consultarDenuncias();
-		} catch (err) {}
+		} catch (err) { }
+		
+		if (!localStorage('admin')) {
+			navigate('/admin/login')
+		} else {
+			const usuarioLogado = localStorage('admin');
+			setUsuario(usuarioLogado.login);
+		}
 	}, []);
 
 	return (

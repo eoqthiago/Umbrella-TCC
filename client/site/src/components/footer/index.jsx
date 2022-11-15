@@ -1,8 +1,10 @@
 import React from "react";
-import { Titulo } from "../../styled";
+import { Titulo, BotaoLiso } from "../../styled";
+import { useNavigate } from 'react-router-dom';
 import "./index.sass";
 
 const Index = () => {
+	const navigate = useNavigate();
 	return (
 		<footer className="comp-footer">
 			<div className="comp-footer-logo">
@@ -46,6 +48,9 @@ const Index = () => {
 					<img src="/assets/icons/twitter.png" alt="Twitter" />
 					<img src="/assets/icons/facebook.png" alt="Facebook" />
 					<img src="/assets/icons/github.png" alt="GitHub" />
+				</div>
+				<div className="botaoadm">
+				<BotaoLiso main= "#fff" onClick={() => navigate('/admin/login')}>Admin</BotaoLiso>
 				</div>
 			</div>
 		</footer>
