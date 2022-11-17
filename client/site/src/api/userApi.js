@@ -247,4 +247,4 @@ export async function consultarMensagens(conversa) {
 		},
 	});
 	return r;
-};
+}

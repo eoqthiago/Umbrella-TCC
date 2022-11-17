@@ -62,11 +62,14 @@ export async function pesquisar(categoria, conteudo) {
 				});
 				r.data.tipo = 'array';
 			} else {
-				r = await api.get(`/comunidade/${conteudo.substring(1, conteudo.length)}`, {
-					headers: {
-						'x-access-token': userToken,
-					},
-				});
+				r = await api.get(
+					`/comunidade/${conteudo.substring(1, conteudo.length)}`,
+					{
+						headers: {
+							'x-access-token': userToken,
+						},
+					}
+				);
 			}
 			break;
 		case 'usuarios':
@@ -77,7 +80,7 @@ export async function pesquisar(categoria, conteudo) {
 			});
 			break;
 		case 'mensagens':
-			r =  await api.get(`/usuarios/mensagens?msg=${conteudo}`, {
+			r = await api.get(`/usuarios/mensagens?msg=${conteudo}`, {
 				headers: {
 					'x-access-token': userToken,
 				},
@@ -91,9 +94,6 @@ export async function pesquisar(categoria, conteudo) {
 	}
 	return r.data;
 }
-
-
-
 
 export async function communityReport(id, email, motivo) {
 	if (!userToken) return;
@@ -222,11 +222,14 @@ export async function enviarMensagemCanal(conteudo, canal, comunidade) {
 
 export async function listarMensagens(comunidade, canal, lastId) {
 	if (!userToken || !comunidade || !canal) return;
-	const r = await api.get(`/comunidade/${comunidade}/canal/${canal}/mensagens/${lastId}`, {
-		headers: {
-			'x-access-token': userToken,
-		},
-	});
+	const r = await api.get(
+		`/comunidade/${comunidade}/canal/${canal}/mensagens/${lastId}`,
+		{
+			headers: {
+				'x-access-token': userToken,
+			},
+		}
+	);
 	return r.data;
 }
 
@@ -285,4 +288,3 @@ export async function banirUsuarioComunidade(comunidade, usuario, motivo) {
 	console.log(r);
 	return r.status;
 }
-
